@@ -127,6 +127,7 @@
                 <EditItemTemplate>
                     <asp:TextBox ID="txtConsumerFirst"  style = "Width:100px;" runat="server" Text='<%# Eval("consumer_first") %>'></asp:TextBox>
                 </EditItemTemplate>
+            </asp:TemplateField>
 
             <asp:TemplateField HeaderText="Last" ItemStyle-Width="120">
                 <ItemTemplate>
@@ -135,72 +136,126 @@
                 <EditItemTemplate>
                     <asp:TextBox ID="txtConsumerLast"  style = "Width:100px;" runat="server" Text='<%# Eval("consumer_last") %>'></asp:TextBox>
                 </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
+                <ItemStyle Width="120px"></ItemStyle>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="ProvinceName" ItemStyle-Width="120">
+
+            <asp:TemplateField HeaderText="Birth Date" ItemStyle-Width="120">
                 <ItemTemplate>
-                    <asp:Label ID="lblProvinceName" runat="server" Text='<%# Eval("Provincename") %>'></asp:Label>
+                    <asp:Label ID="lblBirthDate" runat="server" Text='<%# Eval("date_of_birth") %>'></asp:Label>
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <asp:TextBox ID="txtProvinceName"  style = "Width:100px;" runat="server" Text='<%# Eval("Provincename") %>'></asp:TextBox>
+                    <asp:TextBox ID="txtBirthDate"  style = "Width:100px;" runat="server" Text='<%# Eval("date_of_birth") %>'></asp:TextBox>
                 </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
+                <ItemStyle Width="120px"></ItemStyle>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="CityName" ItemStyle-Width="120">
+
+            <asp:TemplateField HeaderText="Address1" ItemStyle-Width="120">
                 <ItemTemplate>
-                    <asp:Label ID="lblCityname" runat="server" Text='<%# Eval("Cityname") %>'></asp:Label>
+                    <asp:Label ID="lblAddress1" runat="server" Text='<%# Eval("address_line_1") %>'></asp:Label>
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <asp:TextBox ID="txtCityname"  style = "Width:100px;" runat="server" Text='<%# Eval("Cityname") %>'></asp:TextBox>
+                    <asp:TextBox ID="txtAddress1"  style = "Width:100px;" runat="server" Text='<%# Eval("address_line_1") %>'></asp:TextBox>
                 </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
-            </asp:TemplateField><asp:TemplateField HeaderText="Number" ItemStyle-Width="120">
-                <ItemTemplate>
-                    <asp:Label ID="lblNumber" runat="server" Text='<%# Eval("Number") %>'></asp:Label>
-                </ItemTemplate>
-                <EditItemTemplate>
-                    <asp:TextBox ID="txtNumber" style = "Width:100px;" runat="server" Text='<%# Eval("Number") %>'></asp:TextBox>
-                </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
-            </asp:TemplateField><asp:TemplateField HeaderText="Name" ItemStyle-Width="120">
-                <ItemTemplate>
-                    <asp:Label ID="lblName" runat="server" Text='<%# Eval("Name") %>'></asp:Label>
-                </ItemTemplate>
-                <EditItemTemplate>
-                    <asp:TextBox ID="txtName" style = "Width:100px;" runat="server" Text='<%# Eval("Name") %>'></asp:TextBox>
-                </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
-            </asp:TemplateField><asp:TemplateField HeaderText="ContentType" ItemStyle-Width="120">
-                <ItemTemplate>
-                    <asp:Label ID="lblContentType" runat="server" Text='<%# Eval("ContentType") %>'></asp:Label>
-                </ItemTemplate>
-                <EditItemTemplate>
-                    <asp:TextBox ID="txtContentType" style = "Width:100px;" runat="server" Text='<%# Eval("ContentType") %>'></asp:TextBox>
-                </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
-            </asp:TemplateField><asp:TemplateField HeaderText="Data" ItemStyle-Width="120">
-                <ItemTemplate>
-                    <asp:Label ID="lblData" runat="server" Text='<%# Eval("Data") %>'></asp:Label>
-                </ItemTemplate>
-                <EditItemTemplate>
-                    <asp:TextBox ID="txtData" style = "Width:100px;" runat="server" Text='<%# Eval("Data") %>'></asp:TextBox>
-                </EditItemTemplate>
-
-<ItemStyle Width="120px"></ItemStyle>
+                <ItemStyle Width="120px"></ItemStyle>
             </asp:TemplateField>
-           <asp:TemplateField> <ItemTemplate>
-                        <asp:LinkButton ID="lnkDownload" runat="server" Text="Download" OnClick="DownloadFile"
-                            CommandArgument='<%# Eval("BId") %>'></asp:LinkButton>
-                    </ItemTemplate></asp:TemplateField>
-            <asp:CommandField ButtonType="Link" ShowEditButton="true" ShowDeleteButton="true"
-                ItemStyle-Width="100" >
-<ItemStyle Width="100px"></ItemStyle>
+
+            <asp:TemplateField HeaderText="Address2" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblAddress2" runat="server" Text='<%# Eval("address_line_2") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtAddress2"  style = "Width:100px;" runat="server" Text='<%# Eval("address_line_2") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+            
+            <asp:TemplateField HeaderText="City" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblCity" runat="server" Text='<%# Eval("city") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtCity" style = "Width:100px;" runat="server" Text='<%# Eval("city") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+            
+            <asp:TemplateField HeaderText="State" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblState" runat="server" Text='<%# Eval("state") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtState" style = "Width:100px;" runat="server" Text='<%# Eval("state") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+ 
+            <asp:TemplateField HeaderText="Zip" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblZipCode" runat="server" Text='<%# Eval("zip_code") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtZipCode" style = "Width:100px;" runat="server" Text='<%# Eval("zip_code") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+ 
+            <asp:TemplateField HeaderText="Identifier" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblIdentifier" runat="server" Text='<%# Eval("identifier") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtIdentifier" style = "Width:100px;" runat="server" Text='<%# Eval("identifier") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+
+            <asp:TemplateField HeaderText="Gender" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblGender" runat="server" Text='<%# Eval("gender") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtGender" style = "Width:100px;" runat="server" Text='<%# Eval("gender") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+
+            <asp:TemplateField HeaderText="Diagnosis" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblDiagnosis" runat="server" Text='<%# Eval("diagnosis") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtDiagnosis" style = "Width:100px;" runat="server" Text='<%# Eval("diagnosis") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+
+            <asp:TemplateField HeaderText="Nick" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblNicknameFirst" runat="server" Text='<%# Eval("nickname_first") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtNicknameFirst" style = "Width:100px;" runat="server" Text='<%# Eval("nickname_first") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+
+            <asp:TemplateField HeaderText="Name" ItemStyle-Width="120">
+                <ItemTemplate>
+                    <asp:Label ID="lblNicknameLast" runat="server" Text='<%# Eval("nickname_last") %>'></asp:Label>
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtNicknameLast" style = "Width:100px;" runat="server" Text='<%# Eval("nickname_last") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemStyle Width="120px"></ItemStyle>
+            </asp:TemplateField>
+
+            <asp:TemplateField> 
+                <ItemTemplate>
+                    <asp:LinkButton ID="lnkDownload" runat="server" Text="Download" OnClick="DownloadFile" CommandArgument='<%# Eval("consumer_internal_number") %>'></asp:LinkButton>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:CommandField ButtonType="Link" ShowEditButton="true" ShowDeleteButton="true" ItemStyle-Width="100" >
+                <ItemStyle Width="100px"></ItemStyle>
             </asp:CommandField>
         </Columns>
         <FooterStyle BackColor="#99CCCC" ForeColor="#003399" />
@@ -219,12 +274,12 @@
  <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse; margin:10px 0px 0px 25px;">
         <tr>
             <td style="width: 100px; background-color:#003399; color:#CCCCFF;">
-              <b> Username:</b><br />
-                <asp:TextBox ID="txtUsername" runat="server" Width="120" />
+              <b> Consumer First:</b><br />
+                <asp:TextBox ID="txtConsumerFirst" runat="server" Width="120" />
             </td>
             <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
-              <b> Provincename:</b><br />
-                <asp:TextBox ID="txtProvinceName" runat="server" Width="120" />
+              <b> Consumer Last:</b><br />
+                <asp:TextBox ID="txtConsumerLast" runat="server" Width="120" />
             </td>
             <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
                <b>Cityname:</b><br />
@@ -246,6 +301,42 @@
                <b>Data:</b><br />
                 <asp:TextBox ID="txtData" runat="server" Width="120" />
             </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+              <b> Number:</b><br />
+                <asp:TextBox ID="TextBox1" runat="server" Width="120" />
+            </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+              <b> Name:</b><br />
+                <asp:TextBox ID="TextBox2" runat="server" Width="120" />
+            </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+              <b> ContentType:</b><br />
+                <asp:TextBox ID="TextBox3" runat="server" Width="120" />
+            </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+               <b>Data:</b><br />
+                <asp:TextBox ID="TextBox4" runat="server" Width="120" />
+            </td>
+
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+              <b> Number:</b><br />
+                <asp:TextBox ID="TextBox5" runat="server" Width="120" />
+            </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+              <b> Name:</b><br />
+                <asp:TextBox ID="TextBox6" runat="server" Width="120" />
+            </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+              <b> ContentType:</b><br />
+                <asp:TextBox ID="TextBox7" runat="server" Width="120" />
+            </td>
+            <td style="width: 100px;background-color:#003399; color:#CCCCFF;">
+               <b>Data:</b><br />
+                <asp:TextBox ID="TextBox8" runat="server" Width="120" />
+            </td>
+
+
+
             <td style="background-color:#003399; color:#CCCCFF;" class="style1">
                 <asp:Button ID="btnAdd" runat="server" CssClass="btn btn-info" Text="Add" 
                     OnClick="Insert" Width="187px" />
