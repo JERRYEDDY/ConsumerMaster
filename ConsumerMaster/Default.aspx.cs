@@ -54,6 +54,21 @@ namespace ConsumerMaster
             string ContentType = txtContentType.Text;
             string Data = txtData.Text;
 
+            string consumer_first = txtUserName.Text;
+            string consumer_last = txtUserName") as TextBox).Text;
+            string consumer_middle = (row.FindControl("txtUserName") as TextBox).Text;
+            string date_of_birth = (row.FindControl("txtUserName") as TextBox).Text;
+            string address_line_1 = (row.FindControl("txtUserName") as TextBox).Text;
+            string address_line_2 = (row.FindControl("txtUserName") as TextBox).Text;
+            string city = (row.FindControl("txtProvincename") as TextBox).Text;
+            string state = (row.FindControl("txtCityname") as TextBox).Text;
+            string zip_code = (row.FindControl("txtNumber") as TextBox).Text;
+            string identifier = (row.FindControl("txtName") as TextBox).Text;
+            string gender = (row.FindControl("txtContentType") as TextBox).Text;
+            string diagnosis = (row.FindControl("txtContentType") as TextBox).Text;
+            string nickname_first = (row.FindControl("txtContentType") as TextBox).Text;
+            string nickname_last = (row.FindControl("txtData") as TextBox).Text;
+
 
             string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
@@ -62,14 +77,22 @@ namespace ConsumerMaster
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Action", "INSERT");
-                    cmd.Parameters.AddWithValue("@Username", Username);
-                    cmd.Parameters.AddWithValue("@Provincename ", Provincename);
-                    cmd.Parameters.AddWithValue("@Cityname", Cityname);
-                    cmd.Parameters.AddWithValue("@Number", Number);
-                    cmd.Parameters.AddWithValue("@Name", Name);
-                    cmd.Parameters.AddWithValue("@ContentType", ContentType);
-                    //cmd.Parameters.AddWithValue("@Data", Data);
-                    cmd.Parameters.AddWithValue("@Data", SqlDbType.VarBinary).Value = new Byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
+                    cmd.Parameters.AddWithValue("@consumer_internal_number", consumer_internal_number);
+                    cmd.Parameters.AddWithValue("@consumer_first", consumer_first);
+                    cmd.Parameters.AddWithValue("@consumer_last", consumer_last);
+                    cmd.Parameters.AddWithValue("@consumer_middle", consumer_middle);
+                    cmd.Parameters.AddWithValue("@date_of_birth", date_of_birth);
+                    cmd.Parameters.AddWithValue("@address_line_1", address_line_1);
+                    cmd.Parameters.AddWithValue("@address_line_2", address_line_2);
+                    cmd.Parameters.AddWithValue("@city", city);
+                    cmd.Parameters.AddWithValue("@state", state);
+                    cmd.Parameters.AddWithValue("@zip_code", zip_code);
+                    cmd.Parameters.AddWithValue("@identifier", identifier);
+                    cmd.Parameters.AddWithValue("@gender", gender);
+                    cmd.Parameters.AddWithValue("@diagnosis", diagnosis);
+                    cmd.Parameters.AddWithValue("@nickname_first", nickname_first);
+                    cmd.Parameters.AddWithValue("@nickname_last", nickname_last);
+
                     cmd.Connection = con;
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -97,15 +120,19 @@ namespace ConsumerMaster
             int consumer_internal_number = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
             string consumer_first = (row.FindControl("txtUserName") as TextBox).Text;
             string consumer_last = (row.FindControl("txtUserName") as TextBox).Text;
-            string consumer_first = (row.FindControl("txtUserName") as TextBox).Text;
-            string consumer_first = (row.FindControl("txtUserName") as TextBox).Text;
-            string consumer_first = (row.FindControl("txtUserName") as TextBox).Text;
-            string Provincename = (row.FindControl("txtProvincename") as TextBox).Text;
-            string Cityname = (row.FindControl("txtCityname") as TextBox).Text;
-            string Number = (row.FindControl("txtNumber") as TextBox).Text;
-            string Name = (row.FindControl("txtName") as TextBox).Text;
-            string ContentType = (row.FindControl("txtContentType") as TextBox).Text;
-            string Data = (row.FindControl("txtData") as TextBox).Text;
+            string consumer_middle = (row.FindControl("txtUserName") as TextBox).Text;
+            string date_of_birth = (row.FindControl("txtUserName") as TextBox).Text;
+            string address_line_1 = (row.FindControl("txtUserName") as TextBox).Text;
+            string address_line_2 = (row.FindControl("txtUserName") as TextBox).Text;
+            string city = (row.FindControl("txtProvincename") as TextBox).Text;
+            string state = (row.FindControl("txtCityname") as TextBox).Text;
+            string zip_code = (row.FindControl("txtNumber") as TextBox).Text;
+            string identifier = (row.FindControl("txtName") as TextBox).Text;
+            string gender = (row.FindControl("txtContentType") as TextBox).Text;
+            string diagnosis = (row.FindControl("txtContentType") as TextBox).Text;
+            string nickname_first = (row.FindControl("txtContentType") as TextBox).Text;
+            string nickname_last = (row.FindControl("txtData") as TextBox).Text;
+
             string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
@@ -115,40 +142,20 @@ namespace ConsumerMaster
                     cmd.Parameters.AddWithValue("@Action", "UPDATE");
                     cmd.Parameters.AddWithValue("@consumer_internal_number", consumer_internal_number);
                     cmd.Parameters.AddWithValue("@consumer_first", consumer_first);
-                    cmd.Parameters.AddWithValue("@Provincename ", Provincename);
-                    cmd.Parameters.AddWithValue("@Cityname", Cityname);
-                    cmd.Parameters.AddWithValue("@Number", Number);
-                    cmd.Parameters.AddWithValue("@Name", Name);
-                    cmd.Parameters.AddWithValue("@ContentType", ContentType);
+                    cmd.Parameters.AddWithValue("@consumer_last", consumer_last);
+                    cmd.Parameters.AddWithValue("@consumer_middle", consumer_middle);
+                    cmd.Parameters.AddWithValue("@date_of_birth", date_of_birth);
+                    cmd.Parameters.AddWithValue("@address_line_1", address_line_1);
+                    cmd.Parameters.AddWithValue("@address_line_2", address_line_2);
+                    cmd.Parameters.AddWithValue("@city", city);
+                    cmd.Parameters.AddWithValue("@state", state);
+                    cmd.Parameters.AddWithValue("@zip_code", zip_code);
+                    cmd.Parameters.AddWithValue("@identifier", identifier);
+                    cmd.Parameters.AddWithValue("@gender", gender);
+                    cmd.Parameters.AddWithValue("@diagnosis", diagnosis);
+                    cmd.Parameters.AddWithValue("@nickname_first", nickname_first);
+                    cmd.Parameters.AddWithValue("@nickname_last", nickname_last);
 
-                    SET  = ,
-                    consumer_last = @consumer_last,
-                    consumer_middle = @consumer_middle,
-                    date_of_birth = @date_of_birth,
-                    address_line_1 = @address_line_1,
-                    address_line_2 = @address_line_2,
-                    city = @city,
-                    state = @state,
-                    zip_code = @zip_code,
-                    identifier = @identifier,
-                    gender = @gender,
-                    diagnosis = @diagnosis,
-                    nickname_first = @nickname_first
-
-        WHERE  = 
-
-
-
-
-
-
-
-
-
-
-
-
-                    cmd.Parameters.AddWithValue("@Data", SqlDbType.VarBinary).Value = new Byte[] { 0xDE, 0xAD, 0xBE, 0xEF };
                     //cmd.Parameters.AddWithValue("@ContentType", SqlDbType.VarBinary, -1);
                     //cmd.Parameters.AddWithValue("@Data", SqlDbType.VarBinary, -1);
 
