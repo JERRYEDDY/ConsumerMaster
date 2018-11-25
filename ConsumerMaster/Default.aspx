@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="ConsumerMaster._Default" %>
 
+<%@ Register Assembly="Infragistics4.Web.v18.2, Version=18.2.20182.143, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" Namespace="Infragistics.Web.UI.GridControls" TagPrefix="ig" %>
+
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -48,7 +50,7 @@
 }
 
 </style>
-
+<div>
     <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" 
         DataSourceID="SqlDataSource1" CssClass="gridview" AlternatingRowStyle-CssClass="even">
         <Columns>
@@ -75,8 +77,61 @@
             <asp:BoundField DataField="nickname_last" HeaderText="Name" SortExpression="nickname_last" />
         </Columns>
     </asp:GridView>
-
+</div>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" 
         SelectCommand="SELECT * FROM [Consumers]"></asp:SqlDataSource>
+<div></div>
+    <p></p>
+    <br />
+    <br />
+
+    <div>
+        <ig:WebDataGrid ID="WebDataGrid1" Height="400" Width="100%" DataSourceID="SqlDataSource2" runat="server" AutoGenerateColumns="False" ShowFooter="True" AltItemCssClass="gridview">
+            <Columns>
+                <ig:BoundDataField DataFieldName="consumer_internal_number" Key="consumer_internal_number">
+                    <Header Text="Number" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="consumer_first" Key="consumer_first">
+                    <Header Text="First Name" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="consumer_last" Key="consumer_last">
+                    <Header Text="Last Name" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="date_of_birth" Key="date_of_birth">
+                    <Header Text="Birth Date" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="address_line_1" Key="address_line_1">
+                    <Header Text="Address1" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="city" Key="city">
+                    <Header Text="City" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="zip_code" Key="zip_code">
+                    <Header Text="Zip Code" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="identifier" Key="identifier">
+                    <Header Text="ID" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="gender" Key="gender">
+                    <Header Text="Gender" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="diagnosis" Key="diagnosis">
+                    <Header Text="Diagnosis" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="nickname_first" Key="nickname_first">
+                    <Header Text="Nick" />
+                </ig:BoundDataField>
+                <ig:BoundDataField DataFieldName="nickname_last" Key="nickname_last">
+                    <Header Text="Name" />
+                </ig:BoundDataField>
+            </Columns>        
+            <Behaviors>
+                <ig:Paging PageSize="13" QuickPages="5"></ig:Paging>
+            </Behaviors>
+        </ig:WebDataGrid>
+    </div>
+    <asp:SqlDataSource runat="server" ID="SqlDataSource2" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
+    SelectCommand="SELECT * FROM [Consumers]">
+    </asp:SqlDataSource>
 
 </asp:Content>
