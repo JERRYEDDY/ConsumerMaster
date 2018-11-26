@@ -9,23 +9,23 @@
     <div class="demo-container no-bg">
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
-                    OnNeedDataSource="RadGrid1_NeedDataSource" OnPreRender="RadGrid1_PreRender">
+                    OnNeedDataSource="RadGrid1_NeedDataSource" OnPreRender="RadGrid1_PreRender" PageSize="15">
                 <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" DataKeyNames="consumer_internal_number">
                     <Columns>
-                        <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true"/>
+                        <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
                         <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" />
-                        <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="150px" ItemStyle-Width="150px" />
-                        <telerik:GridBoundColumn DataField="date_of_birth" HeaderText="Birth Date" ColumnEditorID="GridTextBoxEditor" DataFormatString="{0:MM/dd/yyyy}" HeaderStyle-Width="100px" ItemStyle-Width="100px" />
-                        <telerik:GridBoundColumn DataField="address_line_1" HeaderText="Address1" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="200px" ItemStyle-Width="200px" />
+                        <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" />
+<%--                        <telerik:GridBoundColumn DataField="date_of_birth" HeaderText="Birth Date" ColumnEditorID="GridTextBoxEditor" DataFormatString="{0:MM/dd/yyyy}" HeaderStyle-Width="100px" ItemStyle-Width="100px" />--%>
+<%--                        <telerik:GridBoundColumn DataField="address_line_1" HeaderText="Address1" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="220px" ItemStyle-Width="220px" />--%>
 <%--                        <telerik:GridBoundColumn DataField="address_line_2" HeaderText="Address2" ColumnEditorID="GridTextBoxEditor"/>--%>
-                        <telerik:GridBoundColumn DataField="city" HeaderText="City" ColumnEditorID="GridTextBoxEditor"/>                        
-                        <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor"/>
-                        <telerik:GridBoundColumn DataField="zip_code" HeaderText="Zip Code" ColumnEditorID="GridTextBoxEditor"/>
+                        <telerik:GridBoundColumn DataField="city" HeaderText="City" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="150px" ItemStyle-Width="150px"/>                        
+                        <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
+<%--                        <telerik:GridBoundColumn DataField="zip_code" HeaderText="Zip Code" ColumnEditorID="GridTextBoxEditor"/>--%>
                         <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor"/>                       
-                        <telerik:GridBoundColumn DataField="gender" HeaderText="Gender" ColumnEditorID="GridTextBoxEditor"/>
+<%--                        <telerik:GridBoundColumn DataField="gender" HeaderText="Gender" ColumnEditorID="GridTextBoxEditor"/>--%>
                         <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor"/>
-                        <telerik:GridBoundColumn DataField="nickname_first" HeaderText="Nick" ColumnEditorID="GridTextBoxEditor"/>                      
-                        <telerik:GridBoundColumn DataField="nickname_last" HeaderText="Name" ColumnEditorID="GridTextBoxEditor"/>
+<%--                        <telerik:GridBoundColumn DataField="nickname_first" HeaderText="Nick" ColumnEditorID="GridTextBoxEditor"/>                      
+                        <telerik:GridBoundColumn DataField="nickname_last" HeaderText="Name" ColumnEditorID="GridTextBoxEditor"/>--%>
                         <telerik:GridEditCommandColumn UniqueName="EditCommandColumn"></telerik:GridEditCommandColumn>
                         <telerik:GridClientDeleteColumn HeaderText="Delete">
                             <HeaderStyle Width="70px" />
