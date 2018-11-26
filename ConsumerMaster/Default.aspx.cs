@@ -5,6 +5,8 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Collections;
+using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
@@ -18,213 +20,169 @@ namespace ConsumerMaster
             }
         }
 
-        private void BindGrid()
+        protected void RadGrid1_PreRender(object sender, System.EventArgs e)
         {
-            string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+            if (!this.IsPostBack && this.RadGrid1.MasterTableView.Items.Count > 1)
             {
-                using (SqlCommand cmd = new SqlCommand("Consumers_CRUD"))
-                {
-                    cmd.Parameters.AddWithValue("@Action", "SELECT");
-                    using (SqlDataAdapter sda = new SqlDataAdapter())
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Connection = con;
-                        sda.SelectCommand = cmd;
-                        using (DataTable dt = new DataTable())
-                        {
-                            sda.Fill(dt);
-                            GridView1.DataSource = dt;
-                            GridView1.DataBind();
-                        }
-                    }
-                }
+                //RadGrid1.MasterTableView.GetColumn("address_line_1").HeaderStyle.Width = Unit.Pixel(350);
+                //RadGrid1.MasterTableView.GetColumn("address_line_1").FilterControlWidth = Unit.Pixel(350);
+                //RadGrid1.MasterTableView.GetColumn("address_line_1").ItemStyle.Width = Unit.Pixel(350);
             }
         }
 
-        //protected void Insert(object sender, EventArgs e)
-        //{
-        //    string consumer_first = txtConsumerFirst.Text;
-        //    string consumer_last = txtConsumerLast.Text;
-        //    //string consumer_middle = txtConsumerMiddle.Text;
-        //    string date_of_birth = txtBirthDate.Text;
-        //    string address_line_1 = txtAddress1.Text;
-        //    string address_line_2 = txtAddress2.Text;
-        //    string city = txtCity.Text;
-        //    string state = txtState.Text;
-        //    string zip_code = txtZipCode.Text;
-        //    string identifier = txtIdentifier.Text;
-        //    string gender = txtGender.Text;
-        //    string diagnosis = txtDiagnosis.Text;
-        //    string nickname_first = txtNicknameFirst.Text;
-        //    string nickname_last = txtNicknameLast.Text;
-
-        //    string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
-        //    using (SqlConnection con = new SqlConnection(constr))
-        //    {
-        //        using (SqlCommand cmd = new SqlCommand("Consumers_CRUD"))
-        //        {
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            cmd.Parameters.AddWithValue("@Action", "INSERT");
-        //            //cmd.Parameters.AddWithValue("@consumer_internal_number", consumer_internal_number);
-        //            cmd.Parameters.AddWithValue("@consumer_first", consumer_first);
-        //            cmd.Parameters.AddWithValue("@consumer_last", consumer_last);
-        //            //cmd.Parameters.AddWithValue("@consumer_middle", consumer_middle);
-        //            cmd.Parameters.AddWithValue("@date_of_birth", date_of_birth);
-        //            cmd.Parameters.AddWithValue("@address_line_1", address_line_1);
-        //            cmd.Parameters.AddWithValue("@address_line_2", address_line_2);
-        //            cmd.Parameters.AddWithValue("@city", city);
-        //            cmd.Parameters.AddWithValue("@state", state);
-        //            cmd.Parameters.AddWithValue("@zip_code", zip_code);
-        //            cmd.Parameters.AddWithValue("@identifier", identifier);
-        //            cmd.Parameters.AddWithValue("@gender", gender);
-        //            cmd.Parameters.AddWithValue("@diagnosis", diagnosis);
-        //            cmd.Parameters.AddWithValue("@nickname_first", nickname_first);
-        //            cmd.Parameters.AddWithValue("@nickname_last", nickname_last);
-
-        //            cmd.Connection = con;
-        //            con.Open();
-        //            cmd.ExecuteNonQuery();
-        //            con.Close();
-        //        }
-        //    }
-        //    this.BindGrid();
-        //}
-
-        protected void OnRowEditing(object sender, GridViewEditEventArgs e)
+        private static DataTable GetDataTable(string queryString)
         {
-            GridView1.EditIndex = e.NewEditIndex;
-            this.BindGrid();
-        }
+            String ConnString = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
+            SqlConnection MySqlConnection = new SqlConnection(ConnString);
+            SqlDataAdapter MySqlDataAdapter = new SqlDataAdapter();
+            MySqlDataAdapter.SelectCommand = new SqlCommand(queryString, MySqlConnection);
 
-        protected void OnRowCancelingEdit(object sender, EventArgs e)
-        {
-            GridView1.EditIndex = -1;
-            this.BindGrid();
-        }
-
-        //protected void OnRowUpdating(object sender, GridViewUpdateEventArgs e)
-        //{
-        //    GridViewRow row = GridView1.Rows[e.RowIndex];
-        //    int consumer_internal_number = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
-        //    string consumer_first = (row.FindControl("txtConsumerFirst") as TextBox).Text;
-        //    string consumer_last = (row.FindControl("txtConsumerLast") as TextBox).Text;
-        //    //string consumer_middle = (row.FindControl("txtUserName") as TextBox).Text;
-        //    string date_of_birth = (row.FindControl("txtBirthDate") as TextBox).Text;
-        //    string address_line_1 = (row.FindControl("txtAddress1") as TextBox).Text;
-        //    string address_line_2 = (row.FindControl("txtAddress2") as TextBox).Text;
-        //    string city = (row.FindControl("txtCity") as TextBox).Text;
-        //    string state = (row.FindControl("txtState") as TextBox).Text;
-        //    string zip_code = (row.FindControl("txtZipCode") as TextBox).Text;
-        //    string identifier = (row.FindControl("txtIdentifier") as TextBox).Text;
-        //    string gender = (row.FindControl("txtGender") as TextBox).Text;
-        //    string diagnosis = (row.FindControl("txtDiagnosis") as TextBox).Text;
-        //    string nickname_first = (row.FindControl("txtNicknameFirst") as TextBox).Text;
-        //    string nickname_last = (row.FindControl("txtNicknameLast") as TextBox).Text;
-
-        //    string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
-        //    using (SqlConnection con = new SqlConnection(constr))
-        //    {
-        //        using (SqlCommand cmd = new SqlCommand("Consumers_CRUD"))
-        //        {
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            cmd.Parameters.AddWithValue("@Action", "UPDATE");
-        //            cmd.Parameters.AddWithValue("@consumer_internal_number", consumer_internal_number);
-        //            cmd.Parameters.AddWithValue("@consumer_first", consumer_first);
-        //            cmd.Parameters.AddWithValue("@consumer_last", consumer_last);
-        //            //cmd.Parameters.AddWithValue("@consumer_middle", consumer_middle);
-        //            cmd.Parameters.AddWithValue("@date_of_birth", date_of_birth);
-        //            cmd.Parameters.AddWithValue("@address_line_1", address_line_1);
-        //            cmd.Parameters.AddWithValue("@address_line_2", address_line_2);
-        //            cmd.Parameters.AddWithValue("@city", city);
-        //            cmd.Parameters.AddWithValue("@state", state);
-        //            cmd.Parameters.AddWithValue("@zip_code", zip_code);
-        //            cmd.Parameters.AddWithValue("@identifier", identifier);
-        //            cmd.Parameters.AddWithValue("@gender", gender);
-        //            cmd.Parameters.AddWithValue("@diagnosis", diagnosis);
-        //            cmd.Parameters.AddWithValue("@nickname_first", nickname_first);
-        //            cmd.Parameters.AddWithValue("@nickname_last", nickname_last);
-
-        //            //cmd.Parameters.AddWithValue("@ContentType", SqlDbType.VarBinary, -1);
-        //            //cmd.Parameters.AddWithValue("@Data", SqlDbType.VarBinary, -1);
-
-        //            cmd.Connection = con;
-        //            con.Open();
-        //            cmd.ExecuteNonQuery();
-        //            con.Close();
-        //        }
-        //    }
-        //    GridView1.EditIndex = -1;
-        //    this.BindGrid();
-        //}
-
-        //protected void OnRowDeleting(object sender, GridViewDeleteEventArgs e)
-        //{
-        //    int consumer_internal_number = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
-        //    string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
-        //    using (SqlConnection con = new SqlConnection(constr))
-        //    {
-        //        using (SqlCommand cmd = new SqlCommand("Consumers_CRUD"))
-        //        {
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            cmd.Parameters.AddWithValue("@Action", "DELETE");
-        //            cmd.Parameters.AddWithValue("@consumer_internal_number",consumer_internal_number);
-        //            cmd.Connection = con;
-        //            con.Open();
-        //            cmd.ExecuteNonQuery();
-        //            con.Close();
-        //        }
-        //    }
-        //    this.BindGrid();
-        //}
-
-        protected void OnPageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            GridView1.PageIndex = e.NewPageIndex;
-            this.BindGrid();
-        }
-
-        protected void OnRowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            //if (e.Row.RowType == DataControlRowType.DataRow && e.Row.RowIndex != GridView1.EditIndex)
-            //{
-            //    (e.Row.Cells[2].Controls[2] as LinkButton).Attributes["onclick"] = "return confirm('Do you want to delete this row?');";
-            //}
-        }
-
-        protected void DownloadFile(object sender, EventArgs e)
-        {
-            int id = int.Parse((sender as LinkButton).CommandArgument);
-            byte[] bytes;
-            string fileName, contentType;
-            string constr = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
+            DataTable myDataTable = new DataTable();
+            MySqlConnection.Open();
+            try
             {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.CommandText = "select Name, Data, ContentType from tblbooking where BId=@BId";
-                    cmd.Parameters.AddWithValue("@BId", id);
-                    cmd.Connection = con;
-                    con.Open();
-                    using (SqlDataReader sdr = cmd.ExecuteReader())
-                    {
-                        sdr.Read();
-                        bytes = (byte[])sdr["Data"];
-                        contentType = sdr["ContentType"].ToString();
-                        fileName = sdr["Name"].ToString();
-                    }
-                    con.Close();
-                }
+                MySqlDataAdapter.Fill(myDataTable);
             }
-            Response.Clear();
-            Response.Buffer = true;
-            Response.Charset = "";
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.ContentType = contentType;
-            Response.AppendHeader("Content-Disposition", "attachment; filename=" + fileName);
-            Response.BinaryWrite(bytes);
-            Response.Flush();
-            Response.End();
+            finally
+            {
+                MySqlConnection.Close();
+            }
+
+            return myDataTable;
+        }
+
+        private DataTable Consumers
+        {
+            get
+            {
+                object obj = this.Session["Consumers"];
+                if ((!(obj == null)))
+                {
+                    return ((DataTable)(obj));
+                }
+                DataTable myDataTable = new DataTable();
+                myDataTable = GetDataTable("SELECT * FROM Consumers");
+                this.Session["Consumers"] = myDataTable;
+                return myDataTable;
+            }
+        }
+
+        protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
+        {
+            this.RadGrid1.DataSource = this.Consumers;
+            this.Consumers.PrimaryKey = new DataColumn[] { this.Consumers.Columns["consumer_internal_number"] };
+        }
+
+        protected void RadGrid1_UpdateCommand(object source, GridCommandEventArgs e)
+        {
+            GridEditableItem editedItem = e.Item as GridEditableItem;
+            UserControl userControl = (UserControl)e.Item.FindControl(GridEditFormItem.EditFormUserControlID);
+          
+            //Prepare new row to add it in the DataSource
+            DataRow[] changedRows = this.Consumers.Select("ConsumerID = " + editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["consumer_internal_number"]);
+
+            if (changedRows.Length != 1)
+            {
+                RadGrid1.Controls.Add(new LiteralControl("Unable to locate the Consumer for updating."));
+                e.Canceled = true;
+                return;
+            }
+
+            //Update new values
+            Hashtable newValues = new Hashtable();
+
+            newValues["Country"] = (userControl.FindControl("TextBox7") as TextBox).Text;
+            newValues["City"] = (userControl.FindControl("TextBox8") as TextBox).Text;
+            newValues["Region"] = (userControl.FindControl("TextBox9") as TextBox).Text;
+            newValues["HomePhone"] = (userControl.FindControl("HomePhoneBox") as RadMaskedTextBox).Text;
+            newValues["BirthDate"] = (userControl.FindControl("BirthDatePicker") as RadDatePicker).SelectedDate.ToString();
+            newValues["TitleOfCourtesy"] = (userControl.FindControl("ddlTOC") as DropDownList).SelectedItem.Value;
+
+            newValues["Notes"] = (userControl.FindControl("TextBox1") as TextBox).Text;
+            newValues["Address"] = (userControl.FindControl("TextBox6") as TextBox).Text;
+            newValues["FirstName"] = (userControl.FindControl("TextBox2") as TextBox).Text;
+            newValues["LastName"] = (userControl.FindControl("TextBox3") as TextBox).Text;
+            newValues["HireDate"] = (userControl.FindControl("HireDatePicker") as RadDatePicker).SelectedDate.ToString();
+            newValues["Title"] = (userControl.FindControl("TextBox4") as TextBox).Text;
+
+            changedRows[0].BeginEdit();
+            try
+            {
+                foreach (DictionaryEntry entry in newValues)
+                {
+                    changedRows[0][(string)entry.Key] = entry.Value;
+                }
+                changedRows[0].EndEdit();
+                this.Consumers.AcceptChanges();
+            }
+            catch (Exception ex)
+            {
+                changedRows[0].CancelEdit();
+
+                Label lblError = new Label();
+                lblError.Text = "Unable to update Consumers. Reason: " + ex.Message;
+                lblError.ForeColor = System.Drawing.Color.Red;
+                RadGrid1.Controls.Add(lblError);
+
+                e.Canceled = true;
+            }
+        }
+
+        protected void RadGrid1_InsertCommand(object source, GridCommandEventArgs e)
+        {
+            UserControl userControl = (UserControl)e.Item.FindControl(GridEditFormItem.EditFormUserControlID);
+
+            //Create new row in the DataSource
+            DataRow newRow = this.Consumers.NewRow();
+
+            //Insert new values
+            Hashtable newValues = new Hashtable();
+
+            newValues["Country"] = (userControl.FindControl("TextBox7") as TextBox).Text;
+            newValues["City"] = (userControl.FindControl("TextBox8") as TextBox).Text;
+            newValues["Region"] = (userControl.FindControl("TextBox9") as TextBox).Text;
+            newValues["HomePhone"] = (userControl.FindControl("HomePhoneBox") as RadMaskedTextBox).Text;
+            newValues["BirthDate"] = (userControl.FindControl("BirthDatePicker") as RadDatePicker).SelectedDate.ToString();
+            newValues["TitleOfCourtesy"] = (userControl.FindControl("ddlTOC") as DropDownList).SelectedItem.Value;
+
+            newValues["Notes"] = (userControl.FindControl("TextBox1") as TextBox).Text;
+            newValues["Address"] = (userControl.FindControl("TextBox6") as TextBox).Text;
+            newValues["FirstName"] = (userControl.FindControl("TextBox2") as TextBox).Text;
+            newValues["LastName"] = (userControl.FindControl("TextBox3") as TextBox).Text;
+            newValues["HireDate"] = (userControl.FindControl("HireDatePicker") as RadDatePicker).SelectedDate.ToString();
+            newValues["Title"] = (userControl.FindControl("TextBox4") as TextBox).Text;
+
+            //make sure that unique primary key value is generated for the inserted row 
+            newValues["consumer_internal_number"] = (int)this.Consumers.Rows[this.Consumers.Rows.Count - 1]["consumer_internal_number"] + 1;
+            try
+            {
+                foreach (DictionaryEntry entry in newValues)
+                {
+                    newRow[(string)entry.Key] = entry.Value;
+                }
+                this.Consumers.Rows.Add(newRow);
+                this.Consumers.AcceptChanges();
+            }
+            catch (Exception ex)
+            {
+                Label lblError = new Label();
+                lblError.Text = "Unable to insert Consumers. Reason: " + ex.Message;
+                lblError.ForeColor = System.Drawing.Color.Red;
+                RadGrid1.Controls.Add(lblError);
+
+                e.Canceled = true;
+            }
+        }
+
+        protected void RadGrid1_DeleteCommand(object source, GridCommandEventArgs e)
+        {
+            string ID = (e.Item as GridDataItem).OwnerTableView.DataKeyValues[e.Item.ItemIndex]["consumer_internal_number"].ToString();
+            DataTable employeeTable = this.Consumers;
+            if (employeeTable.Rows.Find(ID) != null)
+            {
+                employeeTable.Rows.Find(ID).Delete();
+                employeeTable.AcceptChanges();
+            }
         }
     }
 }

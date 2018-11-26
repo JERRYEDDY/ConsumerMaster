@@ -13,39 +13,30 @@ namespace ConsumerMaster {
     public partial class _Default {
         
         /// <summary>
-        /// GridView1 control.
+        /// RadSkinManager1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView1;
+        protected global::Telerik.Web.UI.RadSkinManager RadSkinManager1;
         
         /// <summary>
-        /// SqlDataSource1 control.
+        /// RadFormDecorator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
+        protected global::Telerik.Web.UI.RadFormDecorator RadFormDecorator1;
         
         /// <summary>
-        /// WebDataGrid1 control.
+        /// RadGrid1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Infragistics.Web.UI.GridControls.WebDataGrid WebDataGrid1;
-        
-        /// <summary>
-        /// SqlDataSource2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource2;
+        protected global::Telerik.Web.UI.RadGrid RadGrid1;
     }
 }
