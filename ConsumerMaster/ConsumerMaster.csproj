@@ -111,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
-    <Content Include="ConsumerDetailsCS.ascx" />
     <Content Include="Consumers Bulk Insert.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -190,13 +189,6 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="ConsumerDetailsCS.ascx.cs">
-      <DependentUpon>ConsumerDetailsCS.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ConsumerDetailsCS.ascx.designer.cs">
-      <DependentUpon>ConsumerDetailsCS.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

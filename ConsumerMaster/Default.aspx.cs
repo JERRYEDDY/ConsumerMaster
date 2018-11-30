@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Collections;
 using Telerik.Web.UI;
+using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
@@ -16,7 +17,9 @@ namespace ConsumerMaster
         {
             if (!this.IsPostBack)
             {
+                
                 //this.BindGrid();
+
             }
         }
 
@@ -67,6 +70,12 @@ namespace ConsumerMaster
             }
         }
 
+        protected void rblGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             this.RadGrid1.DataSource = this.Consumers;
@@ -91,19 +100,22 @@ namespace ConsumerMaster
             //Update new values
             Hashtable newValues = new Hashtable();
 
-            newValues["Country"] = (userControl.FindControl("TextBox7") as TextBox).Text;
-            newValues["City"] = (userControl.FindControl("TextBox8") as TextBox).Text;
-            newValues["Region"] = (userControl.FindControl("TextBox9") as TextBox).Text;
-            newValues["HomePhone"] = (userControl.FindControl("HomePhoneBox") as RadMaskedTextBox).Text;
-            newValues["BirthDate"] = (userControl.FindControl("BirthDatePicker") as RadDatePicker).SelectedDate.ToString();
-            newValues["TitleOfCourtesy"] = (userControl.FindControl("ddlTOC") as DropDownList).SelectedItem.Value;
+            newValues["consumer_first"] = (userControl.FindControl("txtConsumerFirst") as TextBox).Text;
+            newValues["consumer_last"] = (userControl.FindControl("txtConsumerLast") as TextBox).Text;
+            newValues["date_of_birth"] = (userControl.FindControl("dpBirthDate") as RadDatePicker).SelectedDate.ToString();
+            newValues["address_line_1"] = (userControl.FindControl("txtAddress1") as TextBox).Text;
+            newValues["address_line_2"] = (userControl.FindControl("txtAddress2") as RadMaskedTextBox).Text;
 
-            newValues["Notes"] = (userControl.FindControl("TextBox1") as TextBox).Text;
-            newValues["Address"] = (userControl.FindControl("TextBox6") as TextBox).Text;
-            newValues["FirstName"] = (userControl.FindControl("TextBox2") as TextBox).Text;
-            newValues["LastName"] = (userControl.FindControl("TextBox3") as TextBox).Text;
-            newValues["HireDate"] = (userControl.FindControl("HireDatePicker") as RadDatePicker).SelectedDate.ToString();
-            newValues["Title"] = (userControl.FindControl("TextBox4") as TextBox).Text;
+            newValues["city"] = (userControl.FindControl("txtCity") as TextBox).Text;
+            newValues["state"] = (userControl.FindControl("txtState") as TextBox).Text;
+            newValues["zip_code"] = (userControl.FindControl("txtZipCode") as TextBox).Text;
+            newValues["identifier"] = (userControl.FindControl("txtIdentifier") as TextBox).Text;
+            newValues["gender"] = (userControl.FindControl("ddlGender") as DropDownList).SelectedItem.Value;
+            //newValues["gender"] = (userControl.FindControl("txtGender") as RadMaskedTextBox).Text;
+
+            newValues["diagnosis"] = (userControl.FindControl("txtDiagnosis") as TextBox).Text;
+            newValues["nickname_first"] = (userControl.FindControl("txtNicknameFirst") as TextBox).Text;
+            newValues["nickname_last"] = (userControl.FindControl("txtNicknameLast") as TextBox).Text;
 
             changedRows[0].BeginEdit();
             try
@@ -138,19 +150,22 @@ namespace ConsumerMaster
             //Insert new values
             Hashtable newValues = new Hashtable();
 
-            newValues["Country"] = (userControl.FindControl("TextBox7") as TextBox).Text;
-            newValues["City"] = (userControl.FindControl("TextBox8") as TextBox).Text;
-            newValues["Region"] = (userControl.FindControl("TextBox9") as TextBox).Text;
-            newValues["HomePhone"] = (userControl.FindControl("HomePhoneBox") as RadMaskedTextBox).Text;
-            newValues["BirthDate"] = (userControl.FindControl("BirthDatePicker") as RadDatePicker).SelectedDate.ToString();
-            newValues["TitleOfCourtesy"] = (userControl.FindControl("ddlTOC") as DropDownList).SelectedItem.Value;
+            newValues["consumer_first"] = (userControl.FindControl("txtConsumerFirst") as TextBox).Text;
+            newValues["consumer_last"] = (userControl.FindControl("txtConsumerLast") as TextBox).Text;
+            newValues["date_of_birth"] = (userControl.FindControl("dpBirthDate") as RadDatePicker).SelectedDate.ToString();
+            newValues["address_line_1"] = (userControl.FindControl("txtAddress1") as TextBox).Text;
+            newValues["address_line_2"] = (userControl.FindControl("txtAddress2") as RadMaskedTextBox).Text;
 
-            newValues["Notes"] = (userControl.FindControl("TextBox1") as TextBox).Text;
-            newValues["Address"] = (userControl.FindControl("TextBox6") as TextBox).Text;
-            newValues["FirstName"] = (userControl.FindControl("TextBox2") as TextBox).Text;
-            newValues["LastName"] = (userControl.FindControl("TextBox3") as TextBox).Text;
-            newValues["HireDate"] = (userControl.FindControl("HireDatePicker") as RadDatePicker).SelectedDate.ToString();
-            newValues["Title"] = (userControl.FindControl("TextBox4") as TextBox).Text;
+            newValues["city"] = (userControl.FindControl("txtCity") as TextBox).Text;
+            newValues["state"] = (userControl.FindControl("txtState") as TextBox).Text;
+            newValues["zip_code"] = (userControl.FindControl("txtZipCode") as TextBox).Text;
+            newValues["identifier"] = (userControl.FindControl("txtIdentifier") as TextBox).Text;
+            newValues["gender"] = (userControl.FindControl("ddlGender") as DropDownList).SelectedItem.Value;
+            //newValues["gender"] = (userControl.FindControl("txtGender") as RadMaskedTextBox).Text;
+
+            newValues["diagnosis"] = (userControl.FindControl("txtDiagnosis") as TextBox).Text;
+            newValues["nickname_first"] = (userControl.FindControl("txtNicknameFirst") as TextBox).Text;
+            newValues["nickname_last"] = (userControl.FindControl("txtNicknameLast") as TextBox).Text;
 
             //make sure that unique primary key value is generated for the inserted row 
             newValues["consumer_internal_number"] = (int)this.Consumers.Rows[this.Consumers.Rows.Count - 1]["consumer_internal_number"] + 1;
@@ -184,5 +199,6 @@ namespace ConsumerMaster
                 employeeTable.AcceptChanges();
             }
         }
+
     }
 }
