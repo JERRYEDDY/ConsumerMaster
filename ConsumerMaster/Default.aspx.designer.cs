@@ -31,13 +31,13 @@ namespace ConsumerMaster {
         protected global::Telerik.Web.UI.RadFormDecorator RadFormDecorator1;
         
         /// <summary>
-        /// RadGrid1 control.
+        /// ConsumersGrid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadGrid RadGrid1;
+        protected global::Telerik.Web.UI.RadGrid ConsumersGrid;
         
         /// <summary>
         /// SqlDataSource1 control.
@@ -47,5 +47,14 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
+        
+        /// <summary>
+        /// StatesSqlDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource StatesSqlDataSource;
     }
 }

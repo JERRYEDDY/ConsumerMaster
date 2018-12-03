@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
@@ -7,7 +6,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Collections;
 using Telerik.Web.UI;
-using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
@@ -17,41 +15,126 @@ namespace ConsumerMaster
         {
             if (!this.IsPostBack)
             {
-                
                 //this.BindGrid();
-
             }
         }
 
-        protected void RadGrid1_PreRender(object sender, System.EventArgs e)
+        protected void ConsumersGrid_ItemUpdated(object source, GridUpdatedEventArgs e)
         {
-            if (!this.IsPostBack && this.RadGrid1.MasterTableView.Items.Count > 1)
+            if (e.Exception != null)
             {
-                //RadGrid1.MasterTableView.GetColumn("address_line_1").HeaderStyle.Width = Unit.Pixel(350);
-                //RadGrid1.MasterTableView.GetColumn("address_line_1").FilterControlWidth = Unit.Pixel(350);
-                //RadGrid1.MasterTableView.GetColumn("address_line_1").ItemStyle.Width = Unit.Pixel(350);
+                e.KeepInEditMode = true;
+                e.ExceptionHandled = true;
+                DisplayMessage(true, "Consumer " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["consumer_internal_number"] + " cannot be updated. Reason: " + e.Exception.Message);
+            }
+            else
+            {
+                DisplayMessage(false, "Consumer " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["consumer_internal_number"] + " updated");
             }
         }
+
+        protected void ConsumersGrid_ItemInserted(object source, GridInsertedEventArgs e)
+        {
+            if (e.Exception != null)
+            {
+                e.ExceptionHandled = true;
+                e.KeepInInsertMode = true;
+                DisplayMessage(true, "Consumer cannot be inserted. Reason: " + e.Exception.Message);
+            }
+            else
+            {
+                DisplayMessage(false, "Consumer inserted");
+            }
+        }
+
+        protected void ConsumersGrid_ItemDeleted(object source, GridDeletedEventArgs e)
+        {
+            if (e.Exception != null)
+            {
+                e.ExceptionHandled = true;
+                DisplayMessage(true, "Consumer " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["consumer_internal_number"] + " cannot be deleted. Reason: " + e.Exception.Message);
+            }
+            else
+            {
+                DisplayMessage(false, "Consumer " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["consumer_internal_number"] + " deleted");
+            }
+        }
+
+        protected void ConsumersGrid_ItemCommand(object source, GridCommandEventArgs e)
+        {
+            if (e.CommandName == RadGrid.InitInsertCommandName) //"Add new" button clicked
+            {
+                GridEditCommandColumn editColumn = (GridEditCommandColumn)ConsumersGrid.MasterTableView.GetColumn("EditCommandColumn");
+                editColumn.Visible = false;
+            }
+            else if (e.CommandName == RadGrid.RebindGridCommandName && e.Item.OwnerTableView.IsItemInserted)
+            {
+                e.Canceled = true;
+            }
+            else
+            {
+                GridEditCommandColumn editColumn = (GridEditCommandColumn)ConsumersGrid.MasterTableView.GetColumn("EditCommandColumn");
+                if (!editColumn.Visible)
+                    editColumn.Visible = true;
+            }
+        }
+
+        protected void ConsumersGrid_PreRender(object sender, EventArgs e)
+        {
+            if (!Page.IsPostBack)
+            {
+                ConsumersGrid.EditIndexes.Add(0);
+                ConsumersGrid.Rebind();
+            }
+        }
+
+        private void DisplayMessage(bool isError, string text)
+        {
+            //Label label = (isError) ? this.Label1 : this.Label2;
+            //label.Text = text;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private static DataTable GetDataTable(string queryString)
         {
-            String ConnString = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
-            SqlConnection MySqlConnection = new SqlConnection(ConnString);
-            SqlDataAdapter MySqlDataAdapter = new SqlDataAdapter();
-            MySqlDataAdapter.SelectCommand = new SqlCommand(queryString, MySqlConnection);
-
-            DataTable myDataTable = new DataTable();
-            MySqlConnection.Open();
-            try
+            using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
             {
-                MySqlDataAdapter.Fill(myDataTable);
+                sqlConnect.Open();
+                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+                {
+                    DataTable dataTable = new DataTable();
+                    sqlDataAdapter.Fill(dataTable);
+                    return dataTable;
+                }
             }
-            finally
-            {
-                MySqlConnection.Close();
-            }
-
-            return myDataTable;
         }
 
         private DataTable Consumers
@@ -63,26 +146,20 @@ namespace ConsumerMaster
                 {
                     return ((DataTable)(obj));
                 }
-                DataTable myDataTable = new DataTable();
-                myDataTable = GetDataTable("SELECT * FROM Consumers");
-                this.Session["Consumers"] = myDataTable;
-                return myDataTable;
+                DataTable dataTable = new DataTable();
+                dataTable = GetDataTable("SELECT * FROM Consumers");
+                this.Session["Consumers"] = dataTable;
+                return dataTable;
             }
         }
 
-        protected void rblGender_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ConsumerGrid_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
-
-        }
-
-
-        protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
-        {
-            this.RadGrid1.DataSource = this.Consumers;
+            this.ConsumersGrid.DataSource = this.Consumers;
             this.Consumers.PrimaryKey = new DataColumn[] { this.Consumers.Columns["consumer_internal_number"] };
         }
 
-        protected void RadGrid1_UpdateCommand(object source, GridCommandEventArgs e)
+        protected void ConsumerGrid_UpdateCommand(object source, GridCommandEventArgs e)
         {
             GridEditableItem editedItem = e.Item as GridEditableItem;
             UserControl userControl = (UserControl)e.Item.FindControl(GridEditFormItem.EditFormUserControlID);
@@ -92,7 +169,7 @@ namespace ConsumerMaster
 
             if (changedRows.Length != 1)
             {
-                RadGrid1.Controls.Add(new LiteralControl("Unable to locate the Consumer for updating."));
+                ConsumersGrid.Controls.Add(new LiteralControl("Unable to locate the Consumer for updating."));
                 e.Canceled = true;
                 return;
             }
@@ -134,13 +211,13 @@ namespace ConsumerMaster
                 Label lblError = new Label();
                 lblError.Text = "Unable to update Consumers. Reason: " + ex.Message;
                 lblError.ForeColor = System.Drawing.Color.Red;
-                RadGrid1.Controls.Add(lblError);
+                ConsumersGrid.Controls.Add(lblError);
 
                 e.Canceled = true;
             }
         }
 
-        protected void RadGrid1_InsertCommand(object source, GridCommandEventArgs e)
+        protected void ConsumerGrid_InsertCommand(object source, GridCommandEventArgs e)
         {
             UserControl userControl = (UserControl)e.Item.FindControl(GridEditFormItem.EditFormUserControlID);
 
@@ -183,13 +260,13 @@ namespace ConsumerMaster
                 Label lblError = new Label();
                 lblError.Text = "Unable to insert Consumers. Reason: " + ex.Message;
                 lblError.ForeColor = System.Drawing.Color.Red;
-                RadGrid1.Controls.Add(lblError);
+                ConsumersGrid.Controls.Add(lblError);
 
                 e.Canceled = true;
             }
         }
 
-        protected void RadGrid1_DeleteCommand(object source, GridCommandEventArgs e)
+        protected void ConsumerGrid_DeleteCommand(object source, GridCommandEventArgs e)
         {
             string ID = (e.Item as GridDataItem).OwnerTableView.DataKeyValues[e.Item.ItemIndex]["consumer_internal_number"].ToString();
             DataTable employeeTable = this.Consumers;
@@ -199,6 +276,23 @@ namespace ConsumerMaster
                 employeeTable.AcceptChanges();
             }
         }
+
+        private DataTable ConsumersTradingPartners
+        {
+            get
+            {
+                object obj = this.Session["ConsumersTradingPartners"];
+                if ((!(obj == null)))
+                {
+                    return ((DataTable)(obj));
+                }
+                DataTable dataTable = new DataTable();
+                dataTable = GetDataTable("SELECT tp.id AS id, tp.name AS name, tp.string AS string FROM ConsumerTradingPartner AS ctp INNER JOIN TradingPartners AS tp ON ctp.trading_partner_id = tp.id");
+                this.Session["ConsumersTradingPartners"] = dataTable;
+                return dataTable;
+            }
+        }
+
 
     }
 }
