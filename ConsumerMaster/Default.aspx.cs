@@ -162,5 +162,21 @@ namespace ConsumerMaster
             Label label = (isError) ? this.Label1 : this.Label2;
             label.Text = text;
         }
+
+        protected void RadListBox1_Transferred(object sender, RadListBoxTransferredEventArgs e)
+        {
+            foreach (RadListBoxItem item in e.Items)
+            {
+
+                    item.Value = item.Value.Replace("_thumb", "");
+  
+
+                //Databind the item in order to evaluate the databinding expressions from the template
+                item.DataBind();
+            }
+        }
+
+
+
     }
 }

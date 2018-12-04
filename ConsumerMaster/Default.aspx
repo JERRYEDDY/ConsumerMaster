@@ -3,6 +3,34 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+<style>
+
+.demo-container {
+    text-align: center;
+}
+ 
+.demo-container .wrapper {
+    display: inline;
+    display: inline-block;
+    zoom: 1;
+}
+ 
+.demo-container .RadListBox {
+    text-align: left;
+    margin-bottom: 5px;
+}
+ 
+.demo-container .block {
+    display: block !important;
+    width: 200px !important;
+}
+
+</style>
+
+
+
+
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
     
@@ -146,9 +174,10 @@
                                                 <tr>
                                                     <td>Trading Partner Id 1:</td>
                                                     <td>
+                                                       
                                                         <telerik:RadDropDownList ID="RadDropDownList1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id1") %>' 
                                                                                  DefaultMessage="Select a trading partner"  DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px" /> 
-                                                        <telerik:RadTextBox ID="RadTextBox1" Text='<%# Bind("trading_partner_id1") %>' runat="server"/>
+
                                                     </td>
                                                 </tr>
                                                     <td>
@@ -159,7 +188,8 @@
                                                 <tr>
                                                     <td>Trading Partner Id 2:</td>
                                                     <td>
-                                                        <telerik:RadDropDownList ID="RadDropDownList2" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id2") %>' DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
+                                                        <telerik:RadDropDownList ID="RadDropDownList2" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id2") %>' 
+                                                                                 DefaultMessage="Select a trading partner"  DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
                                                 </td>
                                                 </tr>
                                                 <tr>
@@ -170,7 +200,8 @@
                                                 <tr>
                                                     <td>Trading Partner Id 3:</td>
                                                     <td>
-                                                        <telerik:RadDropDownList ID="RadDropDownList3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id3") %>' DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
+                                                        <telerik:RadDropDownList ID="RadDropDownList3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id3") %>' 
+                                                                                 DefaultMessage="Select a trading partner"  DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
                                                 </td>
                                                 </tr>
                                                 <tr>
@@ -181,9 +212,20 @@
                                                 <tr>
                                                     <td>Trading Partner Id 4:</td>
                                                     <td>
-                                                        <telerik:RadDropDownList ID="RadDropDownList4" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id4") %>' DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
+                                                        <telerik:RadDropDownList ID="RadDropDownList4" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id4") %>' 
+                                                                                 DefaultMessage="Select a trading partner" DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
                                                 </td>
-                                                </tr>                                                
+                                                </tr>     
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                    </td>
+                                                </tr                                                 
+                                                <tr>
+                                                    <td>
+ 
+                                                    </td>
+                                                </tr                                                 
                                             </table>
                                         </td>
                                     </tr>
@@ -209,29 +251,7 @@
                 </ClientSettings>
            </telerik:RadGrid> 
         </div>
-        
-<%--          <div>
-            <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
-                             PageSize="15" DataSourceID="SqlDataSource2" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid2_ItemDeleted" 
-                             OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" OnItemCommand="RadGrid2_ItemCommand" OnPreRender="RadGrid2_PreRender">
-                <PagerStyle Mode="NumericPages"></PagerStyle>
-                <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="TradingPartners" DataSourceID="SqlDataSource2" DataKeyNames="consumer_internal_number">
-                    <Columns>
-                        <telerik:GridEditCommandColumn UniqueName="EditCommandColumn" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
-                        <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
-                        <telerik:GridBoundColumn DataField="trading_partner_id" HeaderText="TPI" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" />
-                        <telerik:GridBoundColumn DataField="id" HeaderText="Id" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" />
-                        <telerik:GridBoundColumn DataField="name" HeaderText="Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="300px" ItemStyle-Width="300px"/>                        
-                        <telerik:GridBoundColumn DataField="string" HeaderText="String" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="100px" ItemStyle-Width="100px"/>
-                        <telerik:GridClientDeleteColumn HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
-                    </Columns>
-                    <EditFormSettings>
-                    </EditFormSettings>
-                </MasterTableView>
-                <ClientSettings>
-                </ClientSettings>
-            </telerik:RadGrid>
-        </div>--%>   
+   
  
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
@@ -288,7 +308,7 @@
             </UpdateParameters>
         </asp:SqlDataSource>    
  
-<%--         <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
+        <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
             ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
             DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
             InsertCommand="INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id, id, name, string) 
@@ -315,7 +335,7 @@
                 <asp:Parameter Name="string" Type="String"></asp:Parameter>
                 <asp:Parameter Name="[consumer_internal_number]" Type="Int32"></asp:Parameter>
             </UpdateParameters>
-        </asp:SqlDataSource>  --%>  
+        </asp:SqlDataSource>    
     
 
         <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT Name, Abbreviation FROM States"/>
