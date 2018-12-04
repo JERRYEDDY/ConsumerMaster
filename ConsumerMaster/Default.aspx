@@ -16,6 +16,8 @@
         </AjaxSettings>
     </telerik:RadAjaxManager>
 
+
+
     <h4>Pathways Consumers</h4>
     <div class="demo-container no-bg">
         <div id="grid">
@@ -39,7 +41,7 @@
                             <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
                             <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor"/>                       
                             <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor"/>
-                            <telerik:GridClientDeleteColumn HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
+                            <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
                         </Columns>
                         <EditFormSettings EditFormType="Template">
                             <FormTemplate>
@@ -93,7 +95,7 @@
                                                     <td>State:</td>
                                                     <td>
                                                         <telerik:RadDropDownList ID="ddlStates" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
-                                                                                 DataTextField="Name" DataValueField = "Abbreviation" TabIndex="12"/> 
+                                                                                 DataTextField="Name" DataValueField="Abbreviation" TabIndex="12"/> 
                                                     </td>
                                                 </tr>               
                                                 <tr>
@@ -140,30 +142,48 @@
                                             </table>
                                         </td>
                                         <td style="vertical-align: top">
-                                            <table id="Table1" cellspacing="1" cellpadding="1" width="250" border="0" class="module">
+                                            <table id="Table1" cellspacing="1" cellpadding="1" width="500" border="0" class="module">
                                                 <tr>
+                                                    <td>Trading Partner Id 1:</td>
                                                     <td>
-<%--                                                        <telerik:RadDropDownList ID="RadDropDownList1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("state") %>'
-                                                                                 DataTextField="name" DataValueField = "string" TabIndex="12"/> --%>
-                                                        <telerik:RadDropDownList ID="RadDropDownList1" runat="server" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField = "string" TabIndex="12"/> 
-
+                                                        <telerik:RadDropDownList ID="RadDropDownList1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id1") %>' 
+                                                                                 DefaultMessage="Select a trading partner"  DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px" /> 
+                                                        <telerik:RadTextBox ID="RadTextBox1" Text='<%# Bind("trading_partner_id1") %>' runat="server"/>
                                                     </td>
+                                                </tr>
+                                                    <td>
+                                                        <br/>
+                                                    </td>
+                                                <tr>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trading Partner Id 2:</td>
+                                                    <td>
+                                                        <telerik:RadDropDownList ID="RadDropDownList2" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id2") %>' DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
+                                                </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <telerik:RadDropDownList ID="RadDropDownList2" runat="server" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField = "string" TabIndex="12"/> 
+                                                        <br/>
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td>Trading Partner Id 3:</td>
                                                     <td>
-                                                        <telerik:RadDropDownList ID="RadDropDownList3" runat="server" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField = "string" TabIndex="12"/> 
-                                                    </td>
+                                                        <telerik:RadDropDownList ID="RadDropDownList3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id3") %>' DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
+                                                </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <telerik:RadDropDownList ID="RadDropDownList4" runat="server" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField = "string" TabIndex="12"/> 
+                                                        <br/>
                                                     </td>
-                                                </tr>
+                                                </tr                                               
+                                                <tr>
+                                                    <td>Trading Partner Id 4:</td>
+                                                    <td>
+                                                        <telerik:RadDropDownList ID="RadDropDownList4" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id4") %>' DataTextField="name" DataValueField = "id" TabIndex="12" Width="300px"/> 
+                                                </td>
+                                                </tr>                                                
                                             </table>
                                         </td>
                                     </tr>
@@ -189,19 +209,43 @@
                 </ClientSettings>
            </telerik:RadGrid> 
         </div>
-
+        
+<%--          <div>
+            <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
+                             PageSize="15" DataSourceID="SqlDataSource2" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid2_ItemDeleted" 
+                             OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" OnItemCommand="RadGrid2_ItemCommand" OnPreRender="RadGrid2_PreRender">
+                <PagerStyle Mode="NumericPages"></PagerStyle>
+                <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="TradingPartners" DataSourceID="SqlDataSource2" DataKeyNames="consumer_internal_number">
+                    <Columns>
+                        <telerik:GridEditCommandColumn UniqueName="EditCommandColumn" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
+                        <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
+                        <telerik:GridBoundColumn DataField="trading_partner_id" HeaderText="TPI" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" />
+                        <telerik:GridBoundColumn DataField="id" HeaderText="Id" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" />
+                        <telerik:GridBoundColumn DataField="name" HeaderText="Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="300px" ItemStyle-Width="300px"/>                        
+                        <telerik:GridBoundColumn DataField="string" HeaderText="String" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="100px" ItemStyle-Width="100px"/>
+                        <telerik:GridClientDeleteColumn HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
+                    </Columns>
+                    <EditFormSettings>
+                    </EditFormSettings>
+                </MasterTableView>
+                <ClientSettings>
+                </ClientSettings>
+            </telerik:RadGrid>
+        </div>--%>   
+ 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
             DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
             InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, 
-            nickname_first, nickname_last) 
+            nickname_first, nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3, trading_partner_id4) 
             VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
-            SelectCommand="SELECT * FROM Consumers" 
+            SelectCommand="SELECT consumer_internal_number,consumer_first,consumer_last,date_of_birth,address_line_1,address_line_2,city,state,zip_code,identifier,gender,diagnosis,nickname_first,
+            nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3, trading_partner_id4 FROM Consumers" 
             UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, 
             address_line_2 = @address_line_2, city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, nickname_first = @nickname_first, 
-            nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
+            nickname_last = @nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3, trading_partner_id4 WHERE consumer_internal_number = @consumer_internal_number">
             <DeleteParameters>
-                <asp:Parameter Name="[consumer_internal_number]" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
             </DeleteParameters>
             <InsertParameters>
                 <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
@@ -217,6 +261,10 @@
                 <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id1" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id2" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id3" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id4" Type="Int32"></asp:Parameter>
             </InsertParameters>
             <UpdateParameters>
                 <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
@@ -232,11 +280,45 @@
                 <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id1" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id2" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id3" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id4" Type="Int32"></asp:Parameter>
                 <asp:Parameter Name="[consumer_internal_number]" Type="Int32"></asp:Parameter>
             </UpdateParameters>
         </asp:SqlDataSource>    
+ 
+<%--         <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
+            ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
+            DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
+            InsertCommand="INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id, id, name, string) 
+            VALUES (@consumer_internal_number, @trading_partner_id, @id, @name, @string)"
+            SelectCommand="SELECT * FROM ConsumerTradingPartner AS ctp INNER JOIN TradingPartners as tp on ctp.trading_partner_id = tp.id WHERE consumer_internal_number = @consumer_internal_number" 
+            UpdateCommand="UPDATE Consumers SET trading_partner_id = @trading_partner_id, id = @id, name = @name, string = @string WHERE consumer_internal_number = @consumer_internal_number">
+             <SelectParameters>
+                 <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
+             </SelectParameters>
+             <DeleteParameters>
+                <asp:Parameter Name="[consumer_internal_number]" Type="Int32"></asp:Parameter>
+            </DeleteParameters>
+            <InsertParameters>
+                <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="trading_partner_id" Type="String"></asp:Parameter>
+                <asp:Parameter Name="id" Type="String"></asp:Parameter>
+                <asp:Parameter Name="name" Type="String"></asp:Parameter>
+                <asp:Parameter Name="string" Type="String"></asp:Parameter>
+            </InsertParameters>
+            <UpdateParameters>
+                <asp:Parameter Name="trading_partner_id" Type="String"></asp:Parameter>
+                <asp:Parameter Name="id" Type="String"></asp:Parameter>
+                <asp:Parameter Name="name" Type="String"></asp:Parameter>
+                <asp:Parameter Name="string" Type="String"></asp:Parameter>
+                <asp:Parameter Name="[consumer_internal_number]" Type="Int32"></asp:Parameter>
+            </UpdateParameters>
+        </asp:SqlDataSource>  --%>  
     
+
         <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT Name, Abbreviation FROM States"/>
-        <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT name, string FROM TradingPartners"/>
+        <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM TradingPartners"/>
     </div>
 </asp:Content>
