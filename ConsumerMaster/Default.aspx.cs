@@ -153,7 +153,7 @@ namespace ConsumerMaster
                 GridEditFormItem item = e.Item as GridEditFormItem;
                 switch (item.OwnerTableView.Name)
                 {
-                    case "Customers":
+                    case "Customers": 
                         TextBox customerIDBox = item["CustomerID"].Controls[0] as TextBox;
                         customerIDBox.Enabled = false;
                         break;
