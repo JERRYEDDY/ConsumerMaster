@@ -6,6 +6,10 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Collections;
 using Telerik.Web.UI;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
+using System.IO;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
+using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace ConsumerMaster
 {
@@ -16,6 +20,25 @@ namespace ConsumerMaster
             if (!this.IsPostBack)
             {
                 //this.BindGrid();
+
+                string fileName = "SampleFile.xlsx";
+                if (!File.Exists(fileName))
+                {
+                    throw new FileNotFoundException(String.Format("File {0} was not found!", fileName));
+                }
+
+                Workbook workbook;
+                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+
+                using (Stream input = new FileStream(fileName, FileMode.Open))
+                {
+                    workbook = formatProvider.Import(input);
+                }
+
+
+
+
+
             }
         }
 

@@ -23,9 +23,9 @@
                      PageSize="15" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                      OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" >
                 <PagerStyle Mode="NumericPages"></PagerStyle>
-                <MasterTableView  TableLayout="Fixed" CommandItemDisplay="TopAndBottom" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number">
+                <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" Caption="CONSUMERS">
                         <DetailTables>
-                            <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" Name="TradingPartners">
+                            <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" Name="TradingPartners" Caption="TRADING PARTNERS">
                                 <ParentTableRelation>
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
@@ -242,12 +242,12 @@
             ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
             DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
             InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, 
-            nickname_first, nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3, trading_partner_id4) 
+            nickname_first, nickname_last) 
             VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
             SelectCommand="SELECT * FROM Consumers" 
             UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, 
             address_line_2 = @address_line_2, city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, nickname_first = @nickname_first, 
-            nickname_last = @nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3, trading_partner_id4 WHERE consumer_internal_number = @consumer_internal_number">
+            nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
             <DeleteParameters>
                 <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
             </DeleteParameters>
@@ -265,10 +265,6 @@
                 <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id1" Type="Int32"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id2" Type="Int32"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id3" Type="Int32"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id4" Type="Int32"></asp:Parameter>
             </InsertParameters>
             <UpdateParameters>
                 <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
@@ -284,10 +280,6 @@
                 <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id1" Type="Int32"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id2" Type="Int32"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id3" Type="Int32"></asp:Parameter>
-                <asp:Parameter Name="trading_partner_id4" Type="Int32"></asp:Parameter>
             </UpdateParameters>
         </asp:SqlDataSource>    
 
