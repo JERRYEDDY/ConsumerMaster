@@ -19,8 +19,7 @@
     <h4>Pathways Consumers</h4>
     <div class="demo-container no-bg">
     <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="Download" CssClass="downloadButton" OnClick="Download_Click" runat="server" />
-    <br />
-    <br />
+    <br /><br />
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
                      PageSize="15" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
@@ -54,7 +53,7 @@
                                 </Columns>
                                 <EditFormSettings EditFormType="Template">
                                      <FormTemplate>
-                                        <table id="Table3" cellspacing="2" cellpadding="1" width="100%" border="0" rules="none" style="border-collapse: collapse;">
+                                        <table id="Table4" cellspacing="2" cellpadding="1" width="100%" border="0" rules="none" style="border-collapse: collapse;">
                                             <tr class="EditFormHeader">
                                                 <td colspan="2">
                                                     <b>Trading Partner Info</b>

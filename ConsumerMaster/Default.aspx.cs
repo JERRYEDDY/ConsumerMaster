@@ -4,54 +4,53 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Collections;
-using Telerik.Web.UI;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
+using Telerik.Web.UI;
+using System.Collections.Generic;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
-using Telerik.Windows.Documents.Spreadsheet.Utilities;
-using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
     public partial class _Default : Page
     {
-        private static readonly int IndexColumnConsumerInternalNumber = 0;
-        private static readonly int IndexColumnTradingPartnerString = 1;
-        private static readonly int IndexColumnConsumerFirst = 2;
-        private static readonly int IndexColumnConsumerLast = 3;
-        private static readonly int IndexColumnDateOfBirth = 4;
-        private static readonly int IndexColumnAddressLine1 = 5;
-        private static readonly int IndexColumnAddressLine2 = 6;
-        private static readonly int IndexColumnCity = 7;
-        private static readonly int IndexColumnState = 8;
-        private static readonly int IndexColumnZipCode = 9;
-        private static readonly int IndexColumnIdentifier = 10;
-        private static readonly int IndexColumnGender = 11;
+        //private static readonly int IndexColumnConsumerInternalNumber = 0;
+        //private static readonly int IndexColumnTradingPartnerString = 1;
+        //private static readonly int IndexColumnConsumerFirst = 2;
+        //private static readonly int IndexColumnConsumerLast = 3;
+        //private static readonly int IndexColumnDateOfBirth = 4;
+        //private static readonly int IndexColumnAddressLine1 = 5;
+        //private static readonly int IndexColumnAddressLine2 = 6;
+        //private static readonly int IndexColumnCity = 7;
+        //private static readonly int IndexColumnState = 8;
+        //private static readonly int IndexColumnZipCode = 9;
+        //private static readonly int IndexColumnIdentifier = 10;
+        //private static readonly int IndexColumnGender = 11;
 
-        private static readonly int IndexRowItemStart = 1;
+        //private static readonly int IndexRowItemStart = 1;
 
-        private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-        private static readonly ThemableColor InvoiceHeaderForeground = ThemableColor.FromArgb(255, 255, 255, 255);
+        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
+        //private static readonly ThemableColor InvoiceHeaderForeground = ThemableColor.FromArgb(255, 255, 255, 255);
 
-        Dictionary<int, string> ceHeader = new Dictionary<int, string>
-        {
-            {0, "consumer_internal_number"},
-            {1, "trading_partner_string"},
-            {2, "consumer_first"},
-            {3, "consumer_last"},
-            {4, "date_of_birth"},
-            {5, "address_line_1"},
-            {6, "address_line2"},
-            {7, "city"},
-            {8, "state"},
-            {9, "zip_code"},
-            {10, "identifier"},
-            {11, "gender"}
-        };
-       
+        //Dictionary<int, string> ceHeader = new Dictionary<int, string>
+        //{
+        //    {0, "consumer_internal_number"},
+        //    {1, "trading_partner_string"},
+        //    {2, "consumer_first"},
+        //    {3, "consumer_last"},
+        //    {4, "date_of_birth"},
+        //    {5, "address_line_1"},
+        //    {6, "address_line2"},
+        //    {7, "city"},
+        //    {8, "state"},
+        //    {9, "zip_code"},
+        //    {10, "identifier"},
+        //    {11, "gender"}
+        //};
+
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
@@ -64,8 +63,9 @@ namespace ConsumerMaster
         protected void Download_Click(object sender, EventArgs e)
         {
             IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-
-            Workbook workbook = this.CreateWorkbook();
+            ConsumerExport consumerExport = new ConsumerExport();
+            Workbook workbook = consumerExport.CreateWorkbook();
+            //Workbook workbook = this.CreateConsumerExportWorkbook();
             byte[] renderedBytes = null;
 
             using (MemoryStream ms = new MemoryStream())
@@ -80,109 +80,104 @@ namespace ConsumerMaster
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.BinaryWrite(renderedBytes);
             Response.End();
-
         }
 
-        private Workbook CreateWorkbook()
-        {
-            Workbook workbook = new Workbook();
-            workbook.Sheets.Add(SheetType.Worksheet);
+        //private Workbook CreateConsumerExportWorkbook()
+        //{
+        //    Workbook workbook = new Workbook();
+        //    workbook.Sheets.Add(SheetType.Worksheet);
+        //    Worksheet worksheet = workbook.ActiveWorksheet;
 
-            Worksheet worksheet = workbook.ActiveWorksheet;
+        //    string ceQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender FROM Consumers";
+        //    DataTable ceDataTable = GetDataTable(ceQuery);
 
-            string ceQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender " +
-                             "FROM Consumers";
-            DataTable ceDataTable = GetDataTable(ceQuery);
+        //    int totalConsumers = ceDataTable.Rows.Count;
+        //    PrepareConsumerExportDocument(worksheet, totalConsumers);
 
-            int totalConsumers = ceDataTable.Rows.Count;
+        //    int currentRow = IndexRowItemStart + 1;
+        //    foreach (DataRow dr in ceDataTable.Rows)
+        //    {
+        //        worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue("trading_partner_string");
+        //        worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnDateOfBirth].SetValue(dr["date_of_birth"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnAddressLine1].SetValue(dr["address_line_1"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnAddressLine2].SetValue(dr["address_line_2"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnCity].SetValue(dr["city"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnState].SetValue(dr["state"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnZipCode].SetValue(dr["zip_code"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnIdentifier].SetValue(dr["identifier"].ToString());
+        //        worksheet.Cells[currentRow, IndexColumnGender].SetValue(dr["gender"].ToString());
 
-            PrepareConsumerExportDocument(worksheet, totalConsumers);
+        //        currentRow++;
+        //    }
 
-            int currentRow = IndexRowItemStart + 1;
+        //    for (int i = 0; i < worksheet.Columns.Count; i++)
+        //    {
+        //        worksheet.Columns[i].AutoFitWidth();
+        //    }
 
-            foreach (DataRow dr in ceDataTable.Rows)
-            {
-                worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
-                worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue("trading_partner_string");
-                worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
-                worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
-                worksheet.Cells[currentRow, IndexColumnDateOfBirth].SetValue(dr["date_of_birth"].ToString());
-                worksheet.Cells[currentRow, IndexColumnAddressLine1].SetValue(dr["address_line_1"].ToString());
-                worksheet.Cells[currentRow, IndexColumnAddressLine2].SetValue(dr["address_line_2"].ToString());
-                worksheet.Cells[currentRow, IndexColumnCity].SetValue(dr["city"].ToString());
-                worksheet.Cells[currentRow, IndexColumnState].SetValue(dr["state"].ToString());
-                worksheet.Cells[currentRow, IndexColumnZipCode].SetValue(dr["zip_code"].ToString());
-                worksheet.Cells[currentRow, IndexColumnIdentifier].SetValue(dr["identifier"].ToString());
-                worksheet.Cells[currentRow, IndexColumnGender].SetValue(dr["gender"].ToString());
+        //    return workbook;
+        //}
 
-                currentRow++;
-            }
+        //private void PrepareConsumerExportDocument(Worksheet worksheet, int itemsCount)
+        //{
+        //    int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
-            for (int i = 0; i < worksheet.Columns.Count; i++)
-            {
-                worksheet.Columns[i].AutoFitWidth();
-            }
+        //    CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+        //    CellIndex firstRowLastCellIndex = new CellIndex(0, 4);
+        //    CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerInternalNumber);
+        //    CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnGender);
+        //    worksheet.Cells[firstRowFirstCellIndex, firstRowLastCellIndex].MergeAcross();
+        //    CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
+        //    worksheet.Cells[firstRowFirstCellIndex, lastRowLastCellIndex].SetBorders(new CellBorders(border, border, border, border, null, null, null, null));
+        //    worksheet.Cells[lastRowFirstCellIndex, lastRowLastCellIndex].SetBorders(new CellBorders(border, border, border, border, null, null, null, null));
+        //    //worksheet.Cells[firstRowFirstCellIndex].SetValue("INVOICE");
+        //   // worksheet.Cells[firstRowFirstCellIndex].SetFontSize(20);
 
-            return workbook;
-        }
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(ceHeader[0]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(ceHeader[1]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetValue(ceHeader[2]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetValue(ceHeader[3]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnDateOfBirth].SetValue(ceHeader[4]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnDateOfBirth].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine1].SetValue(ceHeader[5]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine2].SetValue(ceHeader[6]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnCity].SetValue(ceHeader[7]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnState].SetValue(ceHeader[8]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnZipCode].SetValue(ceHeader[9]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnIdentifier].SetValue(ceHeader[10]);
+        //    worksheet.Cells[IndexRowItemStart, IndexColumnGender].SetValue(ceHeader[11]);
 
-        private void PrepareConsumerExportDocument(Worksheet worksheet, int itemsCount)
-        {
-            int lastItemIndexRow = IndexRowItemStart + itemsCount;
+        //    //worksheet.Cells[IndexRowItemStart, IndexColumnProductID, IndexRowItemStart, IndexColumnSubTotal].SetFill(new GradientFill(GradientType.Horizontal, InvoiceBackground, InvoiceBackground));
+        //    //worksheet.Cells[IndexRowItemStart, IndexColumnProductID, IndexRowItemStart, IndexColumnSubTotal].SetForeColor(InvoiceHeaderForeground);
+        //    //worksheet.Cells[IndexRowItemStart, IndexColumnUnitPrice, lastItemIndexRow, IndexColumnUnitPrice].SetFormat(new CellValueFormat(EnUSCultureAccountFormatString));
+        //    //worksheet.Cells[IndexRowItemStart, IndexColumnSubTotal, lastItemIndexRow, IndexColumnSubTotal].SetFormat(new CellValueFormat(EnUSCultureAccountFormatString));
 
-            CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-            CellIndex firstRowLastCellIndex = new CellIndex(0, 4);
-            CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerInternalNumber);
-            CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnGender);
-            worksheet.Cells[firstRowFirstCellIndex, firstRowLastCellIndex].MergeAcross();
-            CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
-            worksheet.Cells[firstRowFirstCellIndex, lastRowLastCellIndex].SetBorders(new CellBorders(border, border, border, border, null, null, null, null));
-            worksheet.Cells[lastRowFirstCellIndex, lastRowLastCellIndex].SetBorders(new CellBorders(border, border, border, border, null, null, null, null));
-            //worksheet.Cells[firstRowFirstCellIndex].SetValue("INVOICE");
-           // worksheet.Cells[firstRowFirstCellIndex].SetFontSize(20);
+        //    //worksheet.Cells[lastItemIndexRow + 1, IndexColumnUnitPrice].SetValue("TOTAL: ");
+        //    //worksheet.Cells[lastItemIndexRow + 1, IndexColumnSubTotal].SetFormat(new CellValueFormat(EnUSCultureAccountFormatString));
 
-            worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(ceHeader[0]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(ceHeader[1]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetValue(ceHeader[2]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetHorizontalAlignment(RadHorizontalAlignment.Right);
-            worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetValue(ceHeader[3]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetHorizontalAlignment(RadHorizontalAlignment.Right);
-            worksheet.Cells[IndexRowItemStart, IndexColumnDateOfBirth].SetValue(ceHeader[4]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnDateOfBirth].SetHorizontalAlignment(RadHorizontalAlignment.Right);
-            worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine1].SetValue(ceHeader[5]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine2].SetValue(ceHeader[6]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnCity].SetValue(ceHeader[7]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnState].SetValue(ceHeader[8]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnZipCode].SetValue(ceHeader[9]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnIdentifier].SetValue(ceHeader[10]);
-            worksheet.Cells[IndexRowItemStart, IndexColumnGender].SetValue(ceHeader[11]);
+        //    //string subTotalColumnCellRange = NameConverter.ConvertCellRangeToName(new CellIndex(IndexRowItemStart + 1, IndexColumnSubTotal),new CellIndex(lastItemIndexRow, IndexColumnSubTotal));
+        //    //worksheet.Cells[lastItemIndexRow + 1, IndexColumnSubTotal].SetValue(string.Format("=SUM({0})", subTotalColumnCellRange));
+        //    //worksheet.Cells[lastItemIndexRow + 1, IndexColumnUnitPrice, lastItemIndexRow + 1, IndexColumnSubTotal].SetFontSize(20);
+        //}
 
-            //worksheet.Cells[IndexRowItemStart, IndexColumnProductID, IndexRowItemStart, IndexColumnSubTotal].SetFill(new GradientFill(GradientType.Horizontal, InvoiceBackground, InvoiceBackground));
-            //worksheet.Cells[IndexRowItemStart, IndexColumnProductID, IndexRowItemStart, IndexColumnSubTotal].SetForeColor(InvoiceHeaderForeground);
-            //worksheet.Cells[IndexRowItemStart, IndexColumnUnitPrice, lastItemIndexRow, IndexColumnUnitPrice].SetFormat(new CellValueFormat(EnUSCultureAccountFormatString));
-            //worksheet.Cells[IndexRowItemStart, IndexColumnSubTotal, lastItemIndexRow, IndexColumnSubTotal].SetFormat(new CellValueFormat(EnUSCultureAccountFormatString));
-
-            //worksheet.Cells[lastItemIndexRow + 1, IndexColumnUnitPrice].SetValue("TOTAL: ");
-            //worksheet.Cells[lastItemIndexRow + 1, IndexColumnSubTotal].SetFormat(new CellValueFormat(EnUSCultureAccountFormatString));
-
-            //string subTotalColumnCellRange = NameConverter.ConvertCellRangeToName(new CellIndex(IndexRowItemStart + 1, IndexColumnSubTotal),new CellIndex(lastItemIndexRow, IndexColumnSubTotal));
-            //worksheet.Cells[lastItemIndexRow + 1, IndexColumnSubTotal].SetValue(string.Format("=SUM({0})", subTotalColumnCellRange));
-            //worksheet.Cells[lastItemIndexRow + 1, IndexColumnUnitPrice, lastItemIndexRow + 1, IndexColumnSubTotal].SetFontSize(20);
-        }
-
-        private static DataTable GetDataTable(string queryString)
-        {
-            using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
-            {
-                sqlConnect.Open();
-                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
-                {
-                    DataTable dataTable = new DataTable();
-                    sqlDataAdapter.Fill(dataTable);
-                    return dataTable;
-                }
-            }
-        }
+        //private static DataTable GetDataTable(string queryString)
+        //{
+        //    using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
+        //    {
+        //        sqlConnect.Open();
+        //        using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+        //        {
+        //            DataTable dataTable = new DataTable();
+        //            sqlDataAdapter.Fill(dataTable);
+        //            return dataTable;
+        //        }
+        //    }
+        //}
 
         protected void RadGrid1_ItemInserted(object source, GridInsertedEventArgs e)
         {
