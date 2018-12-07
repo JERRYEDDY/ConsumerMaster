@@ -18,6 +18,9 @@
 
     <h4>Pathways Consumers</h4>
     <div class="demo-container no-bg">
+    <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="Download" CssClass="downloadButton" OnClick="Download_Click" runat="server" />
+    <br />
+    <br />
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
                      PageSize="15" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
