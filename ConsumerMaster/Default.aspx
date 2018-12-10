@@ -5,13 +5,10 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 <style>
-table tr td:empty {
-    width: 50px;
-}
-
-table tr td {
-    padding-top: 10px;
-    padding-bottom: 10px;
+.space {
+  background: none;
+  /* make the width small, but setting it to 0 will actual default to the same width as other cells */
+  width: 0.1rem;
 }
 </style>
 
@@ -263,6 +260,7 @@ table tr td {
                     <td>
                         Consumer Export File 
                     </td>
+                    <td class="space"/>
                     <td>
                         <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" OnClick="ConsumerExportDownload_Click" runat="server" />
                     </td>
@@ -271,6 +269,7 @@ table tr td {
                     <td>
                         Service Export File 
                     </td>
+                    <td class="space"/>
                     <td>
                         <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" OnClick="ServiceExportDownload_Click" runat="server" />
                     </td>
