@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.IO;
 using Telerik.Web.UI;
-using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
+using System.Text.RegularExpressions;
 
 namespace ConsumerMaster
 {
@@ -60,11 +57,41 @@ namespace ConsumerMaster
             }
         }
 
-        protected void Download_Click(object sender, EventArgs e)
+        public bool IsZipCode(string zipCode)
+        {
+            string pattern = @"^\d{5}(?:[-\s]\d{4})?$";
+            Regex regex = new Regex(pattern);
+
+            return regex.IsMatch(zipCode);
+        }
+
+        protected void ConsumerExportDownload_Click(object sender, EventArgs e)
         {
             IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
             ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
             Workbook workbook = consumerExport.CreateWorkbook();
+            //Workbook workbook = this.CreateConsumerExportWorkbook();
+            byte[] renderedBytes = null;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                formatProvider.Export(workbook, ms);
+                renderedBytes = ms.ToArray();
+            }
+
+            Response.ClearHeaders();
+            Response.ClearContent();
+            Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.BinaryWrite(renderedBytes);
+            Response.End();
+        }
+
+        protected void ServiceExportDownload_Click(object sender, EventArgs e)
+        {
+            IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+            ServiceExportExcelFile serviceExport = new ServiceExportExcelFile();
+            Workbook workbook = serviceExport.CreateWorkbook();
             //Workbook workbook = this.CreateConsumerExportWorkbook();
             byte[] renderedBytes = null;
 

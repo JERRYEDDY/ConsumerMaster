@@ -5,8 +5,13 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 <style>
-    .btnDisable .rbPrimaryIcon {
-    background: url(images/loading2.gif) !important;
+table tr td:empty {
+    width: 50px;
+}
+
+table tr td {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 </style>
 
@@ -247,6 +252,7 @@
         </div>
         <div>
             <br/><br/>
+            <telerik:RadPanelBar ID="RadPanelBar1" runat="server"></telerik:RadPanelBar>
             <table>
                 <tr>
                     <td>
@@ -257,10 +263,16 @@
                     <td>
                         Consumer Export File 
                     </td>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" OnClick="ConsumerExportDownload_Click" runat="server" />
+                    </td>
                 </tr>
                 <tr>
                     <td>
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" OnClick="Download_Click" runat="server" />
+                        Service Export File 
+                    </td>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" OnClick="ServiceExportDownload_Click" runat="server" />
                     </td>
                 </tr>
             </table>
