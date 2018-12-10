@@ -63,7 +63,7 @@ namespace ConsumerMaster
         protected void Download_Click(object sender, EventArgs e)
         {
             IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-            ConsumerExport consumerExport = new ConsumerExport();
+            ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
             Workbook workbook = consumerExport.CreateWorkbook();
             //Workbook workbook = this.CreateConsumerExportWorkbook();
             byte[] renderedBytes = null;

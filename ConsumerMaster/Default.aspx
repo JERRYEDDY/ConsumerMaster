@@ -3,6 +3,13 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+<style>
+    .btnDisable .rbPrimaryIcon {
+    background: url(images/loading2.gif) !important;
+}
+</style>
+
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
     
@@ -18,11 +25,10 @@
 
     <h4>Pathways Consumers</h4>
     <div class="demo-container no-bg">
-    <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="Download" CssClass="downloadButton" OnClick="Download_Click" runat="server" />
-    <br /><br />
+    <br/>
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
-                     PageSize="15" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
+                     PageSize="10" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                      OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" >
                 <PagerStyle Mode="NumericPages"></PagerStyle>
                 <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" Caption="CONSUMERS">
@@ -238,6 +244,26 @@
                 <ClientSettings>
                 </ClientSettings>
            </telerik:RadGrid> 
+        </div>
+        <div>
+            <br/><br/>
+            <table>
+                <tr>
+                    <td>
+                        Agency With Choice 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Consumer Export File 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" OnClick="Download_Click" runat="server" />
+                    </td>
+                </tr>
+            </table>
         </div>
  
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 

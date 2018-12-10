@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
@@ -7,7 +6,7 @@ using System.Data;
 
 namespace ConsumerMaster
 {
-    public class ConsumerExport
+    public class ServiceExportExcelFile
     {
         private static readonly int IndexColumnConsumerInternalNumber = 0;
         private static readonly int IndexColumnTradingPartnerString = 1;
@@ -31,16 +30,21 @@ namespace ConsumerMaster
         {
             {0, "consumer_internal_number"},
             {1, "trading_partner_string"},
-            {2, "consumer_first"},
-            {3, "consumer_last"},
-            {4, "date_of_birth"},
-            {5, "address_line_1"},
-            {6, "address_line2"},
-            {7, "city"},
-            {8, "state"},
-            {9, "zip_code"},
-            {10, "identifier"},
-            {11, "gender"}
+            { 2, "trading_partner_program_string"},
+            { 3, "start_date_string"},
+            { 4, "end_date_string"},
+            { 5, "diagnosis_code_1_code"},
+            { 6, "composite_procedure_code_string"},
+            { 7, "units"},
+            { 8, "manual_billable_rate"},
+            { 9, "prior_authorization_number"},
+            { 10, "referral_number"},
+            { 11, "referring_provider_id"},
+            { 12, "referring_provider_first_name"},
+            { 13, "referring_provider_last_name"},
+            { 14, "rendering_provider_id"},
+            { 15, "rendering_provider_first_name"},
+            { 16, "rendering_provider_last_name"}
         };
 
         public Workbook CreateWorkbook()
@@ -49,7 +53,13 @@ namespace ConsumerMaster
             workbook.Sheets.Add(SheetType.Worksheet);
             Worksheet worksheet = workbook.ActiveWorksheet;
 
-            string ceQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender FROM Consumers";
+            //string ceQuery = "SELECT consumer_internal_number, 'trading_partner_string' AS trading_partner_string, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender FROM Consumers";
+            string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.string AS trading_partner_string, c.consumer_first AS consumer_first, " +
+                             "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, c.address_line_2 AS address_line_2, " +
+                             "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +
+                             "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
+                             "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5";
+
             Utility util = new Utility();
             DataTable ceDataTable = util.GetDataTable(ceQuery);
 
@@ -64,7 +74,7 @@ namespace ConsumerMaster
                 CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
                 cellLeadingZeros1.SetFormat(leadingZerosFormat1);
 
-                worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue("trading_partner_string");
+                worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
                 worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
                 worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
                 worksheet.Cells[currentRow, IndexColumnDateOfBirth].SetValue(dr["date_of_birth"].ToString());
@@ -129,4 +139,7 @@ namespace ConsumerMaster
             worksheet.Cells[IndexRowItemStart, IndexColumnGender].SetHorizontalAlignment(RadHorizontalAlignment.Left);
         }
     }
+
+
+}
 }
