@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="About.aspx.cs" Inherits="ConsumerMaster.About" %>
+﻿<%@ Page Title="Trading Partners" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="TradingPartners.aspx.cs" Inherits="ConsumerMaster.TradingPartners" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 

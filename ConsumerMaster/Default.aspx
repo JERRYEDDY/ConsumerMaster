@@ -25,17 +25,19 @@
         </AjaxSettings>
     </telerik:RadAjaxManager>
 
-    <h4>Pathways Consumers</h4>
+    <h3>Pathways Consumers</h3>
     <div class="demo-container no-bg">
     <br/>
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
-                     PageSize="10" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
+                     PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                      OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" >
                 <PagerStyle Mode="NumericPages"></PagerStyle>
                 <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" Caption="CONSUMERS">
+                        <CommandItemSettings AddNewRecordText="Add New Consumer" />
                         <DetailTables>
                             <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" Name="TradingPartners" Caption="TRADING PARTNERS">
+                                <CommandItemSettings AddNewRecordText="Add New Trading Partner" />
                                 <ParentTableRelation>
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
@@ -44,16 +46,16 @@
                                         <HeaderStyle Width="20px"></HeaderStyle>
                                         <ItemStyle CssClass="MyImageButton"></ItemStyle>
                                     </telerik:GridEditCommandColumn>
-                                    <telerik:GridBoundColumn SortExpression="consumer_internal_number" HeaderText="No." DataField="consumer_internal_number" UniqueName="consumer_internal_number" ReadOnly="true">
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn SortExpression="trading_partner_id" HeaderText="TPId" DataField="trading_partner_id" UniqueName="trading_partner_id">
-                                    </telerik:GridBoundColumn>     
-                                    <telerik:GridBoundColumn SortExpression="id" HeaderText="TPId" DataField="id" UniqueName="id">
-                                    </telerik:GridBoundColumn>                                   
-                                    <telerik:GridBoundColumn SortExpression="name" HeaderText="Name" DataField="name" UniqueName="name">
-                                    </telerik:GridBoundColumn>                                   
-                                    <telerik:GridBoundColumn SortExpression="string" HeaderText="String" DataField="string" UniqueName="string">
-                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="consumer_internal_number" HeaderText="No." DataField="consumer_internal_number" UniqueName="consumer_internal_number" ReadOnly="true" Display="True" Visible="False" />
+                                    
+                                    <telerik:GridBoundColumn SortExpression="trading_partner_id" HeaderText="TPId" DataField="trading_partner_id" UniqueName="trading_partner_id" Visible="False" />
+                                         
+                                    <telerik:GridBoundColumn SortExpression="id" HeaderText="TPId" DataField="id" UniqueName="id" Visible="False" />
+                                                                       
+                                    <telerik:GridBoundColumn SortExpression="name" HeaderText="Name" DataField="name" UniqueName="name"/>
+                                                                       
+                                    <telerik:GridBoundColumn SortExpression="string" HeaderText="String" DataField="string" UniqueName="string"/>
+                                    
                                     <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
                                         <HeaderStyle Width="20px"></HeaderStyle>
                                         <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
