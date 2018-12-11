@@ -3,18 +3,14 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
 <style>
 .space {
   background: none;
-  /* make the width small, but setting it to 0 will actual default to the same width as other cells */
   width: 0.1rem;
 }
 </style>
-
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
-    
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         <AjaxSettings>
             <telerik:AjaxSetting AjaxControlID="RadGrid1">
@@ -24,10 +20,9 @@
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
-
-    <h3>Pathways Consumers</h3>
+    <h4>Pathways Consumers</h4>
     <div class="demo-container no-bg">
-    <br/>
+
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
                      PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
@@ -37,7 +32,6 @@
                         <CommandItemSettings AddNewRecordText="Add New Consumer" />
                         <DetailTables>
                             <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" Name="TradingPartners" Caption="TRADING PARTNERS">
-                                <CommandItemSettings AddNewRecordText="Add New Trading Partner" />
                                 <ParentTableRelation>
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
@@ -250,12 +244,12 @@
            </telerik:RadGrid> 
         </div>
         <div>
-            <br/><br/>
+            <br/>
             <telerik:RadPanelBar ID="RadPanelBar1" runat="server"></telerik:RadPanelBar>
             <table>
                 <tr>
                     <td>
-                        Agency With Choice 
+                        <img src="Images/AWCLogo1.png" />
                     </td>
                 </tr>
                 <tr>
