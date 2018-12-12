@@ -13,6 +13,8 @@ namespace ConsumerMaster
     public partial class _Default : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private const string ConsumersTable = "Consumers";
+        private const string TradingPartnersTable = "TradingPartners";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -27,7 +29,6 @@ namespace ConsumerMaster
         {
             string pattern = @"^\d{5}(?:[-\s]\d{4})?$";
             Regex regex = new Regex(pattern);
-
             return regex.IsMatch(zipCode);
         }
 
@@ -38,10 +39,13 @@ namespace ConsumerMaster
             {
                 e.ExceptionHandled = true;
                 DisplayMessage(item + " cannot be inserted. Reason: " + e.Exception.Message);
+                Logger.Info(item + " cannot be inserted. Reason: " + e.Exception.Message);
+                Logger.Error(e);
             }
             else
             {
                 DisplayMessage(item + " inserted");
+                Logger.Info(item + " inserted");
             }
         }
 
@@ -54,10 +58,13 @@ namespace ConsumerMaster
                 e.KeepInEditMode = true;
                 e.ExceptionHandled = true;
                 DisplayMessage(item + " " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Info(item + " " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Error(e);
             }
             else
             {
                 DisplayMessage(item + " " + e.Item[field].Text + " updated");
+                Logger.Info(item + " " + e.Item[field].Text + " updated");
             }
         }
 
@@ -69,10 +76,13 @@ namespace ConsumerMaster
             {
                 e.ExceptionHandled = true;
                 DisplayMessage(item + " " + e.Item[field].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                Logger.Info(item + " " + e.Item[field].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                Logger.Error(e);
             }
             else
             {
                 DisplayMessage(item + " " + e.Item[field].Text + " deleted");
+                Logger.Info(item + " " + e.Item[field].Text + " deleted");
             }
         }
 
@@ -80,13 +90,13 @@ namespace ConsumerMaster
         {
             switch (e.Item.OwnerTableView.Name)
             {
-                case "Consumers":
+                case ConsumersTable:
                     {
-                        GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-                        SqlDataSource1.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
+                        //GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
+                        //SqlDataSource1.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
                     }
                     break;
-                case "Trading Partners":
+                case TradingPartnersTable:
                 {
                     GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
                     SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
@@ -95,36 +105,36 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
-        {
-            if (e.Item is GridEditFormItem && !(e.Item is IGridInsertItem) && e.Item.IsInEditMode)
-            {
-                GridEditFormItem item = e.Item as GridEditFormItem;
-                switch (item.OwnerTableView.Name)
-                {
-                    case "Consumers": 
-                        TextBox customerIDBox = item["CustomerID"].Controls[0] as TextBox;
-                        customerIDBox.Enabled = false;
-                        break;
-                    case "Trading Partners":
-                        TextBox productIDBox = item["ProductID"].Controls[0] as TextBox;
-                        productIDBox.Enabled = false;
-                        break;
-                }
-            }
-        }
+        //protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
+        //{
+        //    if (e.Item is GridEditFormItem && !(e.Item is IGridInsertItem) && e.Item.IsInEditMode)
+        //    {
+        //        GridEditFormItem item = e.Item as GridEditFormItem;
+        //        switch (item.OwnerTableView.Name)
+        //        {
+        //            case "Consumers": 
+        //                TextBox customerIDBox = item["CustomerID"].Controls[0] as TextBox;
+        //                customerIDBox.Enabled = false;
+        //                break;
+        //            case "TradingPartners":
+        //                TextBox productIDBox = item["ProductID"].Controls[0] as TextBox;
+        //                productIDBox.Enabled = false;
+        //                break;
+        //        }
+        //    }
+        //}
 
         private String getItemName(string tableName)
         {
             switch (tableName)
             {
-                case ("Consumers"):
+                case (ConsumersTable):
                     {
                         return "Consumer";
                     }
-                case ("TradingPartners"):
+                case (TradingPartnersTable):
                     {
-                        return "TraderPartner";
+                        return "TradeingPartner";
                     }
                 default: return "";
             }
@@ -134,17 +144,13 @@ namespace ConsumerMaster
         {
             switch (tableName)
             {
-                case ("Consumers"):
+                case (ConsumersTable):
                     {
                         return "consumer_internal_number";
                     }
-                case ("TradingParters"):
+                case (TradingPartnersTable):
                     {
-                        return "id";
-                    }
-                case ("Details"):
-                    {
-                        return "OrderID";
+                        return "consumer_internal_number";
                     }
                 default: return "";
             }
@@ -157,44 +163,58 @@ namespace ConsumerMaster
 
         protected void ConsumerExportDownload_Click(object sender, EventArgs e)
         {
-            IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-            ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-            Workbook workbook = consumerExport.CreateWorkbook();
-            byte[] renderedBytes = null;
-
-            using (MemoryStream ms = new MemoryStream())
+            try
             {
-                formatProvider.Export(workbook, ms);
-                renderedBytes = ms.ToArray();
-            }
+                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                Workbook workbook = consumerExport.CreateWorkbook();
+                byte[] renderedBytes = null;
 
-            Response.ClearHeaders();
-            Response.ClearContent();
-            Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.BinaryWrite(renderedBytes);
-            Response.End();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    formatProvider.Export(workbook, ms);
+                    renderedBytes = ms.ToArray();
+                }
+
+                Response.ClearHeaders();
+                Response.ClearContent();
+                Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.BinaryWrite(renderedBytes);
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
 
         protected void ServiceExportDownload_Click(object sender, EventArgs e)
         {
-            IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-            ServiceExportExcelFile serviceExport = new ServiceExportExcelFile();
-            Workbook workbook = serviceExport.CreateWorkbook();
-            byte[] renderedBytes = null;
-
-            using (MemoryStream ms = new MemoryStream())
+            try
             {
-                formatProvider.Export(workbook, ms);
-                renderedBytes = ms.ToArray();
-            }
+                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+                ServiceExportExcelFile serviceExport = new ServiceExportExcelFile();
+                Workbook workbook = serviceExport.CreateWorkbook();
+                byte[] renderedBytes = null;
 
-            Response.ClearHeaders();
-            Response.ClearContent();
-            Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.BinaryWrite(renderedBytes);
-            Response.End();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    formatProvider.Export(workbook, ms);
+                    renderedBytes = ms.ToArray();
+                }
+
+                Response.ClearHeaders();
+                Response.ClearContent();
+                Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.BinaryWrite(renderedBytes);
+                Response.End();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
 
         //private class ConsumerExport

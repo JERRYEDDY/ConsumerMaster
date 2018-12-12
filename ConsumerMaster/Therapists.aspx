@@ -21,13 +21,13 @@
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
-    <h4>Pathways Therapists</h4>
+    <h4>Therapists</h4>
     <div id="demo" class="demo-container no-bg">
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
                          PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                          OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated">
             <PagerStyle Mode="NextPrevAndNumeric" />
-            <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataSourceID="SqlDataSource1" DataKeyNames="id" Caption="THERAPISTS">
+            <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataSourceID="SqlDataSource1" DataKeyNames="id">
                 <CommandItemSettings AddNewRecordText="Add New Therapist" />
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn"></telerik:GridEditCommandColumn>

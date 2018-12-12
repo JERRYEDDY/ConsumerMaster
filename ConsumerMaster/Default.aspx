@@ -20,7 +20,7 @@
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
-    <h4>Pathways Consumers</h4>
+    <h4>Consumers</h4>
     <div class="demo-container no-bg">
 
         <div id="grid">
@@ -28,7 +28,7 @@
                      PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                      OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnInsertCommand="RadGrid1_InsertCommand">
                 <PagerStyle Mode="NumericPages"></PagerStyle>
-                <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" Caption="CONSUMERS">
+                <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number">
                         <CommandItemSettings AddNewRecordText="Add New Consumer" />
                         <DetailTables>
                             <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" Name="TradingPartners" Caption="TRADING PARTNERS">
@@ -41,15 +41,10 @@
                                         <ItemStyle CssClass="MyImageButton"></ItemStyle>
                                     </telerik:GridEditCommandColumn>
                                     <telerik:GridBoundColumn SortExpression="consumer_internal_number" HeaderText="No." DataField="consumer_internal_number" UniqueName="consumer_internal_number" ReadOnly="true" Display="True" Visible="False" />
-                                    
                                     <telerik:GridBoundColumn SortExpression="trading_partner_id" HeaderText="TPId" DataField="trading_partner_id" UniqueName="trading_partner_id" Visible="False" />
-                                         
                                     <telerik:GridBoundColumn SortExpression="id" HeaderText="TPId" DataField="id" UniqueName="id" Visible="False" />
-                                                                       
                                     <telerik:GridBoundColumn SortExpression="name" HeaderText="Name" DataField="name" UniqueName="name"/>
-                                                                       
                                     <telerik:GridBoundColumn SortExpression="string" HeaderText="String" DataField="string" UniqueName="string"/>
-                                    
                                     <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
                                         <HeaderStyle Width="20px"></HeaderStyle>
                                         <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
@@ -57,49 +52,35 @@
                                 </Columns>
                                 <EditFormSettings EditFormType="Template">
                                      <FormTemplate>
-                                        <table id="Table4" cellspacing="2" cellpadding="1" width="100%" border="0" rules="none" style="border-collapse: collapse;">
-                                            <tr class="EditFormHeader">
-                                                <td colspan="2">
-                                                    <b>Trading Partner Info</b>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table id="Table3" width="450px" border="0" class="module">
-                                                        <tr>
-                                                            <td>TPId</td>
-                                                            <td>
-                                                                <telerik:RadTextBox ID="txtTradingPartnerId" runat="server" Text='<%# Bind("trading_partner_id") %>'/>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <telerik:RadDropDownList ID="ddlTradingPartners" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id") %>'
-                                                                                         DataTextField="name" DataValueField="id" TabIndex="12" Width="400px" />
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td style="vertical-align: top">
-                                                    <table id="Table1" cellspacing="1" cellpadding="1" width="500" border="0" class="module">
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2"></td>
-                                            </tr>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right" colspan="2">
-                                                    <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>'
-                                                        runat="server" CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>'></asp:Button>&nbsp;
-                                                                            <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                         <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" CssClass="demo-container size-narrow" LoadingPanelID="RadAjaxLoadingPanel1">
+                                             <fieldset>
+                                                 <legend>Trading Partner Info</legend>
+                                                 <br />
+                                                 <table border="0" cellpadding="5">
+                                                     <colgroup>
+                                                         <col width="100" />
+                                                         <col width="500" />
+                                                     </colgroup>
+                                                     <tr class="FormContainer">
+                                                         <td>Trading Partner:
+                                                         </td>
+                                                         <td>
+                                                             <telerik:RadDropDownList ID="ddlTradingPartners" runat="server" DataSourceID="TradingPartnerDataSource" 
+                                                                                      SelectedValue='<%# Bind("trading_partner_id") %>' DataTextField="name" DataValueField="id" TabIndex="12" Width="400px" DefaultMessage="Select" />
+                                                             <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlTradingPartners" ErrorMessage="*Required" runat="server" Display="Dynamic" InitialValue="Select">
+                                                             </asp:RequiredFieldValidator>
+                                                         </td>
+                                                     </tr>
+                                                 </table>
+                                                 <br />
+                                                 <br />
+                                                 <br />
+                                                 <br />
+                                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>'
+                                                             runat="server" CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>'></asp:Button>&nbsp;
+                                                 <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                                             </fieldset>
+                                         </telerik:RadAjaxPanel>
                                     </FormTemplate>                                   
                                 </EditFormSettings>
                                 <SortExpressions>

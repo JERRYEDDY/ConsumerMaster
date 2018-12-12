@@ -179,9 +179,9 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[19]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logger.Error(ex);
+                Logger.Error(e);
             }
         }
     }
