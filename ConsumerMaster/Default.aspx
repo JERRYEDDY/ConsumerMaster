@@ -26,7 +26,7 @@
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
                      PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
-                     OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" >
+                     OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnInsertCommand="RadGrid1_InsertCommand">
                 <PagerStyle Mode="NumericPages"></PagerStyle>
                 <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" Caption="CONSUMERS">
                         <CommandItemSettings AddNewRecordText="Add New Consumer" />
@@ -174,9 +174,10 @@
                                                     </td>
                                                 </tr>               
                                                 <tr>
-                                                    <td>Zip Code:</td>
+                                                    
+                                                    <td><telerik:RadLabel ID="RadLabel1" runat="server" Text="Zip Code:" /></td>
                                                     <td>
-                                                        <telerik:RadTextBox ID="txtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13"/>
+                                                        <telerik:RadMaskedTextBox ID="ktxtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13" Mask="#####-####" />
                                                     </td>
                                                 </tr>               
                                                 <tr>
@@ -272,17 +273,17 @@
                 </tr>
             </table>
         </div>
- 
+
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-            DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
-            InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, 
-            nickname_first, nickname_last) 
+            DeleteCommand="DELETE FROM [Consumers] WHERE [consumer_internal_number] = @consumer_internal_number"
+            InsertCommand="INSERT INTO [Consumers] ([consumer_first], [consumer_last], [date_of_birth], [address_line_1], [address_line_2], [city], [state], [zip_code], [identifier], [gender], 
+            [diagnosis], [nickname_first], [nickname_last]) 
             VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
-            SelectCommand="SELECT * FROM Consumers" 
-            UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, 
-            address_line_2 = @address_line_2, city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, nickname_first = @nickname_first, 
-            nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
+            SelectCommand="SELECT * FROM [Consumers]" 
+            UpdateCommand="UPDATE [Consumers] SET [consumer_first] = @consumer_first, [consumer_last] = @consumer_last, [date_of_birth] = @date_of_birth, [address_line_1] = @address_line_1, 
+            [address_line_2] = @address_line_2, [city] = @city, [state] = @state, [zip_code] = @zip_code, [identifier] = @identifier, [gender] = @gender, [diagnosis] = @diagnosis, 
+            [nickname_first] = @nickname_first, [nickname_last] = @nickname_last WHERE [consumer_internal_number] = @consumer_internal_number">
             <DeleteParameters>
                 <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
             </DeleteParameters>
@@ -315,20 +316,21 @@
                 <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
                 <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
+                <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
             </UpdateParameters>
         </asp:SqlDataSource>    
 
        <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
             ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-            DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
-            InsertCommand="INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id) VALUES (@consumer_internal_number, @trading_partner_id)"
-            SelectCommand="SELECT * from ConsumerTradingPartner AS ctp INNER JOIN TradingPartners AS tp ON ctp.trading_partner_id = tp.id WHERE consumer_internal_number = @consumer_internal_number" 
-            UpdateCommand="UPDATE Consumers SET trading_partner_id = @trading_partner_id WHERE consumer_internal_number = @consumer_internal_number">
+            DeleteCommand="DELETE FROM [ConsumerTradingPartner] WHERE [consumer_internal_number] = @consumer_internal_number"
+            InsertCommand="INSERT INTO [ConsumerTradingPartner] ([consumer_internal_number], [trading_partner_id]) VALUES (@consumer_internal_number, @trading_partner_id)"
+            SelectCommand="SELECT * FROM [ConsumerTradingPartner] AS ctp INNER JOIN [TradingPartners] AS tp ON ctp.trading_partner_id = tp.id WHERE [consumer_internal_number] = @consumer_internal_number" 
+            UpdateCommand="UPDATE [ConsumerTradingPartner] SET [trading_partner_id] = @trading_partner_id WHERE [consumer_internal_number] = @consumer_internal_number">
            <SelectParameters>
                <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
            </SelectParameters>
              <DeleteParameters>
-                <asp:Parameter Name="[consumer_internal_number]" Type="Int32"></asp:Parameter>
+                <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
             </DeleteParameters>
             <InsertParameters>
                 <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
@@ -336,6 +338,7 @@
             </InsertParameters>
             <UpdateParameters>
                 <asp:Parameter Name="trading_partner_id" Type="String"></asp:Parameter>
+                <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
             </UpdateParameters>
         </asp:SqlDataSource>    
 
