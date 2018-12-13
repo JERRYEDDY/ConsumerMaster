@@ -105,6 +105,80 @@ namespace ConsumerMaster
             }
         }
 
+        protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)
+        {
+            string item = getItemName(e.Item.OwnerTableView.Name);
+            if (e.Exception != null)
+            {
+                e.ExceptionHandled = true;
+                DisplayMessage(item + " cannot be inserted. Reason: " + e.Exception.Message);
+                Logger.Info(item + " cannot be inserted. Reason: " + e.Exception.Message);
+                Logger.Error(e);
+            }
+            else
+            {
+                DisplayMessage(item + " inserted");
+                Logger.Info(item + " inserted");
+            }
+        }
+
+        protected void RadGrid2_ItemUpdated(object source, GridUpdatedEventArgs e)
+        {
+            string item = getItemName(e.Item.OwnerTableView.Name);
+            string field = getFieldName(e.Item.OwnerTableView.Name);
+            if (e.Exception != null)
+            {
+                e.KeepInEditMode = true;
+                e.ExceptionHandled = true;
+                DisplayMessage(item + " " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Info(item + " " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Error(e);
+            }
+            else
+            {
+                DisplayMessage(item + " " + e.Item[field].Text + " updated");
+                Logger.Info(item + " " + e.Item[field].Text + " updated");
+            }
+        }
+
+        protected void RadGrid2_ItemDeleted(object source, GridDeletedEventArgs e)
+        {
+            string item = getItemName(e.Item.OwnerTableView.Name);
+            string field = getFieldName(e.Item.OwnerTableView.Name);
+            if (e.Exception != null)
+            {
+                e.ExceptionHandled = true;
+                DisplayMessage(item + " " + e.Item[field].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                Logger.Info(item + " " + e.Item[field].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                Logger.Error(e);
+            }
+            else
+            {
+                DisplayMessage(item + " " + e.Item[field].Text + " deleted");
+                Logger.Info(item + " " + e.Item[field].Text + " deleted");
+            }
+        }
+
+        protected void RadGrid2_InsertCommand(object source, GridCommandEventArgs e)
+        {
+            switch (e.Item.OwnerTableView.Name)
+            {
+                case ConsumersTable:
+                    {
+                        //GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
+                        //SqlDataSource1.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
+                    }
+                    break;
+                case TradingPartnersTable:
+                    {
+                        GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
+                        SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
+                    }
+                    break;
+            }
+        }
+
+
         //protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
         //{
         //    if (e.Item is GridEditFormItem && !(e.Item is IGridInsertItem) && e.Item.IsInEditMode)
@@ -325,5 +399,30 @@ namespace ConsumerMaster
         //            editColumn.Visible = true;
         //    }
         //}
+
+        protected void DestinationDataSource_Deleted(object sender, SqlDataSourceStatusEventArgs e)
+        {
+            Logger.Info("DestinationDataSource - Deleted record");
+        }
+
+        protected void SourceDataSource_Deleted(object sender, SqlDataSourceStatusEventArgs e)
+        {
+            Logger.Info("SourceDataSource - Deleted record");
+        }
+
+        protected void DestinationDataSource_Inserted(object sender, SqlDataSourceStatusEventArgs e)
+        {
+            Logger.Info("DestinationDataSource - Inserted record");
+        }
+
+        protected void DestinationDataSource_Updated(object sender, SqlDataSourceStatusEventArgs e)
+        {
+            Logger.Info("DestinationDataSource - Updated record");
+        }
+
+        protected void SourceDataSource_Inserted(object sender, SqlDataSourceStatusEventArgs e)
+        {
+            Logger.Info("SourceDataSource - Inserted record");
+        }
     }
 }

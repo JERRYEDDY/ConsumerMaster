@@ -200,6 +200,10 @@
                                         </td>
                                         <td style="vertical-align: top">
                                             <table id="Table1" cellspacing="1" cellpadding="1" width="500" border="0" class="module">
+                                                <tr>
+                                                    <td>
+                                                    </td>
+                                                </tr>
                                             </table>
                                         </td>
                                     </tr>
@@ -207,7 +211,9 @@
                                         <td colspan="2"></td>
                                     </tr>
                                     <tr>
-                                        <td></td>
+                                        <td>
+
+                                        </td>
                                         <td></td>
                                     </tr>
                                     <tr>
@@ -308,7 +314,7 @@
             SelectCommand="SELECT * FROM [ConsumerTradingPartner] AS ctp INNER JOIN [TradingPartners] AS tp ON ctp.trading_partner_id = tp.id WHERE [consumer_internal_number] = @consumer_internal_number" 
             UpdateCommand="UPDATE [ConsumerTradingPartner] SET [trading_partner_id] = @trading_partner_id WHERE [consumer_internal_number] = @consumer_internal_number">
            <SelectParameters>
-               <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
+               <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" DefaultValue="1" />
            </SelectParameters>
              <DeleteParameters>
                 <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
