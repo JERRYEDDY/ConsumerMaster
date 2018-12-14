@@ -25,7 +25,7 @@
 
         <div id="grid">
             <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
-                     PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
+                     PageSize="15" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                      OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnInsertCommand="RadGrid1_InsertCommand">
                 <PagerStyle Mode="NumericPages"></PagerStyle>
                 <MasterTableView  TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number">
@@ -114,24 +114,32 @@
                                                     <td>First Name:</td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtConsumerFirst" runat="server" Text='<%# Bind("consumer_first") %>'/>
+                                                        <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="txtConsumerFirst"
+                                                                                    ErrorMessage="The consumer first name can not be empty!" />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name:</td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtConsumerLast" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="1"/>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="txtConsumerLast"
+                                                                                    ErrorMessage="The consumer last name can not be empty!" />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Birth Date:</td>
                                                     <td>
                                                         <telerik:RadDatePicker ID="dpBirthDate" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="4"/>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="dpBirthDate"
+                                                                                    ErrorMessage="The date of birth is required" />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Address1:</td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtAddress1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="8"/>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="txtAddress1"
+                                                                                    ErrorMessage="The address1 can not be empty!" />
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -145,6 +153,8 @@
                                                     <td>City:</td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtCity" Text='<%# Bind("city") %>' runat="server" TabIndex="11"/>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" ControlToValidate="txtCity"
+                                                                                    ErrorMessage="The city can not be empty!" />
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -152,36 +162,46 @@
                                                     <td>
                                                         <telerik:RadDropDownList ID="ddlStates" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
                                                                                  DataTextField="Name" DataValueField="Abbreviation" TabIndex="12"/> 
+                                                        <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlStates" ErrorMessage="State is required" runat="server" Display="Dynamic" 
+                                                                                    InitialValue="Select" />
                                                     </td>
                                                 </tr>               
                                                 <tr>
                                                     
                                                     <td><telerik:RadLabel ID="RadLabel1" runat="server" Text="Zip Code:" /></td>
                                                     <td>
-                                                        <telerik:RadMaskedTextBox ID="ktxtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13" Mask="#####-####" />
+                                                        <telerik:RadMaskedTextBox ID="txtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13" Mask="#####-####" />
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" ControlToValidate="txtZipCode"
+                                                                                    ErrorMessage="The zip code can not be empty!" />
                                                     </td>
                                                 </tr>               
                                                 <tr>
                                                     <td>Identifier:</td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtIdentifer" Text='<%# Bind("identifier") %>' runat="server" TabIndex="14"/>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="txtIdentifer"
+                                                                                    ErrorMessage="The identifier can not be empty!" />
                                                     </td>
                                                 </tr>              
                                                 <tr>
                                                     <td>Gender:</td>
                                                     <td>
-                                                        <telerik:RadRadioButtonList runat="server" ID="rblGender" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="15">
+                                                        <telerik:RadRadioButtonList ID="rblGender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="15">
                                                             <Items>
                                                                 <telerik:ButtonListItem Text="Male" Value="M"/>
                                                                 <telerik:ButtonListItem Text="Female" Value="F"/>
                                                             </Items>
                                                         </telerik:RadRadioButtonList>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="rblGender"
+                                                                                    ErrorMessage="Gender is required" />
                                                     </td>
                                                 </tr>                
                                                 <tr>
                                                     <td>Diagnosis:</td>
                                                     <td>
                                                         <telerik:RadTextBox ID="txtDiagnosis" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="16"/>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="txtDiagnosis"
+                                                                                    ErrorMessage="The diagnosis can not be empty!" />
                                                     </td>
                                                 </tr>
                                                 <tr>

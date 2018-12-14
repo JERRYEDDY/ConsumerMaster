@@ -43,8 +43,7 @@
                 <div class="navbar-header">
                     <div class="navbar-header pull-left">
                         <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                            <img src="Images/PathwaysLogo.png" /></a>
-<%--                            <img src="~/Images/Logo.jpg" alt="Site Logo" style="height:25px; width: 25px" /></a>--%>
+                            <img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>
                     </div>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
