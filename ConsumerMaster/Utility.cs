@@ -25,5 +25,25 @@ namespace ConsumerMaster
                 }
             }
         }
+
+        public List<String> GetList(string queryString)
+        {
+            List<String> cpcData = new List<String>();
+            using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
+            {
+                sqlConnect.Open();
+                using (SqlCommand command = new SqlCommand(queryString, sqlConnect))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            cpcData.Add(reader.GetString(0));
+                        }
+                        return cpcData;
+                    }
+                }
+            }
+        }
     }
 }

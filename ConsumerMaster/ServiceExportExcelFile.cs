@@ -4,6 +4,7 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
+using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
 {
@@ -79,6 +80,15 @@ namespace ConsumerMaster
             Utility util = new Utility();
             DataTable seDataTable = util.GetDataTable(seQuery);
 
+            List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes");
+            string cpcString = string.Join(", ", cpcList);
+
+            string compositeProcedureCodeString =
+                "HC:H2023, HC:W1726, HC:W1726:U4, HC:W6089, HC:W7060, HC:W7060:U4, HC:W7061:TE, HC:W7068, HC:W7069:TD, HC:W7069:TE, HC:W7271, HC:W7272, HC:W7278, HC:W7319, HC:W9794, HC:W9798, HC:W9794:U4, HC:W9862:U4, HC:W9862, HC:W9863, " +
+                "HC:92507:U8:TL, HC:97110:UB:TL, HC:97530:U9:TL, HC:99366:GO:TL, HC:99366:GP:TL, HC:99366:TR:TL, HC:S5102, HC:S5102:U5, HC:T2028, HC:W0020:U5:TL, HC:W0021:U5:TL, HC:W0023:U5:TL, HC:W0025, HC:W0026, HC:W0027, HC:W5947, HC:W5943, " +
+                "HC:W5942, HC:W5950, HC:W5951, HC:W5955, HC:W5960, HC:W5962, HC:W5963, HC:W5967, HC:W5972, HC:W5975, HC:W5979, HC:W5984, HC:W5991, HC:W7274, HC:W7094, HC:W7279, HC:W7316, HC:W9000:U8, HC:W9001, HC:W9029:U5, HC:W9030, HC:W9045:U5, " +
+                "HC:W9045:U6, HC:W9045:U7, HC:W9045:U8, HC:W9046, HC:W9000:U8:HI, HC:W9029:U5:HI, HC:W9029:U8:HI, HC:W9045:U5:HI, HC:W9045:U6:HI, HC:W9045:U7:HI, HC:W9045:U8:HI, HC:W4405 :U5:TL, HC:W4407:U8:TL";
+
             int totalConsumers = seDataTable.Rows.Count;
             PrepareWorksheet(worksheet, totalConsumers);
 
@@ -99,7 +109,24 @@ namespace ConsumerMaster
                 worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(dr["start_date_string"].ToString());
                 worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(dr["end_date_string"].ToString());
                 worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
+
                 worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
+
+                CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
+                ListDataValidationRuleContext context = new ListDataValidationRuleContext(worksheet, dataValidationRuleCellIndex);
+                context.InputMessageTitle = "Restricted input";
+                context.InputMessageContent = "The input is restricted to the week days.";
+                context.ErrorStyle = ErrorStyle.Stop;
+                context.ErrorAlertTitle = "Wrong value";
+                context.ErrorAlertContent = "The entered value is not valid. Allowed values are the week days!";
+                context.InCellDropdown = true;
+                //context.Argument1 = "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday";
+                context.Argument1 = compositeProcedureCodeString;
+
+
+                ListDataValidationRule rule = new ListDataValidationRule(context);
+                worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
+
                 worksheet.Cells[currentRow, IndexColumnUnits].SetValue(dr["hours"].ToString());
 
                 string convertToUnits = "=J" + (currentRow +1) + "*4";
