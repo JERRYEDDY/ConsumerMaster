@@ -35,6 +35,8 @@ namespace ConsumerMaster
 
         private static readonly int IndexRowItemStart = 0;
 
+        private static readonly int IndexColumnName = 0;
+
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
         private static readonly ThemableColor InvoiceHeaderForeground = ThemableColor.FromArgb(255, 255, 255, 255);
 
@@ -49,7 +51,7 @@ namespace ConsumerMaster
             {6, "end_date_string"},
             {7, "diagnosis_code_1_code"},
             {8, "composite_procedure_code_string"},
-            {9, "hours" },
+            {9, "hours"},
             {10, "units"},
             {11, "manual_billable_rate"},
             {12, "prior_authorization_number"},
@@ -65,102 +67,125 @@ namespace ConsumerMaster
         public Workbook CreateWorkbook()
         {
             Workbook workbook = new Workbook();
-            workbook.Sheets.Add(SheetType.Worksheet);
-            Worksheet worksheet = workbook.ActiveWorksheet;
 
-            string seQuery =
-                "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, " +
-                "tp.string AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string," +
-                "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS hours, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
-                "' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, " +
-                "' ' AS rendering_provider_id, ' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM[TESTConsumerMaster].[dbo].[Consumers] AS c " +
-                "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
-                "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5";
-
-            Utility util = new Utility();
-            DataTable seDataTable = util.GetDataTable(seQuery);
-
-            List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes");
-            string cpcString = string.Join(", ", cpcList);
-
-            string compositeProcedureCodeString =
-                "HC:H2023, HC:W1726, HC:W1726:U4, HC:W6089, HC:W7060, HC:W7060:U4, HC:W7061:TE, HC:W7068, HC:W7069:TD, HC:W7069:TE, HC:W7271, HC:W7272, HC:W7278, HC:W7319, HC:W9794, HC:W9798, HC:W9794:U4, HC:W9862:U4, HC:W9862, HC:W9863, " +
-                "HC:92507:U8:TL, HC:97110:UB:TL, HC:97530:U9:TL, HC:99366:GO:TL, HC:99366:GP:TL, HC:99366:TR:TL, HC:S5102, HC:S5102:U5, HC:T2028, HC:W0020:U5:TL, HC:W0021:U5:TL, HC:W0023:U5:TL, HC:W0025, HC:W0026, HC:W0027, HC:W5947, HC:W5943, " +
-                "HC:W5942, HC:W5950, HC:W5951, HC:W5955, HC:W5960, HC:W5962, HC:W5963, HC:W5967, HC:W5972, HC:W5975, HC:W5979, HC:W5984, HC:W5991, HC:W7274, HC:W7094, HC:W7279, HC:W7316, HC:W9000:U8, HC:W9001, HC:W9029:U5, HC:W9030, HC:W9045:U5, " +
-                "HC:W9045:U6, HC:W9045:U7, HC:W9045:U8, HC:W9046, HC:W9000:U8:HI, HC:W9029:U5:HI, HC:W9029:U8:HI, HC:W9045:U5:HI, HC:W9045:U6:HI, HC:W9045:U7:HI, HC:W9045:U8:HI, HC:W4405 :U5:TL, HC:W4407:U8:TL";
-
-            int totalConsumers = seDataTable.Rows.Count;
-            PrepareWorksheet(worksheet, totalConsumers);
-
-            int currentRow = IndexRowItemStart + 1;
-            foreach (DataRow dr in seDataTable.Rows)
+            try
             {
-                worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
-                worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
+                WorksheetCollection worksheets = workbook.Worksheets;
+                worksheets.Add();
+                worksheets.Add();
 
-                worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
-                CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
-                CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
-                cellLeadingZeros1.SetFormat(leadingZerosFormat1);
+                Worksheet sheet1Worksheet = worksheets["Sheet1"];
+                Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
-                worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
-                worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
+                Utility util = new Utility();
+                CreateCompositeProcedureCodesWorksheet(sheet2Worksheet);
 
-                worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(dr["start_date_string"].ToString());
-                worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(dr["end_date_string"].ToString());
-                worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
+                string seQuery =
+                    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, " +
+                    "tp.string AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string," +
+                    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS hours, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
+                    "' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, " +
+                    "' ' AS rendering_provider_id, ' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM[TESTConsumerMaster].[dbo].[Consumers] AS c " +
+                    "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
+                    "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5";
 
-                worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
+                DataTable seDataTable = util.GetDataTable(seQuery);
 
-                CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
-                ListDataValidationRuleContext context = new ListDataValidationRuleContext(worksheet, dataValidationRuleCellIndex);
-                context.InputMessageTitle = "Restricted input";
-                context.InputMessageContent = "The input is restricted to the week days.";
-                context.ErrorStyle = ErrorStyle.Stop;
-                context.ErrorAlertTitle = "Wrong value";
-                context.ErrorAlertContent = "The entered value is not valid. Allowed values are the week days!";
-                context.InCellDropdown = true;
-                //context.Argument1 = "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday";
-                context.Argument1 = compositeProcedureCodeString;
+                int totalConsumers = seDataTable.Rows.Count;
+                PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
 
+                int currentRow = IndexRowItemStart + 1;
+                foreach (DataRow dr in seDataTable.Rows)
+                {
+                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
 
-                ListDataValidationRule rule = new ListDataValidationRule(context);
-                worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
+                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
+                    CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
+                    CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
+                    cellLeadingZeros1.SetFormat(leadingZerosFormat1);
 
-                worksheet.Cells[currentRow, IndexColumnUnits].SetValue(dr["hours"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
 
-                string convertToUnits = "=J" + (currentRow +1) + "*4";
-                worksheet.Cells[currentRow, IndexColumnUnits].SetValue(convertToUnits);
+                    sheet1Worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(dr["start_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(dr["end_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
 
-                worksheet.Cells[currentRow, IndexColumnManualBillableRate].SetValue(dr["manual_billable_rate"].ToString());
-                worksheet.Cells[currentRow, IndexColumnPriorAuthorizationNumber].SetValue(dr["prior_authorization_number"].ToString());
-                worksheet.Cells[currentRow, IndexColumnReferralNumber].SetValue(dr["referral_number"].ToString());
-                worksheet.Cells[currentRow, IndexColumnReferringProviderId].SetValue(dr["referring_provider_id"].ToString());
-                worksheet.Cells[currentRow, IndexColumnReferringProviderFirstName].SetValue(dr["referring_provider_first_name"].ToString());
-                worksheet.Cells[currentRow, IndexColumnReferringProviderLastName].SetValue(dr["referring_provider_last_name"].ToString());
-                worksheet.Cells[currentRow, IndexColumnRenderingProviderId].SetValue(dr["rendering_provider_id"].ToString());
-                worksheet.Cells[currentRow, IndexColumnRenderingProviderFirstName].SetValue(dr["rendering_provider_first_name"].ToString());
-                worksheet.Cells[currentRow, IndexColumnRenderingProviderLastName].SetValue(dr["rendering_provider_last_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
+                    CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
+                    ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex);
+                    context.InputMessageTitle = "Restricted input";
+                    context.InputMessageContent = "The input is restricted to the composite procedure codes.";
+                    context.ErrorStyle = ErrorStyle.Stop;
+                    context.ErrorAlertTitle = "Wrong value";
+                    context.ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!";
+                    context.InCellDropdown = true;
+                    context.Argument1 = "=Sheet2!$A$2:$A$73"; //   =Sheet2!$A$2:$A$73
+                    ListDataValidationRule rule = new ListDataValidationRule(context);
+                    sheet1Worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
 
-                currentRow++;
+                    sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(dr["hours"].ToString());
+
+                    string convertToUnits = "=J" + (currentRow + 1) + "*4";
+                    sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(convertToUnits);
+
+                    sheet1Worksheet.Cells[currentRow, IndexColumnManualBillableRate].SetValue(dr["manual_billable_rate"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnPriorAuthorizationNumber].SetValue(dr["prior_authorization_number"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferralNumber].SetValue(dr["referral_number"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderId].SetValue(dr["referring_provider_id"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderFirstName].SetValue(dr["referring_provider_first_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderLastName].SetValue(dr["referring_provider_last_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderId].SetValue(dr["rendering_provider_id"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderFirstName].SetValue(dr["rendering_provider_first_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderLastName].SetValue(dr["rendering_provider_last_name"].ToString());
+
+                    currentRow++;
+                }
+
+                for (int i = 0; i < sheet1Worksheet.Columns.Count; i++)
+                {
+                    sheet1Worksheet.Columns[i].AutoFitWidth();
+                }
             }
-
-            for (int i = 0; i < worksheet.Columns.Count; i++)
+            catch (Exception e)
             {
-                worksheet.Columns[i].AutoFitWidth();
+                Console.WriteLine(e);
+                throw;
             }
-
             return workbook;
         }
 
-        private void PrepareWorksheet(Worksheet worksheet, int itemsCount)
+        private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet)
+        {
+            try
+            {
+                Utility util = new Utility();
+                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 5");  //Agency With Choice = 5
+
+                PrepareSheet2Worksheet(worksheet, cpcList.Count);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (String cpCode in cpcList)
+                {
+                    worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
+                    currentRow++;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
+
+        private void PrepareSheet1Worksheet(Worksheet worksheet, int itemsCount)
         {
             try
             {
                 int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
                 CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                CellIndex firstRowLastCellIndex = new CellIndex(0, 19);
+                CellIndex firstRowLastCellIndex = new CellIndex(0, 22);
                 CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerFirst);
                 CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnRenderingProviderLastName);
                 CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
@@ -205,7 +230,26 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[19]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
+
+        private void PrepareSheet2Worksheet(Worksheet worksheet, int itemsCount)
+        {
+            try
+            {
+                int lastItemIndexRow = IndexRowItemStart + itemsCount;
+
+                CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+                CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
+                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
+
+                worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
+                worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+            }
             catch (Exception e)
             {
                 Logger.Error(e);
