@@ -35,7 +35,7 @@ namespace ConsumerMaster
             {3, "consumer_last"},
             {4, "date_of_birth"},
             {5, "address_line_1"},
-            {6, "address_line2"},
+            {6, "address_line_2"},
             {7, "city"},
             {8, "state"},
             {9, "zip_code"},
