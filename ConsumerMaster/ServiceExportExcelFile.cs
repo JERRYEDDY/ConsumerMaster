@@ -78,7 +78,8 @@ namespace ConsumerMaster
                 Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
                 Utility util = new Utility();
-                CreateCompositeProcedureCodesWorksheet(sheet2Worksheet);
+                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 5");  //Agency With Choice = 5
+                CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
 
                 string seQuery =
                     "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, " +
@@ -90,7 +91,6 @@ namespace ConsumerMaster
                     "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5";
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
-
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
 
@@ -121,7 +121,9 @@ namespace ConsumerMaster
                     context.ErrorAlertTitle = "Wrong value";
                     context.ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!";
                     context.InCellDropdown = true;
-                    context.Argument1 = "=Sheet2!$A$2:$A$73"; //   =Sheet2!$A$2:$A$73
+
+                    string cpcRange = "=Sheet2!$A$2:$A$" + cpcList.Count + 1;  //= Sheet2!$A$2:$A$73
+                    context.Argument1 = cpcRange; //   
                     ListDataValidationRule rule = new ListDataValidationRule(context);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
 
@@ -156,13 +158,10 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet)
+        private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet, List<string> cpcList)
         {
             try
             {
-                Utility util = new Utility();
-                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 5");  //Agency With Choice = 5
-
                 PrepareSheet2Worksheet(worksheet, cpcList.Count);
 
                 int currentRow = IndexRowItemStart + 1;
