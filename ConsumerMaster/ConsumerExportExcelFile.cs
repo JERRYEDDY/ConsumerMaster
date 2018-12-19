@@ -1,7 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 
@@ -25,7 +23,7 @@ namespace ConsumerMaster
         private static readonly int IndexRowItemStart = 0;
 
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-        private static readonly ThemableColor InvoiceHeaderForeground = ThemableColor.FromArgb(255, 255, 255, 255);
+        //private static readonly ThemableColor InvoiceHeaderForeground = ThemableColor.FromArgb(255, 255, 255, 255);
 
         Dictionary<int, string> ceHeader = new Dictionary<int, string>
         {
@@ -54,7 +52,7 @@ namespace ConsumerMaster
                              "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, c.address_line_2 AS address_line_2, " +
                              "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " + 
                              "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " + 
-                             "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5"; //Agency With Choice = 5
+                             "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5 ORDER BY consumer_last"; //Agency With Choice = 5
 
             Utility util = new Utility();
             DataTable ceDataTable = util.GetDataTable(ceQuery);

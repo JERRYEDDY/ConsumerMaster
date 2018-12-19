@@ -7,6 +7,8 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Text.RegularExpressions;
+using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
+using System.Text;
 
 namespace ConsumerMaster
 {
@@ -237,6 +239,7 @@ namespace ConsumerMaster
 
         protected void ConsumerExportDownload_Click(object sender, EventArgs e)
         {
+            const string Filename = @"AWCConsumerExport.xlsx";
             try
             {
                 IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
@@ -252,7 +255,7 @@ namespace ConsumerMaster
 
                 Response.ClearHeaders();
                 Response.ClearContent();
-                Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
+                Response.AppendHeader("content-disposition", "attachment; filename=" + Filename);
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.BinaryWrite(renderedBytes);
                 Response.End();
@@ -265,6 +268,7 @@ namespace ConsumerMaster
 
         protected void ServiceExportDownload_Click(object sender, EventArgs e)
         {
+            const string Filename = @"AWCServiceExport.xlsx";
             try
             {
                 IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
@@ -280,7 +284,7 @@ namespace ConsumerMaster
 
                 Response.ClearHeaders();
                 Response.ClearContent();
-                Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".xlsx");
+                Response.AppendHeader("content-disposition", "attachment; filename=" + Filename);
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.BinaryWrite(renderedBytes);
                 Response.End();
