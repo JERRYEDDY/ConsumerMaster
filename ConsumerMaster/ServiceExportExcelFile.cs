@@ -100,8 +100,6 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
-                    //CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
-                    //cellLeadingZeros1.SetFormat(leadingZerosFormat1);
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
                     sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
