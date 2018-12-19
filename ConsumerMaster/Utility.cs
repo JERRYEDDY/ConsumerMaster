@@ -14,36 +14,53 @@ namespace ConsumerMaster
 
         public DataTable GetDataTable(string queryString)
         {
-            using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
+            DataTable dataTable = new DataTable();
+            try
             {
-                sqlConnect.Open();
-                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+                using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
                 {
-                    DataTable dataTable = new DataTable();
-                    sqlDataAdapter.Fill(dataTable);
-                    return dataTable;
+                    sqlConnect.Open();
+                    using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+                    {
+                       
+                        sqlDataAdapter.Fill(dataTable);
+                        return dataTable;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
             }
         }
 
         public List<String> GetList(string queryString)
         {
             List<String> cpcData = new List<String>();
-            using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
+            try
             {
-                sqlConnect.Open();
-                using (SqlCommand command = new SqlCommand(queryString, sqlConnect))
+                using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
                 {
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    sqlConnect.Open();
+                    using (SqlCommand command = new SqlCommand(queryString, sqlConnect))
                     {
-                        while (reader.Read())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            cpcData.Add(reader.GetString(0));
+                            while (reader.Read())
+                            {
+                                cpcData.Add(reader.GetString(0));
+                            }
+                            return cpcData;
                         }
-                        return cpcData;
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return cpcData;
+            };
         }
     }
 }

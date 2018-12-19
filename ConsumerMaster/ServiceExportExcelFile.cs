@@ -37,8 +37,6 @@ namespace ConsumerMaster
         private static readonly int IndexColumnName = 0;
 
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-        //private static readonly ThemableColor InvoiceHeaderForeground = ThemableColor.FromArgb(255, 255, 255, 255);
-
 
         Dictionary<int, string> ceHeader = new Dictionary<int, string>
         {
@@ -102,8 +100,8 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
-                    CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
-                    cellLeadingZeros1.SetFormat(leadingZerosFormat1);
+                    //CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
+                    //cellLeadingZeros1.SetFormat(leadingZerosFormat1);
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
                     sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
@@ -150,10 +148,9 @@ namespace ConsumerMaster
                     sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
-                throw;
+                Logger.Error(ex);
             }
             return workbook;
         }
@@ -171,9 +168,9 @@ namespace ConsumerMaster
                     currentRow++;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.Error(e);
+                Logger.Error(ex);
             }
         }
 
@@ -253,9 +250,9 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[19]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.Error(e);
+                Logger.Error(ex);
             }
         }
 
@@ -272,9 +269,9 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.Error(e);
+                Logger.Error(ex);
             }
         }
     }
