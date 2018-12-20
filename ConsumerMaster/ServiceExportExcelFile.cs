@@ -4,6 +4,7 @@ using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 using System.Windows.Media;
+using Telerik.Windows.Documents.Spreadsheet.DataSeries;
 
 namespace ConsumerMaster
 {
@@ -125,7 +126,7 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(dr["hours"].ToString());
 
-                    string convertToUnits = "=J" + (currentRow + 1) + "*4";
+                    string convertToUnits = "=ROUNDDOWN(J" + (currentRow + 1) + "*4, 0)";
                     sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(convertToUnits);
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnManualBillableRate].SetValue(dr["manual_billable_rate"].ToString());

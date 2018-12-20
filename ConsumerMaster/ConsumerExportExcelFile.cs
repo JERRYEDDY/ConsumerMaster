@@ -69,8 +69,6 @@ namespace ConsumerMaster
                 {
                     worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
-                    //CellValueFormat leadingZerosFormat1 = new CellValueFormat("0000");
-                    //cellLeadingZeros1.SetFormat(leadingZerosFormat1);
 
                     worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
                     worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
@@ -81,12 +79,7 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, IndexColumnCity].SetValue(dr["city"].ToString());
                     worksheet.Cells[currentRow, IndexColumnState].SetValue(dr["state"].ToString());
                     worksheet.Cells[currentRow, IndexColumnZipCode].SetValue(dr["zip_code"].ToString());
-
                     worksheet.Cells[currentRow, IndexColumnIdentifier].SetValue(dr["identifier"].ToString());
-                    //CellSelection cellLeadingZeros2 = worksheet.Cells[currentRow, IndexColumnIdentifier];
-                    //CellValueFormat leadingZerosFormat2 = new CellValueFormat("0000000000");
-                    //cellLeadingZeros2.SetFormat(leadingZerosFormat2);
-
                     worksheet.Cells[currentRow, IndexColumnGender].SetValue(dr["gender"].ToString());
 
                     currentRow++;
@@ -96,7 +89,7 @@ namespace ConsumerMaster
                 {
                     worksheet.Columns[i].AutoFitWidth();
                 }
-                }
+            }
             catch (Exception ex)
             {
                 Logger.Error(ex);
