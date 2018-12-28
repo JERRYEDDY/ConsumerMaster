@@ -42,7 +42,8 @@
             <div class="container">
                 <div class="navbar-header">
                     <div class="navbar-header pull-left">
-                        <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>
+<%--                        <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>--%>
+                        <a class="navbar-brand" href="Default.aspx")"><img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>
                     </div>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
