@@ -135,14 +135,11 @@ namespace ConsumerMaster
             RadGrid1.Controls.Add(new LiteralControl(string.Format("<span style='color:red'>{0}</span>", text)));
         }
 
-        protected void ConsumerExportDownload_Click(object sender, EventArgs e)
+        public void DownloadExcelFile(Workbook workbook, string filename)
         {
-            const string Filename = @"AWCConsumerExport.xlsx";
             try
             {
                 IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-                Workbook workbook = consumerExport.CreateWorkbook();
                 byte[] renderedBytes = null;
 
                 using (MemoryStream ms = new MemoryStream())
@@ -153,7 +150,7 @@ namespace ConsumerMaster
 
                 HttpContext.Current.Response.ClearHeaders();
                 HttpContext.Current.Response.ClearContent();
-                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + Filename);
+                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + filename);
                 HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 HttpContext.Current.Response.BinaryWrite(renderedBytes);
                 HttpContext.Current.Response.Flush();
@@ -166,30 +163,47 @@ namespace ConsumerMaster
             }
         }
 
-        protected void ServiceExportDownload_Click(object sender, EventArgs e)
+        protected void ConsumerExportDownload_Click(object sender, EventArgs e)
         {
-            const string Filename = @"AWCServiceExport.xlsx";
+            const string filename = @"AWCConsumerExport.xlsx";
             try
             {
-                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                Workbook workbook = consumerExport.CreateWorkbook();
+                DownloadExcelFile(workbook,filename);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        protected void ServiceExportDownload_Click(object sender, EventArgs e)
+        {
+            const string filename = @"AWCServiceExport.xlsx";
+            try
+            {
+                //IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
                 ServiceExportExcelFile serviceExport = new ServiceExportExcelFile();
                 Workbook workbook = serviceExport.CreateWorkbook();
-                byte[] renderedBytes = null;
+                DownloadExcelFile(workbook, filename);
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    formatProvider.Export(workbook, ms);
-                    renderedBytes = ms.ToArray();
-                }
+                //byte[] renderedBytes = null;
 
-                HttpContext.Current.Response.ClearHeaders();
-                HttpContext.Current.Response.ClearContent();
-                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + Filename);
-                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                HttpContext.Current.Response.BinaryWrite(renderedBytes);
-                HttpContext.Current.Response.Flush();
-                HttpContext.Current.Response.SuppressContent = true;
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
+                //using (MemoryStream ms = new MemoryStream())
+                //{
+                //    formatProvider.Export(workbook, ms);
+                //    renderedBytes = ms.ToArray();
+                //}
+
+                //HttpContext.Current.Response.ClearHeaders();
+                //HttpContext.Current.Response.ClearContent();
+                //HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + filename);
+                //HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                //HttpContext.Current.Response.BinaryWrite(renderedBytes);
+                //HttpContext.Current.Response.Flush();
+                //HttpContext.Current.Response.SuppressContent = true;
+                //HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
             catch (Exception ex)
             {
