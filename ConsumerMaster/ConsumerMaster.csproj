@@ -93,6 +93,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Web.Spreadsheet">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Progress\Telerik UI for ASP.NET AJAX R3 2018\AdditionalLibraries\Bin45\Telerik.Web.Spreadsheet.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Web.UI, Version=2018.3.910.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Progress\Telerik UI for ASP.NET AJAX R3 2018\Bin45\Telerik.Web.UI.dll</HintPath>
@@ -129,6 +132,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ATFBillingEntry.aspx" />
     <Content Include="About.aspx" />
     <Content Include="AppEvent.aspx" />
     <Content Include="Consumers Bulk Insert.sql">
@@ -218,6 +222,13 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATFBillingEntry.aspx.cs">
+      <DependentUpon>ATFBillingEntry.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ATFBillingEntry.aspx.designer.cs">
+      <DependentUpon>ATFBillingEntry.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AppEvent.aspx.cs">
       <DependentUpon>AppEvent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

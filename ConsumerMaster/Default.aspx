@@ -229,7 +229,7 @@
                     </td>
                     <td class="space"/>
                     <td>
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" OnClick="ConsumerExportDownload_Click" runat="server" />
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" OnClick="AWCConsumerExportDownload_Click" runat="server" />
                     </td>
                 </tr>
                 <tr>
@@ -238,7 +238,7 @@
                     </td>
                     <td class="space"/>
                     <td>
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" OnClick="ServiceExportDownload_Click" runat="server" />
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" OnClick="AWCServiceExportDownload_Click" runat="server" />
                     </td>
                 </tr>
             </table>

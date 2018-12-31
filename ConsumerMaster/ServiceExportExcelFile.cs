@@ -62,7 +62,7 @@ namespace ConsumerMaster
             {19, "rendering_provider_last_name"}
         };
 
-        public Workbook CreateWorkbook()
+        public Workbook AWCCreateWorkbook()
         {
             Workbook workbook = new Workbook();
 

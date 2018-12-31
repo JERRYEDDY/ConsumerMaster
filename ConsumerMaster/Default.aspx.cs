@@ -163,7 +163,7 @@ namespace ConsumerMaster
             }
         }
 
-        protected void ConsumerExportDownload_Click(object sender, EventArgs e)
+        protected void AWCConsumerExportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"AWCConsumerExport.xlsx";
             try
@@ -178,14 +178,14 @@ namespace ConsumerMaster
             }
         }
 
-        protected void ServiceExportDownload_Click(object sender, EventArgs e)
+        protected void AWCServiceExportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"AWCServiceExport.xlsx";
             try
             {
                 //IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
                 ServiceExportExcelFile serviceExport = new ServiceExportExcelFile();
-                Workbook workbook = serviceExport.CreateWorkbook();
+                Workbook workbook = serviceExport.AWCCreateWorkbook();
                 DownloadExcelFile(workbook, filename);
 
                 //byte[] renderedBytes = null;
