@@ -141,7 +141,7 @@
     <Content Include="Consumer_CRUD.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Contact.aspx" />
+    <Content Include="Consumers.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -246,12 +246,12 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
-    <Compile Include="Contact.aspx.cs">
-      <DependentUpon>Contact.aspx</DependentUpon>
+    <Compile Include="Consumers.aspx.cs">
+      <DependentUpon>Consumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Contact.aspx.designer.cs">
-      <DependentUpon>Contact.aspx</DependentUpon>
+    <Compile Include="Consumers.aspx.designer.cs">
+      <DependentUpon>Consumers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

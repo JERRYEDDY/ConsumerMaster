@@ -79,7 +79,11 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, IndexColumnCity].SetValue(dr["city"].ToString());
                     worksheet.Cells[currentRow, IndexColumnState].SetValue(dr["state"].ToString());
                     worksheet.Cells[currentRow, IndexColumnZipCode].SetValue(dr["zip_code"].ToString());
+
+                    CellValueFormat identifierCellValueFormat = new CellValueFormat("0000000000");
+                    worksheet.Cells[currentRow, IndexColumnIdentifier].SetFormat(identifierCellValueFormat);
                     worksheet.Cells[currentRow, IndexColumnIdentifier].SetValue(dr["identifier"].ToString());
+
                     worksheet.Cells[currentRow, IndexColumnGender].SetValue(dr["gender"].ToString());
 
                     currentRow++;
