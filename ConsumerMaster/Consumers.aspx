@@ -27,11 +27,11 @@
                      PageSize="15" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
                      OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnInsertCommand="RadGrid1_InsertCommand" AllowFilteringByColumn="true">
                 <GroupingSettings CaseSensitive="false" />
-                <MasterTableView TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" >
+                <MasterTableView TableLayout="Fixed" CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number">
                         <CommandItemSettings AddNewRecordText="Add New Consumer" />
                         <DetailTables>
                             <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" 
-                                                   Name="TradingPartners" Caption="TRADING PARTNERS" EditMode="InPlace" AllowFilteringByColumn="false">
+                                                   Name="TradingPartners" Caption="TRADING PARTNERS" EditMode="InPlace" AllowFilteringByColumn="false" >
                                 <ParentTableRelation>
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
@@ -54,7 +54,7 @@
                         </DetailTables>                    
                         <Columns>
                             <telerik:GridEditCommandColumn UniqueName="EditCommandColumn" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
-                            <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false"/>
+                            <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                             <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" AllowFiltering="false"/>
                             <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true"/>
                             <telerik:GridBoundColumn DataField="city" HeaderText="City" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                        
@@ -73,7 +73,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <table id="Table3" width="800px" border="0" class="module">
+                                            <table id="Table3" width="450px" border="0" class="module">
                                                 <tr>
                                                     <td>First Name:</td>
                                                     <td>
@@ -186,21 +186,13 @@
                                             </table>
                                         </td>
                                         <td style="vertical-align: top">
-                                            <table id="Table1" cellspacing="1" cellpadding="1" width="200" border="0" class="module">
-                                                <tr>
-                                                    <td>
-                                                    </td>
-                                                </tr>
-                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"></td>
                                     </tr>
                                     <tr>
-                                        <td>
-
-                                        </td>
+                                        <td></td>
                                         <td></td>
                                     </tr>
                                     <tr>

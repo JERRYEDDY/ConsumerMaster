@@ -20,6 +20,17 @@ namespace ConsumerMaster
             }
         }
 
+
+        protected void RadGrid1_PreRender(object sender, EventArgs e)
+        {
+            foreach (GridDataItem dataItem in RadGrid1.MasterTableView.Items)
+            {
+                int count = dataItem.ChildItem.NestedTableViews[0].Items.Count;
+            }
+        }
+
+
+
         protected void RadGrid1_ItemInserted(object source, GridInsertedEventArgs e)
         {
             string item = getItemName(e.Item.OwnerTableView.Name);
