@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI;
 using Telerik.Web.UI;
 
@@ -16,7 +17,6 @@ namespace ConsumerMaster
             {
                 //this.BindGrid();
                 Logger.Info("ConsumerMaster started");
-
             }
         }
 
@@ -28,8 +28,6 @@ namespace ConsumerMaster
                 int count = dataItem.ChildItem.NestedTableViews[0].Items.Count;
             }
         }
-
-
 
         protected void RadGrid1_ItemInserted(object source, GridInsertedEventArgs e)
         {

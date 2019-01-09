@@ -7,6 +7,7 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
 
+
 namespace ConsumerMaster
 {
     public partial class _Default : Page
@@ -82,5 +83,82 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+        protected void AddTradingPartnerNode_Click(object sender, EventArgs e)
+        {
+            RadButton btn = sender as RadButton;
+            RadDropDownList ddlTradingPartner = btn.Parent.FindControl("RadDropDownList1") as RadDropDownList;
+            try
+            {
+                if (RadTreeView1.SelectedNode != null) //Selected Node
+                {
+                    if (RadTreeView1.SelectedNode.ParentNode == null) //Trading Partner has no parent
+                    {
+                        if(ddlTradingPartner.SelectedItem != null && !String.IsNullOrEmpty(ddlTradingPartner.SelectedItem.Text))
+                        { 
+                            RadTreeNode addedTradingPartnerNode = new RadTreeNode();
+                            addedTradingPartnerNode.Selected = true;
+                            addedTradingPartnerNode.Text = ddlTradingPartner.SelectedText;
+                            addedTradingPartnerNode.Value = ddlTradingPartner.SelectedValue;
+                            RadTreeView1.Nodes.Add(addedTradingPartnerNode);
+                        }
+                    }
+                        Logger.Info(RadTreeView1.SelectedNode.Text + " Level: " + RadTreeView1.SelectedNode.Level);
+                }
+                else if (RadTreeView1.Nodes.Count == 0) //Treeview has no nodes
+                {
+                    if (ddlTradingPartner.SelectedItem != null && !String.IsNullOrEmpty(ddlTradingPartner.SelectedItem.Text))
+                    {
+                        RadTreeNode addedTradingPartnerNode = new RadTreeNode();
+                        addedTradingPartnerNode.Selected = true;
+                        addedTradingPartnerNode.Text = ddlTradingPartner.SelectedText;
+                        addedTradingPartnerNode.Value = ddlTradingPartner.SelectedValue;
+                        RadTreeView1.Nodes.Add(addedTradingPartnerNode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        protected void AddCompositeProcedureCodeNode_Click(object sender, EventArgs e)
+        {
+            RadButton btn = sender as RadButton;
+            RadDropDownList ddlTradingPartner = btn.Parent.FindControl("RadDropDownList1") as RadDropDownList;
+            RadDropDownList ddlCompositeProcedureCode = btn.Parent.FindControl("RadDropDownList2") as RadDropDownList;
+            try
+            {
+                if (RadTreeView1.SelectedNode != null) //Selected node
+                {
+                    RadTreeView1.SelectedNode.Expanded = true;
+                    if (RadTreeView1.SelectedNode.ParentNode == null) //Trading Partner
+                    {
+                        if (ddlCompositeProcedureCode.SelectedItem != null && !String.IsNullOrEmpty(ddlCompositeProcedureCode.SelectedItem.Text))
+                        {
+                            RadTreeNode addedCompositeProcedureCode = new RadTreeNode();
+                            addedCompositeProcedureCode.Selected = true;
+                            addedCompositeProcedureCode.Text = ddlCompositeProcedureCode.SelectedText;
+                            addedCompositeProcedureCode.Value = ddlCompositeProcedureCode.SelectedValue;
+                            RadTreeView1.SelectedNode.Nodes.Add(addedCompositeProcedureCode);
+                        }
+
+                    }
+                    Logger.Info(RadTreeView1.SelectedNode.Text + " Level: " + RadTreeView1.SelectedNode.Level);
+                }
+                else if (RadTreeView1.Nodes.Count == 0) // Treeview has no nodes
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        /// <summary>
+        /// ////////////////////////////////////////////////////////////////////////////
+        /// </summary>
     }
 }

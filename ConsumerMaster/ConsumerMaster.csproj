@@ -165,6 +165,9 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ConsumerMaster.log">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -211,9 +214,11 @@
     <Content Include="Styles\ControlPanel.css" />
     <Content Include="Styles\ControlPanelSingle.css" />
     <Content Include="Styles\css_form.css" />
+    <Content Include="Styles\styles.css" />
     <Content Include="Styles\StyleSheet.css" />
     <Content Include="Therapists.aspx" />
     <Content Include="TradingPartners.aspx" />
+    <Content Include="TreeView.xml" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
