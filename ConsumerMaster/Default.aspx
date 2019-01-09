@@ -82,11 +82,12 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" runat="server"  Width="350px"
+<%--                                        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" runat="server"  Width="350px"
                                                                  DropDownHeight="200" DataSourceID="TradingPartnerDataSource" DataTextField="name" DefaultMessage="Select Trading Partner" 
                                                                  DataValueField="trading_partner_id" TabIndex="2" >
-                                        </telerik:RadDropDownList>
-                                        <asp:DropDownList ID="DropDownList1" runat="server" CssClass="ddl" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id"></asp:DropDownList>
+                                        </telerik:RadDropDownList>--%>
+                                        <asp:DropDownList ID="DropDownList1" runat="server" CssClass="ddl" DataSourceID="TradingPartnerDataSource" DataTextField="name" 
+                                                          DataValueField="trading_partner_id" Font-Size="10"></asp:DropDownList>
                                         
                                         
 

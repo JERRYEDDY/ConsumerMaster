@@ -6,7 +6,7 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
-
+using System.Web.UI.WebControls;
 
 namespace ConsumerMaster
 {
@@ -87,7 +87,8 @@ namespace ConsumerMaster
         protected void AddTradingPartnerNode_Click(object sender, EventArgs e)
         {
             RadButton btn = sender as RadButton;
-            RadDropDownList ddlTradingPartner = btn.Parent.FindControl("RadDropDownList1") as RadDropDownList;
+            //RadDropDownList ddlTradingPartner = btn.Parent.FindControl("RadDropDownList1") as RadDropDownList;
+            DropDownList ddlTradingPartner = btn.Parent.FindControl("DropDownList1") as DropDownList;
             try
             {
                 if (RadTreeView1.SelectedNode != null) //Selected Node
@@ -98,7 +99,7 @@ namespace ConsumerMaster
                         { 
                             RadTreeNode addedTradingPartnerNode = new RadTreeNode();
                             addedTradingPartnerNode.Selected = true;
-                            addedTradingPartnerNode.Text = ddlTradingPartner.SelectedText;
+                            addedTradingPartnerNode.Text = ddlTradingPartner.SelectedItem.Text;
                             addedTradingPartnerNode.Value = ddlTradingPartner.SelectedValue;
                             RadTreeView1.Nodes.Add(addedTradingPartnerNode);
                         }
@@ -111,7 +112,7 @@ namespace ConsumerMaster
                     {
                         RadTreeNode addedTradingPartnerNode = new RadTreeNode();
                         addedTradingPartnerNode.Selected = true;
-                        addedTradingPartnerNode.Text = ddlTradingPartner.SelectedText;
+                        addedTradingPartnerNode.Text = ddlTradingPartner.SelectedItem.Text;
                         addedTradingPartnerNode.Value = ddlTradingPartner.SelectedValue;
                         RadTreeView1.Nodes.Add(addedTradingPartnerNode);
                     }
