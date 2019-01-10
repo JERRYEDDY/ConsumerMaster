@@ -7,6 +7,8 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
 using System.Web.UI.WebControls;
+using System.Xml;
+using System.Data.SqlClient;
 
 namespace ConsumerMaster
 {
@@ -23,6 +25,33 @@ namespace ConsumerMaster
                 //this.BindGrid();
                 Logger.Info("ConsumerMaster started");
 
+                SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
+                csb.DataSource = @".\SQL2014";
+                csb.InitialCatalog = "ConsumerMaster";
+                csb.IntegratedSecurity = true;
+
+                string connString = csb.ToString();
+
+                string queryString = "select * FROM ConsumerTemplate";
+
+                string consumerTemplate;
+
+                using (SqlConnection connection = new SqlConnection(connString))
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = queryString;
+                    //command.Parameters.Add(new SqlParameter("tabId", tabId));
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int Id = Int32.Parse(reader["Id"].ToString());
+                            RadTreeView1.LoadXmlString(reader["Template"].ToString());
+                        }
+                    }
+                }
             }
         }
 
@@ -158,8 +187,39 @@ namespace ConsumerMaster
             }
         }
 
+        protected void DeleteSelectedNode_Click(object sender, EventArgs e)
+        {
+            RadButton btn = sender as RadButton;
+            try
+            {
+                RadTreeView1.GetXml();
+
+                foreach (RadTreeNode node in RadTreeView1.GetAllNodes())
+                {
+                    String foo = node.Text;
+                }
+
+                if (RadTreeView1.SelectedNode != null) //Selected node
+                {
+                    RadTreeView1.SelectedNode.Remove();
+                    Logger.Info(RadTreeView1.SelectedNode.Text + " Level: " + RadTreeView1.SelectedNode.Level);
+                }
+                else if (RadTreeView1.Nodes.Count == 0) // Treeview has no nodes
+                {
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
         /// <summary>
         /// ////////////////////////////////////////////////////////////////////////////
-        /// </summary>
+
+
+
+
+
     }
+
 }

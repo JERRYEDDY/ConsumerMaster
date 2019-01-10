@@ -121,6 +121,24 @@ namespace ConsumerMaster {
         protected global::Telerik.Web.UI.RadButton RadButton3;
         
         /// <summary>
+        /// RadButton5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton RadButton5;
+        
+        /// <summary>
+        /// TreeView1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TreeView TreeView1;
+        
+        /// <summary>
         /// XmlDataSource1 control.
         /// </summary>
         /// <remarks>

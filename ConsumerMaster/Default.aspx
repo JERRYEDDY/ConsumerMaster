@@ -82,15 +82,8 @@
                             <table>
                                 <tr>
                                     <td>
-<%--                                        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" runat="server"  Width="350px"
-                                                                 DropDownHeight="200" DataSourceID="TradingPartnerDataSource" DataTextField="name" DefaultMessage="Select Trading Partner" 
-                                                                 DataValueField="trading_partner_id" TabIndex="2" >
-                                        </telerik:RadDropDownList>--%>
                                         <asp:DropDownList ID="DropDownList1" runat="server" CssClass="ddl" DataSourceID="TradingPartnerDataSource" DataTextField="name" 
                                                           DataValueField="trading_partner_id" Font-Size="10"></asp:DropDownList>
-                                        
-                                        
-
                                         <telerik:RadButton ID="RadButton4" runat="server" Text="Add Trading Partner" OnClick="AddTradingPartnerNode_Click"></telerik:RadButton>
                                     </td>
                                 </tr>
@@ -101,6 +94,7 @@
                                                                  DataValueField="id" TabIndex="3" >
                                         </telerik:RadDropDownList>
                                         <telerik:RadButton ID="RadButton3" runat="server" Text="Add Proc Code" OnClick="AddCompositeProcedureCodeNode_Click"></telerik:RadButton>
+                                        <telerik:RadButton ID="RadButton5" runat="server" Text="Delete Selected" OnClick="DeleteSelectedNode_Click"></telerik:RadButton>
                                     </td>
                                 </tr>
                             </table>
@@ -110,6 +104,7 @@
             </fieldset>
         </div>   
     </div>
+    <asp:TreeView ID="TreeView1" runat="server"></asp:TreeView>
 
 
     <asp:XmlDataSource runat="server" ID="XmlDataSource1" DataFile="TreeView.xml" XPath="/Tree/Node"></asp:XmlDataSource>
