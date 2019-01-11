@@ -10,6 +10,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private const string ConsumersTable = "Consumers";
         private const string TradingPartnersTable = "TradingPartners";
+        private const string CompositeProcedureCodesTable = "CompositeProcedureCodes";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -112,8 +113,13 @@ namespace ConsumerMaster
                     }
                 case (TradingPartnersTable):
                     {
-                        return "TradeingPartner";
+                        return "TradingPartner";
                     }
+                case (CompositeProcedureCodesTable):
+                    {
+                        return "CompositeProcedureCodes";
+                    }
+
                 default: return "";
             }
         }

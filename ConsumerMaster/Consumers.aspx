@@ -31,17 +31,40 @@
                         <CommandItemSettings AddNewRecordText="Add New Consumer" />
                         <DetailTables>
                             <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" 
-                                                   Name="TradingPartners" Caption="TRADING PARTNERS" EditMode="InPlace" AllowFilteringByColumn="false" >
+                                                   Name="TradingPartners" Caption="Trading Partners" EditMode="InPlace" AllowFilteringByColumn="false" >
                                 <ParentTableRelation>
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
+ 			                    <DetailTables>
+                                    <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource3" Width="100%" runat="server" CommandItemDisplay="Top" 
+                                                           Name="CompProcCode" Caption="Composite Procedure" EditMode="InPlace" AllowFilteringByColumn="false" >
+                                        <ParentTableRelation>
+                                            <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
+                                        </ParentTableRelation>
+                                        <Columns>
+                                            <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
+                                                <HeaderStyle Width="20px"></HeaderStyle>
+                                                <ItemStyle CssClass="MyImageButton"></ItemStyle>
+                                            </telerik:GridEditCommandColumn>
+                                            <telerik:GridDropDownColumn UniqueName="CPCDropDownListColumn" ListTextField="name" ListValueField="trading_partner_id" DataSourceID="CompProcCodeDataSource" 
+                                                            HeaderText="CompProcCode" DataField="trading_partner_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="300px"/>
+                                            <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
+                                                <HeaderStyle Width="20px"></HeaderStyle>
+                                                <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
+                                            </telerik:GridButtonColumn>
+                                        </Columns>
+                                        <SortExpressions>
+                                            <telerik:GridSortExpression FieldName="consumer_internal_number"></telerik:GridSortExpression>
+                                        </SortExpressions>
+                                    </telerik:GridTableView>
+			                    </DetailTables>                               
                                 <Columns>
                                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
                                         <HeaderStyle Width="20px"></HeaderStyle>
                                         <ItemStyle CssClass="MyImageButton"></ItemStyle>
                                     </telerik:GridEditCommandColumn>
                                     <telerik:GridDropDownColumn UniqueName="TPDropDownListColumn" ListTextField="name" ListValueField="trading_partner_id" DataSourceID="TradingPartnerDataSource" 
-                                                    HeaderText="Trading Partner" DataField="trading_partner_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="300px"/>
+                                                    HeaderText="Trading Partner" DataField="trading_partner_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="500px"/>
                                     <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
                                         <HeaderStyle Width="20px"></HeaderStyle>
                                         <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
@@ -278,20 +301,44 @@
         SelectCommand="SELECT * FROM [ConsumerTradingPartner] AS ctp INNER JOIN [TradingPartners] AS tp ON ctp.trading_partner_id = tp.id WHERE [consumer_internal_number] = @consumer_internal_number" 
         UpdateCommand="UPDATE [ConsumerTradingPartner] SET [trading_partner_id] = @trading_partner_id WHERE [consumer_internal_number] = @consumer_internal_number">
        <SelectParameters>
-           <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" DefaultValue="1" />
+           <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
        </SelectParameters>
          <DeleteParameters>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </DeleteParameters>
         <InsertParameters>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-            <asp:Parameter Name="trading_partner_id" Type="String"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
         </InsertParameters>
         <UpdateParameters>
-            <asp:Parameter Name="trading_partner_id" Type="String"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </UpdateParameters>
     </asp:SqlDataSource>    
+
+    <asp:SqlDataSource ID="SqlDataSource3" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
+        DeleteCommand="DELETE FROM [ConsumerTradingComposite] WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id"
+        InsertCommand="INSERT INTO [ConsumerTradingComposite] ([consumer_internal_number], [trading_partner_id], [cpc_id]) VALUES (@consumer_internal_number, @trading_partner_id, @cpc_id)"
+        SelectCommand="SELECT * FROM [ConsumerTradingComposite] AS ctc INNER JOIN [CompositeProcedureCodes] AS cpc ON ctc.trading_partner_id = cpc.id WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id"
+        UpdateCommand="UPDATE [ConsumerTradingComposite] SET [cpc_id] = @cpc_id WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id">
+        <SelectParameters>
+            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
+        </SelectParameters>
+        <DeleteParameters>
+            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+        </DeleteParameters>
+        <InsertParameters>
+            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="cpc_id" Type="Int32"></asp:Parameter>
+        </InsertParameters>
+        <UpdateParameters>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="cpc_id" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+        </UpdateParameters>
+    </asp:SqlDataSource>  
 
     <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT Name, Abbreviation FROM States"/>
     <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>

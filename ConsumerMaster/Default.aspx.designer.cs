@@ -157,12 +157,12 @@ namespace ConsumerMaster {
         protected global::System.Web.UI.WebControls.SqlDataSource TradingPartnerDataSource;
         
         /// <summary>
-        /// CompositeProcedureCodeDataSource control.
+        /// CompProcCodeDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource CompositeProcedureCodeDataSource;
+        protected global::System.Web.UI.WebControls.SqlDataSource CompProcCodeDataSource;
     }
 }

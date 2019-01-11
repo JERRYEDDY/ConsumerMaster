@@ -90,7 +90,7 @@
                                 <tr>
                                     <td>
                                         <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList2" runat="server"  Width="220px"
-                                                                 DropDownHeight="200" DataSourceID="CompositeProcedureCodeDataSource" DataTextField="name" DefaultMessage="Select Composite"
+                                                                 DropDownHeight="200" DataSourceID="CompProcCodeDataSource" DataTextField="name" DefaultMessage="Select Composite"
                                                                  DataValueField="id" TabIndex="3" >
                                         </telerik:RadDropDownList>
                                         <telerik:RadButton ID="RadButton3" runat="server" Text="Add Proc Code" OnClick="AddCompositeProcedureCodeNode_Click"></telerik:RadButton>
@@ -109,6 +109,6 @@
 
     <asp:XmlDataSource runat="server" ID="XmlDataSource1" DataFile="TreeView.xml" XPath="/Tree/Node"></asp:XmlDataSource>
     <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
-    <asp:SqlDataSource ID="CompositeProcedureCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>
+    <asp:SqlDataSource ID="CompProcCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>
 
 </asp:Content>
