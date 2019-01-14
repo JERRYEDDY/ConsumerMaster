@@ -31,24 +31,24 @@
                         <CommandItemSettings AddNewRecordText="Add New Consumer" />
                         <DetailTables>
                             <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" Width="100%" runat="server" CommandItemDisplay="Top" 
-                                                   Name="TradingPartners" Caption="Trading Partners" EditMode="InPlace" AllowFilteringByColumn="false" >
+                                                   Name="TradingPartners" Caption="Trading Partners" AllowFilteringByColumn="false" >
                                 <ParentTableRelation>
-                                    <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
  			                    <DetailTables>
                                     <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource3" Width="100%" runat="server" CommandItemDisplay="Top" 
-                                                           Name="CompProcCode" Caption="Composite Procedure" EditMode="InPlace" AllowFilteringByColumn="false" >
+                                                           Name="CompProcCode" Caption="Composite Procedure" AllowFilteringByColumn="false" >
                                         <ParentTableRelation>
                                             <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
+                                            <telerik:GridRelationFields DetailKeyField="trading_partner_id" MasterKeyField="trading_partner_id"></telerik:GridRelationFields>
                                         </ParentTableRelation>
                                         <Columns>
                                             <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
                                                 <HeaderStyle Width="20px"></HeaderStyle>
                                                 <ItemStyle CssClass="MyImageButton"></ItemStyle>
                                             </telerik:GridEditCommandColumn>
-                                            <telerik:GridDropDownColumn UniqueName="CPCDropDownListColumn" ListTextField="name" ListValueField="trading_partner_id" DataSourceID="CompProcCodeDataSource" 
-                                                            HeaderText="CompProcCode" DataField="trading_partner_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="300px"/>
+                                            <telerik:GridDropDownColumn UniqueName="CPCDropDownListColumn" ListTextField="name" ListValueField="id" DataSourceID="CompProcCodeDataSource" 
+                                                            HeaderText="CompProcCode" DataField="cpc_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="300px"/>
                                             <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
                                                 <HeaderStyle Width="20px"></HeaderStyle>
                                                 <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
@@ -210,19 +210,6 @@
                                             </table>
                                         </td>
                                         <td style="vertical-align: top">
-                                            <telerik:RadTreeView ID="RadTreeView1" runat="server">
-                                                <Nodes>
-                                                    <telerik:RadTreeNode runat="server" Text="Agency With Choice; In Home">
-                                                        <Nodes>
-                                                            <telerik:RadTreeNode runat="server" Text="HC:W7068"></telerik:RadTreeNode>
-                                                            <telerik:RadTreeNode runat="server" Text="HC:W7068"></telerik:RadTreeNode>                                                            
-                                                            <telerik:RadTreeNode runat="server" Text="HC:W7060"></telerik:RadTreeNode>                                                           
-                                                            <telerik:RadTreeNode runat="server" Text="HC:W7060"></telerik:RadTreeNode>                                                            
-                                                            <telerik:RadTreeNode runat="server" Text="HC:W7060"></telerik:RadTreeNode>
-                                                        </Nodes>
-                                                    </telerik:RadTreeNode>
-                                                </Nodes>
-                                            </telerik:RadTreeView>
                                         </td>
                                     </tr>
                                     <tr>
@@ -324,10 +311,13 @@
         SelectCommand="SELECT * FROM [ConsumerTradingComposite] AS ctc INNER JOIN [CompositeProcedureCodes] AS cpc ON ctc.trading_partner_id = cpc.id WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id"
         UpdateCommand="UPDATE [ConsumerTradingComposite] SET [cpc_id] = @cpc_id WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id">
         <SelectParameters>
-            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
+            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['trading_partner_id']" Type="Int32" />
+<%--            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>--%>
+<%--            <asp:SessionParameter Name="trading_partner_id" Type="Int32"/>--%>
         </SelectParameters>
         <DeleteParameters>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
         </DeleteParameters>
         <InsertParameters>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
@@ -335,9 +325,9 @@
             <asp:Parameter Name="cpc_id" Type="Int32"></asp:Parameter>
         </InsertParameters>
         <UpdateParameters>
-            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="cpc_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
         </UpdateParameters>
     </asp:SqlDataSource>  
 

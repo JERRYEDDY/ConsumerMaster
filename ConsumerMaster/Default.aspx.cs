@@ -8,6 +8,7 @@ using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace ConsumerMaster
 {
@@ -24,35 +25,57 @@ namespace ConsumerMaster
                 //this.BindGrid();
                 Logger.Info("ConsumerMaster started");
 
-                SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
-                csb.DataSource = @".\SQL2014";
-                csb.InitialCatalog = "ConsumerMaster";
-                csb.IntegratedSecurity = true;
 
-                string connString = csb.ToString();
+                BindToDataTable(RadTreeView1);
 
-                string queryString = "select * FROM ConsumerTemplate";
 
-                string consumerTemplate;
-
-                using (SqlConnection connection = new SqlConnection(connString))
-                using (SqlCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = queryString;
-                    //command.Parameters.Add(new SqlParameter("tabId", tabId));
-                    connection.Open();
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int Id = Int32.Parse(reader["Id"].ToString());
-                            RadTreeView1.LoadXmlString(reader["Template"].ToString());
-                        }
-                    }
-                }
             }
         }
+
+        private void BindToDataTable(RadTreeView treeView)        
+        {
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
+            csb.DataSource = @".\SQL2014";
+            csb.InitialCatalog = "ConsumerMaster";
+            csb.IntegratedSecurity = true;
+            string connString = csb.ToString();
+
+            string queryString =
+                "SELECT NULL AS ParentID, tp.name AS Name, ctp.trading_partner_id AS ID " +
+                "FROM[ConsumerMaster].[dbo].[ConsumerTradingPartner] ctp INNER JOIN TradingPartners tp ON ctp.trading_partner_id = tp.id " +
+                "WHERE consumer_internal_number = 237" +
+                "UNION ALL " +
+                "SELECT ctc.trading_partner_id AS ParentID, cpc.name AS Name, ctc.cpc_id AS ID " +
+                "FROM [ConsumerMaster].[dbo].[ConsumerTradingComposite] ctc INNER JOIN CompositeProcedureCodes cpc ON ctc.cpc_id = cpc.id " +
+                "WHERE consumer_internal_number = 237";   
+            
+            SqlConnection connection = new SqlConnection(connString);
+            SqlDataAdapter adapter = new SqlDataAdapter(queryString, connection);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            treeView.DataTextField = "Name";
+            //treeView.DataValueField = "Description";
+            treeView.DataFieldID = "ID";
+            treeView.DataFieldParentID = "ParentID";
+            treeView.DataSource = dataTable;
+            treeView.DataBind();
+        }
+
+        public void BuildTreeView()
+        {
+
+
+
+
+
+
+
+
+        }
+
+
+
+
 
         public void DownloadExcelFile(Workbook workbook, string filename)
         {
@@ -216,9 +239,68 @@ namespace ConsumerMaster
         /// ////////////////////////////////////////////////////////////////////////////
 
 
+        internal class ConsumerDataItem
+        {
+            private string text;
+            private int id;
+            private int parentId;
+
+            public string Text
+            {
+                get { return text; }
+                set { text = value; }
+            }
 
 
+            public int ID
+            {
+                get { return id; }
+                set { id = value; }
+            }
 
+            public int ParentID
+            {
+                get { return parentId; }
+                set { parentId = value; }
+            }
+
+            public ConsumerDataItem(int id, int parentId, string text)
+            {
+                this.id = id;
+                this.parentId = parentId;
+                this.text = text;
+            }
+        }
+
+        public void old()
+        {
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
+            csb.DataSource = @".\SQL2014";
+            csb.InitialCatalog = "ConsumerMaster";
+            csb.IntegratedSecurity = true;
+
+            string connString = csb.ToString();
+
+            string queryString = "select * FROM ConsumerTemplate";
+
+            string consumerTemplate;
+
+            using (SqlConnection connection = new SqlConnection(connString))
+            using (SqlCommand command = connection.CreateCommand())
+            {
+                command.CommandText = queryString;
+                //command.Parameters.Add(new SqlParameter("tabId", tabId));
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int Id = Int32.Parse(reader["Id"].ToString());
+                        RadTreeView1.LoadXmlString(reader["Template"].ToString());
+                    }
+                }
+            }
+        }
     }
-
 }

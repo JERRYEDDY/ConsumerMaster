@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Web.UI;
 using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
-    public partial class Consumers : Page
+    public partial class Consumers2 : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private const string ConsumersTable = "Consumers";
@@ -14,21 +16,23 @@ namespace ConsumerMaster
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!this.IsPostBack)
+
+        }
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            if (RadGrid1.SelectedIndexes.Count == 0)
+                RadGrid1.SelectedIndexes.Add(0);
+            if (RadGrid2.SelectedIndexes.Count == 0)
             {
-                //this.BindGrid();
-                Logger.Info("ConsumerMaster started");
+                RadGrid2.Rebind();
+                RadGrid2.SelectedIndexes.Add(0);
             }
         }
 
-
-        //protected void RadGrid1_PreRender(object sender, EventArgs e)
-        //{
-        //    foreach (GridDataItem dataItem in RadGrid1.MasterTableView.Items)
-        //    {
-        //        int count = dataItem.ChildItem.NestedTableViews[0].Items.Count;
-        //    }
-        //}
+        protected void RadGrid1_ItemCommand(object sender, GridCommandEventArgs e)
+        {
+            RadGrid1.SelectedIndexes.Clear();
+        }
 
         protected void RadGrid1_ItemInserted(object source, GridInsertedEventArgs e)
         {
@@ -97,7 +101,7 @@ namespace ConsumerMaster
                 case TradingPartnersTable:
                     {
                         GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-                        SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
+                        //SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
                     }
                     break;
             }
