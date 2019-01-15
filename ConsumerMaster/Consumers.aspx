@@ -36,7 +36,7 @@
                                     <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
                                 </ParentTableRelation>
  			                    <DetailTables>
-                                    <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource3" Width="100%" runat="server" CommandItemDisplay="Top" 
+<%--                                    <telerik:GridTableView DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource3" Width="100%" runat="server" CommandItemDisplay="Top" 
                                                            Name="CompProcCode" Caption="Composite Procedure" AllowFilteringByColumn="false" >
                                         <ParentTableRelation>
                                             <telerik:GridRelationFields DetailKeyField="consumer_internal_number" MasterKeyField="consumer_internal_number"></telerik:GridRelationFields>
@@ -57,7 +57,7 @@
                                         <SortExpressions>
                                             <telerik:GridSortExpression FieldName="consumer_internal_number"></telerik:GridSortExpression>
                                         </SortExpressions>
-                                    </telerik:GridTableView>
+                                    </telerik:GridTableView>--%>
 			                    </DetailTables>                               
                                 <Columns>
                                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
@@ -311,7 +311,7 @@
         SelectCommand="SELECT * FROM [ConsumerTradingComposite] AS ctc INNER JOIN [CompositeProcedureCodes] AS cpc ON ctc.trading_partner_id = cpc.id WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id"
         UpdateCommand="UPDATE [ConsumerTradingComposite] SET [cpc_id] = @cpc_id WHERE [consumer_internal_number] = @consumer_internal_number AND trading_partner_id = @trading_partner_id">
         <SelectParameters>
-            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['trading_partner_id']" Type="Int32" />
+            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['trading_partner_id']" Type="Int32"  />
 <%--            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>--%>
 <%--            <asp:SessionParameter Name="trading_partner_id" Type="Int32"/>--%>
         </SelectParameters>

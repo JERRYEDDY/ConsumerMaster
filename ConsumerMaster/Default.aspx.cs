@@ -26,7 +26,7 @@ namespace ConsumerMaster
                 Logger.Info("ConsumerMaster started");
 
 
-                BindToDataTable(RadTreeView1);
+                //BindToDataTable(RadTreeView1);
 
 
             }
