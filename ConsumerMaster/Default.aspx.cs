@@ -6,9 +6,9 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
-using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
+using System.Configuration;
 
 namespace ConsumerMaster
 {
@@ -26,56 +26,55 @@ namespace ConsumerMaster
                 Logger.Info("ConsumerMaster started");
 
 
-                //BindToDataTable(RadTreeView1);
+                BindToDataTable();
 
 
             }
         }
 
-        private void BindToDataTable(RadTreeView treeView)        
+        private void BindToDataTable()        
         {
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
-            csb.DataSource = @".\SQL2014";
-            csb.InitialCatalog = "ConsumerMaster";
+            csb.DataSource = @"ITLOGIC1\UCPDB";
+            csb.InitialCatalog = "ATFIS";
             csb.IntegratedSecurity = true;
             string connString = csb.ToString();
 
-            string queryString =
-                "SELECT NULL AS ParentID, tp.name AS Name, ctp.trading_partner_id AS ID " +
-                "FROM[ConsumerMaster].[dbo].[ConsumerTradingPartner] ctp INNER JOIN TradingPartners tp ON ctp.trading_partner_id = tp.id " +
-                "WHERE consumer_internal_number = 237" +
-                "UNION ALL " +
-                "SELECT ctc.trading_partner_id AS ParentID, cpc.name AS Name, ctc.cpc_id AS ID " +
-                "FROM [ConsumerMaster].[dbo].[ConsumerTradingComposite] ctc INNER JOIN CompositeProcedureCodes cpc ON ctc.cpc_id = cpc.id " +
-                "WHERE consumer_internal_number = 237";   
+
+
+            using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
+            {
+                using (SqlCommand cmd = new SqlCommand("GetConsumersData", sqlConnection1))
+                {
+                    Int32 rowsAffected;
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-11-01 00:00:00";
+                    cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = "2018-11-30 23:59:59";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+
+                }
+            }
+
+            //string queryString =
+            //"SELECT tim.[Social Security #]AS ID, " +
+            //"tim.[FullName], RIGHT(FullName, 6) AS Ratio, SUBSTRING(RIGHT(FullName, 6), 5, 1) AS Type, " +
+            //"SUM((ISNULL(DATEDIFF(second, ta.[StartTime], ta.[EndTime]), 0) + ISNULL(DATEDIFF(second, ta.[StartTime1], ta.[EndTime1]), 0)) / 900) AS TotalUnits " +
+            //"FROM([ATFIS].[dbo].[T_Attendance] AS ta " +
+            //"LEFT OUTER JOIN[ATFIS].[dbo].[T_Individual Master] AS tim ON ta.[CID] = tim.[IndID]) " + 
+            //"LEFT OUTER JOIN[ATFIS].[dbo].[T_Site] AS ts  ON tim.[Site]=ts.[S_ID] " +
+            //"WHERE(ta.[ADate]>= '2018-11-01 00:00:00' AND ta.[ADate]<'2018-11-30 23:59:59') AND tim.Status = 'Active' " +
+            //"GROUP BY tim.[Social Security #],tim.[FullName]";  
             
-            SqlConnection connection = new SqlConnection(connString);
-            SqlDataAdapter adapter = new SqlDataAdapter(queryString, connection);
-            DataTable dataTable = new DataTable();
-            adapter.Fill(dataTable);
-            treeView.DataTextField = "Name";
-            //treeView.DataValueField = "Description";
-            treeView.DataFieldID = "ID";
-            treeView.DataFieldParentID = "ParentID";
-            treeView.DataSource = dataTable;
-            treeView.DataBind();
-        }
-
-        public void BuildTreeView()
-        {
-
-
-
-
-
-
-
+            //SqlConnection connection = new SqlConnection(connString);
+            //SqlDataAdapter adapter = new SqlDataAdapter(queryString, connection);
+            //DataTable dataTable = new DataTable();
+            //adapter.Fill(dataTable);
 
         }
-
-
-
-
 
         public void DownloadExcelFile(Workbook workbook, string filename)
         {
@@ -135,106 +134,6 @@ namespace ConsumerMaster
             }
         }
 
-        protected void AddTradingPartnerNode_Click(object sender, EventArgs e)
-        {
-            RadButton btn = sender as RadButton;
-            //RadDropDownList ddlTradingPartner = btn.Parent.FindControl("RadDropDownList1") as RadDropDownList;
-            DropDownList ddlTradingPartner = btn.Parent.FindControl("DropDownList1") as DropDownList;
-            try
-            {
-                if (RadTreeView1.SelectedNode != null) //Selected Node
-                {
-                    if (RadTreeView1.SelectedNode.ParentNode == null) //Trading Partner has no parent
-                    {
-                        if(ddlTradingPartner.SelectedItem != null && !String.IsNullOrEmpty(ddlTradingPartner.SelectedItem.Text))
-                        { 
-                            RadTreeNode addedTradingPartnerNode = new RadTreeNode();
-                            addedTradingPartnerNode.Selected = true;
-                            addedTradingPartnerNode.Text = ddlTradingPartner.SelectedItem.Text;
-                            addedTradingPartnerNode.Value = ddlTradingPartner.SelectedValue;
-                            RadTreeView1.Nodes.Add(addedTradingPartnerNode);
-                        }
-                    }
-                        Logger.Info(RadTreeView1.SelectedNode.Text + " Level: " + RadTreeView1.SelectedNode.Level);
-                }
-                else if (RadTreeView1.Nodes.Count == 0) //Treeview has no nodes
-                {
-                    if (ddlTradingPartner.SelectedItem != null && !String.IsNullOrEmpty(ddlTradingPartner.SelectedItem.Text))
-                    {
-                        RadTreeNode addedTradingPartnerNode = new RadTreeNode();
-                        addedTradingPartnerNode.Selected = true;
-                        addedTradingPartnerNode.Text = ddlTradingPartner.SelectedItem.Text;
-                        addedTradingPartnerNode.Value = ddlTradingPartner.SelectedValue;
-                        RadTreeView1.Nodes.Add(addedTradingPartnerNode);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        protected void AddCompositeProcedureCodeNode_Click(object sender, EventArgs e)
-        {
-            RadButton btn = sender as RadButton;
-            RadDropDownList ddlTradingPartner = btn.Parent.FindControl("RadDropDownList1") as RadDropDownList;
-            RadDropDownList ddlCompositeProcedureCode = btn.Parent.FindControl("RadDropDownList2") as RadDropDownList;
-            try
-            {
-                if (RadTreeView1.SelectedNode != null) //Selected node
-                {
-                    RadTreeView1.SelectedNode.Expanded = true;
-                    if (RadTreeView1.SelectedNode.ParentNode == null) //Trading Partner
-                    {
-                        if (ddlCompositeProcedureCode.SelectedItem != null && !String.IsNullOrEmpty(ddlCompositeProcedureCode.SelectedItem.Text))
-                        {
-                            RadTreeNode addedCompositeProcedureCode = new RadTreeNode();
-                            addedCompositeProcedureCode.Selected = true;
-                            addedCompositeProcedureCode.Text = ddlCompositeProcedureCode.SelectedText;
-                            addedCompositeProcedureCode.Value = ddlCompositeProcedureCode.SelectedValue;
-                            RadTreeView1.SelectedNode.Nodes.Add(addedCompositeProcedureCode);
-                        }
-
-                    }
-                    Logger.Info(RadTreeView1.SelectedNode.Text + " Level: " + RadTreeView1.SelectedNode.Level);
-                }
-                else if (RadTreeView1.Nodes.Count == 0) // Treeview has no nodes
-                {
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        protected void DeleteSelectedNode_Click(object sender, EventArgs e)
-        {
-            RadButton btn = sender as RadButton;
-            try
-            {
-                RadTreeView1.GetXml();
-
-                foreach (RadTreeNode node in RadTreeView1.GetAllNodes())
-                {
-                    String foo = node.Text;
-                }
-
-                if (RadTreeView1.SelectedNode != null) //Selected node
-                {
-                    RadTreeView1.SelectedNode.Remove();
-                    Logger.Info(RadTreeView1.SelectedNode.Text + " Level: " + RadTreeView1.SelectedNode.Level);
-                }
-                else if (RadTreeView1.Nodes.Count == 0) // Treeview has no nodes
-                {
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
         /// <summary>
         /// ////////////////////////////////////////////////////////////////////////////
 
@@ -269,37 +168,6 @@ namespace ConsumerMaster
                 this.id = id;
                 this.parentId = parentId;
                 this.text = text;
-            }
-        }
-
-        public void old()
-        {
-            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
-            csb.DataSource = @".\SQL2014";
-            csb.InitialCatalog = "ConsumerMaster";
-            csb.IntegratedSecurity = true;
-
-            string connString = csb.ToString();
-
-            string queryString = "select * FROM ConsumerTemplate";
-
-            string consumerTemplate;
-
-            using (SqlConnection connection = new SqlConnection(connString))
-            using (SqlCommand command = connection.CreateCommand())
-            {
-                command.CommandText = queryString;
-                //command.Parameters.Add(new SqlParameter("tabId", tabId));
-                connection.Open();
-
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        int Id = Int32.Parse(reader["Id"].ToString());
-                        RadTreeView1.LoadXmlString(reader["Template"].ToString());
-                    }
-                }
             }
         }
     }
