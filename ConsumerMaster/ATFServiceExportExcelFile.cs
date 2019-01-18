@@ -4,10 +4,14 @@ using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 using System.Windows.Media;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
 
 namespace ConsumerMaster
 {
-    public class ServiceExportExcelFile
+    public class ATFServiceExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -49,20 +53,19 @@ namespace ConsumerMaster
             {6, "end_date_string"},
             {7, "diagnosis_code_1_code"},
             {8, "composite_procedure_code_string"},
-            {9, "hours"},
-            {10, "units"},
-            {11, "manual_billable_rate"},
-            {12, "prior_authorization_number"},
-            {13, "referral_number"},
-            {14, "referring_provider_id"},
-            {15, "referring_provider_first_name"},
-            {16, "referring_provider_last_name"},
-            {17, "rendering_provider_id"},
-            {18, "rendering_provider_first_name"},
-            {19, "rendering_provider_last_name"}
+            {9, "units"},
+            {10, "manual_billable_rate"},
+            {11, "prior_authorization_number"},
+            {12, "referral_number"},
+            {13, "referring_provider_id"},
+            {14, "referring_provider_first_name"},
+            {15, "referring_provider_last_name"},
+            {16, "rendering_provider_id"},
+            {17, "rendering_provider_first_name"},
+            {18, "rendering_provider_last_name"}
         };
 
-        public Workbook AWCCreateWorkbook()
+        public Workbook ATFCreateWorkbook()
         {
             Workbook workbook = new Workbook();
 
@@ -73,70 +76,73 @@ namespace ConsumerMaster
                 worksheets.Add();
 
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
-                Worksheet sheet2Worksheet = worksheets["Sheet2"];
+                //Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
                 Utility util = new Utility();
-                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 5");  //Agency With Choice = 5
-                CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
 
-                string seQuery =
-                    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, " +
-                    "tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string," +
-                    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS hours, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
-                    "' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, " +
-                    "' ' AS rendering_provider_id, ' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
-                    "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
-                    "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5 ORDER BY consumer_last";
+                CultureInfo culture = new CultureInfo("en-US");
+                DateTime startDateTime = Convert.ToDateTime("07/01/2018 12:00:00 AM", culture);
+                DateTime endDateTime = Convert.ToDateTime("07/07/2018 12:59:59 PM", culture);
 
-                DataTable seDataTable = util.GetDataTable(seQuery);
+                DataTable seDataTable = new DataTable();
+                using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@StartDateTime", SqlDbType.Text).Value = startDateTime.ToString("yyyy-MM-dd HH:mm:ss");     
+                        cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = endDateTime.ToString("yyyy-MM-dd HH:mm:ss");         
+
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                        adapter.Fill(seDataTable);
+                    }
+                }
+
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
+                    string[] names = dr["FullName"].ToString().Split(',');
+                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(names[0]);
+                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(names[1]);
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
+                   // sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
+                    Int32.TryParse(dr["Site"].ToString(),out int site);
+                    string tradingPartnerString = (site == 1) ? "atf_bill_george" : "atf_jefferson";
+                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(tradingPartnerString);
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(dr["start_date_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(dr["end_date_string"].ToString());
+                    string tradingPartnerProgramString = "waiver";
+                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(tradingPartnerProgramString);
+
+                    sheet1Worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(startDateTime.ToString("MM/dd/yyyy"));
+                    sheet1Worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(endDateTime.ToString("MM/dd/yyyy"));
+
+
                     sheet1Worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
                     CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
-                    ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex);
-                    context.InputMessageTitle = "Restricted input";
-                    context.InputMessageContent = "The input is restricted to the composite procedure codes.";
-                    context.ErrorStyle = ErrorStyle.Stop;
-                    context.ErrorAlertTitle = "Wrong value";
-                    context.ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!";
-                    context.InCellDropdown = true;
 
-                    string cpcRange = "=Sheet2!$A$2:$A$" + cpcList.Count + 1;  //= Sheet2!$A$2:$A$73
-                    context.Argument1 = cpcRange; //   
-                    ListDataValidationRule rule = new ListDataValidationRule(context);
-                    sheet1Worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(dr["hours"].ToString());
+                    Int32.TryParse(dr["Units1"].ToString(), out int units1);
+                    Int32.TryParse(dr["Units2"].ToString(), out int units2);
+                    int totalUnits = units1 + units2;
+                    sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(totalUnits.ToString());
 
-                    string convertToUnits = "=ROUNDDOWN(J" + (currentRow + 1) + "*4, 0)";
-                    sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(convertToUnits);
-
-                    sheet1Worksheet.Cells[currentRow, IndexColumnManualBillableRate].SetValue(dr["manual_billable_rate"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnPriorAuthorizationNumber].SetValue(dr["prior_authorization_number"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferralNumber].SetValue(dr["referral_number"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderId].SetValue(dr["referring_provider_id"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderFirstName].SetValue(dr["referring_provider_first_name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderLastName].SetValue(dr["referring_provider_last_name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderId].SetValue(dr["rendering_provider_id"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderFirstName].SetValue(dr["rendering_provider_first_name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderLastName].SetValue(dr["rendering_provider_last_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, IndexColumnManualBillableRate].SetValue(" ");                         //"manual_billable_rate"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnPriorAuthorizationNumber].SetValue(dr[" "].ToString());    //"prior_authorization_number"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferralNumber].SetValue(dr[" "].ToString());              //"referral_number"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderId].SetValue(dr[" "].ToString());         //"referring_provider_id"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderFirstName].SetValue(dr[" "].ToString());  //"referring_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderLastName].SetValue(dr[" "].ToString());   //"referring_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderId].SetValue(dr[" "].ToString());         //"rendering_provider_id"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderFirstName].SetValue(dr[" "].ToString());  //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderLastName].SetValue(dr[" "].ToString());   //"rendering_provider_last_name"
 
                     currentRow++;
                 }
@@ -214,38 +220,38 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetValue(ceHeader[IndexColumnCompositeProcedureCodeString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetValue(ceHeader[IndexColumnHours]);
-                worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-                worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetFill(solidPatternFill);
+                //worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetValue(ceHeader[IndexColumnHours]);
+                //worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+                //worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetFill(solidPatternFill);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(ceHeader[10]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(ceHeader[IndexColumnUnits]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(ceHeader[11]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(ceHeader[IndexColumnManualBillableRate]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(ceHeader[12]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(ceHeader[IndexColumnPriorAuthorizationNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(ceHeader[13]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(ceHeader[IndexColumnReferralNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(ceHeader[14]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(ceHeader[IndexColumnReferringProviderId]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(ceHeader[15]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(ceHeader[IndexColumnReferringProviderFirstName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(ceHeader[16]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(ceHeader[IndexColumnReferringProviderLastName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(ceHeader[17]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(ceHeader[IndexColumnRenderingProviderId]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(ceHeader[18]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(ceHeader[IndexColumnRenderingProviderFirstName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[19]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[IndexColumnRenderingProviderLastName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
             catch (Exception ex)

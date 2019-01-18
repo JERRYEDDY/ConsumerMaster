@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.UI;
 using System.IO;
-using Telerik.Web.UI;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
@@ -22,13 +21,18 @@ namespace ConsumerMaster
         {
             if (!this.IsPostBack)
             {
-                //this.BindGrid();
                 Logger.Info("ConsumerMaster started");
 
 
+                ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
+                Workbook workbook = serviceExport.ATFCreateWorkbook();
+
                 BindToDataTable();
+                int range = IsInRange(7.45);
 
-
+                range = IsInRange(24.99);
+                range = IsInRange(25.00);
+                range = IsInRange(25.01);
             }
         }
 
@@ -44,13 +48,13 @@ namespace ConsumerMaster
 
             using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
             {
-                using (SqlCommand cmd = new SqlCommand("GetConsumersData", sqlConnection1))
+                using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
                 {
                     Int32 rowsAffected;
 
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-11-01 00:00:00";
-                    cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = "2018-11-30 23:59:59";
+                    cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-07-01 00:00:00";
+                    cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = "2018-07-07 23:59:59";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
@@ -109,7 +113,7 @@ namespace ConsumerMaster
             const string filename = @"AWCConsumerExport.xlsx";
             try
             {
-                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                AWCConsumerExportExcelFile consumerExport = new AWCConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook();
                 DownloadExcelFile(workbook,filename);
             }
@@ -124,7 +128,7 @@ namespace ConsumerMaster
             const string filename = @"AWCServiceExport.xlsx";
             try
             {
-                ServiceExportExcelFile serviceExport = new ServiceExportExcelFile();
+                AWCServiceExportExcelFile serviceExport = new AWCServiceExportExcelFile();
                 Workbook workbook = serviceExport.AWCCreateWorkbook();
                 DownloadExcelFile(workbook, filename);
             }
@@ -170,5 +174,22 @@ namespace ConsumerMaster
                 this.text = text;
             }
         }
+
+
+
+        public int IsInRange(double percentage)
+        {
+            if (percentage >= 0.00 && percentage <= 25.00)
+                return 1;
+            else if (percentage >= 25.01 && percentage <= 50.00)
+                return 2;
+            else if (percentage >= 50.01 && percentage <= 75.00)
+                return 3;
+            else if (percentage >= 75.01 && percentage <= 100.00)
+                return 4;
+
+            return 0;
+        }
+
     }
 }

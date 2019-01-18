@@ -228,6 +228,7 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="Consumers2.aspx.cs">
       <DependentUpon>Consumers2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -258,7 +259,7 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="ConsumerExportExcelFile.cs" />
+    <Compile Include="AWCConsumerExportExcelFile.cs" />
     <Compile Include="Consumers.aspx.cs">
       <DependentUpon>Consumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -284,7 +285,7 @@
       <DependentUpon>PageEvent.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceExportExcelFile.cs" />
+    <Compile Include="AWCServiceExportExcelFile.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -6,7 +6,7 @@ using System.Data;
 
 namespace ConsumerMaster
 {
-    public class ConsumerExportExcelFile
+    public class AWCConsumerExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
