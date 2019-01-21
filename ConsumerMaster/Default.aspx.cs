@@ -24,15 +24,14 @@ namespace ConsumerMaster
                 Logger.Info("ConsumerMaster started");
 
 
-                ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
-                Workbook workbook = serviceExport.ATFCreateWorkbook();
+                //ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
+                //Workbook workbook = serviceExport.ATFCreateWorkbook();
 
-                BindToDataTable();
-                int range = IsInRange(7.45);
-
-                range = IsInRange(24.99);
-                range = IsInRange(25.00);
-                range = IsInRange(25.01);
+                //BindToDataTable();
+                //int range = IsInRange(7.45);
+                //range = IsInRange(24.99);
+                //range = IsInRange(25.00);
+                //range = IsInRange(25.01);
             }
         }
 

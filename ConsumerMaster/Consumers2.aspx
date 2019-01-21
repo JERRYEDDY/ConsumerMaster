@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
+    <telerik:RadSkinManager ID="RadSkinManager1" runat="server" Skin="Office2010Silver" />
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         <AjaxSettings>
             <telerik:AjaxSetting AjaxControlID="RadGrid1">
@@ -27,11 +27,9 @@
         </AjaxSettings>
     </telerik:RadAjaxManager>
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"></telerik:RadAjaxLoadingPanel>
-    
-
     <div class="demo-container no-bg">
-        <h4>Consumers:</h4>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="5" DataSourceID="SqlDataSource1" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
+        <h5><strong>CONSUMERS:</strong></h5>
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource1" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
                          AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" 
                          OnInsertCommand="RadGrid1_InsertCommand" AllowFilteringByColumn="true" >
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number">
@@ -60,7 +58,7 @@
                                         <tr>
                                             <td>First Name:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtConsumerFirst" runat="server" Text='<%# Bind("consumer_first") %>'/>
+                                                <telerik:RadTextBox ID="txtConsumerFirst" runat="server" Text='<%# Bind("consumer_first") %>' TabIndex="1"/>
                                                 <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="txtConsumerFirst"
                                                                             ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -68,7 +66,7 @@
                                         <tr>
                                             <td>Last Name:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtConsumerLast" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="1"/>
+                                                <telerik:RadTextBox ID="txtConsumerLast" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="2"/>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="txtConsumerLast"
                                                                             ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
                                             </td>
@@ -76,7 +74,7 @@
                                         <tr>
                                             <td>Birth Date:</td>
                                             <td>
-                                                <telerik:RadDatePicker ID="dpBirthDate" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="4"/>
+                                                <telerik:RadDatePicker ID="dpBirthDate" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3"/>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="dpBirthDate"
                                                                             ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -84,7 +82,7 @@
                                         <tr>
                                             <td>Address1:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtAddress1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="8"/>
+                                                <telerik:RadTextBox ID="txtAddress1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="4"/>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="txtAddress1"
                                                                             ErrorMessage="Address1 is required"  ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -92,14 +90,14 @@
                                         <tr>
                                             <td>Address2:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtAddress2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="9"/>
+                                                <telerik:RadTextBox ID="txtAddress2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="5"/>
                                             </td>
                                         </tr>
                                         <tr>
                                         <tr>
                                             <td>City:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtCity" Text='<%# Bind("city") %>' runat="server" TabIndex="11"/>
+                                                <telerik:RadTextBox ID="txtCity" Text='<%# Bind("city") %>' runat="server" TabIndex="6"/>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" ControlToValidate="txtCity"
                                                                             ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -108,7 +106,7 @@
                                             <td>State:</td>
                                             <td>
                                                 <telerik:RadDropDownList ID="ddlStates" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
-                                                                         DataTextField="Name" DataValueField="Abbreviation" TabIndex="12" DefaultMessage="Select" /> 
+                                                                         DataTextField="Name" DataValueField="Abbreviation" TabIndex="7" DefaultMessage="Select" /> 
                                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlStates" 
                                                                             ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -117,7 +115,7 @@
                                             
                                             <td><telerik:RadLabel ID="RadLabel1" runat="server" Text="Zip Code:" /></td>
                                             <td>
-                                                <telerik:RadMaskedTextBox ID="txtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13" Mask="#####-####" />
+                                                <telerik:RadMaskedTextBox ID="txtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="8" Mask="#####-####" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" ControlToValidate="txtZipCode"
                                                                             ErrorMessage="Zip code is required"  ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -125,7 +123,8 @@
                                         <tr>
                                             <td>Identifier:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtIdentifer" Text='<%# Bind("identifier") %>' runat="server" TabIndex="14"/>
+<%--                                                <telerik:RadTextBox ID="txtIdentifer" Text='<%# Bind("identifier") %>' runat="server" TabIndex="9"/>--%>
+                                                <telerik:RadMaskedTextBox ID="txtIdentifer" Text='<%# Bind("identifier") %>' runat="server" TabIndex="9" DisplayMask="##########" Mask="##########"/>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="txtIdentifer"
                                                                             ErrorMessage="Identifier is required" />
                                                 <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="txtIdentifer" 
@@ -135,21 +134,21 @@
                                         <tr>
                                             <td>Gender:</td>
                                             <td>
-                                                <telerik:RadRadioButtonList ID="rblGender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="15" 
+                                                <telerik:RadRadioButtonList ID="rblGender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" 
                                                                             ValidationGroup="GenderGroup" Direction="Horizontal">
                                                     <Items>
                                                         <telerik:ButtonListItem Text="Male" Value="M"/>
                                                         <telerik:ButtonListItem Text="Female" Value="F"/>
                                                     </Items>
                                                 </telerik:RadRadioButtonList>
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="rblGender"  Display="Dynamic"
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="rblGender"  Display="Dynamic" TabIndex="11"
                                                                             ErrorMessage="Gender is required" ValidationGroup="GenderGroup" />
                                             </td>
                                         </tr>                
                                         <tr>
                                             <td>Diagnosis code:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtDiagnosis" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="16"/>
+                                                <telerik:RadTextBox ID="txtDiagnosis" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="12"/>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="txtDiagnosis"
                                                                             ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
                                             </td>
@@ -157,13 +156,13 @@
                                         <tr>
                                             <td>Nickname First:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtNicknameFirst" Text='<%# Bind("nickname_first") %>' runat="server" TabIndex="17"/>
+                                                <telerik:RadTextBox ID="txtNicknameFirst" Text='<%# Bind("nickname_first") %>' runat="server" TabIndex="13"/>
                                             </td>
                                         </tr>               
                                         <tr>
                                             <td>Nickname Last:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtNicknameLast" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="18"/>
+                                                <telerik:RadTextBox ID="txtNicknameLast" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="14"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -196,8 +195,7 @@
         </telerik:RadGrid>
         <br />
         <br />
-
-        <h4>Trading Partners:</h4>
+        <h5><strong>TRADING PARTNERS:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" ShowStatusBar="true" runat="server" AllowPaging="True" PageSize="5" DataSourceID="SqlDataSource2">
             <MasterTableView Width="100%" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top">
                 <Columns>
@@ -222,7 +220,7 @@
         <br />
         <br />
 
-        <h4>Composite Procedure Code:</h4>
+<%--        <h5><strong>COMPOSITE PROCEDURE CODES:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid3" ShowStatusBar="true" runat="server" AllowPaging="True" PageSize="5" DataSourceID="SqlDataSource3">
             <MasterTableView Width="100%" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number,trading_partner_id" DataSourceID="SqlDataSource3">
                 <Columns>
@@ -239,7 +237,7 @@
                 </Columns>
             </MasterTableView>
             <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
-        </telerik:RadGrid>
+        </telerik:RadGrid>--%>
     </div>
     
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 

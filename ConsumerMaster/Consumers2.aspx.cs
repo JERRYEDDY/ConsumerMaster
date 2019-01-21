@@ -101,7 +101,7 @@ namespace ConsumerMaster
                 case TradingPartnersTable:
                     {
                         GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-                        //SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
+                        SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
                     }
                     break;
             }

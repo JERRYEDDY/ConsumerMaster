@@ -24,17 +24,16 @@ namespace ConsumerMaster
         private static readonly int IndexColumnEndDateString = 6;
         private static readonly int IndexColumnDiagnosisCode1Code = 7;
         private static readonly int IndexColumnCompositeProcedureCodeString = 8;
-        private static readonly int IndexColumnHours = 9;
-        private static readonly int IndexColumnUnits = 10;
-        private static readonly int IndexColumnManualBillableRate = 11;
-        private static readonly int IndexColumnPriorAuthorizationNumber = 12;
-        private static readonly int IndexColumnReferralNumber = 13;
-        private static readonly int IndexColumnReferringProviderId = 14;
-        private static readonly int IndexColumnReferringProviderFirstName = 15;
-        private static readonly int IndexColumnReferringProviderLastName = 16;
-        private static readonly int IndexColumnRenderingProviderId = 17;
-        private static readonly int IndexColumnRenderingProviderFirstName = 18;
-        private static readonly int IndexColumnRenderingProviderLastName = 19;
+        private static readonly int IndexColumnUnits = 9;
+        private static readonly int IndexColumnManualBillableRate = 10;
+        private static readonly int IndexColumnPriorAuthorizationNumber = 11;
+        private static readonly int IndexColumnReferralNumber = 12;
+        private static readonly int IndexColumnReferringProviderId = 13;
+        private static readonly int IndexColumnReferringProviderFirstName = 14;
+        private static readonly int IndexColumnReferringProviderLastName = 15;
+        private static readonly int IndexColumnRenderingProviderId = 16;
+        private static readonly int IndexColumnRenderingProviderFirstName = 17;
+        private static readonly int IndexColumnRenderingProviderLastName = 18;
 
         private static readonly int IndexRowItemStart = 0;
 
