@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Tree>
+  <Node Text="Desktop" Expanded="True" >
+    <Node Text="Administrator" Expanded="True">
+      <Node Text="AppData" >
+        <Node Text="Microsoft" />
+      </Node>
+      <Node Text="Contacts"  />
+      <Node Text="Downloads"/>
+      <Node Text="Documents" Selected="True" />
+      <Node Text="Favorites"  >
+        <Node Text="Links" />
+      </Node>
+      <Node Text="Music"  />
+      <Node Text="Pictures"  />
+      <Node Text="Saved Games"   />
+      <Node Text="Searches"   >
+        <Node Text="History" />
+      </Node>
+      <Node Text="Videos" />
+    </Node>
+    <Node Text="Computer"  Expanded="True" >
+      <Node Text="WebServer (\\10.0.0.80) (W:)" />
+      <Node Text="Local Disk (C:)"  Expanded="True" >
+        <Node Text="inetpub"   Expanded="True">
+          <Node Text="AdminScripts"  ></Node>
+        </Node>
+      </Node>
+    </Node>
+  </Node>
+</Tree>

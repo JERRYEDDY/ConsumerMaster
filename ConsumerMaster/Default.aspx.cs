@@ -8,6 +8,8 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsumerMaster
 {
@@ -23,6 +25,41 @@ namespace ConsumerMaster
             {
                 Logger.Info("ConsumerMaster started");
 
+                EIServiceExportFormat esef = new EIServiceExportFormat();
+                DataTable dt = new DataTable();
+                dt = esef.ObjectToData();
+
+                Dictionary<int,string> dictionary = new Dictionary<int,string>();
+                dictionary = esef.ObjectToDictionary();
+
+                foreach (KeyValuePair<int, string> keyValue in dictionary)
+                {
+                    int key = keyValue.Key;
+                    string value = keyValue.Value;
+
+                };
+
+                string fileName = @"C:\Users\jeddy\source\repos\ConsumerMaster\ConsumerMaster\GREENE CTY DEC 2018 -FINAL.xlsx";
+                if (!File.Exists(fileName))
+                {
+                    throw new FileNotFoundException(String.Format("File {0} was not found!", fileName));
+                }
+
+                Workbook workbook;
+                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+
+                using (Stream input = new FileStream(fileName, FileMode.Open))
+                {
+                    workbook = formatProvider.Import(input);
+                }
+
+                WorksheetCollection worksheets = workbook.Worksheets;
+                Worksheet copyWorksheet = worksheets["copy"];
+
+                RangePropertyValue<ICellValue> rangeValue = copyWorksheet.Cells[10, 0].GetValue();
+                ICellValue cellValue = rangeValue.Value;
+
+                //workbook.ActiveWorksheet = workbook.Worksheets[1];
 
                 //ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
                 //Workbook workbook = serviceExport.ATFCreateWorkbook();
@@ -43,13 +80,11 @@ namespace ConsumerMaster
             csb.IntegratedSecurity = true;
             string connString = csb.ToString();
 
-
-
             using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
             {
                 using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
                 {
-                    Int32 rowsAffected;
+                    Int32 rowsAffected = 0;
 
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-07-01 00:00:00";
@@ -173,8 +208,6 @@ namespace ConsumerMaster
                 this.text = text;
             }
         }
-
-
 
         public int IsInRange(double percentage)
         {
