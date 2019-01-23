@@ -80,7 +80,6 @@ namespace ConsumerMaster
 
                 EIServiceExportFormat esef = new EIServiceExportFormat();
                 Dictionary<int, string> dictionary = new Dictionary<int, string>();
-                dictionary = esef.ObjectToDictionary();
 
                 Utility util = new Utility();
 
@@ -110,41 +109,39 @@ namespace ConsumerMaster
                 foreach (DataRow dr in seDataTable.Rows)
                 {
                     string[] names = dr["FullName"].ToString().Split(',');
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("consumer_first")].SetValue(names[0]);
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("consumer_last")].SetValue(names[1]);
 
                     // sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
-                    CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, esef.DKey("consumer_internal_number")];
+                    //CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, esef.DKey("consumer_internal_number")];
 
                     Int32.TryParse(dr["Site"].ToString(), out int site);
                     string tradingPartnerString = (site == 1) ? "atf_bill_george" : "atf_jefferson";
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("trading_partner_string")].SetValue(tradingPartnerString);
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("trading_partner_string")].SetValue(tradingPartnerString);
 
                     string tradingPartnerProgramString = "waiver";
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("trading_partner_program_string")].SetValue(tradingPartnerProgramString);
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("trading_partner_program_string")].SetValue(tradingPartnerProgramString);
 
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("start_date_string")].SetValue(startDateTime.ToString("MM/dd/yyyy"));
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("end_date_string")].SetValue(endDateTime.ToString("MM/dd/yyyy"));
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("start_date_string")].SetValue(startDateTime.ToString("MM/dd/yyyy"));
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("end_date_string")].SetValue(endDateTime.ToString("MM/dd/yyyy"));
 
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
-                    CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, esef.DKey("diagnosis_code_1_code"));
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
+                    //CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, esef.DKey("diagnosis_code_1_code"));
 
                     Int32.TryParse(dr["Units1"].ToString(), out int units1);
                     Int32.TryParse(dr["Units2"].ToString(), out int units2);
                     int totalUnits = units1 + units2;
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("units")].SetValue(totalUnits.ToString());
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("units")].SetValue(totalUnits.ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("manual_billable_rate")].SetValue(" ");         //"manual_billable_rate"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("prior_authorization_number")].SetValue(" ");   //"prior_authorization_number"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("referral_number")].SetValue(" ");              //"referral_number"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("referring_provider_id")].SetValue(" ");         //"referring_provider_id"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("referring_provider_first_name")].SetValue(" ");  //"referring_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("referring_provider_last_name")].SetValue(" ");   //"referring_provider_last_name"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("rendering_provider_id")].SetValue(" ");         //"rendering_provider_id"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("rendering_provider_first_name")].SetValue(" ");  //"rendering_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, esef.DKey("rendering_provider_last_name")].SetValue(" ");   //"rendering_provider_last_name"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("manual_billable_rate")].SetValue(" ");         //"manual_billable_rate"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("prior_authorization_number")].SetValue(" ");   //"prior_authorization_number"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("referral_number")].SetValue(" ");              //"referral_number"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("referring_provider_id")].SetValue(" ");         //"referring_provider_id"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("referring_provider_first_name")].SetValue(" ");  //"referring_provider_first_name"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("referring_provider_last_name")].SetValue(" ");   //"referring_provider_last_name"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("rendering_provider_id")].SetValue(" ");         //"rendering_provider_id"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("rendering_provider_first_name")].SetValue(" ");  //"rendering_provider_first_name"
+                    //sheet1Worksheet.Cells[currentRow, esef.DKey("rendering_provider_last_name")].SetValue(" ");   //"rendering_provider_last_name"
 
                     currentRow++;
                 }
@@ -188,12 +185,11 @@ namespace ConsumerMaster
 
                 EIServiceExportFormat esef = new EIServiceExportFormat();
                 Dictionary<int, string> dictionary = new Dictionary<int, string>();
-                dictionary = esef.ObjectToDictionary();
 
                 CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 CellIndex firstRowLastCellIndex = new CellIndex(0, 22);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, esef.DKey("consumer_first"));
-                CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, esef.DKey("rendering_provider_last_name"));
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, esef.DKey("consumer_first"));
+                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, esef.DKey("rendering_provider_last_name"));
                 CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 

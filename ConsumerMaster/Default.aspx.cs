@@ -10,6 +10,7 @@ using System.Data;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using FileHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Formatting;
 
 namespace ConsumerMaster
@@ -26,32 +27,84 @@ namespace ConsumerMaster
             {
                 Logger.Info("ConsumerMaster started");
 
-                EIServiceExportFormat esef = new EIServiceExportFormat();
-                DataTable dt = new DataTable();
-                dt = esef.ObjectToData();
 
-                Dictionary<int,string> dictionary = new Dictionary<int,string>();
-                dictionary = esef.ObjectToDictionary();
 
-                foreach (KeyValuePair<int, string> keyValue in dictionary)
+
+                string inFileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.tsv";
+                var inEngine = new FileHelperEngine<EIBillingInput>();
+                var inResult = inEngine.ReadFile(inFileName);
+
+
+                var outEngine = new FileHelperEngine<EIServiceExportFormat>();
+                outEngine.HeaderText = outEngine.GetFileHeader();
+                var billingTrans = new List<EIServiceExportFormat>();
+
+                string queryString = "SELECT *FROM Consumers AS c ";
+                Utility util = new Utility();
+                DataTable consumers = util.GetDataTable(queryString);
+                DataView consumersView = new DataView(consumers);
+
+                foreach (EIBillingInput ebi in inResult)
                 {
-                    int key = keyValue.Key;
-                    string value = keyValue.Value;
 
-                };
+                    string tradingPartner = " ";
+                    if (ebi.Discipline.Equals("SPECIAL INSTRUCTION"))
+                    {
+                        tradingPartner = "eisi_in_home";
+                    }
+                    else
+                    {
+                        tradingPartner = "eidt_in_home";
+                    }
 
-                string fileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.csv";
+                    string tradingPartnerProgram = " ";
+                    string fundingSource = ebi.FundingSource;
 
-                
-            DataTable inputTable = new DataTable();
-                inputTable = ReadCsvFile(fileName);
+                    switch (fundingSource)
+                    {
+                        case "MA":
+                            tradingPartnerProgram = "ma" + "_" + ebi.County.ToLower();
+                            break;
 
-                //ICellValue cellValue = rangeValue.Value;
+                        case "COUNTY":
+                            tradingPartnerProgram = "b" + "_" + ebi.County.ToLower();
+                            break;
 
-                //workbook.ActiveWorksheet = workbook.Worksheets[1];
+                        case "WAIVER":
+                            tradingPartnerProgram = "w" + "_" + ebi.County.ToLower();
+                            break;
 
-                //ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
-                //Workbook workbook = serviceExport.ATFCreateWorkbook();
+                    }
+
+                    string[] therapist = ebi.Therapists.Split(',');
+
+                    billingTrans.Add(new EIServiceExportFormat()
+                    {
+                        consumer_first = ebi.FirstName,
+                        consumer_last = ebi.LastName,
+                        consumer_internal_number = "4444",
+                        diagnosis_code_1_code = "F84.0",
+                        trading_partner_string = tradingPartner,
+                        trading_partner_program_string = tradingPartnerProgram,
+                        start_date_string = ebi.BillDate.ToString("MM/dd/yyyy"),
+                        end_date_string = ebi.BillDate.ToString("MM/dd/yyyy"),
+                        composite_procedure_code_string = " ",
+                        units = ebi.TotalUnits.ToString(),
+                        manual_billable_rate = " ",
+                        prior_authorization_number = " ",
+                        referral_number = " ",
+                        referring_provider_id = " ",
+                        referring_provider_first_name = " ",
+                        referring_provider_last_name = " ",
+                        rendering_provider_id = " ",
+                        rendering_provider_first_name = therapist[1],
+                        rendering_provider_last_name = therapist[0],
+                        billing_note = " "
+                    });
+                }
+
+                string outFileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL OUTPUT.csv";
+                outEngine.WriteFile(outFileName, billingTrans);
 
                 //BindToDataTable();
                 //int range = IsInRange(7.45);
@@ -60,50 +113,6 @@ namespace ConsumerMaster
                 //range = IsInRange(25.01);
             }
         }
-
-
-        public DataTable ReadCsvFile(string fullPath)
-        {
-
-            DataTable dtCsv = new DataTable();
-            string Fulltext;
-            using (StreamReader sr = new StreamReader(fullPath))
-            {
-                while (!sr.EndOfStream)
-                {
-                    Fulltext = sr.ReadToEnd().ToString(); //read full file text  
-                    string[] rows = Fulltext.Split('\n'); //split full file text into rows  
-                    for (int i = 0; i < rows.Count() - 1; i++)
-                    {
-                        string[] rowValues = rows[i].Split(','); //split each row with comma to get individual values  
-                        {
-                            if (i == 0)
-                            {
-                                for (int j = 0; j < rowValues.Count(); j++)
-                                {
-                                    dtCsv.Columns.Add(rowValues[j]); //add headers  
-                                }
-                            }
-                            else
-                            {
-                                DataRow dr = dtCsv.NewRow();
-                                for (int k = 0; k < rowValues.Count(); k++)
-                                {
-                                    dr[k] = rowValues[k].ToString();
-                                }
-                                dtCsv.Rows.Add(dr); //add other rows  
-                            }
-                        }
-                    }
-                }
-            }
-
-            return dtCsv;
-        }
-
-
-
-
 
         private void BindToDataTable()        
         {

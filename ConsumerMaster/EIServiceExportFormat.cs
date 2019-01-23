@@ -1,78 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Web;
+﻿using FileHelpers;
 
 namespace ConsumerMaster
 {
+    [DelimitedRecord(",")]
     public class EIServiceExportFormat
     {
-        public string consumer_first { get; set; }
-        public string consumer_last { get; set; }
-        public string consumer_internal_number {get; set; }
-        public string trading_partner_string {get; set; }
-        public string trading_partner_program_string {get; set; }
-        public string start_date_string {get; set; }
-        public string end_date_string {get; set; }
-        public string diagnosis_code_1_code {get; set; }
-        public string composite_procedure_code_string {get; set; }
-        public string units {get; set; }
-        public string billing_note { get; set; }
-        public string manual_billable_rate {get; set; }
-        public string prior_authorization_number {get; set; }
-        public string referral_number {get; set; }
-        public string referring_provider_id {get; set; }
-        public string referring_provider_first_name {get; set; }
-        public string referring_provider_last_name {get; set; }
-        public string rendering_provider_id {get; set; }
-        public string rendering_provider_first_name {get; set; }
-        public string rendering_provider_last_name {get; set; }
-
-        public DataTable ObjectToData()
-        {
-            DataTable dt = new DataTable();
-
-            DataRow dr = dt.NewRow();
-            dt.Rows.Add(dr);
-
-            this.GetType().GetProperties().ToList().ForEach(f =>
-            {
-                try
-                {
-                    f.GetValue(this, null);
-                    dt.Columns.Add(f.Name, f.PropertyType);
-                    dt.Rows[0][f.Name] = f.GetValue(this, null);
-                }
-                catch { }
-            });
-            return dt;
-        }
-
-        public Dictionary<int, string> ObjectToDictionary()
-        {
-            Dictionary<int, string> dictionary = new Dictionary<int, string>();
-            int index = 0;
-
-            this.GetType().GetProperties().ToList().ForEach(f =>
-            {
-                try
-                {
-                    f.GetValue(this, null);
-                    dictionary.Add(index++, f.Name);
-                }
-                catch { }
-            });
-            return dictionary;
-        }
-
-        public int DKey(string name)
-        {
-            Dictionary<int, string> dictionary = this.ObjectToDictionary();
-
-            int index = dictionary.Values.ToList().IndexOf(name);
-            return index;
-        }
+        public string consumer_first;
+        public string consumer_last;
+        public string consumer_internal_number;
+        public string diagnosis_code_1_code;
+        public string trading_partner_string;
+        public string trading_partner_program_string;
+        public string start_date_string;
+        public string end_date_string;
+        public string composite_procedure_code_string;
+        public string units;
+        public string manual_billable_rate;
+        public string prior_authorization_number;
+        public string referral_number;
+        public string referring_provider_id;
+        public string referring_provider_first_name;
+        public string referring_provider_last_name;
+        public string rendering_provider_id;
+        public string rendering_provider_first_name;
+        public string rendering_provider_last_name;
+        public string billing_note;
     }
 }

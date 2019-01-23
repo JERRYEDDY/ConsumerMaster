@@ -14,11 +14,11 @@ namespace ConsumerMaster
         private static readonly int IndexColumnConsumerFirst = 0;
         private static readonly int IndexColumnConsumerLast = 1;
         private static readonly int IndexColumnConsumerInternalNumber = 2;
-        private static readonly int IndexColumnTradingPartnerString = 3;
-        private static readonly int IndexColumnTradingPartnerProgramString = 4;
-        private static readonly int IndexColumnStartDateString = 5;
-        private static readonly int IndexColumnEndDateString = 6;
-        private static readonly int IndexColumnDiagnosisCode1Code = 7;
+        private static readonly int IndexColumnDiagnosisCode1Code = 3;
+        private static readonly int IndexColumnTradingPartnerString = 4;
+        private static readonly int IndexColumnTradingPartnerProgramString = 5;
+        private static readonly int IndexColumnStartDateString = 6;
+        private static readonly int IndexColumnEndDateString = 7;
         private static readonly int IndexColumnCompositeProcedureCodeString = 8;
         private static readonly int IndexColumnHours = 9;
         private static readonly int IndexColumnUnits = 10;
@@ -31,6 +31,7 @@ namespace ConsumerMaster
         private static readonly int IndexColumnRenderingProviderId = 17;
         private static readonly int IndexColumnRenderingProviderFirstName = 18;
         private static readonly int IndexColumnRenderingProviderLastName = 19;
+        private static readonly int IndexColumnBillingNote = 20;
 
         private static readonly int IndexRowItemStart = 0;
 
@@ -43,11 +44,11 @@ namespace ConsumerMaster
             {0, "consumer_first"},
             {1, "consumer_last"},
             {2, "consumer_internal_number"},
-            {3, "trading_partner_string"},
-            {4, "trading_partner_program_string"},
-            {5, "start_date_string"},
-            {6, "end_date_string"},
-            {7, "diagnosis_code_1_code"},
+            {3, "diagnosis_code_1_code"},
+            {4, "trading_partner_string"},
+            {5, "trading_partner_program_string"},
+            {6, "start_date_string"},
+            {7, "end_date_string"},
             {8, "composite_procedure_code_string"},
             {9, "hours"},
             {10, "units"},
@@ -59,7 +60,8 @@ namespace ConsumerMaster
             {16, "referring_provider_last_name"},
             {17, "rendering_provider_id"},
             {18, "rendering_provider_first_name"},
-            {19, "rendering_provider_last_name"}
+            {19, "rendering_provider_last_name"},
+            {20, "billing_note" }
         };
 
         public Workbook AWCCreateWorkbook()
@@ -101,12 +103,13 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
 
+                    sheet1Worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
+
                     sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
                     sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(dr["start_date_string"].ToString());
                     sheet1Worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(dr["end_date_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
                     CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
@@ -196,6 +199,9 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(ceHeader[IndexColumnConsumerInternalNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
+                worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetValue(ceHeader[IndexColumnDiagnosisCode1Code]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+
                 worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(ceHeader[IndexColumnTradingPartnerString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
@@ -208,9 +214,6 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetValue(ceHeader[IndexColumnEndDateString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetValue(ceHeader[IndexColumnDiagnosisCode1Code]);
-                worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
                 worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetValue(ceHeader[IndexColumnCompositeProcedureCodeString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
@@ -218,35 +221,38 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetFill(solidPatternFill);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(ceHeader[10]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(ceHeader[IndexColumnUnits]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(ceHeader[11]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(ceHeader[IndexColumnManualBillableRate]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(ceHeader[12]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(ceHeader[IndexColumnPriorAuthorizationNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(ceHeader[13]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(ceHeader[IndexColumnReferralNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(ceHeader[14]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(ceHeader[IndexColumnReferringProviderId]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(ceHeader[15]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(ceHeader[IndexColumnReferringProviderFirstName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(ceHeader[16]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(ceHeader[IndexColumnReferringProviderLastName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(ceHeader[17]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(ceHeader[IndexColumnRenderingProviderId]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(ceHeader[18]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(ceHeader[IndexColumnRenderingProviderFirstName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[19]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[IndexColumnRenderingProviderLastName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+
+                worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetValue(ceHeader[IndexColumnBillingNote]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
             catch (Exception ex)
             {
