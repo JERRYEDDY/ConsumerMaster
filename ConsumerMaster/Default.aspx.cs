@@ -10,6 +10,7 @@ using System.Data;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using Telerik.Windows.Documents.Spreadsheet.Formatting;
 
 namespace ConsumerMaster
 {
@@ -39,25 +40,13 @@ namespace ConsumerMaster
 
                 };
 
-                string fileName = @"C:\Users\jeddy\source\repos\ConsumerMaster\ConsumerMaster\GREENE CTY DEC 2018 -FINAL.xlsx";
-                if (!File.Exists(fileName))
-                {
-                    throw new FileNotFoundException(String.Format("File {0} was not found!", fileName));
-                }
+                string fileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.csv";
 
-                Workbook workbook;
-                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+                
+            DataTable inputTable = new DataTable();
+                inputTable = ReadCsvFile(fileName);
 
-                using (Stream input = new FileStream(fileName, FileMode.Open))
-                {
-                    workbook = formatProvider.Import(input);
-                }
-
-                WorksheetCollection worksheets = workbook.Worksheets;
-                Worksheet copyWorksheet = worksheets["copy"];
-
-                RangePropertyValue<ICellValue> rangeValue = copyWorksheet.Cells[10, 0].GetValue();
-                ICellValue cellValue = rangeValue.Value;
+                //ICellValue cellValue = rangeValue.Value;
 
                 //workbook.ActiveWorksheet = workbook.Worksheets[1];
 
@@ -71,6 +60,50 @@ namespace ConsumerMaster
                 //range = IsInRange(25.01);
             }
         }
+
+
+        public DataTable ReadCsvFile(string fullPath)
+        {
+
+            DataTable dtCsv = new DataTable();
+            string Fulltext;
+            using (StreamReader sr = new StreamReader(fullPath))
+            {
+                while (!sr.EndOfStream)
+                {
+                    Fulltext = sr.ReadToEnd().ToString(); //read full file text  
+                    string[] rows = Fulltext.Split('\n'); //split full file text into rows  
+                    for (int i = 0; i < rows.Count() - 1; i++)
+                    {
+                        string[] rowValues = rows[i].Split(','); //split each row with comma to get individual values  
+                        {
+                            if (i == 0)
+                            {
+                                for (int j = 0; j < rowValues.Count(); j++)
+                                {
+                                    dtCsv.Columns.Add(rowValues[j]); //add headers  
+                                }
+                            }
+                            else
+                            {
+                                DataRow dr = dtCsv.NewRow();
+                                for (int k = 0; k < rowValues.Count(); k++)
+                                {
+                                    dr[k] = rowValues[k].ToString();
+                                }
+                                dtCsv.Rows.Add(dr); //add other rows  
+                            }
+                        }
+                    }
+                }
+            }
+
+            return dtCsv;
+        }
+
+
+
+
 
         private void BindToDataTable()        
         {
