@@ -27,40 +27,129 @@ namespace ConsumerMaster
             {
                 Logger.Info("ConsumerMaster started");
 
-
-
-
                 string inFileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.tsv";
                 var inEngine = new FileHelperEngine<EIBillingInput>();
                 var inResult = inEngine.ReadFile(inFileName);
-
 
                 var outEngine = new FileHelperEngine<EIServiceExportFormat>();
                 outEngine.HeaderText = outEngine.GetFileHeader();
                 var billingTrans = new List<EIServiceExportFormat>();
 
-                string queryString = "SELECT *FROM Consumers AS c ";
+                string queryString = "SELECT * FROM Consumers AS c ";
                 Utility util = new Utility();
-                DataTable consumers = util.GetDataTable(queryString);
-                DataView consumersView = new DataView(consumers);
+
+                DataTable consumersDataTable = util.GetDataTable(queryString);
+                DataTable billingDataTable = new DataTable();
+
+                billingDataTable.Columns.Add("Therapists", typeof(string));
+                billingDataTable.Columns.Add("BillDate", typeof(string));
+                billingDataTable.Columns.Add("LastName", typeof(string));
+                billingDataTable.Columns.Add("FirstName", typeof(string));
+                billingDataTable.Columns.Add("County", typeof(string));
+                billingDataTable.Columns.Add("FundingSource", typeof(string));
+                billingDataTable.Columns.Add("VisitType", typeof(string));
+                billingDataTable.Columns.Add("Discipline", typeof(string));
+                billingDataTable.Columns.Add("TotalUnits", typeof(string));
 
                 foreach (EIBillingInput ebi in inResult)
                 {
+                    DataRow dr = billingDataTable.NewRow();
 
-                    string tradingPartner = " ";
-                    if (ebi.Discipline.Equals("SPECIAL INSTRUCTION"))
+                    dr[0] = ebi.Therapists;
+                    dr[1] = ebi.BillDate.ToString("MM/dd/yyyy");
+                    dr[2] = ebi.LastName;
+                    dr[3] = ebi.FirstName;
+                    dr[4] = ebi.County;
+                    dr[5] = ebi.FundingSource;
+                    dr[6] = ebi.VisitType;
+                    dr[7] = ebi.Discipline;
+                    dr[8] = ebi.TotalUnits;
+
+                    billingDataTable.Rows.Add(dr);
+                }
+
+                using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
+                {
+                    using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(sqlConnect))
                     {
-                        tradingPartner = "eisi_in_home";
+                        //Set the database table name
+                        sqlBulkCopy.DestinationTableName = "#EIBillingTransactions";
+
+                        //[OPTIONAL]: Map the DataTable columns with that of the database table
+                        sqlBulkCopy.ColumnMappings.Add("Therapists", "Therapists");
+                        sqlBulkCopy.ColumnMappings.Add("BillDate", "BillDate");
+                        sqlBulkCopy.ColumnMappings.Add("LastName", "LastName");
+                        sqlBulkCopy.ColumnMappings.Add("FirstName", "FirstName");
+                        sqlBulkCopy.ColumnMappings.Add("County", "County");
+                        sqlBulkCopy.ColumnMappings.Add("FundingSource", "FundingSource");
+                        sqlBulkCopy.ColumnMappings.Add("VisitType", "VisitType");
+                        sqlBulkCopy.ColumnMappings.Add("Discipline", "Discipline");
+                        sqlBulkCopy.ColumnMappings.Add("TotalUnits", "TotalUnits");
+
+                        sqlConnect.Open();
+
+                        var command = new SqlCommand("CREATE TABLE #EIBillingTransactions (Id UNIQUEIDENTIFIER, Status INT)", sqlConnect);
+                        command.ExecuteNonQuery();
+
+
+
+
+
+                        sqlBulkCopy.WriteToServer(billingDataTable);
+                        sqlConnect.Close();
                     }
-                    else
+                }
+
+                var result = (from row1 in billingDataTable.AsEnumerable()
+                    join row2 in consumersDataTable.AsEnumerable() on
+                        new
+                        {
+                            lastName = row1.Field<string>("LastName"),
+                            firstName = row1.Field<string>("FirstName")
+                        }
+                        equals
+                        new
+                        {
+                            lastName = row2.Field<string>("consumer_last"),
+                            firstName = row2.Field<string>("consumer_first")
+                        }
+                    select new
                     {
-                        tradingPartner = "eidt_in_home";
-                    }
+                        consumer_internal_number = row2.Field<int>("consumer_internal_number"),
+                        lastName1 = row1.Field<string>("LastName"),
+                        firstName1 = row1.Field<string>("FirstName"),
+                        lastName2 = row2.Field<string>("consumer_last"),
+                        firstName2 = row2.Field<string>("consumer_first"),
+                        billDate = row2.Field<string>("BillDate"),
+                        county = row2.Field<string>("County"),
+                        fundingSource = row2.Field<string>("FundingSource"),
+                        visitType = row2.Field<string>("VisitType")
+
+                    }).ToList();
+
+
+
+
+                //var JoinResult = (from p in dt.AsEnumerable()
+                //    join t in dt2.AsEnumerable()
+                //        on p.Field<string>("EmpName") equals t.Field<string>("EmpName") into tempJoin
+                //    from leftJoin in tempJoin.DefaultIfEmpty()
+                //    select new
+                //    {
+                //        EmpName = p.Field<string>("EmpName"),
+                //        Grade = leftJoin == null ? 0 : leftJoin.Field<int>("Grade")
+                //    }).ToList();
+
+
+
+
+
+                foreach (EIBillingInput ebi in inResult)
+                {
+                    string tradingPartner = (ebi.Discipline.Equals("SPECIAL INSTRUCTION")) ? "eisi_in_home" : "eidt_in_home";
 
                     string tradingPartnerProgram = " ";
-                    string fundingSource = ebi.FundingSource;
-
-                    switch (fundingSource)
+                    switch (ebi.FundingSource)
                     {
                         case "MA":
                             tradingPartnerProgram = "ma" + "_" + ebi.County.ToLower();
@@ -77,6 +166,30 @@ namespace ConsumerMaster
                     }
 
                     string[] therapist = ebi.Therapists.Split(',');
+
+                    string billingNote = " ";
+                    switch (ebi.County)
+                    {
+                        case "ALLEGHENY":
+                            billingNote = "CC11006 - ALLEGHENY";
+                            break;
+
+                        case "FAYETTE":
+                            billingNote = "CC11029 - FAYETTE";
+                            break;
+
+                        case "GREENE":
+                            billingNote = "CC11032 - GREENE";
+                            break;
+
+                        case "WASHINGTON":
+                            billingNote = "CC11049 - WASHINGTON";
+                            break;
+
+                        case "WESTMORELAND":
+                            billingNote = "CC11050 - WESTMORELAND";
+                            break;
+                    }
 
                     billingTrans.Add(new EIServiceExportFormat()
                     {
@@ -99,7 +212,7 @@ namespace ConsumerMaster
                         rendering_provider_id = " ",
                         rendering_provider_first_name = therapist[1],
                         rendering_provider_last_name = therapist[0],
-                        billing_note = " "
+                        billing_note = billingNote
                     });
                 }
 
