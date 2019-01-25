@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Linq;
 using System.Web;
 using Telerik.Windows.Documents.Spreadsheet.Model;
+using FileHelpers;
 
 namespace ConsumerMaster
 {
@@ -65,7 +66,7 @@ namespace ConsumerMaster
         //    {18, "rendering_provider_last_name"}
         //};
 
-        public Workbook ATFCreateWorkbook()
+        public Workbook EICreateWorkbook()
         {
             Workbook workbook = new Workbook();
 
@@ -79,31 +80,123 @@ namespace ConsumerMaster
                 //Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
                 EIServiceExportFormat esef = new EIServiceExportFormat();
-                Dictionary<int, string> dictionary = new Dictionary<int, string>();
+                //Dictionary<int, string> dictionary = new Dictionary<int, string>();
 
                 Utility util = new Utility();
 
-                CultureInfo culture = new CultureInfo("en-US");
-                DateTime startDateTime = Convert.ToDateTime("07/01/2018 12:00:00 AM", culture);
-                DateTime endDateTime = Convert.ToDateTime("07/07/2018 12:59:59 PM", culture);
 
-                DataTable seDataTable = new DataTable();
-                using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
+
+
+
+                string inFileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.tsv";
+
+                var inEngine = new FileHelperEngine<EIBillingTransactions>();
+                var inResult = inEngine.ReadFile(inFileName);
+
+
+
+
+                DataTable billingDataTable = new DataTable();
+
+                billingDataTable.Columns.Add("Therapists", typeof(string));
+                billingDataTable.Columns.Add("BillDate", typeof(string));
+                billingDataTable.Columns.Add("LastName", typeof(string));
+                billingDataTable.Columns.Add("FirstName", typeof(string));
+                billingDataTable.Columns.Add("County", typeof(string));
+                billingDataTable.Columns.Add("FundingSource", typeof(string));
+                billingDataTable.Columns.Add("VisitType", typeof(string));
+                billingDataTable.Columns.Add("Discipline", typeof(string));
+                billingDataTable.Columns.Add("TotalUnits", typeof(string));
+
+                foreach (EIBillingTransactions ebi in inResult)
                 {
-                    using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("@StartDateTime", SqlDbType.Text).Value = startDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-                        cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = endDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    DataRow dr = billingDataTable.NewRow();
 
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    dr[0] = ebi.Therapists;
+                    dr[1] = ebi.BillDate.ToString("MM/dd/yyyy");
+                    dr[2] = ebi.LastName;
+                    dr[3] = ebi.FirstName;
+                    dr[4] = ebi.County;
+                    dr[5] = ebi.FundingSource;
+                    dr[6] = ebi.VisitType;
+                    dr[7] = ebi.Discipline;
+                    dr[8] = ebi.TotalUnits;
 
-                        adapter.Fill(seDataTable);
-                    }
+                    billingDataTable.Rows.Add(dr);
                 }
+
+
+                InsertDataIntoSQLServerUsingSQLBulkCopy(billingDataTable);
+
+                string seQuery =
+                    SELECT e.FirstName AS consumer_first, e.LastName AS consumer_last, c.consumer_internal_number, c.diagnosis, 
+                e.BillDate,  e.County, e.FundingSource, e.Discipline, e.TotalUnits AS units,
+                    t.rendering_provider_id, t.rendering_provider_first_name, t.rendering_provider_last_name
+                FROM[EIBillingTransactions] e
+                    LEFT OUTER JOIN[Consumers] c ON e.LastName = c.consumer_last AND e.FirstName = c.consumer_first
+                LEFT OUTER JOIN[Therapists] t ON e.Therapists = t.rendering_provider_name
+
+                DataTable seDataTable = util.GetDataTable(seQuery);
 
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
+
+
+
+                foreach (EIBillingTransactions ebi in inResult)
+                {
+                    string tradingPartner = (ebi.Discipline.Equals("SPECIAL INSTRUCTION")) ? "eisi_in_home" : "eidt_in_home";
+
+                    string tradingPartnerProgram = " ";
+                    switch (ebi.FundingSource)
+                    {
+                        case "MA":
+                            tradingPartnerProgram = "ma" + "_" + ebi.County.ToLower();
+                            break;
+
+                        case "COUNTY":
+                            tradingPartnerProgram = "b" + "_" + ebi.County.ToLower();
+                            break;
+
+                        case "WAIVER":
+                            tradingPartnerProgram = "w" + "_" + ebi.County.ToLower();
+                            break;
+
+                    }
+
+                    string[] therapist = ebi.Therapists.Split(',');
+
+                    string billingNote = " ";
+                    switch (ebi.County)
+                    {
+                        case "ALLEGHENY":
+                            billingNote = "CC11006 - ALLEGHENY";
+                            break;
+
+                        case "FAYETTE":
+                            billingNote = "CC11029 - FAYETTE";
+                            break;
+
+                        case "GREENE":
+                            billingNote = "CC11032 - GREENE";
+                            break;
+
+                        case "WASHINGTON":
+                            billingNote = "CC11049 - WASHINGTON";
+                            break;
+
+                        case "WESTMORELAND":
+                            billingNote = "CC11050 - WESTMORELAND";
+                            break;
+                    }
+
+
+
+
+
+
+
+
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
@@ -156,6 +249,21 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
             return workbook;
+        }
+
+        static void InsertDataIntoSQLServerUsingSQLBulkCopy(DataTable csvFileData)
+        {
+            using (SqlConnection dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
+            {
+                dbConnection.Open();
+                using (SqlBulkCopy s = new SqlBulkCopy(dbConnection))
+                {
+                    s.DestinationTableName = "EIBillingTransactions";
+                    foreach (var column in csvFileData.Columns)
+                        s.ColumnMappings.Add(column.ToString(), column.ToString());
+                    s.WriteToServer(csvFileData);
+                }
+            }
         }
 
         private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet, List<string> cpcList)

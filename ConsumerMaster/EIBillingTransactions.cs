@@ -4,7 +4,7 @@ using FileHelpers;
 namespace ConsumerMaster
 {
     [DelimitedRecord("\t")]
-    public class EIBillingInput
+    public class EIBillingTransactions
     {
         public string Therapists;
         [FieldConverter(ConverterKind.Date, "MM/dd/yy")]
