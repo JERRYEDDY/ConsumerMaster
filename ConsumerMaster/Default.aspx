@@ -65,6 +65,37 @@
                 </tr>
             </table>
         </div>
+        <div>
+            <br/>
+            <telerik:RadPanelBar ID="RadPanelBar2" runat="server"></telerik:RadPanelBar>
+            <table>
+                <tr>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Consumer Export File 
+                    </td>
+                    <td class="space"/>
+                    <td>
+<%--                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                           OnClick="AWCConsumerExportDownload_Click" runat="server" />--%>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Service Export File 
+                    </td>
+                    <td class="space"/>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton4" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                           OnClick="EIServiceExportDownload_Click" runat="server" />
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div><br/><br/>
     
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone"></telerik:RadFormDecorator>

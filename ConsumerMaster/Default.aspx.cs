@@ -8,10 +8,6 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
-using System.Collections.Generic;
-using System.Linq;
-using FileHelpers;
-using Telerik.Windows.Documents.Spreadsheet.Formatting;
 
 namespace ConsumerMaster
 {
@@ -35,11 +31,6 @@ namespace ConsumerMaster
                 //range = IsInRange(25.01);
             }
         }
-
-
-
-
-
 
         private void BindToDataTable()        
         {
@@ -143,6 +134,20 @@ namespace ConsumerMaster
 
         /// <summary>
         /// ////////////////////////////////////////////////////////////////////////////
+        protected void EIServiceExportDownload_Click(object sender, EventArgs e)
+        {
+            const string filename = @"EIServiceExport.xlsx";
+            try
+            {
+                EIServiceExportExcelFile serviceExport = new EIServiceExportExcelFile();
+                Workbook workbook = serviceExport.EICreateWorkbook();
+                DownloadExcelFile(workbook, filename);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
 
 
         internal class ConsumerDataItem
