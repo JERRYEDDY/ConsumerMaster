@@ -291,5 +291,29 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+        public Dictionary<string, string> CompositeProcedureCodeDictionary()
+        {
+            Dictionary<string, string> cpcDictionary = new Dictionary<string, string>();
+
+
+
+        }
+
+        //static string GetCompositeProcedureCodes(string musician)
+        //{
+        //    var instrument = string.Empty;
+
+        //    try
+        //    {
+        //        instrument = instruments[musician];
+        //    }
+        //    catch (System.Collections.Generic.KeyNotFoundException)
+        //    {
+        //        throw new ArgumentException(musician + " is not a valid musician.");
+        //    }
+
+        //    return instrument;
+        //}
     }
 }
