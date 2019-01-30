@@ -259,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ATFServiceExportExcelFile.cs" />
+    <Compile Include="ConsumerExportExcelFile.cs" />
     <Compile Include="Consumers2.aspx.cs">
       <DependentUpon>Consumers2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -306,6 +307,8 @@
     </Compile>
     <Compile Include="EIBillingTransactions.cs" />
     <Compile Include="EIServiceExportExcelFile.cs" />
+    <Compile Include="ConsumerExportFormat.cs" />
+    <Compile Include="ServiceExportFormat.cs" />
     <Compile Include="EIServiceExportFormat.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

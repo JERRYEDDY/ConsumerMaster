@@ -68,33 +68,37 @@
         <div>
             <br/>
             <telerik:RadPanelBar ID="RadPanelBar2" runat="server"></telerik:RadPanelBar>
-            <table>
-                <tr>
-                    <td>
-                        
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Consumer Export File 
-                    </td>
-                    <td class="space"/>
-                    <td>
-<%--                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                           OnClick="AWCConsumerExportDownload_Click" runat="server" />--%>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Service Export File 
-                    </td>
-                    <td class="space"/>
-                    <td>
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton4" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                           OnClick="EIServiceExportDownload_Click" runat="server" />
-                    </td>
-                </tr>
-            </table>
+            
+            <div class="demo-container size-thin">
+                <h4>Consumer Export File</h4>
+                <telerik:RadDropDownList RenderMode="Lightweight" ID="TPRadDropDownList" runat="server"  Width="350px"
+                                         DropDownHeight="200" DataSourceID="TradingPartnerDataSource" DataTextField="name" DefaultMessage="Select Partner"
+                                         DataValueField="trading_partner_id" ValidationGroup="TPValidationGroup" />
+                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="TPValidationGroup" 
+                                   OnClick="ConsumerExportDownload_Click" runat="server" />
+                <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="TPRadDropDownList"
+                                            Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="TPValidationGroup" />
+                <p>
+                    <asp:Label runat="server" ID="Label2" />
+                </p>
+            </div>
+            <div class="demo-container size-thin">
+                <h3>Consumer Export</h3>
+                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                   OnClick="ConsumerExportDownload_Click" runat="server" />
+                <p>
+                    <asp:Label runat="server" ID="Label3" />
+                </p>
+            </div>
+            
+            <div class="demo-container size-thin">
+                <h3>EI Service Export</h3>
+                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton4" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                   OnClick="EIServiceExportDownload_Click" runat="server" />
+                <p>
+                    <asp:Label runat="server" ID="Label1" />
+                </p>
+            </div>           
         </div>
     </div><br/><br/>
     

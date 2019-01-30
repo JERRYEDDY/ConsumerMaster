@@ -83,49 +83,16 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
                 {
-                    int index = Array.IndexOf(columnsList, "consumer_first");
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_internal_number")];
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis"].ToString());
+                    sheet1Worksheet.Cells[currentRow, esef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
-                    string tradingPartner = " ";
-                    string compositeProcedureCode = " ";
-                    switch (dr["Discipline"])
-                    {
-                        case "HEARING":
-                            tradingPartner = "eisi_in_home";
-
-                            break;
-
-                        case "NUTRITION":
-                            tradingPartner = "eisi_in_home";
-                            break;
-
-                        case "OCCUPATIONAL THERAPY":
-                            tradingPartner = "eidt_in_home";
-                            break;
-
-                        case "PHYSICAL THERAPY":
-                            tradingPartner = "eidt_in_home";
-                            break;
-
-                        case "SI-BEHAVIOR":
-                            tradingPartner = "eisi_in_home";
-                            break;
-
-                        case "SPECIAL INSTRUCTION":
-                            tradingPartner = "eisi_in_home";
-                            break;
-
-                        case "SPEECH":
-                            tradingPartner = "eidt_in_home";
-                            break;
-                    }
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("trading_partner_string")].SetValue(tradingPartner);
+ 
+                    sheet1Worksheet.Cells[currentRow, esef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
                     string tradingPartnerProgram = " ";
                     switch (dr["FundingSource"])
@@ -145,11 +112,11 @@ namespace ConsumerMaster
                     }
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("trading_partner_program_string")].SetValue(tradingPartnerProgram);
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("start_date_string")].SetValue(dr["BillDate"].ToString());
+                    sheet1Worksheet.Cells[currentRow, esef.GetKey("start_date_string")].SetValue(dr["bill_date"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("end_date_string")].SetValue(dr["BillDate"].ToString());
+                    sheet1Worksheet.Cells[currentRow, esef.GetKey("end_date_string")].SetValue(dr["bill_date"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("composite_procedure_code_string")].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, esef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("units")].SetValue(dr["units"].ToString());
 
@@ -202,21 +169,6 @@ namespace ConsumerMaster
             }
             return workbook;
         }
-
-        //static void InsertDataIntoSQLServerUsingSQLBulkCopy(DataTable csvFileData)
-        //{
-        //    using (SqlConnection dbConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString))
-        //    {
-        //        dbConnection.Open();
-        //        using (SqlBulkCopy s = new SqlBulkCopy(dbConnection))
-        //        {
-        //            s.DestinationTableName = "#EIBillingTEMP";
-        //            foreach (var column in csvFileData.Columns)
-        //                s.ColumnMappings.Add(column.ToString(), column.ToString());
-        //            s.WriteToServer(csvFileData);
-        //        }
-        //    }
-        //}
 
         private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet, List<string> cpcList)
         {
@@ -291,29 +243,5 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
-
-        public Dictionary<string, string> CompositeProcedureCodeDictionary()
-        {
-            Dictionary<string, string> cpcDictionary = new Dictionary<string, string>();
-
-
-
-        }
-
-        //static string GetCompositeProcedureCodes(string musician)
-        //{
-        //    var instrument = string.Empty;
-
-        //    try
-        //    {
-        //        instrument = instruments[musician];
-        //    }
-        //    catch (System.Collections.Generic.KeyNotFoundException)
-        //    {
-        //        throw new ArgumentException(musician + " is not a valid musician.");
-        //    }
-
-        //    return instrument;
-        //}
     }
 }

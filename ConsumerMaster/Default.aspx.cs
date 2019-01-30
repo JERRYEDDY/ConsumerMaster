@@ -134,6 +134,25 @@ namespace ConsumerMaster
 
         /// <summary>
         /// ////////////////////////////////////////////////////////////////////////////
+        ///
+
+        protected void ConsumerExportDownload_Click(object sender, EventArgs e)
+        {
+            const string filename = @"ConsumerExport.xlsx";
+            try
+            {
+                string selectedValue = TPRadDropDownList.SelectedValue;
+
+                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
+                DownloadExcelFile(workbook, filename);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
         protected void EIServiceExportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"EIServiceExport.xlsx";
@@ -148,7 +167,6 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
-
 
         internal class ConsumerDataItem
         {
@@ -196,6 +214,5 @@ namespace ConsumerMaster
 
             return 0;
         }
-
     }
 }
