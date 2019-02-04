@@ -23,6 +23,16 @@ namespace ConsumerMaster
             {
                 Logger.Info("ConsumerMaster started");
 
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "consumermaster.database.windows.net";
+                builder.UserID = "CSAdmin";
+                builder.Password = "MyCSDB2918";
+                builder.InitialCatalog = "consumermaster";
+
+
+                string connection = builder.ConnectionString;
+
+
 
                 //BindToDataTable();
                 //int range = IsInRange(7.45);
@@ -40,22 +50,22 @@ namespace ConsumerMaster
             csb.IntegratedSecurity = true;
             string connString = csb.ToString();
 
-            using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
-            {
-                using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
-                {
-                    Int32 rowsAffected = 0;
+            //using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
+            //{
+            //    using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
+            //    {
+            //        //Int32 rowsAffected = 0;
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-07-01 00:00:00";
-                    cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = "2018-07-07 23:59:59";
+            //        cmd.CommandType = CommandType.StoredProcedure;
+            //        cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-07-01 00:00:00";
+            //        cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = "2018-07-07 23:59:59";
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
+            //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            //        DataTable dataTable = new DataTable();
+            //        adapter.Fill(dataTable);
 
-                }
-            }
+            //    }
+            //}
 
             //string queryString =
             //"SELECT tim.[Social Security #]AS ID, " +

@@ -84,19 +84,19 @@ namespace ConsumerMaster
                 DateTime endDateTime = Convert.ToDateTime("07/07/2018 12:59:59 PM", culture);
 
                 DataTable seDataTable = new DataTable();
-                using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("@StartDateTime", SqlDbType.Text).Value = startDateTime.ToString("yyyy-MM-dd HH:mm:ss");     
-                        cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = endDateTime.ToString("yyyy-MM-dd HH:mm:ss");         
+                //using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
+                //{
+                //    using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
+                //    {
+                //        cmd.CommandType = CommandType.StoredProcedure;
+                //        cmd.Parameters.Add("@StartDateTime", SqlDbType.Text).Value = startDateTime.ToString("yyyy-MM-dd HH:mm:ss");     
+                //        cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = endDateTime.ToString("yyyy-MM-dd HH:mm:ss");         
 
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
 
-                        adapter.Fill(seDataTable);
-                    }
-                }
+                //        adapter.Fill(seDataTable);
+                //    }
+                //}
 
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);

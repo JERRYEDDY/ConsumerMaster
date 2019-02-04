@@ -14,17 +14,17 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         protected global::Telerik.Web.UI.RadSpreadsheet RadSpreadsheet1;
 
-        private static readonly int IndexColumnConsumerName = 0;
-        private static readonly int IndexColumnRateCode = 1;
-        private static readonly int IndexColumnFacility = 2;
-        private static readonly int IndexColumnCommunity = 3;
-        private static readonly int IndexColumnTotal = 4;
-        private static readonly int IndexColumnPercentage = 5;
-        private static readonly int IndexColumnBillingRate = 6;
-        private static readonly int IndexColumnComProcCode = 7;
+        //private static readonly int IndexColumnConsumerName = 0;
+        //private static readonly int IndexColumnRateCode = 1;
+        //private static readonly int IndexColumnFacility = 2;
+        //private static readonly int IndexColumnCommunity = 3;
+        //private static readonly int IndexColumnTotal = 4;
+        //private static readonly int IndexColumnPercentage = 5;
+        //private static readonly int IndexColumnBillingRate = 6;
+        //private static readonly int IndexColumnComProcCode = 7;
 
-        private static readonly int IndexRowItemStart = 0;
-        private static readonly int IndexColumnName = 0;
+        //private static readonly int IndexRowItemStart = 0;
+        //private static readonly int IndexColumnName = 0;
 
        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
