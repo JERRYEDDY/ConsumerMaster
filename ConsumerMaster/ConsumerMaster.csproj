@@ -162,6 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConsumersNew.aspx" />
     <Content Include="Consumers2.aspx" />
     <Content Include="ATFBillingEntry.aspx" />
     <Content Include="About.aspx" />
@@ -193,6 +194,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Images\AWCLogo1.png" />
     <Content Include="Images\PathwaysLogo.png" />
+    <Content Include="NewConsumers.aspx" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -262,6 +264,13 @@
   <ItemGroup>
     <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
+    <Compile Include="ConsumersNew.aspx.cs">
+      <DependentUpon>ConsumersNew.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConsumersNew.aspx.designer.cs">
+      <DependentUpon>ConsumersNew.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Consumers2.aspx.cs">
       <DependentUpon>Consumers2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -310,6 +319,13 @@
     <Compile Include="EIBillingTransactions.cs" />
     <Compile Include="EIServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportFormat.cs" />
+    <Compile Include="NewConsumers.aspx.cs">
+      <DependentUpon>NewConsumers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NewConsumers.aspx.designer.cs">
+      <DependentUpon>NewConsumers.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ServiceExportFormat.cs" />
     <Compile Include="EIServiceExportFormat.cs" />
     <Compile Include="Global.asax.cs">
@@ -368,10 +384,16 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <None Include="Web.Azure.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Development.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Intern.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.ITSQLX1.config">

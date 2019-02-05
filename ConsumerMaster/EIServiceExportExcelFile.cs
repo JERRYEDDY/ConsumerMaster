@@ -88,10 +88,7 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_internal_number")];
-
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
-
- 
                     sheet1Worksheet.Cells[currentRow, esef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
                     string tradingPartnerProgram = " ";

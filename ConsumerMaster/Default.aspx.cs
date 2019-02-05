@@ -6,8 +6,7 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
 using System.Data.SqlClient;
-using System.Data;
-using System.Configuration;
+
 
 namespace ConsumerMaster
 {
