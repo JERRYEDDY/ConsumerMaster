@@ -189,7 +189,9 @@
         <br />
         <br />
         <h5><strong>PARTNER/PROGRAM:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" ShowStatusBar="true" runat="server" AllowPaging="True" PageSize="5" DataSourceID="SqlDataSource2">
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10" AutoGenerateColumns="False" OnNeedDataSource="RadGrid2_NeedDataSource" 
+                         OnUpdateCommand="RadGrid2_UpdateCommand" OnItemCreated="RadGrid2_ItemCreated" OnDeleteCommand="RadGrid2_DeleteCommand" OnInsertCommand="RadGrid2_InsertCommand"
+                         AllowFilteringByColumn="true" >    
             <MasterTableView Width="100%" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
@@ -199,9 +201,6 @@
                     <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="partner_name" HeaderText="Partner" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                    
                     <telerik:GridBoundColumn DataField="program_name" HeaderText="Program" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />     
-                    
-                    
-
 
 <%--                    <telerik:GridDropDownColumn UniqueName="TPDropDownListColumn" ListTextField="name" ListValueField="trading_partner_id" DataSourceID="TradingPartnerDataSource" 
                                     HeaderText="Trading Partner" DataField="trading_partner_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="500px"/>--%>
@@ -213,37 +212,56 @@
                 </Columns>
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
-                        <div>
-                            <fieldset>
-                                <legend>Text Boxes</legend>
-                                <label for="Consumer">Consumer (&lt;label&gt;):&nbsp;</label>
-                                    <asp:TextBox runat="server" ID="UsernameBox" Width="150px" TabIndex="7"></asp:TextBox>
-                                <div>
-                                    &nbsp;
-                                </div>
-                                <label for="PartnerProgram">Partner/Program (&lt;label&gt;):&nbsp;</label>
-                                    <telerik:RadMultiColumnComboBox runat="server" ID="RadMultiColumnComboBox1" DataSourceID="PartnerProgramDataSource"
-                                        DropDownWidth="600px" Height="400px" Width="100%" Filter="contains" FilterFields="id, partner_name, program_name" DataTextField="partner_name" 
-                                        DataValueField="id" Placeholder="select from the dropdown or type" >
-<%--                                        SelectedValue='<%# Bind("partner_program_id") %>'--%>
-                                        <ColumnsCollection>
-                                            <telerik:MultiColumnComboBoxColumn Field="id" Title="ID" Width="200px" />
-                                            <telerik:MultiColumnComboBoxColumn Field="partner_name" Title="Partner" Width="200px" />
-                                            <telerik:MultiColumnComboBoxColumn Field="program_name" Title="Program" Width="200px" />
-                                        </ColumnsCollection>
-                                        <ClientEvents OnSelect="OnSelectHandler" />
-                                    </telerik:RadMultiColumnComboBox>
-                                <div>
-                                    &nbsp;
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend>Textarea</legend>
-                                <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
-                                            CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
-                                <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
-                            </fieldset>
-                        </div>    
+                        <table id="Table2" cellspacing="2" cellpadding="1" width="100%" border="0" rules="none" style="border-collapse: collapse;">
+                            <tr class="EditFormHeader">
+                                <td colspan="2">
+                                    <b>Partner/Program Info</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table id="Table3" width="450px" border="0" class="module">
+                                        <tr>
+                                            <td>Nickname First:</td>
+                                            <td>
+                                                <telerik:RadTextBox ID="txtCIN" Text='<%# Bind("consumer_internal_number") %>' runat="server" TabIndex="17" ReadOnly="True"/>
+                                            </td>
+                                        </tr>                                     
+                                        <tr>
+                                            <td>Partner/Program:</td>
+                                            <td>
+					                            <telerik:RadMultiColumnComboBox runat="server" ID="RadMultiColumnComboBox1" DataSourceID="PartnerProgramDataSource"
+						                        DropDownWidth="600px" Height="400px" Width="100%" Filter="contains" FilterFields="id, partner_name, program_name" DataTextField="partner_name" 
+						                        DataValueField="id" Placeholder="select from the dropdown or type" >
+						                        <ColumnsCollection>
+						                            <telerik:MultiColumnComboBoxColumn Field="id" Title="ID" Width="200px" />
+						                            <telerik:MultiColumnComboBoxColumn Field="partner_name" Title="Partner" Width="200px" />
+						                            <telerik:MultiColumnComboBoxColumn Field="program_name" Title="Program" Width="200px" />
+						                        </ColumnsCollection>
+						                        <ClientEvents OnSelect="OnSelectHandler" />
+					                            </telerik:RadMultiColumnComboBox>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="vertical-align: top">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td align="right" colspan="2">
+                                    <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
+                                                CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
+                                                            <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                                </td>
+                            </tr>
+                        </table>  
                     </FormTemplate>
                 </EditFormSettings>   
             </MasterTableView>
