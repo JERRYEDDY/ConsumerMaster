@@ -189,9 +189,10 @@
         <br />
         <br />
         <h5><strong>PARTNER/PROGRAM:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10" AutoGenerateColumns="False" OnNeedDataSource="RadGrid2_NeedDataSource" 
-                         OnUpdateCommand="RadGrid2_UpdateCommand" OnItemCreated="RadGrid2_ItemCreated" OnDeleteCommand="RadGrid2_DeleteCommand" OnInsertCommand="RadGrid2_InsertCommand"
-                         AllowFilteringByColumn="true" >    
+    
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource2" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
+                     AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" 
+                     OnInsertCommand="RadGrid2_InsertCommand" AllowFilteringByColumn="true" >
             <MasterTableView Width="100%" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
@@ -201,16 +202,12 @@
                     <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="No." ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="partner_name" HeaderText="Partner" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                    
                     <telerik:GridBoundColumn DataField="program_name" HeaderText="Program" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />     
-
-<%--                    <telerik:GridDropDownColumn UniqueName="TPDropDownListColumn" ListTextField="name" ListValueField="trading_partner_id" DataSourceID="TradingPartnerDataSource" 
-                                    HeaderText="Trading Partner" DataField="trading_partner_id" DropDownControlType="RadComboBox" AllowSorting="true" HeaderStyle-Width="500px"/>--%>
-
                     <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
                         <HeaderStyle Width="20px"></HeaderStyle>
                         <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
                     </telerik:GridButtonColumn>
                 </Columns>
-                <EditFormSettings EditFormType="Template">
+<%--                <EditFormSettings EditFormType="Template">
                     <FormTemplate>
                         <table id="Table2" cellspacing="2" cellpadding="1" width="100%" border="0" rules="none" style="border-collapse: collapse;">
                             <tr class="EditFormHeader">
@@ -263,7 +260,7 @@
                             </tr>
                         </table>  
                     </FormTemplate>
-                </EditFormSettings>   
+                </EditFormSettings>   --%>
             </MasterTableView>
             <ClientSettings AllowKeyboardNavigation="true" EnablePostBackOnRowClick="true">
                 <Selecting AllowRowSelect="true"></Selecting>

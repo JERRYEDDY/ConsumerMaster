@@ -30,7 +30,7 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadGrid1_ItemCreated(object sender, Telerik.Web.UI.GridItemEventArgs e)
+        protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
         {
             if (e.Item is GridEditableItem && e.Item.IsInEditMode)
             {
