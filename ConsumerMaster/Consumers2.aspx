@@ -101,7 +101,7 @@
                                             <td>State:</td>
                                             <td>
                                                 <telerik:RadDropDownList ID="ddlStates" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
-                                                                         DataTextField="Name" DataValueField="Abbreviation" TabIndex="12" DefaultMessage="Select" /> 
+                                                                         DataTextField="name" DataValueField="abbreviation" TabIndex="12" DefaultMessage="Select" /> 
                                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlStates" 
                                                                             ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                                             </td>
@@ -220,7 +220,10 @@
                                         <tr>
                                             <td>Trading Partner:</td>
                                             <td>
-                                                <telerik:RadTextBox ID="txtTradingPartner" runat="server" Text='<%# Bind("trading_partner_id") %>' TabIndex="1"/>
+                                                <telerik:RadDropDownList ID="ddlTradingPartners" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id") %>'
+                                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" /> 
+                                                <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlTradingPartners" 
+                                                                            ErrorMessage="Trading Partner is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                                             </td>
                                         </tr>
                                     </table>
@@ -300,28 +303,6 @@
         </UpdateParameters>
     </asp:SqlDataSource>        
    
-<%--    <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
-       ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-       DeleteCommand="DELETE FROM ConsumerPartnerProgram WHERE consumer_internal_number = @consumer_internal_number"
-       InsertCommand="INSERT INTO ConsumerPartnerProgram (consumer_internal_number, partner_program_id) VALUES (@consumer_internal_number, @partner_program_id)"
-       SelectCommand="SELECT cpp.consumer_internal_number, cpp.partner_program_id, pp.partner_name, pp.program_name FROM ConsumerPartnerProgram cpp INNER JOIN PartnerPrograms2 pp ON cpp.partner_program_id = pp.id WHERE consumer_internal_number = @consumer_internal_number" 
-       UpdateCommand="UPDATE ConsumerPartnerProgram SET partner_program_id = @partner_program_id WHERE consumer_internal_number = @consumer_internal_number">
-        <SelectParameters>
-            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
-        </SelectParameters>
-        <DeleteParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </DeleteParameters>
-        <InsertParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-            <asp:Parameter Name="partner_program_id" Type="Int32"></asp:Parameter>
-        </InsertParameters>
-        <UpdateParameters>
-            <asp:Parameter Name="partner_program_id" Type="Int32"></asp:Parameter>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </UpdateParameters>
-    </asp:SqlDataSource> --%>
-
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
                        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
                        DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
@@ -344,7 +325,7 @@
         </UpdateParameters>
     </asp:SqlDataSource> 
 
-<asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT Name, Abbreviation FROM States"/>
+<asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT name, abbreviation FROM States"/>
 <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
 <asp:SqlDataSource ID="PartnerProgramDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, partner_name, program_name FROM PartnerPrograms2"/>
 <asp:SqlDataSource ID="CompositeProcedureCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>
