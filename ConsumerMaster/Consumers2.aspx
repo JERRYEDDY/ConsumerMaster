@@ -218,20 +218,28 @@
                                 <td>
                                     <table id="Table3" width="450px" border="0" class="module">
                                         <tr>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
                                             <td>Trading Partner:</td>
                                             <td>
                                                 <telerik:RadDropDownList ID="ddlTradingPartners" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id") %>'
-                                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" /> 
+                                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" Width="300px" DropDownWidth="300px" /> 
                                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlTradingPartners" 
                                                                             ErrorMessage="Trading Partner is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                                             </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
                                         </tr>
                                     </table>
                                 </td>
                                 <td style="vertical-align: top">
                                 </td>
                             </tr>
-                            <tr>
+                            <tr  dropdownwidth="3" id="p">
                                 <td colspan="2"></td>
                             </tr>
                             <tr>
