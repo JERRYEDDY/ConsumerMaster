@@ -162,8 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConsumersNew.aspx" />
-    <Content Include="Consumers2.aspx" />
+    <Content Include="Consumers.aspx" />
     <Content Include="ATFBillingEntry.aspx" />
     <Content Include="About.aspx" />
     <Content Include="AppEvent.aspx" />
@@ -173,7 +172,7 @@
     <Content Include="Consumer_CRUD.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Consumers.aspx" />
+    <Content Include="ConsumersOLD.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -194,7 +193,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Images\AWCLogo1.png" />
     <Content Include="Images\PathwaysLogo.png" />
-    <Content Include="NewConsumers.aspx" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -264,19 +262,12 @@
   <ItemGroup>
     <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
-    <Compile Include="ConsumersNew.aspx.cs">
-      <DependentUpon>ConsumersNew.aspx</DependentUpon>
+    <Compile Include="Consumers.aspx.cs">
+      <DependentUpon>Consumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ConsumersNew.aspx.designer.cs">
-      <DependentUpon>ConsumersNew.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Consumers2.aspx.cs">
-      <DependentUpon>Consumers2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Consumers2.aspx.designer.cs">
-      <DependentUpon>Consumers2.aspx</DependentUpon>
+    <Compile Include="Consumers.aspx.designer.cs">
+      <DependentUpon>Consumers.aspx</DependentUpon>
     </Compile>
     <Compile Include="ATFBillingEntry.aspx.cs">
       <DependentUpon>ATFBillingEntry.aspx</DependentUpon>
@@ -302,12 +293,12 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="AWCConsumerExportExcelFile.cs" />
-    <Compile Include="Consumers.aspx.cs">
-      <DependentUpon>Consumers.aspx</DependentUpon>
+    <Compile Include="ConsumersOLD.aspx.cs">
+      <DependentUpon>ConsumersOLD.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Consumers.aspx.designer.cs">
-      <DependentUpon>Consumers.aspx</DependentUpon>
+    <Compile Include="ConsumersOLD.aspx.designer.cs">
+      <DependentUpon>ConsumersOLD.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -319,13 +310,6 @@
     <Compile Include="EIBillingTransactions.cs" />
     <Compile Include="EIServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportFormat.cs" />
-    <Compile Include="NewConsumers.aspx.cs">
-      <DependentUpon>NewConsumers.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="NewConsumers.aspx.designer.cs">
-      <DependentUpon>NewConsumers.aspx</DependentUpon>
-    </Compile>
     <Compile Include="ServiceExportFormat.cs" />
     <Compile Include="EIServiceExportFormat.cs" />
     <Compile Include="Global.asax.cs">

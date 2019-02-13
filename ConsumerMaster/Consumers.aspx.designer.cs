@@ -10,7 +10,7 @@
 namespace ConsumerMaster {
     
     
-    public partial class ConsumersNew {
+    public partial class Consumers {
         
         /// <summary>
         /// RadSkinManager1 control.
@@ -22,15 +22,6 @@ namespace ConsumerMaster {
         protected global::Telerik.Web.UI.RadSkinManager RadSkinManager1;
         
         /// <summary>
-        /// RadFormDecorator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadFormDecorator RadFormDecorator1;
-        
-        /// <summary>
         /// RadAjaxManager1 control.
         /// </summary>
         /// <remarks>
@@ -40,6 +31,24 @@ namespace ConsumerMaster {
         protected global::Telerik.Web.UI.RadAjaxManager RadAjaxManager1;
         
         /// <summary>
+        /// RadAjaxLoadingPanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadAjaxLoadingPanel RadAjaxLoadingPanel1;
+        
+        /// <summary>
+        /// FormDecorator1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadFormDecorator FormDecorator1;
+        
+        /// <summary>
         /// RadGrid1 control.
         /// </summary>
         /// <remarks>
@@ -47,6 +56,15 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadGrid RadGrid1;
+        
+        /// <summary>
+        /// RadGrid2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadGrid RadGrid2;
         
         /// <summary>
         /// SqlDataSource1 control.
@@ -67,15 +85,6 @@ namespace ConsumerMaster {
         protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource2;
         
         /// <summary>
-        /// SqlDataSource3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource3;
-        
-        /// <summary>
         /// StatesSqlDataSource control.
         /// </summary>
         /// <remarks>
@@ -92,6 +101,15 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.SqlDataSource TradingPartnerDataSource;
+        
+        /// <summary>
+        /// PartnerProgramDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource PartnerProgramDataSource;
         
         /// <summary>
         /// CompositeProcedureCodeDataSource control.
