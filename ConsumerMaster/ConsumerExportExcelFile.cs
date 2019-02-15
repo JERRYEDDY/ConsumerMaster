@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 
@@ -14,7 +13,7 @@ namespace ConsumerMaster
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
 
-        public Workbook CreateWorkbook( string tradingPartnerID)
+        public Workbook CreateWorkbook(string tradingPartnerID)
         {
             Workbook workbook = new Workbook();
 
@@ -23,11 +22,18 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " + 
+                string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
                                  "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, c.address_line_2 AS address_line_2, " +
-                                 "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " + 
-                                 "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " + 
-                                 "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = " + tradingPartnerID + " ORDER BY consumer_last";
+                                 "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +
+                                 "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
+                                 "INNER JOIN TradingPartners AS tp ON ctp.trading_partner_id = tp.id";
+
+                if(!String.Equals(tradingPartnerID,"0"))
+                {
+                    ceQuery += " WHERE ctp.trading_partner_id = " + tradingPartnerID;
+                }
+
+                ceQuery += " ORDER BY consumer_last";
 
                 Utility util = new Utility();
                 ConsumerExportFormat cef = new ConsumerExportFormat();

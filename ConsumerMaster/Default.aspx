@@ -18,17 +18,9 @@
    font-size:10px;
 } 
 </style>
-<%--    <link href="styles.css" rel="stylesheet" type="text/css" />--%>
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-<%--        <AjaxSettings>
-            <telerik:AjaxSetting AjaxControlID="RadGrid1">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="RadGrid1"></telerik:AjaxUpdatedControl>
-                </UpdatedControls>
-            </telerik:AjaxSetting>
-        </AjaxSettings>--%>
     </telerik:RadAjaxManager>
     <h4>Home</h4>
     <div class="demo-container no-bg">
@@ -71,13 +63,10 @@
             
             <div class="demo-container size-thin">
                 <h4>Consumer Export File</h4>
-                <telerik:RadDropDownList RenderMode="Lightweight" ID="TPRadDropDownList" runat="server"  Width="350px"
-                                         DropDownHeight="200" DataSourceID="TradingPartnerDataSource" DataTextField="name" DefaultMessage="Select Partner"
-                                         DataValueField="trading_partner_id" ValidationGroup="TPValidationGroup" />
-                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="TPValidationGroup" 
-                                   OnClick="ConsumerExportDownload_Click" runat="server" />
-                <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="TPRadDropDownList"
-                                            Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="TPValidationGroup" />
+                <telerik:RadDropDownList RenderMode="Lightweight" ID="TPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
+                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="TPValidationGroup" OnClick="ConsumerExportDownload_Click" runat="server" />
+                <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="TPRadDropDownList" Display="Dynamic" 
+                        ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="TPValidationGroup" />
                 <p>
                     <asp:Label runat="server" ID="Label2" />
                 </p>

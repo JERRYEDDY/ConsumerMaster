@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
-using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 using System.Windows.Media;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Globalization;
-using System.Runtime.Remoting.Messaging;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+
 
 namespace ConsumerMaster
 {
@@ -98,6 +100,39 @@ namespace ConsumerMaster
                     }
                 }
 
+                DataTable workTable = new DataTable("Consumers");
+                DataColumn workCol = workTable.Columns.Add("FullName", typeof(String));
+                workTable.Columns.Add("Ratio1", typeof(String));
+                workTable.Columns.Add("Units1", typeof(Int32));
+                workTable.Columns.Add("Pct1", typeof(Double));
+                workTable.Columns.Add("Ratio2", typeof(String));
+                workTable.Columns.Add("Units2", typeof(Int32));
+                workTable.Columns.Add("Pct2", typeof(Double));
+                workTable.Columns.Add("Total", typeof(Int32));
+                workTable.Columns["Total"].Expression = "Units1 + Units2";
+                workTable.Columns["Pct1"].Expression = "IIF(Total=0, 0, (Units1 / Total) * 100)";
+                workTable.Columns["Pct2"].Expression = "IIF(Total=0, 0, (Units2 / Total) * 100)";
+
+                foreach (DataRow dRow in seDataTable.Rows)
+                {
+                    var row = workTable.NewRow();
+
+                    row["FullName"] = dRow["FullName"];
+                    row["Ratio1"] = dRow["Ratio1"];
+                    row["Units1"] = dRow["Units1"];
+                    row["Ratio2"] = dRow["Ratio2"];
+                    row["Units2"] = dRow["Units2"] ?? "0";
+
+                    workTable.Rows.Add(row);
+                }
+
+                string outFileName = @"C:\Billing Software\ATF\ATFConsumerRatio.pdf";
+
+                CreatePDF(workTable, outFileName);
+
+
+
+
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
 
@@ -121,12 +156,10 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(startDateTime.ToString("MM/dd/yyyy"));
                     sheet1Worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(endDateTime.ToString("MM/dd/yyyy"));
 
-
                     sheet1Worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
                     CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
-
 
                     Int32.TryParse(dr["Units1"].ToString(), out int units1);
                     Int32.TryParse(dr["Units2"].ToString(), out int units2);
@@ -277,6 +310,71 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+
+        public void CreatePDF(DataTable dataTable, string destinationPath)
+        {
+            //Initialize writer
+            PdfWriter writer = new PdfWriter(dest);
+
+            //Initialize document
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document doc = new Document(pdfDoc);
+
+            //Add paragraph to the document
+            doc.add(new Paragraph("Hello World!"));
+
+            //Close document
+            doc.close();
+        }
+
+
+
+        //public void CreatePDF(DataTable dataTable, string destinationPath)
+        //{
+        //    Document document = new Document();
+        //    PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(destinationPath, FileMode.Create));
+        //    document.Open();
+
+        //    PdfPTable table = new PdfPTable(dataTable.Columns.Count);
+        //    table.WidthPercentage = 100;
+        //    BaseFont bf = BaseFont.CreateFont(
+        //                BaseFont.TIMES_ROMAN,
+        //                BaseFont.CP1252,
+        //                BaseFont.EMBEDDED);
+        //    Font font = new Font(bf, 20);
+
+
+        //    for (int k = 0; k < dataTable.Columns.Count; k++)
+        //    {
+        //        PdfPCell cell = new PdfPCell(new Phrase(dataTable.Columns[k].ColumnName, font));
+
+        //        cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+        //        cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+        //        cell.BackgroundColor = new BaseColor(51, 102, 102);
+
+        //        table.AddCell(cell);
+        //    }
+
+
+        //    for (int i = 0; i < dataTable.Rows.Count; i++)
+        //    {
+        //        for (int j = 0; j < dataTable.Columns.Count; j++)
+        //        {
+        //            PdfPCell cell = new PdfPCell(new Phrase(dataTable.Rows[i][j].ToString()));
+
+
+        //            cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+        //            cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+
+        //            table.AddCell(cell);
+        //        }
+        //    }
+
+        //    document.Add(table);
+        //    document.Close();
+        //}
+
     }
 }
 

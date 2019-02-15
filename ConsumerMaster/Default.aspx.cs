@@ -6,7 +6,9 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web;
 using System.Data.SqlClient;
-
+using System.Data;
+using System.Configuration;
+using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
@@ -28,20 +30,13 @@ namespace ConsumerMaster
                 builder.Password = "MyCSDB2918";
                 builder.InitialCatalog = "consumermaster";
 
-
                 string connection = builder.ConnectionString;
 
-
-                //ATFServiceExportExcelFile atf = new ATFServiceExportExcelFile();
-                //atf.ATFCreateWorkbook();
-
+                ATFServiceExportExcelFile atf = new ATFServiceExportExcelFile();
+                atf.ATFCreateWorkbook();
 
 
-                //BindToDataTable();
-                //int range = IsInRange(7.45);
-                //range = IsInRange(24.99);
-                //range = IsInRange(25.00);
-                //range = IsInRange(25.01);
+                BindToTPDropDownList(TPRadDropDownList);
             }
         }
 
@@ -52,39 +47,6 @@ namespace ConsumerMaster
             csb.InitialCatalog = "ATFIS";
             csb.IntegratedSecurity = true;
             string connString = csb.ToString();
-
-            //using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
-            //{
-            //    using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
-            //    {
-            //        //Int32 rowsAffected = 0;
-
-            //        cmd.CommandType = CommandType.StoredProcedure;
-            //        cmd.Parameters.Add("@StartDateTime",SqlDbType.Text).Value = "2018-07-01 00:00:00";
-            //        cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = "2018-07-07 23:59:59";
-
-            //        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-            //        DataTable dataTable = new DataTable();
-            //        adapter.Fill(dataTable);
-
-            //    }
-            //}
-
-            //string queryString =
-            //"SELECT tim.[Social Security #]AS ID, " +
-            //"tim.[FullName], RIGHT(FullName, 6) AS Ratio, SUBSTRING(RIGHT(FullName, 6), 5, 1) AS Type, " +
-            //"SUM((ISNULL(DATEDIFF(second, ta.[StartTime], ta.[EndTime]), 0) + ISNULL(DATEDIFF(second, ta.[StartTime1], ta.[EndTime1]), 0)) / 900) AS TotalUnits " +
-            //"FROM([ATFIS].[dbo].[T_Attendance] AS ta " +
-            //"LEFT OUTER JOIN[ATFIS].[dbo].[T_Individual Master] AS tim ON ta.[CID] = tim.[IndID]) " + 
-            //"LEFT OUTER JOIN[ATFIS].[dbo].[T_Site] AS ts  ON tim.[Site]=ts.[S_ID] " +
-            //"WHERE(ta.[ADate]>= '2018-11-01 00:00:00' AND ta.[ADate]<'2018-11-30 23:59:59') AND tim.Status = 'Active' " +
-            //"GROUP BY tim.[Social Security #],tim.[FullName]";  
-            
-            //SqlConnection connection = new SqlConnection(connString);
-            //SqlDataAdapter adapter = new SqlDataAdapter(queryString, connection);
-            //DataTable dataTable = new DataTable();
-            //adapter.Fill(dataTable);
-
         }
 
         public void DownloadExcelFile(Workbook workbook, string filename)
@@ -163,6 +125,29 @@ namespace ConsumerMaster
             catch (Exception ex)
             {
                 Logger.Error(ex);
+            }
+        }
+
+        private void BindToTPDropDownList(RadDropDownList dropdownlist)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            {
+                con.Open();
+                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners",con))
+                {
+                    DataTable tradingPartners = new DataTable();
+                    adapter.Fill(tradingPartners);
+
+                    DataRow dr = tradingPartners.NewRow();
+                    dr["trading_partner_id"] = "0";
+                    dr["name"] = "ALL TRADING PARTNERS";
+                    tradingPartners.Rows.InsertAt(dr, 0);
+
+                    dropdownlist.DataTextField = "name";
+                    dropdownlist.DataValueField = "trading_partner_id";
+                    dropdownlist.DataSource = tradingPartners;
+                    dropdownlist.DataBind();
+                }
             }
         }
 
