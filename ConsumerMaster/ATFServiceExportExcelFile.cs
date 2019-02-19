@@ -6,10 +6,15 @@ using System.Windows.Media;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Globalization;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using System.IO;
-
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Kernel.Font;
+using iText.Layout.Element;
+using iText.IO.Font;
+using iText.Kernel.Geom;
+using iText.Layout.Properties;
+using iText.IO.Util;
 
 namespace ConsumerMaster
 {
@@ -130,8 +135,7 @@ namespace ConsumerMaster
 
                 CreatePDF(workTable, outFileName);
 
-
-
+                TableToPDF(workTable, outFileName);
 
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
@@ -314,22 +318,85 @@ namespace ConsumerMaster
 
         public void CreatePDF(DataTable dataTable, string destinationPath)
         {
-            //Initialize writer
-            PdfWriter writer = new PdfWriter(dest);
+            PdfDocument pdf = new PdfDocument(new PdfWriter(destinationPath));
+            Document document = new Document(pdf);
+            
+            PdfFont font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.TIMES_ROMAN);
+            PdfFont bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.TIMES_BOLD);
+            Text title = new Text("The Strange Case of Dr. Jekyll and Mr. Hyde").SetFont(bold);
+            Text author = new Text("Robert Louis Stevenson").SetFont(font);
+            Paragraph p1 = new Paragraph().Add(title).Add(" by ").Add(author);
+            document.Add(p1);
 
-            //Initialize document
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            Document doc = new Document(pdfDoc);
-
-            //Add paragraph to the document
-            doc.add(new Paragraph("Hello World!"));
-
-            //Close document
-            doc.close();
+            Text title1 = new Text("The Strange Case of ").SetFontSize(12);
+            Text title2 = new Text("Dr. Jekyll and Mr. Hyde").SetFontSize(16);
+            //Text author = new Text("Robert Louis Stevenson");
+            Paragraph p2 = new Paragraph().SetFontSize(8).Add(title1).Add(title2).Add(" by ").Add(author);
+            document.Add(p2);
+            document.Close();
         }
 
+        public void TableToPDF(DataTable dTable, string destinationPath)
+        {
+            var writer = new PdfWriter(destinationPath);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf, PageSize.A4.Rotate());
+            document.SetMargins(20, 20, 20, 20);
+            var font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA);
+            var bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
+            var table = new Table(new float[] { 4, 1, 3, 4, 3, 3, 3, 3 });
+            table.SetWidth(UnitValue.CreatePercentValue(100));
+
+            table.AddHeaderCell(new Cell().Add(new Paragraph("FullName").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Ratio1").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Units1").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Pct1").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Ratio2").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Units2").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Pct2").SetFont(font)));
+            table.AddHeaderCell(new Cell().Add(new Paragraph("Total").SetFont(font)));
+
+            foreach (DataRow dr in dTable.Rows)
+            {
+                table.AddCell(new Cell().Add(new Paragraph(dr["FullName"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Ratio1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Units1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Pct1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Ratio2"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Units2"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Pct2"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Total"].ToString()).SetFont(font)));
+            }
 
 
+            //StreamReader sr = File.OpenText(DATA);
+            //var line = sr.readLine();
+            //process(table, line, bold, true);
+            //while ((line = sr.readLine()) != null)
+            //{
+            //    process(table, line, font, false);
+            //}
+            //sr.Close();
+
+            document.Add(table);
+            document.Close();
+        }
+
+        public void ProcessDataTable(Table table, String line, PdfFont font, bool isHeader)
+        {
+            var tokenizer = new StringTokenizer(line, ";");
+            while (tokenizer.HasMoreTokens())
+            {
+                if (isHeader)
+                {
+                    table.AddHeaderCell(new Cell().Add(new Paragraph(tokenizer.NextToken()).SetFont(font)));
+                }
+                else
+                {
+                    table.AddCell(new Cell().Add(new Paragraph(tokenizer.NextToken()).SetFont(font)));
+                }
+            }
+        }
         //public void CreatePDF(DataTable dataTable, string destinationPath)
         //{
         //    Document document = new Document();
