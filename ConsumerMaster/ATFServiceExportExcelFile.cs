@@ -108,12 +108,13 @@ namespace ConsumerMaster
                 DataTable workTable = new DataTable("Consumers");
                 DataColumn workCol = workTable.Columns.Add("FullName", typeof(String));
                 workTable.Columns.Add("Ratio1", typeof(String));
-                workTable.Columns.Add("Units1", typeof(Int32));
-                workTable.Columns.Add("Pct1", typeof(Double));
                 workTable.Columns.Add("Ratio2", typeof(String));
+                workTable.Columns.Add("Units1", typeof(Int32));
                 workTable.Columns.Add("Units2", typeof(Int32));
-                workTable.Columns.Add("Pct2", typeof(Double));
                 workTable.Columns.Add("Total", typeof(Int32));
+                workTable.Columns.Add("Pct1", typeof(Double));
+                workTable.Columns.Add("Pct2", typeof(Double));
+
                 workTable.Columns["Total"].Expression = "Units1 + Units2";
                 workTable.Columns["Pct1"].Expression = "IIF(Total=0, 0, (Units1 / Total) * 100)";
                 workTable.Columns["Pct2"].Expression = "IIF(Total=0, 0, (Units2 / Total) * 100)";
@@ -121,11 +122,10 @@ namespace ConsumerMaster
                 foreach (DataRow dRow in seDataTable.Rows)
                 {
                     var row = workTable.NewRow();
-
                     row["FullName"] = dRow["FullName"];
                     row["Ratio1"] = dRow["Ratio1"];
-                    row["Units1"] = dRow["Units1"];
                     row["Ratio2"] = dRow["Ratio2"];
+                    row["Units1"] = dRow["Units1"] ?? "0";
                     row["Units2"] = dRow["Units2"] ?? "0";
 
                     workTable.Rows.Add(row);
@@ -344,39 +344,29 @@ namespace ConsumerMaster
             document.SetMargins(20, 20, 20, 20);
             var font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA);
             var bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
-            var table = new Table(new float[] { 4, 1, 3, 4, 3, 3, 3, 3 });
+            var table = new Table(new float[] { 4, 1, 3, 3, 3, 3, 3, 3 });
             table.SetWidth(UnitValue.CreatePercentValue(100));
 
-            table.AddHeaderCell(new Cell().Add(new Paragraph("FullName").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Ratio1").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Units1").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Pct1").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Ratio2").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Units2").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Pct2").SetFont(font)));
-            table.AddHeaderCell(new Cell().Add(new Paragraph("Total").SetFont(font)));
+            foreach (DataColumn column in dTable.Columns)
+            {
+                table.AddHeaderCell(new Cell().Add(new Paragraph(column.ColumnName).SetFont(font)));
+            }
 
             foreach (DataRow dr in dTable.Rows)
             {
                 table.AddCell(new Cell().Add(new Paragraph(dr["FullName"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Ratio1"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Units1"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Pct1"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Ratio2"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Units1"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Units2"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Pct2"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Total"].ToString()).SetFont(font)));
+
+                //double percent1 = (double)dr["Pct1"];
+                //string pct1 = string.Format("{0:f2}", percent1);
+                //table.AddCell(new Cell().Add(new Paragraph(pct1).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Pct1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Pct2"].ToString()).SetFont(font)));
             }
-
-
-            //StreamReader sr = File.OpenText(DATA);
-            //var line = sr.readLine();
-            //process(table, line, bold, true);
-            //while ((line = sr.readLine()) != null)
-            //{
-            //    process(table, line, font, false);
-            //}
-            //sr.Close();
 
             document.Add(table);
             document.Close();
