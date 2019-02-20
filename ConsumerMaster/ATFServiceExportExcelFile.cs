@@ -105,28 +105,55 @@ namespace ConsumerMaster
                     }
                 }
 
+                RemoveNulls(seDataTable);
+
                 DataTable workTable = new DataTable("Consumers");
                 DataColumn workCol = workTable.Columns.Add("FullName", typeof(String));
                 workTable.Columns.Add("Ratio1", typeof(String));
                 workTable.Columns.Add("Ratio2", typeof(String));
-                workTable.Columns.Add("Units1", typeof(Int32));
-                workTable.Columns.Add("Units2", typeof(Int32));
-                workTable.Columns.Add("Total", typeof(Int32));
-                workTable.Columns.Add("Pct1", typeof(Double));
-                workTable.Columns.Add("Pct2", typeof(Double));
+                workTable.Columns.Add("Units1", typeof(int));
+                workTable.Columns.Add("Units2", typeof(int));
+                workTable.Columns.Add("Total", typeof(int));
+                workTable.Columns.Add("Pct1", typeof(String));
+                workTable.Columns.Add("Pct2", typeof(String));
 
-                workTable.Columns["Total"].Expression = "Units1 + Units2";
-                workTable.Columns["Pct1"].Expression = "IIF(Total=0, 0, (Units1 / Total) * 100)";
-                workTable.Columns["Pct2"].Expression = "IIF(Total=0, 0, (Units2 / Total) * 100)";
+                //workTable.Columns["Total"].Expression = "Units1 + Units2";
+                //workTable.Columns["Pct1"].Expression = "IIF(Total=0, 0, (Units1 / Total) * 100)";
+                //workTable.Columns["Pct2"].Expression = "IIF(Total=0, 0, (Units2 / Total) * 100)";
 
-                foreach (DataRow dRow in seDataTable.Rows)
-                {
+                foreach(DataRow dRow in seDataTable.Rows)
+                { 
                     var row = workTable.NewRow();
-                    row["FullName"] = dRow["FullName"];
-                    row["Ratio1"] = dRow["Ratio1"];
-                    row["Ratio2"] = dRow["Ratio2"];
-                    row["Units1"] = dRow["Units1"] ?? "0";
-                    row["Units2"] = dRow["Units2"] ?? "0";
+
+                    row["FullName"] = dRow["FullName"].ToString();
+                    row["Ratio1"] = dRow["Ratio1"].ToString();
+                    row["Ratio2"] = dRow["Ratio2"].ToString();
+                    row["Units1"] = dRow["Units1"];
+                    row["Units2"] = dRow["Units2"]; 
+
+                    int units1 = (dRow["Units1"] as int?) ?? 0;
+                    int units2 = (dRow["Units2"] as int?) ?? 0;
+                    int total = units1 + units2;
+                    row["Total"] = total;
+
+                    if (units1 != total)
+                    {
+                        int testme = units1;
+                    }
+
+                    double pct1 = 0;
+                    double pct2 = 0;
+
+                    if(total != 0)
+                    {
+                        pct1 = (units1 / total) * 100;
+                        pct2 = (units2 / total) * 100;
+                    }
+
+                    string percentage1 = string.Format("{0:P2}", pct1);
+                    string percentage2 = string.Format("{0:P2}", pct2);
+                    row["Pct1"] = percentage1;
+                    row["Pct2"] = percentage2;
 
                     workTable.Rows.Add(row);
                 }
@@ -360,10 +387,6 @@ namespace ConsumerMaster
                 table.AddCell(new Cell().Add(new Paragraph(dr["Units1"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Units2"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Total"].ToString()).SetFont(font)));
-
-                //double percent1 = (double)dr["Pct1"];
-                //string pct1 = string.Format("{0:f2}", percent1);
-                //table.AddCell(new Cell().Add(new Paragraph(pct1).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Pct1"].ToString()).SetFont(font)));
                 table.AddCell(new Cell().Add(new Paragraph(dr["Pct2"].ToString()).SetFont(font)));
             }
@@ -386,6 +409,31 @@ namespace ConsumerMaster
                     table.AddCell(new Cell().Add(new Paragraph(tokenizer.NextToken()).SetFont(font)));
                 }
             }
+        }
+
+
+
+        public static DataTable RemoveNulls(DataTable dt)
+        {
+            for (int a = 0; a < dt.Rows.Count; a++)
+            {
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    if (dt.Rows[a][i] == DBNull.Value)
+                    {
+                        if(dt.Columns[i].DataType.Name.Equals("String"))
+                        {
+                            dt.Rows[a][i] = "";
+                        }
+                        else if (dt.Columns[i].DataType.Name.Equals("Int32"))
+                        {
+                            dt.Rows[a][i] = 0;
+                        }
+                    }
+                }
+            }
+
+            return dt;
         }
         //public void CreatePDF(DataTable dataTable, string destinationPath)
         //{
