@@ -87,7 +87,16 @@
                 <p>
                     <asp:Label runat="server" ID="Label1" />
                 </p>
-            </div>           
+            </div>   
+
+            <div class="demo-container size-thin">
+                <h3>ATF Service Export</h3>
+                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                   OnClick="ATFServiceExportDownload_Click" runat="server" />
+                <p>
+                    <asp:Label runat="server" ID="Label4" />
+                </p>
+            </div>              
         </div>
     </div><br/><br/>
     

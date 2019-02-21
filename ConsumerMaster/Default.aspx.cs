@@ -32,8 +32,8 @@ namespace ConsumerMaster
 
                 string connection = builder.ConnectionString;
 
-                ATFServiceExportExcelFile atf = new ATFServiceExportExcelFile();
-                atf.ATFCreateWorkbook();
+                //ATFServiceExportExcelFile atf = new ATFServiceExportExcelFile();
+                //atf.ATFCreateWorkbook();
 
 
                 BindToTPDropDownList(TPRadDropDownList);
@@ -165,6 +165,22 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+        protected void ATFServiceExportDownload_Click(object sender, EventArgs e)
+        {
+            const string filename = @"ATFServiceExport.xlsx";
+            try
+            {
+                ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
+                Workbook workbook = serviceExport.ATFCreateWorkbook();
+                DownloadExcelFile(workbook, filename);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
 
         internal class ConsumerDataItem
         {
