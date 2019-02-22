@@ -34,9 +34,7 @@ namespace ConsumerMaster
         private static readonly int IndexColumnBillingNote = 20;
 
         private static readonly int IndexRowItemStart = 0;
-
         private static readonly int IndexColumnName = 0;
-
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
         Dictionary<int, string> ceHeader = new Dictionary<int, string>

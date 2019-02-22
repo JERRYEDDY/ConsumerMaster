@@ -38,12 +38,6 @@
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
-                    <telerik:GridBoundColumn DataField="rendering_provider_name" HeaderText="rendering_provider_name" SortExpression="rendering_provider_name" UniqueName="rendering_provider_name">
-                        <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_name is required"></RequiredFieldValidator>
-                            <ModelErrorMessage BackColor="Red" />
-                        </ColumnValidationSettings>
-                    </telerik:GridBoundColumn>
                     <telerik:GridBoundColumn DataField="rendering_provider_first_name" HeaderText="rendering_provider_first_name" SortExpression="rendering_provider_first_name" UniqueName="rendering_provider_first_name">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_first_name is required"></RequiredFieldValidator>
@@ -56,6 +50,12 @@
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn DataField="rendering_provider_name" HeaderText="rendering_provider_name" SortExpression="rendering_provider_name" UniqueName="rendering_provider_name" ReadOnly="True">
+                        <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_name is required"></RequiredFieldValidator>
+                            <ModelErrorMessage BackColor="Red" />
+                        </ColumnValidationSettings>
+                    </telerik:GridBoundColumn>
                     <telerik:GridButtonColumn ConfirmText="Delete this Therapist record?" Text="Delete" CommandName="Delete" />
                 </Columns>    
             </MasterTableView>
@@ -65,22 +65,22 @@
         ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
         DeleteCommand="DELETE FROM Therapists WHERE id = @id"
         InsertCommand="INSERT INTO Therapists (rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name) 
-        VALUES (@rendering_provider_id, @rendering_provider_name, @rendering_provider_first_name, @rendering_provider_last_name)"
+        VALUES (@rendering_provider_id, @rendering_provider_first_name, @rendering_provider_last_name)"
         SelectCommand="SELECT * FROM Therapists" 
-        UpdateCommand="UPDATE Therapists SET rendering_provider_id = @rendering_provider_id, rendering_provider_name = @rendering_provider_name, rendering_provider_first_name = @rendering_provider_first_name, 
+        UpdateCommand="UPDATE Therapists SET rendering_provider_id = @rendering_provider_id, rendering_provider_first_name = @rendering_provider_first_name, 
         rendering_provider_last_name = @rendering_provider_last_name WHERE id = @id">
         <DeleteParameters>
             <asp:Parameter Name="id " Type="Int32"></asp:Parameter>
         </DeleteParameters>
         <InsertParameters>
             <asp:Parameter Name="rendering_provider_id" Type="String"></asp:Parameter>
-            <asp:Parameter Name="rendering_provider_name" Type="String"></asp:Parameter>
+<%--            <asp:Parameter Name="rendering_provider_name" Type="String"></asp:Parameter>--%>
             <asp:Parameter Name="rendering_provider_first_name" Type="String"></asp:Parameter>
             <asp:Parameter Name="rendering_provider_last_name" Type="String"></asp:Parameter>
         </InsertParameters>
         <UpdateParameters>
             <asp:Parameter Name="rendering_provider_id" Type="String"></asp:Parameter>
-            <asp:Parameter Name="rendering_provider_name" Type="String"></asp:Parameter>
+<%--            <asp:Parameter Name="rendering_provider_name" Type="String"></asp:Parameter>--%>
             <asp:Parameter Name="rendering_provider_first_name" Type="String"></asp:Parameter>
             <asp:Parameter Name="rendering_provider_last_name" Type="String"></asp:Parameter>
         </UpdateParameters>

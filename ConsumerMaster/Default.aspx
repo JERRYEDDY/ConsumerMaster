@@ -91,6 +91,7 @@
 
             <div class="demo-container size-thin">
                 <h3>ATF Service Export</h3>
+                <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
                                    OnClick="ATFServiceExportDownload_Click" runat="server" />
                 <p>

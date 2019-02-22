@@ -1,27 +1,32 @@
 ﻿using System;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
     public partial class Therapists : Page
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
+
         protected void RadGrid1_ItemUpdated(object source, GridUpdatedEventArgs e)
         {
             if (e.Exception != null)
             {
                 e.KeepInEditMode = true;
                 e.ExceptionHandled = true;
-                DisplayMessage(true, "Therapist " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["id"] + " cannot be updated. Reason: " + e.Exception.Message);
+                DisplayMessage("Therapist " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Error("Therapist " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Error(e);
             }
             else
             {
-                DisplayMessage(false, "Therapist " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["id"] + " updated");
+                DisplayMessage("Therapist " + e.Item["id"].Text + " updated");
+                Logger.Info("Therapist " + e.Item["id"].Text + " updated");
             }
         }
 
@@ -31,11 +36,14 @@ namespace ConsumerMaster
             {
                 e.ExceptionHandled = true;
                 e.KeepInInsertMode = true;
-                DisplayMessage(true, "Therapist cannot be inserted. Reason: " + e.Exception.Message);
+                DisplayMessage("Therapist " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
+                Logger.Error("Therapist " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
             }
             else
             {
-                DisplayMessage(false, "Therapist inserted");
+                DisplayMessage("Therapist " + e.Item["id"].Text + " inserted");
+                Logger.Info("Therapist " + e.Item["id"].Text + " inserted");
+                Logger.Error(e);
             }
         }
 
@@ -44,18 +52,20 @@ namespace ConsumerMaster
             if (e.Exception != null)
             {
                 e.ExceptionHandled = true;
-                DisplayMessage(true, "Therapist " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["id"] + " cannot be deleted. Reason: " + e.Exception.Message);
+                DisplayMessage("Therapist " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                Logger.Info("Therapist " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                Logger.Error(e);
             }
             else
             {
-                DisplayMessage(false, "Therapist " + e.Item.OwnerTableView.DataKeyValues[e.Item.ItemIndex]["id"] + " deleted");
+                DisplayMessage("Therapist " + e.Item["id"].Text + " deleted");
+                Logger.Info("Therapist " + e.Item["id"].Text + " deleted");
             }
         }
 
-        private void DisplayMessage(bool isError, string text)
+        private void DisplayMessage(string text)
         {
-            Label label = (isError) ? this.Label1 : this.Label2;
-            label.Text = text;
+            RadGrid1.Controls.Add(new LiteralControl(string.Format("<span style='color:red'>{0}</span>", text)));
         }
     }
 }

@@ -21,13 +21,6 @@ namespace ConsumerMaster
                 RadGrid1.SelectedIndexes.Add(0);
                 RadGrid2.SelectedIndexes.Add(0);
             }
-            //if (RadGrid1.SelectedIndexes.Count == 0)
-            //    RadGrid1.SelectedIndexes.Add(0);
-            //if (RadGrid2.SelectedIndexes.Count == 0)
-            //{
-            //    RadGrid2.Rebind();
-            //    RadGrid2.SelectedIndexes.Add(0);
-            //}
         }
 
         protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
