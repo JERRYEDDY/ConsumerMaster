@@ -37,6 +37,7 @@ namespace ConsumerMaster
 
 
                 BindToTPDropDownList(TPRadDropDownList);
+                BindToATFTPDropDownList(ATFTPRadDropDownList);
             }
         }
 
@@ -151,6 +152,29 @@ namespace ConsumerMaster
             }
         }
 
+        private void BindToATFTPDropDownList(RadDropDownList dropdownlist)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            {
+                con.Open();
+                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
+                {
+                    DataTable tradingPartners = new DataTable();
+                    adapter.Fill(tradingPartners);
+
+                    //DataRow dr = tradingPartners.NewRow();
+                    //dr["trading_partner_id"] = "0";
+                    //dr["name"] = "ALL TRADING PARTNERS";
+                    //tradingPartners.Rows.InsertAt(dr, 0);
+
+                    dropdownlist.DataTextField = "name";
+                    dropdownlist.DataValueField = "trading_partner_id";
+                    dropdownlist.DataSource = tradingPartners;
+                    dropdownlist.DataBind();
+                }
+            }
+        }
+
         protected void EIServiceExportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"EIServiceExport.xlsx";
@@ -171,8 +195,10 @@ namespace ConsumerMaster
             const string filename = @"ATFServiceExport.xlsx";
             try
             {
+                string selectedValue = ATFTPRadDropDownList.SelectedValue;
+
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
-                Workbook workbook = serviceExport.ATFCreateWorkbook();
+                Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);
                 DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Consumers.aspx.cs" Inherits="ConsumerMaster.Consumers" %>
+﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Consumers2.aspx.cs" Inherits="ConsumerMaster.Consumers2" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
@@ -191,7 +191,7 @@
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource2" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
                      AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" 
                      OnInsertCommand="RadGrid2_InsertCommand" AllowFilteringByColumn="false" >
-            <MasterTableView Width="100%" Name="TradingPartners" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top">
+            <MasterTableView Width="100%" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
                         <HeaderStyle Width="20px"></HeaderStyle>

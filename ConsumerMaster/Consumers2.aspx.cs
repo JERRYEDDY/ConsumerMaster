@@ -4,7 +4,7 @@ using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
-    public partial class Consumers : Page
+    public partial class Consumers2 : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private const string ConsumersTable = "Consumers";
@@ -49,19 +49,16 @@ namespace ConsumerMaster
 
         protected void RadGrid1_ItemUpdated(object source, GridUpdatedEventArgs e)
         {
-            string item = getItemName(e.Item.OwnerTableView.Name);
-            string field = getFieldName(e.Item.OwnerTableView.Name);
-
             if (e.Exception != null)
             {
                 e.ExceptionHandled = true;
-                DisplayMessage("Consumer " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
-                Logger.Error("Consumer " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                DisplayMessage("Consumer " + e.Item["consumer_internal_number"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Error("Consumer " + e.Item["consumer_internal_number"].Text + " cannot be updated. Reason: " + e.Exception.Message);
             }
             else
             {
-                DisplayMessage("Consumer " + e.Item[field].Text + " updated");
-                Logger.Info("Consumer " + e.Item[field].Text + " updated");
+                DisplayMessage("Consumer " + e.Item["consumer_internal_number"].Text + " updated");
+                Logger.Info("Consumer " + e.Item["consumer_internal_number"].Text + " updated");
             }
         }
 
@@ -98,46 +95,6 @@ namespace ConsumerMaster
             //        }
             //        break;
             //}
-        }
-
-        private String getItemName(string tableName)
-        {
-            switch (tableName)
-            {
-                case ("Consumers"):
-                    {
-                        return "Consumer";
-                    }
-                case ("TradingPartners"):
-                    {
-                        return "TradingPartner";
-                    }
-                //case ("Details"):
-                //    {
-                //        return "Details for order";
-                //    }
-                default: return "";
-            }
-        }
-
-        private String getFieldName(string tableName)
-        {
-            switch (tableName)
-            {
-                case ("Consumers"):
-                    {
-                        return "consumer_internal_number";
-                    }
-                case ("TradingPartners"):
-                    {
-                        return "trading_partner_id";
-                    }
-                //case ("Details"):
-                //    {
-                //        return "OrderID";
-                //    }
-                default: return "";
-            }
         }
 
         protected void RadGrid2_ItemCreated(object sender, GridItemEventArgs e)

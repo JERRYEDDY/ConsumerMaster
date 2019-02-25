@@ -198,6 +198,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Consumers2.aspx" />
     <Content Include="Consumers.aspx" />
     <Content Include="ATFBillingEntry.aspx" />
     <Content Include="About.aspx" />
@@ -298,6 +299,13 @@
   <ItemGroup>
     <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
+    <Compile Include="Consumers2.aspx.cs">
+      <DependentUpon>Consumers2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Consumers2.aspx.designer.cs">
+      <DependentUpon>Consumers2.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Consumers.aspx.cs">
       <DependentUpon>Consumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

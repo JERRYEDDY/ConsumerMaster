@@ -91,7 +91,7 @@
 
             <div class="demo-container size-thin">
                 <h3>ATF Service Export</h3>
-                <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
+                <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFTPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
                                    OnClick="ATFServiceExportDownload_Click" runat="server" />
                 <p>
@@ -102,6 +102,7 @@
     </div><br/><br/>
     
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone"></telerik:RadFormDecorator>
+
 
     <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
     <asp:SqlDataSource ID="CompProcCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>

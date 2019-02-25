@@ -66,7 +66,7 @@ namespace ConsumerMaster
         //    {18, "rendering_provider_last_name"}
         //};
 
-        public Workbook ATFCreateWorkbook()
+        public Workbook ATFCreateWorkbook(string tradingPartnerID)
         {
             Workbook workbook = new Workbook();
 
@@ -93,7 +93,7 @@ namespace ConsumerMaster
                     "' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, " +
                     "' ' AS rendering_provider_id, ' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
                     "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
-                    "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 3 ORDER BY consumer_last";
+                    "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = " + tradingPartnerID + " ORDER BY consumer_last";
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
                 int totalConsumers = seDataTable.Rows.Count;
