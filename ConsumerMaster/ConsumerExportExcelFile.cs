@@ -53,7 +53,10 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, cef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
                     worksheet.Cells[currentRow, cef.GetKey("date_of_birth")].SetValue(dr["date_of_birth"].ToString());
                     worksheet.Cells[currentRow, cef.GetKey("address_line_1")].SetValue(dr["address_line_1"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("address_line_2")].SetValue(dr["address_line_2"].ToString());
+
+                    string addressLine2 = dr["address_line_2"] == null ? String.Empty : dr["address_line_2"].ToString(); 
+                    worksheet.Cells[currentRow, cef.GetKey("address_line_2")].SetValue(addressLine2);
+
                     worksheet.Cells[currentRow, cef.GetKey("city")].SetValue(dr["city"].ToString());
                     worksheet.Cells[currentRow, cef.GetKey("state")].SetValue(dr["state"].ToString());
                     worksheet.Cells[currentRow, cef.GetKey("zip_code")].SetValue(dr["zip_code"].ToString());

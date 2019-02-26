@@ -71,14 +71,14 @@
                     <asp:Label runat="server" ID="Label2" />
                 </p>
             </div>
-            <div class="demo-container size-thin">
+<%--            <div class="demo-container size-thin">
                 <h3>Consumer Export</h3>
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
                                    OnClick="ConsumerExportDownload_Click" runat="server" />
                 <p>
                     <asp:Label runat="server" ID="Label3" />
                 </p>
-            </div>
+            </div>--%>
             
             <div class="demo-container size-thin">
                 <h3>EI Service Export</h3>
@@ -90,13 +90,42 @@
             </div>   
 
             <div class="demo-container size-thin">
-                <h3>ATF Service Export</h3>
+<%--                <h3>ATF Service Export</h3>
                 <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFTPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                   OnClick="ATFServiceExportDownload_Click" runat="server" />
+                                   OnClick="ATFServiceExportDownload_Click" runat="server" />--%>
                 <p>
                     <asp:Label runat="server" ID="Label4" />
                 </p>
+
+                <table>
+                    <tr>
+                        <td>
+                            <img src="Images/ATFLogo1.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Consumer Export File 
+                        </td>
+                        <td class="space"/>
+                        <td>
+<%--                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                               OnClick="AWCConsumerExportDownload_Click" runat="server" />--%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Service Export File 
+                        </td>
+                        <td class="space"/>
+                        <td>
+                            <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFTPRadDropDownList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
+                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton7" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                                               OnClick="ATFServiceExportDownload_Click" runat="server" />
+                        </td>
+                    </tr>
+                </table>
             </div>              
         </div>
     </div><br/><br/>

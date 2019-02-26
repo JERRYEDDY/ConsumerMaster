@@ -32,10 +32,6 @@ namespace ConsumerMaster
 
                 string connection = builder.ConnectionString;
 
-                //ATFServiceExportExcelFile atf = new ATFServiceExportExcelFile();
-                //atf.ATFCreateWorkbook();
-
-
                 BindToTPDropDownList(TPRadDropDownList);
                 BindToATFTPDropDownList(ATFTPRadDropDownList);
             }
@@ -108,10 +104,6 @@ namespace ConsumerMaster
             }
         }
 
-        /// <summary>
-        /// ////////////////////////////////////////////////////////////////////////////
-        ///
-
         protected void ConsumerExportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"ConsumerExport.xlsx";
@@ -126,52 +118,6 @@ namespace ConsumerMaster
             catch (Exception ex)
             {
                 Logger.Error(ex);
-            }
-        }
-
-        private void BindToTPDropDownList(RadDropDownList dropdownlist)
-        {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-            {
-                con.Open();
-                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners",con))
-                {
-                    DataTable tradingPartners = new DataTable();
-                    adapter.Fill(tradingPartners);
-
-                    DataRow dr = tradingPartners.NewRow();
-                    dr["trading_partner_id"] = "0";
-                    dr["name"] = "ALL TRADING PARTNERS";
-                    tradingPartners.Rows.InsertAt(dr, 0);
-
-                    dropdownlist.DataTextField = "name";
-                    dropdownlist.DataValueField = "trading_partner_id";
-                    dropdownlist.DataSource = tradingPartners;
-                    dropdownlist.DataBind();
-                }
-            }
-        }
-
-        private void BindToATFTPDropDownList(RadDropDownList dropdownlist)
-        {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-            {
-                con.Open();
-                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
-                {
-                    DataTable tradingPartners = new DataTable();
-                    adapter.Fill(tradingPartners);
-
-                    //DataRow dr = tradingPartners.NewRow();
-                    //dr["trading_partner_id"] = "0";
-                    //dr["name"] = "ALL TRADING PARTNERS";
-                    //tradingPartners.Rows.InsertAt(dr, 0);
-
-                    dropdownlist.DataTextField = "name";
-                    dropdownlist.DataValueField = "trading_partner_id";
-                    dropdownlist.DataSource = tradingPartners;
-                    dropdownlist.DataBind();
-                }
             }
         }
 
@@ -207,52 +153,92 @@ namespace ConsumerMaster
             }
         }
 
-
-        internal class ConsumerDataItem
+        private void BindToTPDropDownList(RadDropDownList dropdownlist)
         {
-            private string text;
-            private int id;
-            private int parentId;
-
-            public string Text
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
-                get { return text; }
-                set { text = value; }
-            }
+                con.Open();
+                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners", con))
+                {
+                    DataTable tradingPartners = new DataTable();
+                    adapter.Fill(tradingPartners);
 
+                    DataRow dr = tradingPartners.NewRow();
+                    dr["trading_partner_id"] = "0";
+                    dr["name"] = "ALL TRADING PARTNERS";
+                    tradingPartners.Rows.InsertAt(dr, 0);
 
-            public int ID
-            {
-                get { return id; }
-                set { id = value; }
-            }
-
-            public int ParentID
-            {
-                get { return parentId; }
-                set { parentId = value; }
-            }
-
-            public ConsumerDataItem(int id, int parentId, string text)
-            {
-                this.id = id;
-                this.parentId = parentId;
-                this.text = text;
+                    dropdownlist.DataTextField = "name";
+                    dropdownlist.DataValueField = "trading_partner_id";
+                    dropdownlist.DataSource = tradingPartners;
+                    dropdownlist.DataBind();
+                }
             }
         }
 
-        public int IsInRange(double percentage)
+        private void BindToATFTPDropDownList(RadDropDownList dropdownlist)
         {
-            if (percentage >= 0.00 && percentage <= 25.00)
-                return 1;
-            else if (percentage >= 25.01 && percentage <= 50.00)
-                return 2;
-            else if (percentage >= 50.01 && percentage <= 75.00)
-                return 3;
-            else if (percentage >= 75.01 && percentage <= 100.00)
-                return 4;
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            {
+                con.Open();
+                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
+                {
+                    DataTable tradingPartners = new DataTable();
+                    adapter.Fill(tradingPartners);
 
-            return 0;
+                    dropdownlist.DataTextField = "name";
+                    dropdownlist.DataValueField = "trading_partner_id";
+                    dropdownlist.DataSource = tradingPartners;
+                    dropdownlist.DataBind();
+                }
+            }
         }
+
+        //internal class ConsumerDataItem
+        //{
+        //    private string text;
+        //    private int id;
+        //    private int parentId;
+
+        //    public string Text
+        //    {
+        //        get { return text; }
+        //        set { text = value; }
+        //    }
+
+
+        //    public int ID
+        //    {
+        //        get { return id; }
+        //        set { id = value; }
+        //    }
+
+        //    public int ParentID
+        //    {
+        //        get { return parentId; }
+        //        set { parentId = value; }
+        //    }
+
+        //    public ConsumerDataItem(int id, int parentId, string text)
+        //    {
+        //        this.id = id;
+        //        this.parentId = parentId;
+        //        this.text = text;
+        //    }
+        //}
+
+        //public int IsInRange(double percentage)
+        //{
+        //    if (percentage >= 0.00 && percentage <= 25.00)
+        //        return 1;
+        //    else if (percentage >= 25.01 && percentage <= 50.00)
+        //        return 2;
+        //    else if (percentage >= 50.01 && percentage <= 75.00)
+        //        return 3;
+        //    else if (percentage >= 75.01 && percentage <= 100.00)
+        //        return 4;
+
+        //    return 0;
+        //}
     }
 }
