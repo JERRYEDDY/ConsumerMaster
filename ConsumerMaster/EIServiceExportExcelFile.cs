@@ -28,7 +28,7 @@ namespace ConsumerMaster
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
                 Utility util = new Utility();
 
-                EIServiceExportFormat esef = new EIServiceExportFormat();
+                ServiceExportFormat sef = new ServiceExportFormat();
                 string inFileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.tsv";
                 var inEngine = new FileHelperEngine<EIBillingTransactions>();
                 var inResult = inEngine.ReadFile(inFileName);
@@ -78,18 +78,18 @@ namespace ConsumerMaster
                 int totalConsumers = seDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
 
-                string[] columnsList = esef.GetColumns();
+                //string[] columnsList = esef.GetColumns();
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, esef.GetKey("consumer_internal_number")];
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
+                    CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")];
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
                     string tradingPartnerProgram = " ";
                     switch (dr["FundingSource"])
@@ -107,25 +107,25 @@ namespace ConsumerMaster
                             break;
 
                     }
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("trading_partner_program_string")].SetValue(tradingPartnerProgram);
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_program_string")].SetValue(tradingPartnerProgram);
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("start_date_string")].SetValue(dr["bill_date"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("start_date_string")].SetValue(dr["bill_date"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("end_date_string")].SetValue(dr["bill_date"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("end_date_string")].SetValue(dr["bill_date"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("units")].SetValue(dr["units"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("units")].SetValue(dr["units"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("manual_billable_rate")].SetValue(" ");         //"manual_billable_rate"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("prior_authorization_number")].SetValue(" ");   //"prior_authorization_number"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("referral_number")].SetValue(" ");              //"referral_number"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("referring_provider_id")].SetValue(" ");         //"referring_provider_id"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("referring_provider_first_name")].SetValue(" ");  //"referring_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("referring_provider_last_name")].SetValue(" ");   //"referring_provider_last_name"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());         //"rendering_provider_id"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());  //"rendering_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());   //"rendering_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("manual_billable_rate")].SetValue(" ");                                                            //"manual_billable_rate"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("prior_authorization_number")].SetValue(" ");                                                      //"prior_authorization_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referral_number")].SetValue(" ");                                                                 //"referral_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_id")].SetValue(" ");                                                           //"referring_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_first_name")].SetValue(" ");                                                   //"referring_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_last_name")].SetValue(" ");                                                    //"referring_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                        //"rendering_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());        //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());          //"rendering_provider_last_name"
 
                     string billingNote = " ";
                     switch (dr["County"])
@@ -150,7 +150,8 @@ namespace ConsumerMaster
                             billingNote = "CC11050 - WESTMORELAND";
                             break;
                     }
-                    sheet1Worksheet.Cells[currentRow, esef.GetKey("billing_note")].SetValue(billingNote);   //"billing_note"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("billing_note")].SetValue(billingNote);                                                            //"billing_note"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_secondary_id")].SetValue(dr["rendering_provider_secondary_id"].ToString());    //"rendering_provider_secondary_id"
 
                     currentRow++;
                 }
@@ -192,20 +193,20 @@ namespace ConsumerMaster
             {
                 int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
-                EIServiceExportFormat esef = new EIServiceExportFormat();
-                string[] columnsList = esef.GetColumns();
+                ServiceExportFormat sef = new ServiceExportFormat();
+                string[] columnsList = sef.GetColumns();
 
                 CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, esef.GetKey("consumer_first"));
-                CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, esef.GetKey("rendering_provider_last_name"));
+                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("consumer_first"));
+                CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("rendering_provider_last_name"));
                 CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
                 foreach (string column in columnsList)
                 {
-                    int columnKey = Array.IndexOf(columnsList, column.ToString());
-                    string columnName = column.ToString();
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
 
                     worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
                     worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);

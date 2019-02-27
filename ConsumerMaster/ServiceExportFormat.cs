@@ -27,6 +27,14 @@ namespace ConsumerMaster
         public string rendering_provider_first_name { get; set; }
         public string rendering_provider_last_name { get; set; }
         public string billing_note { get; set; }
+        public string rendering_provider_secondary_id { get; set; }
+
+
+        public ServiceExportFormat()
+        {
+
+
+        }
 
         public string[] GetColumns()
         {

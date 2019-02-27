@@ -78,6 +78,7 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 5");  //Agency With Choice = 5
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
+                ServiceExportFormat sef = new ServiceExportFormat();
 
                 string seQuery =
                     "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, " +
@@ -95,21 +96,21 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerFirst].SetValue(dr["consumer_first"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerLast].SetValue(dr["consumer_last"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber].SetValue(dr["consumer_internal_number"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
                     CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnDiagnosisCode1Code].SetValue(dr["diagnosis_code_1_code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerString].SetValue(dr["trading_partner_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnTradingPartnerProgramString].SetValue(dr["trading_partner_program_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_program_string")].SetValue(dr["trading_partner_program_string"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnStartDateString].SetValue(dr["start_date_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnEndDateString].SetValue(dr["end_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("start_date_string")].SetValue(dr["start_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("end_date_string")].SetValue(dr["end_date_string"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnCompositeProcedureCodeString].SetValue(dr["composite_procedure_code_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
                     CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
                     ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex);
                     context.InputMessageTitle = "Restricted input";
@@ -129,15 +130,17 @@ namespace ConsumerMaster
                     string convertToUnits = "=ROUNDDOWN(J" + (currentRow + 1) + "*4, 0)";
                     sheet1Worksheet.Cells[currentRow, IndexColumnUnits].SetValue(convertToUnits);
 
-                    sheet1Worksheet.Cells[currentRow, IndexColumnManualBillableRate].SetValue(dr["manual_billable_rate"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnPriorAuthorizationNumber].SetValue(dr["prior_authorization_number"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferralNumber].SetValue(dr["referral_number"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderId].SetValue(dr["referring_provider_id"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderFirstName].SetValue(dr["referring_provider_first_name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnReferringProviderLastName].SetValue(dr["referring_provider_last_name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderId].SetValue(dr["rendering_provider_id"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderFirstName].SetValue(dr["rendering_provider_first_name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, IndexColumnRenderingProviderLastName].SetValue(dr["rendering_provider_last_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referral_number")].SetValue(dr["referral_number"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_id")].SetValue(dr["referring_provider_id"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("billing_note")].SetValue(dr["billing_note"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_secondary_id")].SetValue(dr["rendering_provider_secondary_id"].ToString());
 
                     currentRow++;
                 }

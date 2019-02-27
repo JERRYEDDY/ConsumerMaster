@@ -108,7 +108,7 @@
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFConsumerList" runat="server"  Width="350px" DefaultMessage="Select Partner" 
                                 ValidationGroup="ATFConsumerValidationGroup" />
                             <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="ATFConsumerValidationGroup" 
-                                OnClick="AWCConsumerExportDownload_Click" runat="server" />
+                                OnClick="ATFConsumerExportDownload_Click" runat="server" />
                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="ATFConsumerList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFConsumerValidationGroup" />
                         </td>
                     </tr>

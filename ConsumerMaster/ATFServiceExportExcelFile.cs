@@ -19,52 +19,9 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //private static readonly int IndexColumnConsumerFirst = 0;
-        //private static readonly int IndexColumnConsumerLast = 1;
-        //private static readonly int IndexColumnConsumerInternalNumber = 2;
-        //private static readonly int IndexColumnTradingPartnerString = 3;
-        //private static readonly int IndexColumnTradingPartnerProgramString = 4;
-        //private static readonly int IndexColumnStartDateString = 5;
-        //private static readonly int IndexColumnEndDateString = 6;
-        //private static readonly int IndexColumnDiagnosisCode1Code = 7;
-        //private static readonly int IndexColumnCompositeProcedureCodeString = 8;
-        //private static readonly int IndexColumnUnits = 9;
-        //private static readonly int IndexColumnManualBillableRate = 10;
-        //private static readonly int IndexColumnPriorAuthorizationNumber = 11;
-        //private static readonly int IndexColumnReferralNumber = 12;
-        //private static readonly int IndexColumnReferringProviderId = 13;
-        //private static readonly int IndexColumnReferringProviderFirstName = 14;
-        //private static readonly int IndexColumnReferringProviderLastName = 15;
-        //private static readonly int IndexColumnRenderingProviderId = 16;
-        //private static readonly int IndexColumnRenderingProviderFirstName = 17;
-        //private static readonly int IndexColumnRenderingProviderLastName = 18;
-
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-
-        //Dictionary<int, string> ceHeader = new Dictionary<int, string>
-        //{
-        //    {0, "consumer_first"},
-        //    {1, "consumer_last"},
-        //    {2, "consumer_internal_number"},
-        //    {3, "trading_partner_string"},
-        //    {4, "trading_partner_program_string"},
-        //    {5, "start_date_string"},
-        //    {6, "end_date_string"},
-        //    {7, "diagnosis_code_1_code"},
-        //    {8, "composite_procedure_code_string"},
-        //    {9, "units"},
-        //    {10, "manual_billable_rate"},
-        //    {11, "prior_authorization_number"},
-        //    {12, "referral_number"},
-        //    {13, "referring_provider_id"},
-        //    {14, "referring_provider_first_name"},
-        //    {15, "referring_provider_last_name"},
-        //    {16, "rendering_provider_id"},
-        //    {17, "rendering_provider_first_name"},
-        //    {18, "rendering_provider_last_name"}
-        //};
 
         public Workbook ATFCreateWorkbook(string tradingPartnerID)
         {
@@ -109,7 +66,6 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
-                    //string tradingPartnerProgramString = "waiver";
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_program_string")].SetValue(dr["trading_partner_program_string"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("start_date_string")].SetValue(dr["start_date_string"].ToString());
@@ -134,15 +90,17 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("units")].SetValue(dr["units"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());                      //"manual_billable_rate"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());          //"prior_authorization_number"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referral_number")].SetValue(dr["referral_number"].ToString());                                //"referral_number"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_id")].SetValue(dr["referring_provider_id"].ToString());                    //"referring_provider_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());    //"referring_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());      //"referring_provider_last_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                    //"rendering_provider_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());    //"rendering_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());      //"rendering_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());                          //"manual_billable_rate"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());              //"prior_authorization_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referral_number")].SetValue(dr["referral_number"].ToString());                                    //"referral_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_id")].SetValue(dr["referring_provider_id"].ToString());                        //"referring_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());        //"referring_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());          //"referring_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                        //"rendering_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());        //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());          //"rendering_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("billing_note")].SetValue(" ");                                                                    //"billing_note"
+                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_secondary_id")].SetValue(" ");                                                 //"rendering_provider_secondary_id"
 
                     currentRow++;
                 }
