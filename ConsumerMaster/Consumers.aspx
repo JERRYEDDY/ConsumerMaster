@@ -25,7 +25,7 @@
         <h5><strong>CONSUMERS:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource1" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
                          AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" 
-                         OnInsertCommand="RadGrid1_InsertCommand" AllowFilteringByColumn="true" >
+                         AllowFilteringByColumn="true" >
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
@@ -190,7 +190,7 @@
         <h5><strong>TRADING PARTNER:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource2" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
                      AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" 
-                     OnInsertCommand="RadGrid2_InsertCommand" AllowFilteringByColumn="false" >
+                     AllowFilteringByColumn="false" >
             <MasterTableView Width="100%" Name="TradingPartners" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
@@ -267,12 +267,9 @@
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
         DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
-        InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last) 
-        VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
+        InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last) VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
         SelectCommand="SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last" 
-        UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, address_line_2 = @address_line_2, 
-            city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, 
-            nickname_first = @nickname_first, nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
+        UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, address_line_2 = @address_line_2, city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, nickname_first = @nickname_first, nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
         <DeleteParameters>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </DeleteParameters>
@@ -323,10 +320,10 @@
         </DeleteParameters>
         <InsertParameters>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-            <asp:Parameter Name="partner_program_id" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
         </InsertParameters>
         <UpdateParameters>
-            <asp:Parameter Name="partner_program_id" Type="Int32"></asp:Parameter>
+            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </UpdateParameters>
     </asp:SqlDataSource> 

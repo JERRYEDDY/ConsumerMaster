@@ -7,8 +7,6 @@ namespace ConsumerMaster
     public partial class Consumers : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private const string ConsumersTable = "Consumers";
-        private const string TradingPartnersTable = "TradingPartners";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -19,14 +17,6 @@ namespace ConsumerMaster
             if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
             RadGrid1.SelectedIndexes.Add(0);
             RadGrid2.SelectedIndexes.Add(0);
-        }
-
-        protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
-        {
-            if (e.Item is GridEditableItem && e.Item.IsInEditMode)
-            {
-
-            }
         }
 
         protected void RadGrid1_ItemInserted(object source, GridInsertedEventArgs e)
@@ -75,73 +65,39 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadGrid1_InsertCommand(object source, GridCommandEventArgs e)
-        {
-            //GridEditableItem editedItem = e.Item as GridEditableItem;
-            //switch (e.Item.OwnerTableView.Name)
-            //{
-            //    case ConsumersTable:
-            //        {
-            //            //GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-            //            //SqlDataSource1.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
-            //        }
-            //        break;
-            //    case TradingPartnersTable:
-            //        {
-            //            GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-            //            SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
-            //        }
-            //        break;
-            //}
-        }
+        //private string GetItemName(string tableName)
+        //{
+        //    switch (tableName)
+        //    {
+        //        case ("Consumers"):
+        //            {
+        //                return "Consumer";
+        //            }
+        //        case ("TradingPartners"):
+        //            {
+        //                return "TradingPartner";
+        //            }
+        //        default: return "";
+        //    }
+        //}
 
-        private string GetItemName(string tableName)
-        {
-            switch (tableName)
-            {
-                case ("Consumers"):
-                    {
-                        return "Consumer";
-                    }
-                case ("TradingPartners"):
-                    {
-                        return "TradingPartner";
-                    }
-                //case ("Details"):
-                //    {
-                //        return "Details for order";
-                //    }
-                default: return "";
-            }
-        }
+        //private string getFieldName(string tableName)
+        //{
+        //    switch (tableName)
+        //    {
+        //        case ("Consumers"):
+        //            {
+        //                return "consumer_internal_number";
+        //            }
+        //        case ("TradingPartners"):
+        //            {
+        //                return "trading_partner_id";
+        //            }
+        //        default: return "";
+        //    }
+        //}
 
-        private string getFieldName(string tableName)
-        {
-            switch (tableName)
-            {
-                case ("Consumers"):
-                    {
-                        return "consumer_internal_number";
-                    }
-                case ("TradingPartners"):
-                    {
-                        return "trading_partner_id";
-                    }
-                //case ("Details"):
-                //    {
-                //        return "OrderID";
-                //    }
-                default: return "";
-            }
-        }
-
-        protected void RadGrid2_ItemCreated(object sender, GridItemEventArgs e)
-        {
-            if (e.Item is GridEditableItem && e.Item.IsInEditMode)
-            {
-
-            }
-        }
+/***********RADGRID2******************************************************************************************************************************/
 
         protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)
         {
@@ -186,25 +142,6 @@ namespace ConsumerMaster
                 DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " deleted");
                 Logger.Info(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " deleted");
             }
-        }
-
-        protected void RadGrid2_InsertCommand(object source, GridCommandEventArgs e)
-        {
-            //switch (e.Item.OwnerTableView.Name)
-            //{
-            //    case ConsumersTable:
-            //        {
-            //            //GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-            //            //SqlDataSource1.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
-            //        }
-            //        break;
-            //    case TradingPartnersTable:
-            //        {
-            //            GridDataItem parentItem = (GridDataItem)e.Item.OwnerTableView.ParentItem;
-            //            SqlDataSource2.InsertParameters["consumer_internal_number"].DefaultValue = parentItem.OwnerTableView.DataKeyValues[parentItem.ItemIndex]["consumer_internal_number"].ToString();
-            //        }
-            //        break;
-            //}
         }
 
         private void DisplayMessage(string text)

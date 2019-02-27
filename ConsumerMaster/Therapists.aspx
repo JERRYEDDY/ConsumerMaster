@@ -64,23 +64,19 @@
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
         DeleteCommand="DELETE FROM Therapists WHERE id = @id"
-        InsertCommand="INSERT INTO Therapists (rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name) 
-        VALUES (@rendering_provider_id, @rendering_provider_first_name, @rendering_provider_last_name)"
+        InsertCommand="INSERT INTO Therapists (rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name) VALUES (@rendering_provider_id, @rendering_provider_first_name, @rendering_provider_last_name)"
         SelectCommand="SELECT * FROM Therapists" 
-        UpdateCommand="UPDATE Therapists SET rendering_provider_id = @rendering_provider_id, rendering_provider_first_name = @rendering_provider_first_name, 
-        rendering_provider_last_name = @rendering_provider_last_name WHERE id = @id">
+        UpdateCommand="UPDATE Therapists SET rendering_provider_id = @rendering_provider_id, rendering_provider_first_name = @rendering_provider_first_name, rendering_provider_last_name = @rendering_provider_last_name WHERE id = @id">
         <DeleteParameters>
             <asp:Parameter Name="id " Type="Int32"></asp:Parameter>
         </DeleteParameters>
         <InsertParameters>
             <asp:Parameter Name="rendering_provider_id" Type="String"></asp:Parameter>
-<%--            <asp:Parameter Name="rendering_provider_name" Type="String"></asp:Parameter>--%>
             <asp:Parameter Name="rendering_provider_first_name" Type="String"></asp:Parameter>
             <asp:Parameter Name="rendering_provider_last_name" Type="String"></asp:Parameter>
         </InsertParameters>
         <UpdateParameters>
             <asp:Parameter Name="rendering_provider_id" Type="String"></asp:Parameter>
-<%--            <asp:Parameter Name="rendering_provider_name" Type="String"></asp:Parameter>--%>
             <asp:Parameter Name="rendering_provider_first_name" Type="String"></asp:Parameter>
             <asp:Parameter Name="rendering_provider_last_name" Type="String"></asp:Parameter>
         </UpdateParameters>

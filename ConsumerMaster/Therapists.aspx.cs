@@ -17,8 +17,8 @@ namespace ConsumerMaster
         {
             if (e.Exception != null)
             {
-                e.KeepInEditMode = true;
                 e.ExceptionHandled = true;
+                e.KeepInEditMode = true;
                 DisplayMessage("Therapist " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
                 Logger.Error("Therapist " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
                 Logger.Error(e);
@@ -65,7 +65,7 @@ namespace ConsumerMaster
 
         private void DisplayMessage(string text)
         {
-            RadGrid1.Controls.Add(new LiteralControl(string.Format("<span style='color:red'>{0}</span>", text)));
+            RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
     }
 }
