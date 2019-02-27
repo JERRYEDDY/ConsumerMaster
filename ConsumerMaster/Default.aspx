@@ -65,8 +65,7 @@
                 <h4>Consumer Export File</h4>
                 <telerik:RadDropDownList RenderMode="Lightweight" ID="TPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="TPValidationGroup" OnClick="ConsumerExportDownload_Click" runat="server" />
-                <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="TPRadDropDownList" Display="Dynamic" 
-                        ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="TPValidationGroup" />
+                <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="TPRadDropDownList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="TPValidationGroup" />
                 <p>
                     <asp:Label runat="server" ID="Label2" />
                 </p>
@@ -90,10 +89,6 @@
             </div>   
 
             <div class="demo-container size-thin">
-<%--                <h3>ATF Service Export</h3>
-                <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFTPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
-                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                   OnClick="ATFServiceExportDownload_Click" runat="server" />--%>
                 <p>
                     <asp:Label runat="server" ID="Label4" />
                 </p>
@@ -110,8 +105,11 @@
                         </td>
                         <td class="space"/>
                         <td>
-<%--                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                               OnClick="AWCConsumerExportDownload_Click" runat="server" />--%>
+                            <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFConsumerList" runat="server"  Width="350px" DefaultMessage="Select Partner" 
+                                ValidationGroup="ATFConsumerValidationGroup" />
+                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="ATFConsumerValidationGroup" 
+                                OnClick="AWCConsumerExportDownload_Click" runat="server" />
+                           <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="ATFConsumerList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFConsumerValidationGroup" />
                         </td>
                     </tr>
                     <tr>
@@ -120,9 +118,11 @@
                         </td>
                         <td class="space"/>
                         <td>
-                            <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFTPRadDropDownList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="TPValidationGroup" />
-                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton7" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
+                            <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFServiceList" runat="server"  Width="350px" DefaultMessage="Select Partner" 
+                                ValidationGroup="ATFServiceValidationGroup" />
+                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton7" CssClass="downloadButton" ValidationGroup="ATFServiceValidationGroup" 
                                                OnClick="ATFServiceExportDownload_Click" runat="server" />
+                           <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator2" ControlToValidate="ATFServiceList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFServiceValidationGroup" />
                         </td>
                     </tr>
                 </table>

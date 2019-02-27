@@ -33,7 +33,9 @@ namespace ConsumerMaster
                 string connection = builder.ConnectionString;
 
                 BindToTPDropDownList(TPRadDropDownList);
-                BindToATFTPDropDownList(ATFTPRadDropDownList);
+                BindToATFTPDropDownList(ATFConsumerList);
+                BindToATFTPDropDownList(ATFServiceList);
+
             }
         }
 
@@ -136,12 +138,29 @@ namespace ConsumerMaster
             }
         }
 
+        protected void ATFConsumerExportDownload_Click(object sender, EventArgs e)
+        {
+            const string filename = @"ATFConsumerExport.xlsx";
+            try
+            {
+                string selectedValue = ATFConsumerList.SelectedValue;
+
+                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
+                DownloadExcelFile(workbook, filename);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
         protected void ATFServiceExportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"ATFServiceExport.xlsx";
             try
             {
-                string selectedValue = ATFTPRadDropDownList.SelectedValue;
+                string selectedValue = ATFServiceList.SelectedValue;
 
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
                 Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);

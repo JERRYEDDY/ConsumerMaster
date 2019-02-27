@@ -16,11 +16,9 @@ namespace ConsumerMaster
         }
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (RadGrid1.SelectedIndexes.Count == 0 && RadGrid2.SelectedIndexes.Count == 0)
-            {
-                RadGrid1.SelectedIndexes.Add(0);
-                RadGrid2.SelectedIndexes.Add(0);
-            }
+            if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
+            RadGrid1.SelectedIndexes.Add(0);
+            RadGrid2.SelectedIndexes.Add(0);
         }
 
         protected void RadGrid1_ItemCreated(object sender, GridItemEventArgs e)
@@ -49,19 +47,16 @@ namespace ConsumerMaster
 
         protected void RadGrid1_ItemUpdated(object source, GridUpdatedEventArgs e)
         {
-            string item = getItemName(e.Item.OwnerTableView.Name);
-            string field = getFieldName(e.Item.OwnerTableView.Name);
-
             if (e.Exception != null)
             {
                 e.ExceptionHandled = true;
-                DisplayMessage("Consumer " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
-                Logger.Error("Consumer " + e.Item[field].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                DisplayMessage("Consumer " + e.Item["consumer_internal_number"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                Logger.Error("Consumer " + e.Item["consumer_internal_number"].Text + " cannot be updated. Reason: " + e.Exception.Message);
             }
             else
             {
-                DisplayMessage("Consumer " + e.Item[field].Text + " updated");
-                Logger.Info("Consumer " + e.Item[field].Text + " updated");
+                DisplayMessage("Consumer " + e.Item["consumer_internal_number"].Text + " updated");
+                Logger.Info("Consumer " + e.Item["consumer_internal_number"].Text + " updated");
             }
         }
 
@@ -82,7 +77,7 @@ namespace ConsumerMaster
 
         protected void RadGrid1_InsertCommand(object source, GridCommandEventArgs e)
         {
-            GridEditableItem editedItem = e.Item as GridEditableItem;
+            //GridEditableItem editedItem = e.Item as GridEditableItem;
             //switch (e.Item.OwnerTableView.Name)
             //{
             //    case ConsumersTable:
@@ -100,7 +95,7 @@ namespace ConsumerMaster
             //}
         }
 
-        private String getItemName(string tableName)
+        private string GetItemName(string tableName)
         {
             switch (tableName)
             {
@@ -120,7 +115,7 @@ namespace ConsumerMaster
             }
         }
 
-        private String getFieldName(string tableName)
+        private string getFieldName(string tableName)
         {
             switch (tableName)
             {
@@ -214,7 +209,7 @@ namespace ConsumerMaster
 
         private void DisplayMessage(string text)
         {
-            RadGrid1.Controls.Add(new LiteralControl(string.Format("<span style='color:red'>{0}</span>", text)));
+            RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
     }
 }
