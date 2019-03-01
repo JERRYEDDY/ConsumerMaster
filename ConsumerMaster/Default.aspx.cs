@@ -24,6 +24,12 @@ namespace ConsumerMaster
             {
                 Logger.Info("ConsumerMaster started");
 
+                ServiceExportFormat sef = new ServiceExportFormat();
+                string[] list = sef.GetColumns();
+
+                ServiceExportFormat sef1 = new ServiceExportFormat(true);
+                string[] list1 = sef1.GetColumns();
+
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
                 builder.DataSource = "consumermaster.database.windows.net";
                 builder.UserID = "CSAdmin";
