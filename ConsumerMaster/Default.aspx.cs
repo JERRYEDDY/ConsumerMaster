@@ -15,8 +15,8 @@ namespace ConsumerMaster
     public partial class _Default : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private const string ConsumersTable = "Consumers";
-        private const string TradingPartnersTable = "TradingPartners";
+        //private const string ConsumersTable = "Consumers";
+        //private const string TradingPartnersTable = "TradingPartners";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,27 +30,28 @@ namespace ConsumerMaster
                 ServiceExportFormat sef1 = new ServiceExportFormat(true);
                 string[] list1 = sef1.GetColumns();
 
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                builder.DataSource = "consumermaster.database.windows.net";
-                builder.UserID = "CSAdmin";
-                builder.Password = "MyCSDB2918";
-                builder.InitialCatalog = "consumermaster";
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = "consumermaster.database.windows.net",
+                    UserID = "CSAdmin",
+                    Password = "MyCSDB2918",
+                    InitialCatalog = "consumermaster"
+                };
 
                 string connection = builder.ConnectionString;
 
                 BindToTPDropDownList(TPRadDropDownList);
                 BindToATFTPDropDownList(ATFConsumerList);
                 BindToATFTPDropDownList(ATFServiceList);
-
             }
         }
 
         private void BindToDataTable()        
         {
-            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder();
-            csb.DataSource = @"ITLOGIC1\UCPDB";
-            csb.InitialCatalog = "ATFIS";
-            csb.IntegratedSecurity = true;
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder
+            {
+                DataSource = @"ITLOGIC1\UCPDB", InitialCatalog = "ATFIS", IntegratedSecurity = true
+            };
             string connString = csb.ToString();
         }
 
@@ -59,7 +60,7 @@ namespace ConsumerMaster
             try
             {
                 IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-                byte[] renderedBytes = null;
+                byte[] renderedBytes;
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -178,6 +179,23 @@ namespace ConsumerMaster
             }
         }
 
+        protected void ATFConsumerRatioReportDownload_Click(object sender, EventArgs e)
+        {
+            const string filename = @"ATFServiceExport.xlsx";
+            try
+            {
+                string selectedValue = ATFServiceList.SelectedValue;
+
+                ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
+                Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);
+                DownloadExcelFile(workbook, filename);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
         private void BindToTPDropDownList(RadDropDownList dropdownlist)
         {
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
@@ -218,52 +236,5 @@ namespace ConsumerMaster
                 }
             }
         }
-
-        //internal class ConsumerDataItem
-        //{
-        //    private string text;
-        //    private int id;
-        //    private int parentId;
-
-        //    public string Text
-        //    {
-        //        get { return text; }
-        //        set { text = value; }
-        //    }
-
-
-        //    public int ID
-        //    {
-        //        get { return id; }
-        //        set { id = value; }
-        //    }
-
-        //    public int ParentID
-        //    {
-        //        get { return parentId; }
-        //        set { parentId = value; }
-        //    }
-
-        //    public ConsumerDataItem(int id, int parentId, string text)
-        //    {
-        //        this.id = id;
-        //        this.parentId = parentId;
-        //        this.text = text;
-        //    }
-        //}
-
-        //public int IsInRange(double percentage)
-        //{
-        //    if (percentage >= 0.00 && percentage <= 25.00)
-        //        return 1;
-        //    else if (percentage >= 25.01 && percentage <= 50.00)
-        //        return 2;
-        //    else if (percentage >= 50.01 && percentage <= 75.00)
-        //        return 3;
-        //    else if (percentage >= 75.01 && percentage <= 100.00)
-        //        return 4;
-
-        //    return 0;
-        //}
     }
 }

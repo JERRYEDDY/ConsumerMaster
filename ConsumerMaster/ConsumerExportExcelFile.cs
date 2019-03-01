@@ -13,7 +13,7 @@ namespace ConsumerMaster
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
 
-        public Workbook CreateWorkbook(string tradingPartnerID)
+        public Workbook CreateWorkbook(string tradingPartnerId)
         {
             Workbook workbook = new Workbook();
 
@@ -28,9 +28,9 @@ namespace ConsumerMaster
                                  "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
                                  "INNER JOIN TradingPartners AS tp ON ctp.trading_partner_id = tp.id";
 
-                if(!String.Equals(tradingPartnerID,"0"))
+                if(!String.Equals(tradingPartnerId,"0"))
                 {
-                    ceQuery += " WHERE ctp.trading_partner_id = " + tradingPartnerID;
+                    ceQuery += " WHERE ctp.trading_partner_id = " + tradingPartnerId;
                 }
 
                 ceQuery += " ORDER BY consumer_last";
@@ -46,7 +46,7 @@ namespace ConsumerMaster
                 foreach (DataRow dr in ceDataTable.Rows)
                 {
                     worksheet.Cells[currentRow, cef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, cef.GetKey("consumer_internal_number")];
+                    //CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, cef.GetKey("consumer_internal_number")];
 
                     worksheet.Cells[currentRow, cef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
                     worksheet.Cells[currentRow, cef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
@@ -86,21 +86,21 @@ namespace ConsumerMaster
         {
             try
             {
-                int lastItemIndexRow = IndexRowItemStart + itemsCount;
+                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
                 ConsumerExportFormat cef = new ConsumerExportFormat();
                 string[] columnsList = cef.GetColumns();
 
-                CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, cef.GetKey("consumer_first"));
-                CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1,cef.GetKey("gender"));
-                CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
+                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+                //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, cef.GetKey("consumer_first"));
+                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1,cef.GetKey("gender"));
+                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
 
                 foreach (string column in columnsList)
                 {
-                    int columnKey = Array.IndexOf(columnsList, column.ToString());
-                    string columnName = column.ToString();
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
 
                     worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
                     worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);

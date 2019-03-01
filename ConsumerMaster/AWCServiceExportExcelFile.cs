@@ -35,9 +35,9 @@ namespace ConsumerMaster
 
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
-        private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
+        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
-        Dictionary<int, string> ceHeader = new Dictionary<int, string>
+        readonly Dictionary<int, string> _ceHeader = new Dictionary<int, string>
         {
             {0, "consumer_first"},
             {1, "consumer_last"},
@@ -100,7 +100,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
+                    //CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
@@ -112,13 +112,16 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
                     CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, IndexColumnCompositeProcedureCodeString);
-                    ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex);
-                    context.InputMessageTitle = "Restricted input";
-                    context.InputMessageContent = "The input is restricted to the composite procedure codes.";
-                    context.ErrorStyle = ErrorStyle.Stop;
-                    context.ErrorAlertTitle = "Wrong value";
-                    context.ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!";
-                    context.InCellDropdown = true;
+                    ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex)
+                    {
+                        InputMessageTitle = "Restricted input",
+                        InputMessageContent = "The input is restricted to the composite procedure codes.",
+                        ErrorStyle = ErrorStyle.Stop,
+                        ErrorAlertTitle = "Wrong value",
+                        ErrorAlertContent =
+                            "The entered value is not valid. Allowed values are the composite procedure codes!",
+                        InCellDropdown = true
+                    };
 
                     string cpcRange = "=Sheet2!$A$2:$A$" + cpcList.Count + 1;  //= Sheet2!$A$2:$A$73
                     context.Argument1 = cpcRange; //   
@@ -180,79 +183,80 @@ namespace ConsumerMaster
         {
             try
             {
-                int lastItemIndexRow = IndexRowItemStart + itemsCount;
+                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
-                CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                CellIndex firstRowLastCellIndex = new CellIndex(0, 22);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerFirst);
-                CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnRenderingProviderLastName);
-                CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
+                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+                //CellIndex firstRowLastCellIndex = new CellIndex(0, 22);
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerFirst);
+                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnRenderingProviderLastName);
+                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
+
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255,255,0,0), Colors.Transparent);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetValue(ceHeader[IndexColumnConsumerFirst]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetValue(_ceHeader[IndexColumnConsumerFirst]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetFill(solidPatternFill);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetValue(ceHeader[IndexColumnConsumerLast]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetValue(_ceHeader[IndexColumnConsumerLast]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetFill(solidPatternFill);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(ceHeader[IndexColumnConsumerInternalNumber]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(_ceHeader[IndexColumnConsumerInternalNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetValue(ceHeader[IndexColumnDiagnosisCode1Code]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetValue(_ceHeader[IndexColumnDiagnosisCode1Code]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(ceHeader[IndexColumnTradingPartnerString]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(_ceHeader[IndexColumnTradingPartnerString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerProgramString].SetValue(ceHeader[IndexColumnTradingPartnerProgramString]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerProgramString].SetValue(_ceHeader[IndexColumnTradingPartnerProgramString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerProgramString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnStartDateString].SetValue(ceHeader[IndexColumnStartDateString]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnStartDateString].SetValue(_ceHeader[IndexColumnStartDateString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnStartDateString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetValue(ceHeader[IndexColumnEndDateString]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetValue(_ceHeader[IndexColumnEndDateString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetValue(ceHeader[IndexColumnCompositeProcedureCodeString]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetValue(_ceHeader[IndexColumnCompositeProcedureCodeString]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetValue(ceHeader[IndexColumnHours]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetValue(_ceHeader[IndexColumnHours]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetFill(solidPatternFill);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(ceHeader[IndexColumnUnits]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(_ceHeader[IndexColumnUnits]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(ceHeader[IndexColumnManualBillableRate]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(_ceHeader[IndexColumnManualBillableRate]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(ceHeader[IndexColumnPriorAuthorizationNumber]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(_ceHeader[IndexColumnPriorAuthorizationNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(ceHeader[IndexColumnReferralNumber]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(_ceHeader[IndexColumnReferralNumber]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(ceHeader[IndexColumnReferringProviderId]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(_ceHeader[IndexColumnReferringProviderId]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(ceHeader[IndexColumnReferringProviderFirstName]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(_ceHeader[IndexColumnReferringProviderFirstName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(ceHeader[IndexColumnReferringProviderLastName]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(_ceHeader[IndexColumnReferringProviderLastName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(ceHeader[IndexColumnRenderingProviderId]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(_ceHeader[IndexColumnRenderingProviderId]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(ceHeader[IndexColumnRenderingProviderFirstName]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(_ceHeader[IndexColumnRenderingProviderFirstName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(ceHeader[IndexColumnRenderingProviderLastName]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(_ceHeader[IndexColumnRenderingProviderLastName]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
 
-                worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetValue(ceHeader[IndexColumnBillingNote]);
+                worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetValue(_ceHeader[IndexColumnBillingNote]);
                 worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
             catch (Exception ex)
@@ -265,11 +269,11 @@ namespace ConsumerMaster
         {
             try
             {
-                int lastItemIndexRow = IndexRowItemStart + itemsCount;
+                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
-                CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
+                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+                //CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
 
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);

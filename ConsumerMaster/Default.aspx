@@ -92,7 +92,6 @@
                 <p>
                     <asp:Label runat="server" ID="Label4" />
                 </p>
-
                 <table>
                     <tr>
                         <td>
@@ -126,13 +125,36 @@
                         </td>
                     </tr>
                 </table>
-            </div>              
+              
+            </div>    
+            <div class="demo-container size-thin">
+                <p>
+                    <asp:Label runat="server" ID="Label3" />
+                </p>     
+                <table>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Consumer Ratio 
+                        </td>
+                        <td></td>
+                        <td class="space"/>
+                        <td>
+                            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" runat="server" DateInput-Label="From: " />
+                            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker2" runat="server" DateInput-Label="To: " />
+                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="ATFConsumerValidationGroup" 
+                                               OnClick="ATFConsumerExportDownload_Click" runat="server" />
+                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator4" ControlToValidate="ATFConsumerList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFConsumerValidationGroup" />
+                        </td>
+                    </tr>
+                </table>                
+            </div>
         </div>
     </div><br/><br/>
     
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone"></telerik:RadFormDecorator>
-
-
     <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
     <asp:SqlDataSource ID="CompProcCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>
 

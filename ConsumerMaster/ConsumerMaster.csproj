@@ -293,6 +293,7 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATFConsumerRatioReport.cs" />
     <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
     <Compile Include="Consumers.aspx.cs">

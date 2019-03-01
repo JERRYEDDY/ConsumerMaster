@@ -87,7 +87,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")];
+                    //CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")];
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
@@ -191,16 +191,17 @@ namespace ConsumerMaster
         {
             try
             {
-                int lastItemIndexRow = IndexRowItemStart + itemsCount;
+                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
                 ServiceExportFormat sef = new ServiceExportFormat();
                 string[] columnsList = sef.GetColumns();
 
-                CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("consumer_first"));
-                CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("rendering_provider_last_name"));
-                CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
+                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+                //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("consumer_first"));
+                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("rendering_provider_last_name"));
+                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
+
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
                 foreach (string column in columnsList)
@@ -227,11 +228,11 @@ namespace ConsumerMaster
         {
             try
             {
-                int lastItemIndexRow = IndexRowItemStart + itemsCount;
+                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
-                CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
-                CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
+                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
+                //CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
 
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
