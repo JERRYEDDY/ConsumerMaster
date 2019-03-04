@@ -11,7 +11,7 @@ using iText.Layout.Properties;
 
 namespace ConsumerMaster
 {
-    public class ATFConsumerRatioReport
+    public class ATFRatioReport
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -21,6 +21,7 @@ namespace ConsumerMaster
             DateTime endtDate = new DateTime(2019, 2, 22);
 
             string outFileName = @"C:\Billing Software\ATF\ATFConsumerRatio.pdf";
+
             DataTable reportDataTable = GetAttendanceData(startDate, endtDate);
 
             TableToPdf(reportDataTable,outFileName);
@@ -89,7 +90,7 @@ namespace ConsumerMaster
             document.SetMargins(20, 20, 20, 20);
             var font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA);
             var bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
-            var table = new Table(new float[] { 4, 1, 3, 3, 3, 3, 3, 3 });
+            var table = new Table(new float[] { 4, 1, 2, 2, 2, 2, 2, 2 });
             table.SetWidth(UnitValue.CreatePercentValue(100));
 
             foreach (DataColumn column in dTable.Columns)

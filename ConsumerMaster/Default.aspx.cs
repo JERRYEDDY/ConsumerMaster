@@ -43,6 +43,7 @@ namespace ConsumerMaster
                 BindToTPDropDownList(TPRadDropDownList);
                 BindToATFTPDropDownList(ATFConsumerList);
                 BindToATFTPDropDownList(ATFServiceList);
+
             }
         }
 
@@ -170,22 +171,6 @@ namespace ConsumerMaster
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
                 Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);
                 DownloadExcelFile(workbook, filename);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        protected void ATFConsumerRatioReportDownload_Click(object sender, EventArgs e)
-        {
-            const string filename = @"ATFServiceExport.xlsx";
-            try
-            {
-                string selectedValue = ATFServiceList.SelectedValue;
-                ATFConsumerRatioReport ratioReport = new ATFConsumerRatioReport();
-                ratioReport.CreateReport();
-                //DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
