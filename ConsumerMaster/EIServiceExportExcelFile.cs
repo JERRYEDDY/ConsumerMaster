@@ -15,7 +15,7 @@ namespace ConsumerMaster
 
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
-        private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
+        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
         public Workbook EICreateWorkbook()
         {
@@ -76,7 +76,7 @@ namespace ConsumerMaster
                 }
 
                 int totalConsumers = seDataTable.Rows.Count;
-                PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
+                PrepareSheet1Worksheet(sheet1Worksheet);
 
                 //string[] columnsList = esef.GetColumns();
 
@@ -108,13 +108,9 @@ namespace ConsumerMaster
 
                     }
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_program_string")].SetValue(tradingPartnerProgram);
-
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("start_date_string")].SetValue(dr["bill_date"].ToString());
-
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("end_date_string")].SetValue(dr["bill_date"].ToString());
-
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
-
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("units")].SetValue(dr["units"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetKey("manual_billable_rate")].SetValue(" ");                                                            //"manual_billable_rate"
@@ -172,7 +168,7 @@ namespace ConsumerMaster
         {
             try
             {
-                PrepareSheet2Worksheet(worksheet, cpcList.Count);
+                PrepareSheet2Worksheet(worksheet);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (String cpCode in cpcList)
@@ -187,14 +183,14 @@ namespace ConsumerMaster
             }
         }
 
-        private void PrepareSheet1Worksheet(Worksheet worksheet, int itemsCount)
+        private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
             try
             {
                 //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
                 ServiceExportFormat sef = new ServiceExportFormat();
-                string[] columnsList = sef.GetColumns();
+                string[] columnsList = sef.ColumnStrings;
 
                 //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
@@ -224,7 +220,7 @@ namespace ConsumerMaster
             }
         }
 
-        private void PrepareSheet2Worksheet(Worksheet worksheet, int itemsCount)
+        private void PrepareSheet2Worksheet(Worksheet worksheet)
         {
             try
             {

@@ -144,9 +144,9 @@
                         <td>
                             <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" runat="server" DateInput-Label="From: " />
                             <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker2" runat="server" DateInput-Label="To: " />
-                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="ATFConsumerValidationGroup" 
-                                               OnClick="ATFConsumerExportDownload_Click" runat="server" />
-                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator4" ControlToValidate="ATFConsumerList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFConsumerValidationGroup" />
+                            <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="ATFConsumerReportGroup" 
+                                               OnClick="ATFConsumerRatioReportDownload_Click" runat="server" />
+<%--                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator4" ControlToValidate="ATFConsumerList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFConsumerValidationGroup" />--%>
                         </td>
                     </tr>
                 </table>                

@@ -32,31 +32,34 @@ namespace ConsumerMaster
             {10, new ServiceExportColumn {Include=true,Name="units"} },
             {11, new ServiceExportColumn {Include=true,Name="manual_billable_rate"} },
             {12, new ServiceExportColumn {Include=true,Name="prior_authorization_number"} },
-            {13, new ServiceExportColumn {Include=true,Name="referring_provider_id"} },
-            {14, new ServiceExportColumn {Include=true,Name="referring_provider_first_name"} },
-            {15, new ServiceExportColumn {Include=true,Name="referring_provider_last_name"} },
-            {16, new ServiceExportColumn {Include=true,Name="rendering_provider_id"} },
-            {17, new ServiceExportColumn {Include=true,Name="rendering_provider_first_name"} },
-            {18, new ServiceExportColumn {Include=true,Name="rendering_provider_last_name"} },
-            {19, new ServiceExportColumn {Include=true,Name="billing_note"} },
-            {20, new ServiceExportColumn {Include=true,Name="rendering_provider_secondary_id"} },
+            {13, new ServiceExportColumn {Include=true,Name="referral_number"} },
+            {14, new ServiceExportColumn {Include=true,Name="referring_provider_id"} },
+            {15, new ServiceExportColumn {Include=true,Name="referring_provider_first_name"} },
+            {16, new ServiceExportColumn {Include=true,Name="referring_provider_last_name"} },
+            {17, new ServiceExportColumn {Include=true,Name="rendering_provider_id"} },
+            {18, new ServiceExportColumn {Include=true,Name="rendering_provider_first_name"} },
+            {19, new ServiceExportColumn {Include=true,Name="rendering_provider_last_name"} },
+            {20, new ServiceExportColumn {Include=true,Name="billing_note"} },
+            {21, new ServiceExportColumn {Include=true,Name="rendering_provider_secondary_id"} },
         };
 
-        readonly StringCollection _cols = new StringCollection();
+        public string[] ColumnStrings;
         private readonly bool _includeHours = false;
 
         public ServiceExportFormat()
         {
-
+            ColumnStrings = GetColumns();
         }
 
         public ServiceExportFormat(bool include)
         {
             this._includeHours = include;
+            ColumnStrings = GetColumns();
         }
 
-        public string[] GetColumns()
+        private string[] GetColumns()
         {
+            StringCollection _cols = new StringCollection();
             try
             {
                 foreach (var column in _columnNameList)
@@ -82,8 +85,7 @@ namespace ConsumerMaster
 
         public int GetKey(string value)
         {
-            string[] columnList = this.GetColumns();
-            return Array.IndexOf(columnList, value);
+            return Array.IndexOf(ColumnStrings, value);
         }
     }
 }

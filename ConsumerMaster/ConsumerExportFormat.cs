@@ -33,10 +33,16 @@ namespace ConsumerMaster
             {11, new ConsumerExportColumn {Include=true,Name="gender"} },
         };
 
-        readonly StringCollection _cols = new StringCollection();
+        public string[] ColumnStrings;
 
-        public string[] GetColumns()
+        public ConsumerExportFormat()
         {
+            ColumnStrings = GetColumns();
+        }
+
+        private string[] GetColumns()
+        {
+            StringCollection _cols = new StringCollection();
             try
             {
                 foreach (var column in _columnNameList)
@@ -54,8 +60,7 @@ namespace ConsumerMaster
 
         public int GetKey(string value)
         {
-            string[] columnList = GetColumns();
-            return Array.IndexOf(columnList, value);
+            return Array.IndexOf(ColumnStrings, value);
         }
     }
 }

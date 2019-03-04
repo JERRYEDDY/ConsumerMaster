@@ -15,37 +15,15 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public void TableToPdf(DataTable dTable, string destinationPath)
+        public void CreateReport()
         {
-            var writer = new PdfWriter(destinationPath);
-            var pdf = new PdfDocument(writer);
-            var document = new Document(pdf, PageSize.A4.Rotate());
-            document.SetMargins(20, 20, 20, 20);
-            var font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA);
-            var bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
-            var table = new Table(new float[] { 4, 1, 3, 3, 3, 3, 3, 3 });
-            table.SetWidth(UnitValue.CreatePercentValue(100));
+            DateTime startDate = new DateTime(2019, 2,18);
+            DateTime endtDate = new DateTime(2019, 2, 22);
 
-            foreach (DataColumn column in dTable.Columns)
-            {
-                table.AddHeaderCell(new Cell().Add(new Paragraph(column.ColumnName).SetFont(font)));
-            }
+            string outFileName = @"C:\Billing Software\ATF\ATFConsumerRatio.pdf";
+            DataTable reportDataTable = GetAttendanceData(startDate, endtDate);
 
-            foreach (DataRow dr in dTable.Rows)
-            {
-                table.AddCell(new Cell().Add(new Paragraph(dr["FullName"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Ratio1"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Ratio2"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Units1"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Units2"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Total"].ToString()).SetFont(font)));
-
-                table.AddCell(new Cell().Add(new Paragraph(dr["Pct1"].ToString()).SetFont(font)));
-                table.AddCell(new Cell().Add(new Paragraph(dr["Pct2"].ToString()).SetFont(font)));
-            }
-
-            document.Add(table);
-            document.Close();
+            TableToPdf(reportDataTable,outFileName);
         }
 
         public DataTable GetAttendanceData(DateTime startDateTime, DateTime endDateTime)
@@ -100,9 +78,40 @@ namespace ConsumerMaster
                     }
                 }
             }
-
-            string outFileName = @"C:\Billing Software\ATF\ATFConsumerRatio.pdf";
             return consumersTable;
+        }
+
+        public void TableToPdf(DataTable dTable, string destinationPath)
+        {
+            var writer = new PdfWriter(destinationPath);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf, PageSize.A4.Rotate());
+            document.SetMargins(20, 20, 20, 20);
+            var font = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA);
+            var bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
+            var table = new Table(new float[] { 4, 1, 3, 3, 3, 3, 3, 3 });
+            table.SetWidth(UnitValue.CreatePercentValue(100));
+
+            foreach (DataColumn column in dTable.Columns)
+            {
+                table.AddHeaderCell(new Cell().Add(new Paragraph(column.ColumnName).SetFont(font)));
+            }
+
+            foreach (DataRow dr in dTable.Rows)
+            {
+                table.AddCell(new Cell().Add(new Paragraph(dr["FullName"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Ratio1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Ratio2"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Units1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Units2"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Total"].ToString()).SetFont(font)));
+
+                table.AddCell(new Cell().Add(new Paragraph(dr["Pct1"].ToString()).SetFont(font)));
+                table.AddCell(new Cell().Add(new Paragraph(dr["Pct2"].ToString()).SetFont(font)));
+            }
+
+            document.Add(table);
+            document.Close();
         }
     }
 }

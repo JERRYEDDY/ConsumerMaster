@@ -14,7 +14,7 @@ namespace ConsumerMaster
 
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
-        private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
+        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
         public Workbook ATFCreateWorkbook(string tradingPartnerID)
         {
@@ -47,7 +47,7 @@ namespace ConsumerMaster
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
                 int totalConsumers = seDataTable.Rows.Count;
-                PrepareSheet1Worksheet(sheet1Worksheet, totalConsumers);
+                PrepareSheet1Worksheet(sheet1Worksheet);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
@@ -116,7 +116,7 @@ namespace ConsumerMaster
         {
             try
             {
-                PrepareSheet2Worksheet(worksheet, cpcList.Count);
+                PrepareSheet2Worksheet(worksheet);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (String cpCode in cpcList)
@@ -131,14 +131,14 @@ namespace ConsumerMaster
             }
         }
 
-        private void PrepareSheet1Worksheet(Worksheet worksheet, int itemsCount)
+        private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
             try
             {
                 //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
                 ServiceExportFormat sef = new ServiceExportFormat();
-                string[] columnsList = sef.GetColumns();
+                string[] columnsList = sef.ColumnStrings;
 
                 //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
@@ -167,7 +167,7 @@ namespace ConsumerMaster
             }
         }
 
-        private void PrepareSheet2Worksheet(Worksheet worksheet, int itemsCount)
+        private void PrepareSheet2Worksheet(Worksheet worksheet)
         {
             try
             {

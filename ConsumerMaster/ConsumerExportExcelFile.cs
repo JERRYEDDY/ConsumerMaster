@@ -8,9 +8,8 @@ namespace ConsumerMaster
     public class ConsumerExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
         private static readonly int IndexRowItemStart = 0;
-        private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
+        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
 
         public Workbook CreateWorkbook(string tradingPartnerId)
@@ -40,7 +39,7 @@ namespace ConsumerMaster
                 DataTable ceDataTable = util.GetDataTable(ceQuery);
 
                 int totalConsumers = ceDataTable.Rows.Count;
-                PrepareWorksheet(worksheet, totalConsumers);
+                PrepareWorksheet(worksheet);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in ceDataTable.Rows)
@@ -82,14 +81,14 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private void PrepareWorksheet(Worksheet worksheet, int itemsCount)
+        private void PrepareWorksheet(Worksheet worksheet)
         {
             try
             {
                 //int lastItemIndexRow = IndexRowItemStart + itemsCount;
 
                 ConsumerExportFormat cef = new ConsumerExportFormat();
-                string[] columnsList = cef.GetColumns();
+                string[] columnsList = cef.ColumnStrings;
 
                 //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);

@@ -25,10 +25,10 @@ namespace ConsumerMaster
                 Logger.Info("ConsumerMaster started");
 
                 ServiceExportFormat sef = new ServiceExportFormat();
-                string[] list = sef.GetColumns();
+                string[] list = sef.ColumnStrings;
 
                 ServiceExportFormat sef1 = new ServiceExportFormat(true);
-                string[] list1 = sef1.GetColumns();
+                string[] list1 = sef1.ColumnStrings;
 
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
                 {
@@ -151,7 +151,6 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = ATFConsumerList.SelectedValue;
-
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
                 DownloadExcelFile(workbook, filename);
@@ -168,7 +167,6 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = ATFServiceList.SelectedValue;
-
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
                 Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);
                 DownloadExcelFile(workbook, filename);
@@ -185,10 +183,9 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = ATFServiceList.SelectedValue;
-
-                ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
-                Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);
-                DownloadExcelFile(workbook, filename);
+                ATFConsumerRatioReport ratioReport = new ATFConsumerRatioReport();
+                ratioReport.CreateReport();
+                //DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
