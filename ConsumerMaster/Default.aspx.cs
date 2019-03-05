@@ -105,7 +105,7 @@ namespace ConsumerMaster
             try
             {
                 AWCServiceExportExcelFile serviceExport = new AWCServiceExportExcelFile();
-                Workbook workbook = serviceExport.AWCCreateWorkbook();
+                Workbook workbook = serviceExport.CreateWorkbook();
                 DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
@@ -137,7 +137,7 @@ namespace ConsumerMaster
             try
             {
                 EIServiceExportExcelFile serviceExport = new EIServiceExportExcelFile();
-                Workbook workbook = serviceExport.EICreateWorkbook();
+                Workbook workbook = serviceExport.CreateWorkbook();
                 DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
@@ -169,7 +169,7 @@ namespace ConsumerMaster
             {
                 string selectedValue = ATFServiceList.SelectedValue;
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
-                Workbook workbook = serviceExport.ATFCreateWorkbook(selectedValue);
+                Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
                 DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)

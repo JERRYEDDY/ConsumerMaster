@@ -17,7 +17,7 @@ namespace ConsumerMaster
         private static readonly int IndexColumnName = 0;
         //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
-        public Workbook EICreateWorkbook()
+        public Workbook CreateWorkbook()
         {
             Workbook workbook = new Workbook();
 

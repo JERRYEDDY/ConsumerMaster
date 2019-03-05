@@ -294,6 +294,7 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATFConsumerRatioReport.cs" />
     <Compile Include="Reports.aspx.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -338,6 +339,7 @@
     <Compile Include="EIBillingTransactions.cs" />
     <Compile Include="EIServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportFormat.cs" />
+    <Compile Include="ConsumerRatioReportFormat.cs" />
     <Compile Include="ServiceExportFormat.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

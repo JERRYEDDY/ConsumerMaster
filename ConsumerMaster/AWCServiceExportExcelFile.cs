@@ -62,7 +62,7 @@ namespace ConsumerMaster
         //    {20, "billing_note" }
         //};
 
-        public Workbook AWCCreateWorkbook()
+        public Workbook CreateWorkbook()
         {
             Workbook workbook = new Workbook();
             try

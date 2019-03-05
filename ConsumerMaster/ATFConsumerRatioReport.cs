@@ -1,0 +1,177 @@
+﻿using System;
+using Telerik.Windows.Documents.Spreadsheet.Model;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Windows.Media;
+
+namespace ConsumerMaster
+{
+    public class ATFConsumerRatioReport
+    {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
+        private static readonly int IndexRowItemStart = 0;
+        private static readonly int IndexColumnName = 0;
+
+        public Workbook CreateWorkbook(DateTime startDate, DateTime endDate)
+        {
+            Workbook workbook = new Workbook();
+
+            try
+            {
+                WorksheetCollection worksheets = workbook.Worksheets;
+                worksheets.Add();
+
+                Worksheet sheet1Worksheet = worksheets["Sheet1"];
+
+                ConsumerRatioReportFormat crrf = new ConsumerRatioReportFormat();
+                DataTable crrDataTable = GetAttendanceData(startDate, endDate);
+
+                int totalConsumers = crrDataTable.Rows.Count;
+                PrepareSheet1Worksheet(sheet1Worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (DataRow dr in crrDataTable.Rows)
+                {
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Site")].SetValue(dr["Site"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetValue(dr["FullName"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Ratio1")].SetValue(dr["Ratio1"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Ratio2")].SetValue(dr["Ratio2"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units1")].SetValue(dr["Units1"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units2")].SetValue(dr["Units2"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Total")].SetValue(dr["Total"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Pct1")].SetValue(dr["Pct1"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Pct2")].SetValue(dr["Pct2"].ToString());
+
+                    currentRow++;
+                }
+
+                ThemableColor black = new ThemableColor(Colors.Black);
+                CellBorders blackBorders = new CellBorders(
+                    new CellBorder(CellBorderStyle.None, black),   // Left border 
+                    new CellBorder(CellBorderStyle.Medium, black),   // Top border 
+                    new CellBorder(CellBorderStyle.None, black),   // Right border 
+                    new CellBorder(CellBorderStyle.None, black),   // Bottom border 
+                    new CellBorder(CellBorderStyle.None, black),       // Inside horizontal border 
+                    new CellBorder(CellBorderStyle.None, black),       // Inside vertical border 
+                    new CellBorder(CellBorderStyle.None, black),     // Diagonal up border 
+                    new CellBorder(CellBorderStyle.None, black));    // Diagonal down border 
+
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units1")].SetBorders(blackBorders);
+                string sumUnits1 = "=SUM(E2:E" + currentRow + ")";
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units1")].SetValue(sumUnits1);
+
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units2")].SetBorders(blackBorders);
+                string sumUnits2 = "=SUM(F2:F" + currentRow + ")";
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units2")].SetValue(sumUnits2);
+
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Total")].SetBorders(blackBorders);
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetIsBold(true);
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetValue("Total:");
+                string sumTotal = "=SUM(G2:G" + currentRow + ")";
+                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Total")].SetValue(sumTotal);
+
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("FullName")].SetIsBold(true);
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("FullName")].SetValue("Average:");
+                CellValueFormat decimalFormat = new CellValueFormat("0.00");
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("Total")].SetFormat(decimalFormat);
+                string avgTotal = "=AVERAGE(G2:G" + currentRow + ")";
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("Total")].SetValue(avgTotal);
+
+                for (int i = 0; i < crrDataTable.Columns.Count; i++)
+                {
+                    sheet1Worksheet.Columns[i].AutoFitWidth();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            return workbook;
+        }
+
+        private void PrepareSheet1Worksheet(Worksheet worksheet)
+        {
+            try
+            {
+                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
+
+                ConsumerRatioReportFormat crrf = new ConsumerRatioReportFormat();
+                string[] columnsList = crrf.ColumnStrings;
+                foreach (string column in columnsList)
+                {
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
+
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetIsBold(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        public DataTable GetAttendanceData(DateTime startDateTime, DateTime endDateTime)
+        {
+            DataTable consumersTable = new DataTable("Consumers");
+            consumersTable.Columns.Add("Site", typeof(int));
+            consumersTable.Columns.Add("FullName", typeof(String));
+            consumersTable.Columns.Add("Ratio1", typeof(String));
+            consumersTable.Columns.Add("Ratio2", typeof(String));
+            consumersTable.Columns.Add("Units1", typeof(int));
+            consumersTable.Columns.Add("Units2", typeof(int));
+            consumersTable.Columns.Add("Total", typeof(int));
+            consumersTable.Columns.Add("Pct1", typeof(String));
+            consumersTable.Columns.Add("Pct2", typeof(String));
+
+            using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_GetConsumersData", sqlConnection1))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@StartDateTime", SqlDbType.Text).Value = startDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = endDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                    sqlConnection1.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            var row = consumersTable.NewRow();
+                            row["Site"] = dr.IsDBNull(0) ? 0 : dr.GetInt32(0);
+                            //string maNumber = dr.IsDBNull(1) ? String.Empty : dr.GetString(1);
+                            row["FullName"] = dr.IsDBNull(2) ? string.Empty : dr.GetString(2);
+                            row["Ratio1"] = dr.IsDBNull(3) ? string.Empty : dr.GetString(3);
+                            row["Ratio2"] = dr.IsDBNull(4) ? string.Empty : dr.GetString(4);
+                            row["Units1"] = dr.IsDBNull(5) ? 0 : dr.GetInt32(5);
+                            row["Units2"] = dr.IsDBNull(6) ? 0 : dr.GetInt32(6);
+
+                            int units1 = dr.IsDBNull(5) ? 0 : dr.GetInt32(5);
+                            int units2 = dr.IsDBNull(6) ? 0 : dr.GetInt32(6);
+                            int total = units1 + units2;
+                            row["Total"] = total;
+
+                            double pct1 = (total == 0) ? 0 : units1 / (double)total;
+                            double pct2 = (total == 0) ? 0 : units2 / (double)total;
+                            row["Pct1"] = $"{pct1:P2}";
+                            row["Pct2"] = $"{pct2:P2}";
+
+                            consumersTable.Rows.Add(row);
+                        }
+                        dr.Close();
+                    }
+                }
+            }
+            return consumersTable;
+        }
+    }
+}
+
+

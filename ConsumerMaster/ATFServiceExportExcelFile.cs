@@ -16,7 +16,7 @@ namespace ConsumerMaster
         private static readonly int IndexColumnName = 0;
         //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
-        public Workbook ATFCreateWorkbook(string tradingPartnerID)
+        public Workbook CreateWorkbook(string tradingPartnerID)
         {
             Workbook workbook = new Workbook();
 
