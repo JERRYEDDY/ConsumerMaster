@@ -18,7 +18,7 @@ namespace ConsumerMaster
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //BindToATFTPDropDownList2(ATFRatioList);
+            BindToATFTPDropDownList2(ATFPartnerList);
         }
 
         private void BindToATFTPDropDownList2(RadDropDownList dropdownlist)
@@ -44,13 +44,23 @@ namespace ConsumerMaster
             const string filename = @"ATFConsumerRatioReport.xlsx";
             try
             {
-                DateTime startDate = new DateTime(2019, 2, 18, 0, 0, 0);
-                DateTime endDate = new DateTime(2019, 2, 22, 23, 59, 59);
+                //DateTime startDate = new DateTime(2019, 2, 18, 0, 0, 0);
+                //DateTime endDate = new DateTime(2019, 2, 22, 23, 59, 59);
 
-                //string selectedValue = ATFConsumerList.SelectedValue;
+                DateTime startDate = new DateTime(StartDatePicker.SelectedDate.Value.Year,
+                    StartDatePicker.SelectedDate.Value.Month, StartDatePicker.SelectedDate.Value.Day, 0, 0, 0);
+                DateTime endDate = new DateTime(EndDatePicker.SelectedDate.Value.Year,
+                    EndDatePicker.SelectedDate.Value.Month, EndDatePicker.SelectedDate.Value.Day, 23, 59, 59);
+
+                string st = startDate.ToString("MM/dd/yyyy hh:mm:ss");
+                string ed = endDate.ToString("MM/dd/yyyy hh:mm:ss");
+
+                string selectedValue = ATFPartnerList.SelectedValue;
+                int index = ATFPartnerList.SelectedIndex;
+                int Site = index + 1;
 
                 ATFConsumerRatioReport ratioReport = new ATFConsumerRatioReport();
-                Workbook workbook = ratioReport.CreateWorkbook(startDate, endDate);
+                Workbook workbook = ratioReport.CreateWorkbook(startDate, endDate, Site);
                 DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)

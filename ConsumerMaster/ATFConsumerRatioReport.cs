@@ -10,11 +10,10 @@ namespace ConsumerMaster
     public class ATFConsumerRatioReport
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
-        private static readonly int IndexRowItemStart = 0;
+        private static readonly int IndexRowItemStart = 3;
         private static readonly int IndexColumnName = 0;
 
-        public Workbook CreateWorkbook(DateTime startDate, DateTime endDate)
+        public Workbook CreateWorkbook(DateTime startDate, DateTime endDate, int Site)
         {
             Workbook workbook = new Workbook();
 
@@ -26,10 +25,23 @@ namespace ConsumerMaster
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
 
                 ConsumerRatioReportFormat crrf = new ConsumerRatioReportFormat();
-                DataTable crrDataTable = GetAttendanceData(startDate, endDate);
+                DataTable crrDataTable = GetAttendanceData(startDate, endDate, Site);
 
                 int totalConsumers = crrDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet);
+
+                CellIndex A1Cell = new CellIndex(0, 0);
+                CellIndex D1Cell = new CellIndex(0, 3);
+                sheet1Worksheet.Cells[A1Cell, D1Cell].Merge();
+                sheet1Worksheet.Cells[0, 0].SetValue("Consumers Ratio Report");
+                sheet1Worksheet.Cells[0, 0].SetIsBold(true);
+                sheet1Worksheet.Cells[0, 0].SetFontSize(20);
+
+                CellIndex A2Cell = new CellIndex(1, 0);
+                CellIndex D2Cell = new CellIndex(1, 3);
+                sheet1Worksheet.Cells[A2Cell, D2Cell].Merge();
+                string rangeText = "Range: " + startDate.ToString("d") + "-" + endDate.ToString("d");
+                sheet1Worksheet.Cells[1, 0].SetValue(rangeText);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in crrDataTable.Rows)
@@ -118,18 +130,18 @@ namespace ConsumerMaster
             }
         }
 
-        public DataTable GetAttendanceData(DateTime startDateTime, DateTime endDateTime)
+        public DataTable GetAttendanceData(DateTime startDateTime, DateTime endDateTime, int Site)
         {
             DataTable consumersTable = new DataTable("Consumers");
             consumersTable.Columns.Add("Site", typeof(int));
-            consumersTable.Columns.Add("FullName", typeof(String));
-            consumersTable.Columns.Add("Ratio1", typeof(String));
-            consumersTable.Columns.Add("Ratio2", typeof(String));
+            consumersTable.Columns.Add("FullName", typeof(string));
+            consumersTable.Columns.Add("Ratio1", typeof(string));
+            consumersTable.Columns.Add("Ratio2", typeof(string));
             consumersTable.Columns.Add("Units1", typeof(int));
             consumersTable.Columns.Add("Units2", typeof(int));
             consumersTable.Columns.Add("Total", typeof(int));
-            consumersTable.Columns.Add("Pct1", typeof(String));
-            consumersTable.Columns.Add("Pct2", typeof(String));
+            consumersTable.Columns.Add("Pct1", typeof(string));
+            consumersTable.Columns.Add("Pct2", typeof(string));
 
             using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
             {
@@ -138,6 +150,7 @@ namespace ConsumerMaster
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add("@StartDateTime", SqlDbType.Text).Value = startDateTime.ToString("yyyy-MM-dd HH:mm:ss");
                     cmd.Parameters.Add("@EndDateTime", SqlDbType.Text).Value = endDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    cmd.Parameters.Add("@Site", SqlDbType.Int).Value = Site;
 
                     sqlConnection1.Open();
 

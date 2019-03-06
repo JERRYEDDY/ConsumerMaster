@@ -27,19 +27,19 @@
             </tr>
             <tr>
                 <td>
-<%--                    <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFRatioList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="ATFRatioReportGroup" />
-                    <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="ATFRatioList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFRatioReportGroup" />--%>
+                  <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFPartnerList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="ATFRatioReportGroup" />
+<%--                    <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="ATFRatioList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFRatioReportGroup" />--%>
                 </td>
             </tr>
             <tr>
                 <td>
-<%--                    <telerik:RadDatePicker RenderMode="Lightweight" ID="StartDatePicker" runat="server" DateInput-Label="From: " />
-                    <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator2" ControlToValidate="StartDatePicker" Display="Dynamic" ErrorMessage="You must select a start date!"  ValidationGroup="ATFRatioReportGroup"/>
+                   <telerik:RadDatePicker RenderMode="Lightweight" ID="StartDatePicker" runat="server" DateInput-Label="From: " />
+<%--                    <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator2" ControlToValidate="StartDatePicker" Display="Dynamic" ErrorMessage="You must select start date!"  ValidationGroup="ATFRatioReportGroup"/>--%>
 
                     <telerik:RadDatePicker RenderMode="Lightweight" ID="EndDatePicker" runat="server" DateInput-Label="To: " />
-                    <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="StartDatePicker" Display="Dynamic" ErrorMessage="You must select a end date!"  ValidationGroup="ATFRatioReportGroup"/>
+<%--                    <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="StartDatePicker" Display="Dynamic" ErrorMessage="You must select end date!"  ValidationGroup="ATFRatioReportGroup"/>--%>
 
-                    <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToCompare="StartDatePicker" EnableClientScript="true" ControlToValidate="EndDatePicker" Type="Date" Operator="GreaterThan" ErrorMessage="The end date must be after the start one." ValidationGroup="ATFRatioReportGroup" />--%>
+<%--                    <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToCompare="StartDatePicker" EnableClientScript="true" ControlToValidate="EndDatePicker" Type="Date" Operator="GreaterThan" ErrorMessage="The end date must be after the start one." ValidationGroup="ATFRatioReportGroup" />--%>
 
                     <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="ATFRatioReportGroup" OnClick="ATFRatioReportDownload_Click" runat="server" />
                 </td>
