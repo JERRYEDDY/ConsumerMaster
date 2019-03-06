@@ -202,9 +202,6 @@
     <Content Include="Consumers.aspx" />
     <Content Include="About.aspx" />
     <Content Include="AppEvent.aspx" />
-    <Content Include="Consumers Bulk Insert.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Consumer_CRUD.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -279,7 +276,7 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
-    <Content Include="sp_GetConsumerData.txt" />
+    <Content Include="sp_GetConsumerData.sql" />
     <Content Include="Styles\ControlPanel.css" />
     <Content Include="Styles\ControlPanelSingle.css" />
     <Content Include="Styles\css_form.css" />

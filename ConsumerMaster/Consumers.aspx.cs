@@ -65,38 +65,6 @@ namespace ConsumerMaster
             }
         }
 
-        //private string GetItemName(string tableName)
-        //{
-        //    switch (tableName)
-        //    {
-        //        case ("Consumers"):
-        //            {
-        //                return "Consumer";
-        //            }
-        //        case ("TradingPartners"):
-        //            {
-        //                return "TradingPartner";
-        //            }
-        //        default: return "";
-        //    }
-        //}
-
-        //private string getFieldName(string tableName)
-        //{
-        //    switch (tableName)
-        //    {
-        //        case ("Consumers"):
-        //            {
-        //                return "consumer_internal_number";
-        //            }
-        //        case ("TradingPartners"):
-        //            {
-        //                return "trading_partner_id";
-        //            }
-        //        default: return "";
-        //    }
-        //}
-
 /***********RADGRID2******************************************************************************************************************************/
 
         protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)

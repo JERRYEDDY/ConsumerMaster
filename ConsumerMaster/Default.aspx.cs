@@ -15,8 +15,6 @@ namespace ConsumerMaster
     public partial class _Default : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        //private const string ConsumersTable = "Consumers";
-        //private const string TradingPartnersTable = "TradingPartners";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -41,9 +39,8 @@ namespace ConsumerMaster
                 string connection = builder.ConnectionString;
 
                 BindToTPDropDownList(TPRadDropDownList);
-                BindToATFTPDropDownList(ATFConsumerList);
-                BindToATFTPDropDownList(ATFServiceList);
-
+                BindToATF_TPDropDownList(ATFConsumerList);
+                BindToATF_TPDropDownList(ATFServiceList);
             }
         }
 
@@ -180,42 +177,56 @@ namespace ConsumerMaster
 
         private void BindToTPDropDownList(RadDropDownList dropdownlist)
         {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            try
             {
-                con.Open();
-                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners", con))
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
-                    DataTable tradingPartners = new DataTable();
-                    adapter.Fill(tradingPartners);
+                    con.Open();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners", con))
+                    {
+                        DataTable tradingPartners = new DataTable();
+                        adapter.Fill(tradingPartners);
 
-                    DataRow dr = tradingPartners.NewRow();
-                    dr["trading_partner_id"] = "0";
-                    dr["name"] = "ALL TRADING PARTNERS";
-                    tradingPartners.Rows.InsertAt(dr, 0);
+                        DataRow dr = tradingPartners.NewRow();
+                        dr["trading_partner_id"] = "0";
+                        dr["name"] = "ALL TRADING PARTNERS";
+                        tradingPartners.Rows.InsertAt(dr, 0);
 
-                    dropdownlist.DataTextField = "name";
-                    dropdownlist.DataValueField = "trading_partner_id";
-                    dropdownlist.DataSource = tradingPartners;
-                    dropdownlist.DataBind();
+                        dropdownlist.DataTextField = "name";
+                        dropdownlist.DataValueField = "trading_partner_id";
+                        dropdownlist.DataSource = tradingPartners;
+                        dropdownlist.DataBind();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
             }
         }
 
-        private void BindToATFTPDropDownList(RadDropDownList dropdownlist)
+        private void BindToATF_TPDropDownList(RadDropDownList dropdownlist)
         {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            try
             {
-                con.Open();
-                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
-                    DataTable tradingPartners = new DataTable();
-                    adapter.Fill(tradingPartners);
+                    con.Open();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
+                    {
+                        DataTable tradingPartners = new DataTable();
+                        adapter.Fill(tradingPartners);
 
-                    dropdownlist.DataTextField = "name";
-                    dropdownlist.DataValueField = "trading_partner_id";
-                    dropdownlist.DataSource = tradingPartners;
-                    dropdownlist.DataBind();
+                        dropdownlist.DataTextField = "name";
+                        dropdownlist.DataValueField = "trading_partner_id";
+                        dropdownlist.DataSource = tradingPartners;
+                        dropdownlist.DataBind();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
             }
         }
     }

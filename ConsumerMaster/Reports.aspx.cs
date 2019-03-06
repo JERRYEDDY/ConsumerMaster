@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 using Telerik.Web.UI;
+using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 
 namespace ConsumerMaster
 {
@@ -18,49 +19,49 @@ namespace ConsumerMaster
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            BindToATFTPDropDownList2(ATFPartnerList);
+            BindToATF_TPDropDownList2(ATFPartnerList);
         }
 
-        private void BindToATFTPDropDownList2(RadDropDownList dropdownlist)
+        private void BindToATF_TPDropDownList2(RadDropDownList dropdownlist)
         {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            try
             {
-                con.Open();
-                using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (3, 4)", con))
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
-                    DataTable tradingPartners = new DataTable();
-                    adapter.Fill(tradingPartners);
+                    con.Open();
+                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (3, 4)", con))
+                    {
+                        DataTable tradingPartners = new DataTable();
+                        adapter.Fill(tradingPartners);
 
-                    dropdownlist.DataTextField = "name";
-                    dropdownlist.DataValueField = "trading_partner_id";
-                    dropdownlist.DataSource = tradingPartners;
-                    dropdownlist.DataBind();
+                        dropdownlist.DataTextField = "name";
+                        dropdownlist.DataValueField = "trading_partner_id";
+                        dropdownlist.DataSource = tradingPartners;
+                        dropdownlist.DataBind();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
             }
         }
 
-        protected void ATFRatioReportDownload_Click(object sender, EventArgs e)
+        protected void ATFConsumerRatioReportDownload_Click(object sender, EventArgs e)
         {
             const string filename = @"ATFConsumerRatioReport.xlsx";
             try
             {
-                //DateTime startDate = new DateTime(2019, 2, 18, 0, 0, 0);
-                //DateTime endDate = new DateTime(2019, 2, 22, 23, 59, 59);
-
                 DateTime startDate = new DateTime(StartDatePicker.SelectedDate.Value.Year,
                     StartDatePicker.SelectedDate.Value.Month, StartDatePicker.SelectedDate.Value.Day, 0, 0, 0);
                 DateTime endDate = new DateTime(EndDatePicker.SelectedDate.Value.Year,
                     EndDatePicker.SelectedDate.Value.Month, EndDatePicker.SelectedDate.Value.Day, 23, 59, 59);
 
-                string st = startDate.ToString("MM/dd/yyyy hh:mm:ss");
-                string ed = endDate.ToString("MM/dd/yyyy hh:mm:ss");
-
-                string selectedValue = ATFPartnerList.SelectedValue;
-                int index = ATFPartnerList.SelectedIndex;
-                int Site = index + 1;
+                int siteId = ATFPartnerList.SelectedValue.Equals("3") ? 2 : 1;     //Greene=3(2) and Washington=4(1)
+                string siteName = ATFPartnerList.SelectedText;
 
                 ATFConsumerRatioReport ratioReport = new ATFConsumerRatioReport();
-                Workbook workbook = ratioReport.CreateWorkbook(startDate, endDate, Site);
+                Workbook workbook = ratioReport.CreateWorkbook(startDate, endDate, siteId, siteName);
                 DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
