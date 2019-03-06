@@ -34,15 +34,15 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in crrDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Site")].SetValue(dr["Site"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetValue(dr["FullName"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Ratio1")].SetValue(dr["Ratio1"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Ratio2")].SetValue(dr["Ratio2"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units1")].SetValue(dr["Units1"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units2")].SetValue(dr["Units2"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Total")].SetValue(dr["Total"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Pct1")].SetValue(dr["Pct1"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetKey("Pct2")].SetValue(dr["Pct2"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Site")].SetValue(dr["Site"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetValue(dr["FullName"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio1")].SetValue(dr["Ratio1"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio2")].SetValue(dr["Ratio2"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetValue(dr["Units1"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetValue(dr["Units2"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetValue(dr["Total"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct1")].SetValue(dr["Pct1"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct2")].SetValue(dr["Pct2"].ToString());
 
                     currentRow++;
                 }
@@ -58,28 +58,29 @@ namespace ConsumerMaster
                     new CellBorder(CellBorderStyle.None, black),     // Diagonal up border 
                     new CellBorder(CellBorderStyle.None, black));    // Diagonal down border 
 
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units1")].SetBorders(blackBorders);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetBorders(blackBorders);
                 string sumUnits1 = "=SUM(E2:E" + currentRow + ")";
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units1")].SetValue(sumUnits1);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetValue(sumUnits1);
 
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units2")].SetBorders(blackBorders);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetBorders(blackBorders);
                 string sumUnits2 = "=SUM(F2:F" + currentRow + ")";
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Units2")].SetValue(sumUnits2);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetValue(sumUnits2);
 
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Total")].SetBorders(blackBorders);
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetIsBold(true);
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("FullName")].SetValue("Total:");
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetBorders(blackBorders);
+
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetIsBold(true);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetValue("Total:");
                 string sumTotal = "=SUM(G2:G" + currentRow + ")";
-                sheet1Worksheet.Cells[currentRow, crrf.GetKey("Total")].SetValue(sumTotal);
+                sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetValue(sumTotal);
 
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("FullName")].SetIsBold(true);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("FullName")].SetValue("Average:");
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FullName")].SetIsBold(true);
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FullName")].SetValue("Average:");
                 CellValueFormat decimalFormat = new CellValueFormat("0.00");
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("Total")].SetFormat(decimalFormat);
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("Total")].SetFormat(decimalFormat);
                 string avgTotal = "=AVERAGE(G2:G" + currentRow + ")";
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetKey("Total")].SetValue(avgTotal);
+                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("Total")].SetValue(avgTotal);
 
                 for (int i = 0; i < crrDataTable.Columns.Count; i++)
                 {

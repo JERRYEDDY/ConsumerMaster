@@ -83,7 +83,7 @@ namespace ConsumerMaster
             return _cols.Cast<string>().ToArray();
         }
 
-        public int GetKey(string value)
+        public int GetIndex(string value)
         {
             return Array.IndexOf(ColumnStrings, value);
         }

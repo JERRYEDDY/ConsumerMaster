@@ -89,7 +89,7 @@ namespace ConsumerMaster
                     currentRow++;
                 }
 
-                for (int i = 0; i < worksheet.Columns.Count; i++)
+                for (int i = 0; i < ceDataTable.Columns.Count; i++)
                 {
                     worksheet.Columns[i].AutoFitWidth();
                 }

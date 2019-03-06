@@ -52,22 +52,22 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_first")].SetValue(dr["consumer_first"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("trading_partner_program_string")].SetValue(dr["trading_partner_program_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_program_string")].SetValue(dr["trading_partner_program_string"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("start_date_string")].SetValue(dr["start_date_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("end_date_string")].SetValue(dr["end_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["start_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("end_date_string")].SetValue(dr["end_date_string"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
-                    CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, sef.GetKey("composite_procedure_code_string"));
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
+                    CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, sef.GetIndex("composite_procedure_code_string"));
                     ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex)
                     {
                         InputMessageTitle = "Restricted input",
@@ -83,24 +83,24 @@ namespace ConsumerMaster
                     ListDataValidationRule rule = new ListDataValidationRule(context);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("units")].SetValue(dr["units"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["units"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());                          //"manual_billable_rate"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());              //"prior_authorization_number"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referral_number")].SetValue(dr["referral_number"].ToString());                                    //"referral_number"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_id")].SetValue(dr["referring_provider_id"].ToString());                        //"referring_provider_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());        //"referring_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());          //"referring_provider_last_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                        //"rendering_provider_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());        //"rendering_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());          //"rendering_provider_last_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("billing_note")].SetValue(" ");                                                                    //"billing_note"
-                    sheet1Worksheet.Cells[currentRow, sef.GetKey("rendering_provider_secondary_id")].SetValue(" ");                                                 //"rendering_provider_secondary_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());                          //"manual_billable_rate"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());              //"prior_authorization_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referral_number")].SetValue(dr["referral_number"].ToString());                                    //"referral_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_id")].SetValue(dr["referring_provider_id"].ToString());                        //"referring_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());        //"referring_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());          //"referring_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                        //"rendering_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());        //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());          //"rendering_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(" ");                                                                    //"billing_note"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(" ");                                                 //"rendering_provider_secondary_id"
 
                     currentRow++;
                 }
 
-                for (int i = 0; i < sheet1Worksheet.Columns.Count; i++)
+                for (int i = 0; i < seDataTable.Columns.Count; i++)
                 {
                     sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
@@ -142,8 +142,8 @@ namespace ConsumerMaster
 
                 //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("consumer_first"));
-                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetKey("rendering_provider_last_name"));
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetIndex("consumer_first"));
+                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetIndex("rendering_provider_last_name"));
                 //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
 
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);

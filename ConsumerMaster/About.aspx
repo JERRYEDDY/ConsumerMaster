@@ -26,8 +26,7 @@
                 </td>
                 <td class="space"/>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                       OnClick="AWCConsumerExportDownload_Click" runat="server" />
+
                 </td>
             </tr>
             <tr>
@@ -36,8 +35,7 @@
                 </td>
                 <td class="space"/>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                       OnClick="AWCServiceExportDownload_Click" runat="server" />
+
                 </td>
             </tr>
         </table>

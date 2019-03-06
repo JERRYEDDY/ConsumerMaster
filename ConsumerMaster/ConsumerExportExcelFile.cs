@@ -44,27 +44,27 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in ceDataTable.Rows)
                 {
-                    worksheet.Cells[currentRow, cef.GetKey("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    //CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, cef.GetKey("consumer_internal_number")];
+                    worksheet.Cells[currentRow, cef.GetIndex("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
+                    //CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, cef.GetIndex("consumer_internal_number")];
 
-                    worksheet.Cells[currentRow, cef.GetKey("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("consumer_first")].SetValue(dr["consumer_first"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("consumer_last")].SetValue(dr["consumer_last"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("date_of_birth")].SetValue(dr["date_of_birth"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("address_line_1")].SetValue(dr["address_line_1"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("consumer_first")].SetValue(dr["consumer_first"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("consumer_last")].SetValue(dr["consumer_last"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("date_of_birth")].SetValue(dr["date_of_birth"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("address_line_1")].SetValue(dr["address_line_1"].ToString());
 
                     string addressLine2 = dr["address_line_2"] == null ? string.Empty : dr["address_line_2"].ToString(); 
-                    worksheet.Cells[currentRow, cef.GetKey("address_line_2")].SetValue(addressLine2);
+                    worksheet.Cells[currentRow, cef.GetIndex("address_line_2")].SetValue(addressLine2);
 
-                    worksheet.Cells[currentRow, cef.GetKey("city")].SetValue(dr["city"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("state")].SetValue(dr["state"].ToString());
-                    worksheet.Cells[currentRow, cef.GetKey("zip_code")].SetValue(dr["zip_code"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("city")].SetValue(dr["city"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("state")].SetValue(dr["state"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("zip_code")].SetValue(dr["zip_code"].ToString());
 
                     CellValueFormat identifierCellValueFormat = new CellValueFormat("0000000000");
-                    worksheet.Cells[currentRow, cef.GetKey("identifier")].SetFormat(identifierCellValueFormat);
-                    worksheet.Cells[currentRow, cef.GetKey("identifier")].SetValue(dr["identifier"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("identifier")].SetFormat(identifierCellValueFormat);
+                    worksheet.Cells[currentRow, cef.GetIndex("identifier")].SetValue(dr["identifier"].ToString());
 
-                    worksheet.Cells[currentRow, cef.GetKey("gender")].SetValue(dr["gender"].ToString());
+                    worksheet.Cells[currentRow, cef.GetIndex("gender")].SetValue(dr["gender"].ToString());
 
                     currentRow++;
                 }
@@ -92,8 +92,8 @@ namespace ConsumerMaster
 
                 //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
                 //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, cef.GetKey("consumer_first"));
-                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1,cef.GetKey("gender"));
+                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, cef.GetIndex("consumer_first"));
+                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1,cef.GetIndex("gender"));
                 //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
 
                 foreach (string column in columnsList)
