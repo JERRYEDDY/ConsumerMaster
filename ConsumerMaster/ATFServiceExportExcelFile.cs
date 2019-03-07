@@ -11,10 +11,8 @@ namespace ConsumerMaster
     public class ATFServiceExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
-        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
         public Workbook CreateWorkbook(string tradingPartnerID)
         {
@@ -31,8 +29,8 @@ namespace ConsumerMaster
 
                 Utility util = new Utility();
 
-                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 3 or trading_partner_id = 4");
-                                                                                    //Adult Training Facility; Bill George = 3 or Adult Training Facility; Jefferson = 4
+                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 1 or trading_partner_id = 2");
+                                                                                      //Adult Training Facility;Jefferson = 1 or Adult Training Facility;Bill George = 2 
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat();
 

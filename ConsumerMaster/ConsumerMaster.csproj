@@ -300,7 +300,6 @@
     <Compile Include="Reports.aspx.designer.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ATFRatioReport.cs" />
     <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
     <Compile Include="Consumers.aspx.cs">

@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 using Telerik.Web.UI;
-using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
+
 
 namespace ConsumerMaster
 {
@@ -57,7 +57,7 @@ namespace ConsumerMaster
                 DateTime endDate = new DateTime(EndDatePicker.SelectedDate.Value.Year,
                     EndDatePicker.SelectedDate.Value.Month, EndDatePicker.SelectedDate.Value.Day, 23, 59, 59);
 
-                int siteId = ATFPartnerList.SelectedValue.Equals("3") ? 2 : 1;     //Greene=3(2) and Washington=4(1)
+                int siteId = Convert.ToInt32(ATFPartnerList.SelectedValue);
                 string siteName = ATFPartnerList.SelectedText;
 
                 ATFConsumerRatioReport ratioReport = new ATFConsumerRatioReport();

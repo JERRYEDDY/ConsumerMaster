@@ -12,10 +12,8 @@ namespace ConsumerMaster
     public class EIServiceExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
-        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
 
         public Workbook CreateWorkbook()
         {

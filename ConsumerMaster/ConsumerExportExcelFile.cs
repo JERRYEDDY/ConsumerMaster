@@ -9,8 +9,6 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
-        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-
 
         public Workbook CreateWorkbook(string tradingPartnerId)
         {
@@ -69,7 +67,7 @@ namespace ConsumerMaster
                     currentRow++;
                 }
 
-                for (int i = 0; i < worksheet.Columns.Count; i++)
+                for (int i = 0; i < ceDataTable.Columns.Count; i++)
                 {
                     worksheet.Columns[i].AutoFitWidth();
                 }
@@ -85,16 +83,8 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
                 ConsumerExportFormat cef = new ConsumerExportFormat();
                 string[] columnsList = cef.ColumnStrings;
-
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, cef.GetIndex("consumer_first"));
-                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1,cef.GetIndex("gender"));
-                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
 
                 foreach (string column in columnsList)
                 {

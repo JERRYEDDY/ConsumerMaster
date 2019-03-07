@@ -22,21 +22,21 @@ namespace ConsumerMaster
             {
                 Logger.Info("ConsumerMaster started");
 
-                ServiceExportFormat sef = new ServiceExportFormat();
-                string[] list = sef.ColumnStrings;
+                //ServiceExportFormat sef = new ServiceExportFormat();
+                //string[] list = sef.ColumnStrings;
 
-                ServiceExportFormat sef1 = new ServiceExportFormat(true);
-                string[] list1 = sef1.ColumnStrings;
+                //ServiceExportFormat sef1 = new ServiceExportFormat(true);
+                //string[] list1 = sef1.ColumnStrings;
 
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
-                {
-                    DataSource = "consumermaster.database.windows.net",
-                    UserID = "CSAdmin",
-                    Password = "MyCSDB2918",
-                    InitialCatalog = "consumermaster"
-                };
+                //SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                //{
+                //    DataSource = "consumermaster.database.windows.net",
+                //    UserID = "CSAdmin",
+                //    Password = "MyCSDB2918",
+                //    InitialCatalog = "consumermaster"
+                //};
 
-                string connection = builder.ConnectionString;
+                //string connection = builder.ConnectionString;
 
                 BindToTPDropDownList(TPRadDropDownList);
                 BindToATF_TPDropDownList(ATFConsumerList);

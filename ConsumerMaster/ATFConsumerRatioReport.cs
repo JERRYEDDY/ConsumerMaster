@@ -52,15 +52,15 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in crrDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Site")].SetValue(dr["Site"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetValue(dr["FullName"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio1")].SetValue(dr["Ratio1"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio2")].SetValue(dr["Ratio2"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetValue(dr["Units1"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetValue(dr["Units2"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetValue(dr["Total"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct1")].SetValue(dr["Pct1"].ToString());
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct2")].SetValue(dr["Pct2"].ToString());
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Site")].SetValue(dr["Site"].ToString());               //Column A
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetValue(dr["FullName"].ToString());       //Column B
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio1")].SetValue(dr["Ratio1"].ToString());           //Column C      
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio2")].SetValue(dr["Ratio2"].ToString());           //Column D                   
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetValue(dr["Units1"].ToString());           //Column E
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetValue(dr["Units2"].ToString());           //Column F
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetValue(dr["Total"].ToString());             //Column G
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct1")].SetValue(dr["Pct1"].ToString());               //Column H
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct2")].SetValue(dr["Pct2"].ToString());               //Column I
 
                     currentRow++;
                 }
@@ -148,6 +148,7 @@ namespace ConsumerMaster
                 consumersTable.Columns.Add("Total", typeof(int));
                 consumersTable.Columns.Add("Pct1", typeof(string));
                 consumersTable.Columns.Add("Pct2", typeof(string));
+
 
                 using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringAttendance"].ToString()))
                 {

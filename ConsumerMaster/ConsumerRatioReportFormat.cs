@@ -28,6 +28,7 @@ namespace ConsumerMaster
             {6, new ConsumerRatioReportColumn {Include=true,Name="Total"} },
             {7, new ConsumerRatioReportColumn {Include=true,Name="Pct1"} },
             {8, new ConsumerRatioReportColumn {Include=true,Name="Pct2"} },
+
         };
 
         public string[] ColumnStrings;

@@ -39,7 +39,6 @@
                     <telerik:RadDatePicker RenderMode="Lightweight" ID="EndDatePicker" runat="server" DateInput-Label="To: " />
                     <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="EndDatePicker" Display="Dynamic" ErrorMessage="You must select end date!"  ValidationGroup="ATFConsumerRatioReportGroup"/>
                     <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToCompare="StartDatePicker" EnableClientScript="true" ControlToValidate="EndDatePicker" Type="Date" Operator="GreaterThan" ErrorMessage="The end date must be after the start one." ValidationGroup="ATFConsumerRatioReportGroup" />
-
                     <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton6" CssClass="downloadButton" ValidationGroup="ATFConsumerRatioReportGroup" OnClick="ATFConsumerRatioReportDownload_Click" runat="server" />
                 </td>
             </tr>
