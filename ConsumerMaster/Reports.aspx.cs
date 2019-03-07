@@ -29,7 +29,7 @@ namespace ConsumerMaster
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
                     con.Open();
-                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (3, 4)", con))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2)", con))
                     {
                         DataTable tradingPartners = new DataTable();
                         adapter.Fill(tradingPartners);
