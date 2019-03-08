@@ -49,18 +49,46 @@ namespace ConsumerMaster
                 string rangeText = "Range: " + startDate.ToString("d") + "-" + endDate.ToString("d");
                 sheet1Worksheet.Cells[2, 0].SetValue(rangeText);
 
+                sheet1Worksheet.Columns[crrf.GetIndex("Site")].SetWidth(new ColumnWidth(40, false));
+
+                sheet1Worksheet.Columns[crrf.GetIndex("FullName")].SetWidth(new ColumnWidth(200, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Ratio1")].SetWidth(new ColumnWidth(80, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Ratio2")].SetWidth(new ColumnWidth(80, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Units1")].SetWidth(new ColumnWidth(75, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Units2")].SetWidth(new ColumnWidth(75, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Total")].SetWidth(new ColumnWidth(80, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Pct1")].SetWidth(new ColumnWidth(80, false));
+                sheet1Worksheet.Columns[crrf.GetIndex("Pct2")].SetWidth(new ColumnWidth(80, false));
+
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in crrDataTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Site")].SetValue(dr["Site"].ToString());               //Column A
+                    string site = dr["Site"].ToString();
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Site")].SetValue(site);                                //Column A
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Site")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
                     sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetValue(dr["FullName"].ToString());       //Column B
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio1")].SetValue(dr["Ratio1"].ToString());           //Column C      
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio2")].SetValue(dr["Ratio2"].ToString());           //Column D                   
+
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio1")].SetValue(dr["Ratio1"].ToString());           //Column C    
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio1")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio2")].SetValue(dr["Ratio2"].ToString());           //Column D   
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Ratio2")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
                     sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetValue(dr["Units1"].ToString());           //Column E
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units1")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
                     sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetValue(dr["Units2"].ToString());           //Column F
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Units2")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
                     sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetValue(dr["Total"].ToString());             //Column G
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct1")].SetValue(dr["Pct1"].ToString());               //Column H
-                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct2")].SetValue(dr["Pct2"].ToString());               //Column I
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct1")].SetValue(dr["Pct1"].ToString());              //Column H
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct1")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct2")].SetValue(dr["Pct2"].ToString());              //Column I
+                    sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Pct2")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
 
                     currentRow++;
                 }
@@ -97,10 +125,6 @@ namespace ConsumerMaster
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetBorders(blackBorders);
                 sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("Total")].SetValue("=AVERAGE(G2:G" + currentRow + ")");
 
-                for (int i = 0; i < crrDataTable.Columns.Count; i++)
-                {
-                    sheet1Worksheet.Columns[i].AutoFitWidth();
-                }
             }
             catch (Exception ex)
             {
@@ -113,10 +137,8 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
                 ConsumerRatioReportFormat crrf = new ConsumerRatioReportFormat();
-                string[] columnsList = crrf.ColumnStrings;
+                string[] columnsList = crrf.HeaderStrings;
                 foreach (string column in columnsList)
                 {
                     int columnKey = Array.IndexOf(columnsList, column);
@@ -181,8 +203,8 @@ namespace ConsumerMaster
 
                                 double pct1 = (total == 0) ? 0 : units1 / (double)total;
                                 double pct2 = (total == 0) ? 0 : units2 / (double)total;
-                                row["Pct1"] = $"{pct1:P2}";
-                                row["Pct2"] = $"{pct2:P2}";
+                                row["Pct1"] = $"{pct1:P0}";
+                                row["Pct2"] = $"{pct2:P0}";
 
                                 consumersTable.Rows.Add(row);
                             }
