@@ -23,55 +23,25 @@ namespace ConsumerMaster
                 {1, new ConsumerRatioReportColumn {Include = true, Name = "FullName"}},
                 {2, new ConsumerRatioReportColumn {Include = true, Name = "Ratio1"}},
                 {3, new ConsumerRatioReportColumn {Include = true, Name = "Ratio2"}},
-                {4, new ConsumerRatioReportColumn {Include = true, Name = "Units1"}},
-                {5, new ConsumerRatioReportColumn {Include = true, Name = "Units2"}},
-                {6, new ConsumerRatioReportColumn {Include = true, Name = "Total"}},
-                {7, new ConsumerRatioReportColumn {Include = true, Name = "Pct1"}},
-                {8, new ConsumerRatioReportColumn {Include = true, Name = "Pct2"}},
-
+                {4, new ConsumerRatioReportColumn {Include = true, Name = "Ratio3"}},
+                {5, new ConsumerRatioReportColumn {Include = true, Name = "Units1"}},
+                {6, new ConsumerRatioReportColumn {Include = true, Name = "Units2"}},
+                {7, new ConsumerRatioReportColumn {Include = true, Name = "Units3"}},
+                {8, new ConsumerRatioReportColumn {Include = true, Name = "Total"}},
+                {9, new ConsumerRatioReportColumn {Include = true, Name = "FacUnits"}},
+                {10, new ConsumerRatioReportColumn {Include = true, Name = "ComUnits"}},
+                {11, new ConsumerRatioReportColumn {Include = true, Name = "OtherUnits"}},
+                {12, new ConsumerRatioReportColumn {Include = true, Name = "ComPct"}},
             };
 
-        private readonly Dictionary<int, string> _headerNameList = new Dictionary<int, string>
-        {
-            {0, "Site"},
-            {1, "Name"},
-            {2, "Fac Ratio"},
-            {3, "Com Ratio"},
-            {4,"Fac Units"},
-            {5, "Com Units"},
-            {6, "Total"},
-            {7, "Fac %"},
-            {8, "Com %"},
-        };
-
         public string[] ColumnStrings;
-        public string[] HeaderStrings;
+        public string[] HeaderStrings = new string[] {"Site", "Name", "Ratio1", "Ratio2", "Ratio3", "Units1", "Units2", "Units3", "Total", "Fac Units", "Com Units", "Other", "Com %" };
 
         private readonly bool _includeHours = false;
 
         public ConsumerRatioReportFormat()
         {
-            HeaderStrings = GetHeaders();
             ColumnStrings = GetColumns();
-        }
-
-        private string[] GetHeaders()
-        {
-            StringCollection _cols = new StringCollection();
-            try
-            {
-                foreach (var column in _headerNameList)
-                {
-                 _cols.Add(column.Value);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            return _cols.Cast<string>().ToArray();
         }
 
         private string[] GetColumns()
