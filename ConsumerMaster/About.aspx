@@ -3,42 +3,44 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
-    <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
-    <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-    </telerik:RadAjaxManager>
-    <h4>Home</h4>
-    <div class="demo-container no-bg">
-    <div id="grid">
-    </div>
-    <div>
-        <br/>
-        <telerik:RadPanelBar ID="RadPanelBar1" runat="server"></telerik:RadPanelBar>
-        <table>
-            <tr>
-                <td>
-                    <img src="Images/AWCLogo1.png" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Consumer Export File 
-                </td>
-                <td class="space"/>
-                <td>
+<style>
 
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Service Export File 
-                </td>
-                <td class="space"/>
-                <td>
+.container-1 {
+    display: flex;
+}
 
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div>
+.container-1 div {
+    border: 1px #ccc solid;
+    padding:10px
+}
+
+.box-1{
+
+}
+
+.box-2{
+
+}
+
+.box-3 {
+
+}
+</style>   
+
+<div class="container-1">
+    <div class="box-1">
+        <h3>Box One</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>    
+    <div class="box-2">
+        <h3>Box Two</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div> 
+    <div class="box-3">
+        <h3>Box Three</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div> 
+</div>    
+
+
 </asp:Content>

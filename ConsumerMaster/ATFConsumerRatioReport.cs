@@ -123,6 +123,7 @@ namespace ConsumerMaster
                     new CellBorder(CellBorderStyle.None, black),     // Diagonal up border 
                     new CellBorder(CellBorderStyle.None, black));    // Diagonal down border 
 
+                int totalRow = currentRow;
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetValue("=SUM(I2:I" + currentRow + ")");
 
@@ -142,38 +143,39 @@ namespace ConsumerMaster
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetIsBold(true);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FullName")].SetValue("Total:");
 
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FullName")].SetIsBold(true);
+                int averageRow = currentRow + 1;
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("FullName")].SetHorizontalAlignment(RadHorizontalAlignment.Right);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("FullName")].SetIsBold(true);
                 sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FullName")].SetValue("Average:");
 
                 CellValueFormat decimalFormat = new CellValueFormat("0.00");
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("Total")].SetFormat(decimalFormat);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("Total")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("Total")].SetFormat(decimalFormat);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("Total")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("Total")].SetBorders(blackBorders);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("Total")].SetValue("=AVERAGE(I2:I" + currentRow + ")");
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("Total")].SetValue("=AVERAGE(I2:I" + currentRow + ")");
 
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FacUnits")].SetFormat(decimalFormat);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FacUnits")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("FacUnits")].SetFormat(decimalFormat);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("FacUnits")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("FacUnits")].SetBorders(blackBorders);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("FacUnits")].SetValue("=AVERAGE(J2:J" + currentRow + ")");
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("FacUnits")].SetValue("=AVERAGE(J2:J" + currentRow + ")");
 
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("ComUnits")].SetFormat(decimalFormat);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("ComUnits")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("ComUnits")].SetFormat(decimalFormat);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("ComUnits")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("ComUnits")].SetBorders(blackBorders);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("ComUnits")].SetValue("=AVERAGE(K2:K" + currentRow + ")");
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("ComUnits")].SetValue("=AVERAGE(K2:K" + currentRow + ")");
 
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("OtherUnits")].SetFormat(decimalFormat);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("OtherUnits")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("OtherUnits")].SetFormat(decimalFormat);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("OtherUnits")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("OtherUnits")].SetBorders(blackBorders);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("OtherUnits")].SetValue("=AVERAGE(L2:L" + currentRow + ")");
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("OtherUnits")].SetValue("=AVERAGE(L2:L" + currentRow + ")");
 
                 CellValueFormat percentageFormat = new CellValueFormat("0%");
-                int avgRow = currentRow + 1;
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("ComPct")].SetFormat(percentageFormat);
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("ComPct")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("ComPct")].SetFormat(percentageFormat);
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("ComPct")].SetHorizontalAlignment(RadHorizontalAlignment.Center);
                 sheet1Worksheet.Cells[currentRow, crrf.GetIndex("ComPct")].SetBorders(blackBorders);
-                string pct2Formula = "=(K" + avgRow + "/I" + avgRow + ")";
-                sheet1Worksheet.Cells[currentRow + 1, crrf.GetIndex("ComPct")].SetValue(pct2Formula);
+                string pct2Formula = "=(K" + averageRow + "/I" + averageRow + ")";
+                sheet1Worksheet.Cells[averageRow, crrf.GetIndex("ComPct")].SetValue(pct2Formula);
             }
             catch (Exception ex)
             {
@@ -207,7 +209,6 @@ namespace ConsumerMaster
         public DataTable GetAttendanceData(DateTime startDateTime, DateTime endDateTime, int siteId)
         {
             DataTable consumersTable = new DataTable("Consumers");
-
             try
             {
                 consumersTable.Columns.Add("Site", typeof(int));
@@ -293,20 +294,27 @@ namespace ConsumerMaster
         public int[] CombineUnits(string[] ratio, int[] units)
         {
             int[] combinedUnits = new int[3] { 0, 0, 0 };
-            for (int i = 0; i < 3; i++)
+            try
             {
-                if (ratio[i].Contains("F"))
+                for (int i = 0; i < 3; i++)
                 {
-                    combinedUnits[0] += units[i]; //Facility
+                    if (ratio[i].Contains("F"))
+                    {
+                        combinedUnits[0] += units[i]; //Facility
+                    }
+                    else if (ratio[i].Contains("c"))
+                    {
+                        combinedUnits[1] += units[i]; //Community
+                    }
+                    else
+                    {
+                        combinedUnits[2] += units[i]; //Other
+                    }
                 }
-                else if (ratio[i].Contains("c"))
-                {
-                    combinedUnits[1] += units[i]; //Community
-                }
-                else
-                {
-                    combinedUnits[2] += units[i]; //Other
-                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
             }
             return combinedUnits;
         }
