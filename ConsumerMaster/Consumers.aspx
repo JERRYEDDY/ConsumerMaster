@@ -5,54 +5,90 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 <style>
-/* form specific formatting */
+    .register-form {
+        line-height: 1.4;
+    }
     .form-group {
+        background: #F6DDCE;
+        margin-bottom:1em;
+        padding: 10px;
+    }
+    .form-group ul {
+        list-style: none;
+        margin: 0 0 2em;
+        padding: 0;
+    }
+    .form-group li {
+        margin-bottom: 0.5em;
+    }
+    .form-group h3 {
+        margin-bottom: 1em;
+    }
+    .form-fields input[type="text"],
+    .form-fields input[type="tel"],
+    .form-fields input[type="url"],
+    .form-fields input[type="email"],
+    .form-fields input[type="number"],
+    .form-fields select {
+        box-sizing: border-box;
+        padding: 0.6em 0.8em;
+        color: #999;
+        background: #f7f7f7;
+        border: 1px solid #e1e1e1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.9em;
+        text-decoration: none;
+        line-height: normal;
+        max-height: 3em;
+    }
+    .form-fields input[type="text"]:focus,
+    .form-fields input[type="tel"]:focus,
+    .form-fields input[type="url"]:focus,
+    .form-fields input[type="email"]:focus,
+    .form-fields input[type="number"]:focus,
+    .form-food textarea:focus,
+    .form-fields select:focus {
+        color: #333;
+        border: 1px solid #C17CCF;
+        outline: none;
+        background: #f2f2f2;
+    }
+    .register-btn {
+        border-radius: 0px 2px 2px 0px;
+        box-sizing: content-box;
+        background: #8B798C;
+        font-weight: 300;
+        text-transform: uppercase;
+        color: white;
+        padding: 0.35em 0.75em;
+        border: none;
+        font-size: 1.1em;
+        text-decoration: none;
+        cursor: pointer;	
+    }
+    .register-btn:hover, .register-btn:focus {
+        background: #C17CCF;
+    }
+    /*flex it*/
+    .form-fields li {
         display: flex;
-        flex-direction: row;
+        flex-wrap: wrap;
     }
- 
-    .form-group label {
-        flex: none;
-        display: block;
-        width: 125px;
-        font-weight: bold;
-        font-size: 1em;
+
+    .form-fields input[type="text"],
+    .form-fields input[type="tel"],
+    .form-fields input[type="url"],
+    .form-fields input[type="email"],
+    .form-fields input[type="number"],
+    .form-fields select {
+        flex: 1 0 230px;
     }
-    .form-group label.right-inline {
-        text-align: right;  
-        padding-right: 8px;
-        padding-left: 10px;
-        width: auto;
+    .form-fields label {
+        flex: 1 0 90px;
     }
- 
-    .form-group .input-control {
-        flex: 1 1 auto;
-        display: block;
-        margin-bottom: 10px;
-        margin-right: 8px;
-        padding: 4px;
-        margin-top: -4px;
-    }
- 
-    button {
-        padding: 5px 15px;
-        margin: 5px;
-        min-width: 100px
-    }
- 
-    @media (max-width: 768px) {
-        .form-group {
-            flex-direction: column;
-        }
-        .form-group .input-control {
-            margin-top: 2px;
-        }
-        .form-group label.right-inline {
-            text-align: left;  
-            padding-right: 0;
-            padding-left: 0;   
-        }
-    }
+
 </style>
 
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
@@ -92,93 +128,96 @@
                 </Columns>
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
-                        <H5>Consumer Info</H5>
-                        <div class="form-group">
-                            <label for="first_name">First Name:</label> 
-                            <telerik:RadTextBox ID="txtConsumerFirst" runat="server" Text='<%# Bind("consumer_first") %>'/>
-                            <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="txtConsumerFirst"
-                                                        ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="last_name">Last name :</label> 
-                            <telerik:RadTextBox ID="txtConsumerLast" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="1"/>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="txtConsumerLast"
-                                                        ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
-                        </div>
-                        <div class="form-group">
-                            <label for="birth_date">Birth Date:</label> 
-                            <telerik:RadDatePicker ID="dpBirthDate" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="4"/>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="dpBirthDate"
-                                                        ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="address1">Address1:</label> 
-                            <telerik:RadTextBox ID="txtAddress1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="8"/>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="txtAddress1"
-                                                        ErrorMessage="Address1 is required"  ValidationGroup="FormValidationGroup"/>
-                        </div>                                    
-                        <div class="form-group">
-                            <label for="address2">Address2:</label> 
-                            <telerik:RadTextBox ID="txtAddress2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="9"/>
-                        </div>                                   
-                        <div class="form-group">
-                            <label for="city">City:</label> 
-                            <telerik:RadTextBox ID="txtCity" Text='<%# Bind("city") %>' runat="server" TabIndex="11"/>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" ControlToValidate="txtCity"
-                                                        ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="state">State:</label> 
-                            <telerik:RadDropDownList ID="ddlStates" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
-                                                     DataTextField="name" DataValueField="abbreviation" TabIndex="12" DefaultMessage="Select" /> 
-                            <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlStates" 
-                                                        ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
-                        </div>                                    
-                        <div class="form-group">
-                            <label for="zip_code">Zip Code:</label> 
-                            <telerik:RadMaskedTextBox ID="txtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13" Mask="#####-####" />
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" ControlToValidate="txtZipCode"
-                                                        ErrorMessage="Zip code is required"  ValidationGroup="FormValidationGroup"/>
-                        </div>  
-                        <div class="form-group">
-                            <label for="identifier">Identifier:</label> 
-                            <telerik:RadTextBox ID="txtIdentifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="14"/>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="txtIdentifier"
-                                                        ErrorMessage="Identifier is required" />
-                            <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="txtIdentifier" 
-                                                            ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />
-                        </div>                                     
-                        <div class="form-group">
-                            <label for="gender">Gender:</label> 
-                            <telerik:RadRadioButtonList ID="rblGender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="15" 
-                                                        ValidationGroup="GenderGroup" Direction="Horizontal">
-                                <Items>
-                                    <telerik:ButtonListItem Text="Male" Value="M"/>
-                                    <telerik:ButtonListItem Text="Female" Value="F"/>
-                                </Items>
-                            </telerik:RadRadioButtonList>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="rblGender"  Display="Dynamic"
-                                                        ErrorMessage="Gender is required" ValidationGroup="GenderGroup" />
-                        </div>                                      
-                        <div class="form-group">
-                            <label for="diagnosis_code">Diagnosis Code:</label> 
-                            <telerik:RadTextBox ID="txtDiagnosis" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="16"/>
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="txtDiagnosis"
-                                                        ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
-                        </div>  
-                        <div class="form-group">
-                            <label for="nickname_first">Nickname First:</label> 
-                            <telerik:RadTextBox ID="txtNicknameFirst" Text='<%# Bind("nickname_first") %>' runat="server" TabIndex="17"/>
-                        </div>                                      
-                        <div class="form-group">
-                            <label for="nickname_last">Nickname Last:</label> 
-                            <telerik:RadTextBox ID="txtNicknameLast" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="18"/>
-                        </div>                                      
-                        <div class="form-group">
-                            <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
-                                  CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
-                            <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
-                        </div>
+                        <section class="form-group">
+                            <h4>Consumer Info</h4>
+                            <ul class="form-fields">
+                            <li>
+                                <label for="first_name">First Name:</label> 
+                                <telerik:RadTextBox ID="txtConsumerFirst" runat="server" Text='<%# Bind("consumer_first") %>'/>
+                                <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="txtConsumerFirst"
+                                                            ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
+                            </li>
+                            <li>
+                                <label for="last_name">Last name :</label> 
+                                <telerik:RadTextBox ID="txtConsumerLast" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="1"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="txtConsumerLast"
+                                                            ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
+                            </li>
+                            <li>
+                                <label for="birth_date">Birth Date:</label> 
+                                <telerik:RadDatePicker ID="dpBirthDate" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="4"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="dpBirthDate"
+                                                            ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
+                            </li>
+                            <li>
+                                <label for="address1">Address1:</label> 
+                                <telerik:RadTextBox ID="txtAddress1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="8"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="txtAddress1"
+                                                            ErrorMessage="Address1 is required"  ValidationGroup="FormValidationGroup"/>
+                            </li>                                    
+                            <li>
+                                <label for="address2">Address2:</label> 
+                                <telerik:RadTextBox ID="txtAddress2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="9"/>
+                            </li>                                   
+                            <li>
+                                <label for="city">City:</label> 
+                                <telerik:RadTextBox ID="txtCity" Text='<%# Bind("city") %>' runat="server" TabIndex="11"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" ControlToValidate="txtCity"
+                                                            ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
+                            </li>
+                            <li>
+                                <label for="state">State:</label> 
+                                <telerik:RadDropDownList ID="ddlStates" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
+                                                         DataTextField="name" DataValueField="abbreviation" TabIndex="12" DefaultMessage="Select" /> 
+                                <asp:RequiredFieldValidator ID="Validator" ControlToValidate="ddlStates" 
+                                                            ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
+                            </li>                                    
+                            <li>
+                                <label for="zip_code">Zip Code:</label> 
+                                <telerik:RadMaskedTextBox ID="txtZipCode" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="13" Mask="#####-####" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" ControlToValidate="txtZipCode"
+                                                            ErrorMessage="Zip code is required"  ValidationGroup="FormValidationGroup"/>
+                            </li>  
+                            <li>
+                                <label for="identifier">Identifier:</label> 
+                                <telerik:RadTextBox ID="txtIdentifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="14"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="txtIdentifier"
+                                                            ErrorMessage="Identifier is required" />
+                                <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="txtIdentifier" 
+                                                                ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />
+                            </li>                                     
+                            <li>
+                                <label for="gender">Gender:</label> 
+                                <telerik:RadRadioButtonList ID="rblGender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="15" 
+                                                            ValidationGroup="GenderGroup" Direction="Horizontal">
+                                    <Items>
+                                        <telerik:ButtonListItem Text="Male" Value="M"/>
+                                        <telerik:ButtonListItem Text="Female" Value="F"/>
+                                    </Items>
+                                </telerik:RadRadioButtonList>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="rblGender"  Display="Dynamic"
+                                                            ErrorMessage="Gender is required" ValidationGroup="GenderGroup" />
+                            </li>                                      
+                            <li>
+                                <label for="diagnosis_code">Diagnosis Code:</label> 
+                                <telerik:RadTextBox ID="txtDiagnosis" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="16"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="txtDiagnosis"
+                                                            ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
+                            </li>  
+                            <li>
+                                <label for="nickname_first">Nickname First:</label> 
+                                <telerik:RadTextBox ID="txtNicknameFirst" Text='<%# Bind("nickname_first") %>' runat="server" TabIndex="17"/>
+                            </li>                                      
+                            <div class="form-group">
+                                <label for="nickname_last">Nickname Last:</label> 
+                                <telerik:RadTextBox ID="txtNicknameLast" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="18"/>
+                            </div>    
+                        </section>
+                        <section class="form-submit">
+                                <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
+                                      CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
+                                <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                        </section>
                     </FormTemplate>
                 </EditFormSettings>              
             </MasterTableView>

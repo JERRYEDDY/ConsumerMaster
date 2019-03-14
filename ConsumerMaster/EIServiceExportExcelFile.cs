@@ -125,23 +125,23 @@ namespace ConsumerMaster
                     switch (dr["County"])
                     {
                         case "ALLEGHENY":
-                            billingNote = "CC11006 - ALLEGHENY";
+                            billingNote = "CC11006"; //ALLEGHENY
                             break;
 
                         case "FAYETTE":
-                            billingNote = "CC11029 - FAYETTE";
+                            billingNote = "CC11029"; //FAYETTE
                             break;
 
                         case "GREENE":
-                            billingNote = "CC11032 - GREENE";
+                            billingNote = "CC11032"; //GREENE
                             break;
 
                         case "WASHINGTON":
-                            billingNote = "CC11049 - WASHINGTON";
+                            billingNote = "CC11049"; //WASHINGTON
                             break;
 
                         case "WESTMORELAND":
-                            billingNote = "CC11050 - WESTMORELAND";
+                            billingNote = "CC11050"; //WESTMORELAND
                             break;
                     }
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(billingNote);                                                            //"billing_note"
