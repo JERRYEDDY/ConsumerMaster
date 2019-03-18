@@ -190,12 +190,6 @@ namespace ConsumerMaster
                 ServiceExportFormat sef = new ServiceExportFormat();
                 string[] columnsList = sef.ColumnStrings;
 
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetIndex("consumer_first"));
-                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetIndex("rendering_provider_last_name"));
-                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
-
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
                 foreach (string column in columnsList)
@@ -222,12 +216,6 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
-
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
