@@ -198,6 +198,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Consumers2.aspx" />
     <Content Include="Reports.aspx" />
     <Content Include="Consumers.aspx" />
     <Content Include="About.aspx" />
@@ -293,6 +294,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ATFConsumerRatioReport.cs" />
+    <Compile Include="Consumers2.aspx.cs">
+      <DependentUpon>Consumers2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Consumers2.aspx.designer.cs">
+      <DependentUpon>Consumers2.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports.aspx.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

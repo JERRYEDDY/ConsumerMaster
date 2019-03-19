@@ -70,15 +70,6 @@
                     <asp:Label runat="server" ID="Label2" />
                 </p>
             </div>
-<%--            <div class="demo-container size-thin">
-                <h3>Consumer Export</h3>
-                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
-                                   OnClick="ConsumerExportDownload_Click" runat="server" />
-                <p>
-                    <asp:Label runat="server" ID="Label3" />
-                </p>
-            </div>--%>
-            
             <div class="demo-container size-thin">
                 <h3>EI Service Export</h3>
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton4" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" 
