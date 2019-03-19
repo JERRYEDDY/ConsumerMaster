@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
+using System.Configuration;
 
 namespace ConsumerMaster
 {
@@ -76,52 +77,101 @@ namespace ConsumerMaster
             GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
 
             //Access the textbox from the insert form template and store the values in string variables. 
-            string CustomerID = (insertedItem.FindControl("txtCustomerID") as TextBox).Text;
-            string CompanyName = (insertedItem.FindControl("txtCompanyName") as TextBox).Text;
-            string ContactName = (insertedItem.FindControl("txtContactName") as TextBox).Text;
-            string Address = (insertedItem.FindControl("txtAddress") as TextBox).Text;
-            try
-            {
-                //Open the SqlConnection 
-                SqlConnection.Open();
-                //Update Query to insert into  the database  
-                string insertQuery = "INSERT into  Customers(CustomerID,CompanyName,ContactName,Address) values('" + CustomerID + "','" + CompanyName + "','" + ContactName + "','" + Address + "')";
-                SqlCommand.CommandText = insertQuery;
-                SqlCommand.Connection = SqlConnection;
-                SqlCommand.ExecuteNonQuery();
-                //Close the SqlConnection 
-                SqlConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                RadGrid1.Controls.Add(new LiteralControl("Unable to insert Customers. Reason: " + ex.Message));
-                e.Canceled = true;
-            }
+            string consumerFirst = ((TextBox) insertedItem.FindControl("consumer_first") as TextBox).Text;
+            string consumerLast = ((TextBox) insertedItem.FindControl("consumer_last") as TextBox)?.Text;
+            RadDatePicker birthDate = insertedItem.FindControl("birth_date") as RadDatePicker;
+            string addressLine1 = ((TextBox) insertedItem.FindControl("address_line_1")).Text;
+            string addressLine2 = ((TextBox) insertedItem.FindControl("address_line_2") as TextBox).Text;
+            string city = ((TextBox) insertedItem.FindControl("city") as TextBox).Text;
+            string state = ((TextBox) insertedItem.FindControl("state") as TextBox).Text;
+            string zipCode = ((TextBox) insertedItem.FindControl("zip_code") as TextBox).Text;
+            string identifier = ((TextBox) insertedItem.FindControl("identifier") as TextBox).Text;
+            string gender = ((TextBox) insertedItem.FindControl("gender") as TextBox).Text;
+            string diagnosis = ((TextBox) insertedItem.FindControl("diagnosis") as TextBox).Text;
+            string nicknameFirst = ((TextBox) insertedItem.FindControl("nickname_first") as TextBox).Text;
+            string nicknameLast = ((TextBox) insertedItem.FindControl("nickname_last") as TextBox).Text;
 
+            string insertQuery =
+                "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last)" +
+                " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)";
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    try
+                    {
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = insertQuery;
+
+                        SqlCommand.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
+                        SqlCommand.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
+
+                        if (birthDate != null)
+                            SqlCommand.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value = birthDate.SelectedDate;
+
+                        SqlCommand.Parameters.Add("address_line_1", SqlDbType.VarChar).Value = addressLine1;
+                        SqlCommand.Parameters.Add("address_line_2", SqlDbType.VarChar).Value = addressLine2;
+                        SqlCommand.Parameters.Add("city", SqlDbType.VarChar).Value = city;
+                        SqlCommand.Parameters.Add("state", SqlDbType.VarChar).Value = state;
+                        SqlCommand.Parameters.Add("zip_code", SqlDbType.VarChar).Value = zipCode;
+                        SqlCommand.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
+                        SqlCommand.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
+                        SqlCommand.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
+                        SqlCommand.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
+                        SqlCommand.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
+
+
+                        con.Open();
+                        SqlCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        RadGrid1.Controls.Add(new LiteralControl("Unable to insert Customers. Reason: " + ex.Message));
+                        e.Canceled = true;
+                    }
+
+                }
+            }
         }
 
         protected void RadGrid1_DeleteCommand(object source, GridCommandEventArgs e)
         {
             //Get the GridDataItem of the RadGrid 
-            GridDataItem item = (GridDataItem)e.Item;
+            GridDataItem item = (GridDataItem) e.Item;
+
             //Get the primary key value using the DataKeyValue. 
-            string CustomerID = item.OwnerTableView.DataKeyValues[item.ItemIndex]["CustomerID"].ToString();
-            try
+            string consumerInternalNumber = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
+
+            string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
-                //Open the SqlConnection 
-                SqlConnection.Open();
-                string deleteQuery = "DELETE from Consumers where consumer_internal_number='" + CustomerID + "'";
-                SqlCommand.CommandText = deleteQuery;
-                SqlCommand.Connection = SqlConnection;
-                SqlCommand.ExecuteNonQuery();
-                //Close the SqlConnection 
-                SqlConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                DisplayMessage("Unable to delete Consumers. Reason: " + ex.Message);
-                Logger.Info("Unable to delete Consumers. Reason: " + ex.Message);
-                e.Canceled = true;
+                using (SqlCommand cmd = new SqlCommand())
+                {
+
+                    try
+                    {
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = deleteQuery;
+
+
+                        SqlCommand.CommandText = deleteQuery;
+                        SqlCommand.Connection = SqlConnection;
+                        SqlCommand.ExecuteNonQuery();
+
+                        //Close the SqlConnection 
+                        SqlConnection.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        DisplayMessage("Unable to delete Consumers. Reason: " + ex.Message);
+                        Logger.Info("Unable to delete Consumers. Reason: " + ex.Message);
+                        e.Canceled = true;
+                    }
+                }
             }
         }
 
