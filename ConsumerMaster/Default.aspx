@@ -115,7 +115,18 @@
                            <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator2" ControlToValidate="ATFServiceList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFServiceValidationGroup" />
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            MultiSelect Checkbox 
+                        </td>
+                        <td class="space"/>
+                        <td>
+                            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" Width="400" />
+                            <telerik:RadButton RenderMode="Lightweight" ID="Button1" runat="server" Text="Get Checked Items" OnClick="Button1_Click"  />
+                        </td>
+                    </tr>
                 </table>
+                <asp:Literal ID="itemsClientSide" runat="server" />
             </div>    
         </div>
     </div><br/><br/>

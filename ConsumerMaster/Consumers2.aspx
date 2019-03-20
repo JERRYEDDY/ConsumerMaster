@@ -125,10 +125,25 @@
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
                     <telerik:GridTemplateColumn HeaderText="Trading Partners">
                         <ItemTemplate>
-                            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" DropDownAutoWidth="Enabled" Enabled="False"
+                            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" DropDownAutoWidth="Enabled" 
                                                  DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" />
                         </ItemTemplate>
                     </telerik:GridTemplateColumn>
+
+                    <telerik:GridTemplateColumn HeaderText="Trading Partners2">  
+                        <ItemTemplate>
+                            <telerik:RadCheckBoxList runat="server" ID="Questionnaire" AutoPostBack="false" CssClass="content">
+                                <Items>
+                                    <telerik:ButtonListItem Text="Game apps" Value="0" />
+                                    <telerik:ButtonListItem Text="Sports apps" Value="1" />
+                                    <telerik:ButtonListItem Text="Travel apps" Value="2" />
+                                    <telerik:ButtonListItem Text="News apps" Value="3" />
+                                </Items>
+                            </telerik:RadCheckBoxList>   
+                        </ItemTemplate>
+                    </telerik:GridTemplateColumn>
+                    
+
                     <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
                 </Columns>
                 <EditFormSettings EditFormType="Template">
@@ -219,9 +234,9 @@
                             </li>    
                         </section>
                         <section class="form-submit">
-                                <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
-                                      CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
-                                <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                            <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
+                                        CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"/>&nbsp;
+                            <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"/>
                         </section>
                     </FormTemplate>
                 </EditFormSettings>              
@@ -237,7 +252,7 @@
         <br />
     </div>
     
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+<%--    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
         DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
         InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last) VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
@@ -277,9 +292,9 @@
             <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </UpdateParameters>
-    </asp:SqlDataSource>        
+    </asp:SqlDataSource> --%>       
    
-    <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
+<%--    <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
                        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
                        DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
                        InsertCommand="INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id) VALUES (@consumer_internal_number, @trading_partner_id)"
@@ -299,7 +314,7 @@
             <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </UpdateParameters>
-    </asp:SqlDataSource> 
+    </asp:SqlDataSource> --%>
 
 <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT name, abbreviation FROM States"/>
 <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>

@@ -222,6 +222,32 @@ namespace ConsumerMaster
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
 
+
+
+
+        protected void RadGrid1_ItemDataBound(object sender, GridItemEventArgs e)
+        {
+            if (e.Item is GridEditableItem && e.Item.IsInEditMode)
+            {
+                GridEditableItem editItem = (GridEditableItem)e.Item;
+                CheckBoxList Colors = (CheckBoxList)editItem.FindControl("Colors");
+
+                string value = ((DataRowView)e.Item.DataItem)["Colors"].ToString();
+
+                string[] selectedColors = value.Split(',');
+                for (int j = 0; j < Colors.Items.Count; j++)
+                {
+                    for (int i = 0; i < selectedColors.Length; i++)
+                    {
+                        if (Colors.Items[j].Text == selectedColors[i])
+                        {
+                            Colors.Items[j].Selected = true;
+                        }
+                    }
+                }
+            }
+        }
+
         //protected void Page_PreRender(object sender, EventArgs e)
         //{
         //    if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
