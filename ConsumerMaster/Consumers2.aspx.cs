@@ -12,62 +12,36 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //Declare a global DataTable dtTable 
-        public static DataTable dtTable;
-        //Declare a global SqlConnection SqlConnection 
-        public SqlConnection SqlConnection = new SqlConnection("Data Source=local;Initial Catalog=Northwind;User ID=**");
-        //Declare a global SqlDataAdapter SqlDataAdapter 
-        public SqlDataAdapter SqlDataAdapter = new SqlDataAdapter();
-        //Declare a global SqlCommand SqlCommand 
-        public SqlCommand SqlCommand = new SqlCommand();
-
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid 
-            dtTable = new DataTable();
-            //Open the SqlConnection 
-            SqlConnection.Open();
-            try
-            {
-                //Select Query to populate the RadGrid with data from table Customers. 
-                string selectQuery = "SELECT CustomerID,CompanyName,ContactName,Address FROM Customers";
-                SqlDataAdapter.SelectCommand = new SqlCommand(selectQuery, SqlConnection);
-                SqlDataAdapter.Fill(dtTable);
-                RadGrid1.DataSource = dtTable;
-            }
-            finally
-            {
-                //Close the SqlConnection 
-                SqlConnection.Close();
-            }
-        }
+            DataTable dtTable = new DataTable();
+            string selectQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, " + 
+                                 "address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last";
 
-        protected void RadGrid1_UpdateCommand(object source, GridCommandEventArgs e)
-        {
-            //Get the GridEditableItem of the RadGrid 
-            GridEditableItem editedItem = e.Item as GridEditableItem;
-            //Get the primary key value using the DataKeyValue. 
-            string CustomerID = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["CustomerID"].ToString();
-            //Access the textbox from the edit form template and store the values in string variables. 
-            string CompanyName = (editedItem.FindControl("txtCompanyName") as TextBox).Text;
-            string ContactName = (editedItem.FindControl("txtContactName") as TextBox).Text;
-            string Address = (editedItem.FindControl("txtAddress") as TextBox).Text;
-            try
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
-                //Open the SqlConnection 
-                SqlConnection.Open();
-                //Update Query to update the Datatable  
-                string updateQuery = "UPDATE Customers set CompanyName='" + CompanyName + "',ContactName='" + ContactName + "',Address='" + Address + "' where CustomerID='" + CustomerID + "'";
-                SqlCommand.CommandText = updateQuery;
-                SqlCommand.Connection = SqlConnection;
-                SqlCommand.ExecuteNonQuery();
-                //Close the SqlConnection 
-                SqlConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                RadGrid1.Controls.Add(new LiteralControl("Unable to update Customers. Reason: " + ex.Message));
-                e.Canceled = true;
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    try
+                    {
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = selectQuery;
+
+                        SqlDataAdapter adapter = new SqlDataAdapter
+                        {
+                            SelectCommand = cmd
+                        };
+                        adapter.Fill(dtTable);
+                        RadGrid1.DataSource = dtTable;
+                    }
+                    catch (Exception ex)
+                    {
+                        DisplayMessage("Cannot select Consumers. Reason: " + ex.Message);
+                        Logger.Info("Cannot select Consumers. Reason: " + ex.Message);
+                    }
+                }
             }
         }
 
@@ -77,19 +51,19 @@ namespace ConsumerMaster
             GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
 
             //Access the textbox from the insert form template and store the values in string variables. 
-            string consumerFirst = ((TextBox) insertedItem.FindControl("consumer_first") as TextBox).Text;
-            string consumerLast = ((TextBox) insertedItem.FindControl("consumer_last") as TextBox)?.Text;
-            RadDatePicker birthDate = insertedItem.FindControl("birth_date") as RadDatePicker;
-            string addressLine1 = ((TextBox) insertedItem.FindControl("address_line_1")).Text;
-            string addressLine2 = ((TextBox) insertedItem.FindControl("address_line_2") as TextBox).Text;
-            string city = ((TextBox) insertedItem.FindControl("city") as TextBox).Text;
-            string state = ((TextBox) insertedItem.FindControl("state") as TextBox).Text;
-            string zipCode = ((TextBox) insertedItem.FindControl("zip_code") as TextBox).Text;
-            string identifier = ((TextBox) insertedItem.FindControl("identifier") as TextBox).Text;
-            string gender = ((TextBox) insertedItem.FindControl("gender") as TextBox).Text;
-            string diagnosis = ((TextBox) insertedItem.FindControl("diagnosis") as TextBox).Text;
-            string nicknameFirst = ((TextBox) insertedItem.FindControl("nickname_first") as TextBox).Text;
-            string nicknameLast = ((TextBox) insertedItem.FindControl("nickname_last") as TextBox).Text;
+            string consumerFirst = ((TextBox)insertedItem.FindControl("consumer_first")).Text;
+            string consumerLast = ((TextBox)insertedItem.FindControl("consumer_last"))?.Text;
+            RadDatePicker dateOfBirth = insertedItem.FindControl("date_of_birth") as RadDatePicker;
+            string addressLine1 = ((TextBox)insertedItem.FindControl("address_line_1")).Text;
+            string addressLine2 = ((TextBox)insertedItem.FindControl("address_line_2")).Text;
+            string city = ((TextBox)insertedItem.FindControl("city")).Text;
+            string state = ((TextBox)insertedItem.FindControl("state")).Text;
+            string zipCode = ((TextBox)insertedItem.FindControl("zip_code")).Text;
+            string identifier = ((TextBox)insertedItem.FindControl("identifier")).Text;
+            string gender = ((TextBox)insertedItem.FindControl("gender")).Text;
+            string diagnosis = ((TextBox)insertedItem.FindControl("diagnosis")).Text;
+            string nicknameFirst = ((TextBox)insertedItem.FindControl("nickname_first")).Text;
+            string nicknameLast = ((TextBox)insertedItem.FindControl("nickname_last")).Text;
 
             string insertQuery =
                 "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last)" +
@@ -105,30 +79,100 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = insertQuery;
 
-                        SqlCommand.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
-                        SqlCommand.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
+                        cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
+                        cmd.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
 
-                        if (birthDate != null)
-                            SqlCommand.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value = birthDate.SelectedDate;
+                        if (dateOfBirth != null)
+                            cmd.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value = dateOfBirth.SelectedDate;
 
-                        SqlCommand.Parameters.Add("address_line_1", SqlDbType.VarChar).Value = addressLine1;
-                        SqlCommand.Parameters.Add("address_line_2", SqlDbType.VarChar).Value = addressLine2;
-                        SqlCommand.Parameters.Add("city", SqlDbType.VarChar).Value = city;
-                        SqlCommand.Parameters.Add("state", SqlDbType.VarChar).Value = state;
-                        SqlCommand.Parameters.Add("zip_code", SqlDbType.VarChar).Value = zipCode;
-                        SqlCommand.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
-                        SqlCommand.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
-                        SqlCommand.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
-                        SqlCommand.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
-                        SqlCommand.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
-
+                        cmd.Parameters.Add("address_line_1", SqlDbType.VarChar).Value = addressLine1;
+                        cmd.Parameters.Add("address_line_2", SqlDbType.VarChar).Value = addressLine2;
+                        cmd.Parameters.Add("city", SqlDbType.VarChar).Value = city;
+                        cmd.Parameters.Add("state", SqlDbType.VarChar).Value = state;
+                        cmd.Parameters.Add("zip_code", SqlDbType.VarChar).Value = zipCode;
+                        cmd.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
+                        cmd.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
+                        cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
+                        cmd.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
+                        cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
 
                         con.Open();
-                        SqlCommand.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
                     }
                     catch (Exception ex)
                     {
-                        RadGrid1.Controls.Add(new LiteralControl("Unable to insert Customers. Reason: " + ex.Message));
+                        var message = $"Consumer: {consumerFirst}  {consumerLast} cannot be inserted. Reason: ";
+                        DisplayMessage(message + ex.Message);
+                        Logger.Info(message + ex.Message);
+                        e.Canceled = true;
+                    }
+                }
+            }
+        }
+
+        protected void RadGrid1_UpdateCommand(object source, GridCommandEventArgs e)
+        {
+            //Get the GridEditableItem of the RadGrid 
+            GridEditableItem editedItem = e.Item as GridEditableItem;
+
+            //Get the primary key value using the DataKeyValue. 
+            string consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["CustomerID"].ToString();
+            Int32.TryParse(consumerId, out int consumer_internal_number);
+
+            //Access the textbox from the edit form template and store the values in string variables. 
+            string consumerFirst = ((TextBox)editedItem.FindControl("consumer_first")).Text;
+            string consumerLast = ((TextBox)editedItem.FindControl("consumer_last"))?.Text;
+            RadDatePicker dateOfBirth = editedItem.FindControl("date_of_birth") as RadDatePicker;
+            string addressLine1 = ((TextBox)editedItem.FindControl("address_line_1")).Text;
+            string addressLine2 = ((TextBox)editedItem.FindControl("address_line_2")).Text;
+            string city = ((TextBox)editedItem.FindControl("city")).Text;
+            string state = ((TextBox)editedItem.FindControl("state")).Text;
+            string zipCode = ((TextBox)editedItem.FindControl("zip_code")).Text;
+            string identifier = ((TextBox)editedItem.FindControl("identifier")).Text;
+            string gender = ((TextBox)editedItem.FindControl("gender")).Text;
+            string diagnosis = ((TextBox)editedItem.FindControl("diagnosis")).Text;
+            string nicknameFirst = ((TextBox)editedItem.FindControl("nickname_first")).Text;
+            string nicknameLast = ((TextBox)editedItem.FindControl("nickname_last")).Text;
+
+            string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
+                   "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " + 
+                   " WHERE consumer_internal_number=@consumer_internal_number";
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+            {
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    try
+                    {
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = updateQuery;
+                        cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
+                        cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
+                        cmd.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
+
+                        if (dateOfBirth != null)
+                            cmd.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value = dateOfBirth.SelectedDate;
+
+                        cmd.Parameters.Add("address_line_1", SqlDbType.VarChar).Value = addressLine1;
+                        cmd.Parameters.Add("address_line_2", SqlDbType.VarChar).Value = addressLine2;
+                        cmd.Parameters.Add("city", SqlDbType.VarChar).Value = city;
+                        cmd.Parameters.Add("state", SqlDbType.VarChar).Value = state;
+                        cmd.Parameters.Add("zip_code", SqlDbType.VarChar).Value = zipCode;
+                        cmd.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
+                        cmd.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
+                        cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
+                        cmd.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
+                        cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
+
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        var message = $"Consumer: {consumerId} cannot be updated. Reason: ";
+                        DisplayMessage(message + ex.Message);
+                        Logger.Info(message + ex.Message);
                         e.Canceled = true;
                     }
 
@@ -142,7 +186,8 @@ namespace ConsumerMaster
             GridDataItem item = (GridDataItem) e.Item;
 
             //Get the primary key value using the DataKeyValue. 
-            string consumerInternalNumber = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
+            string consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
+            Int32.TryParse(consumerId, out int consumerInternalNumber);
 
             string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
 
@@ -150,25 +195,22 @@ namespace ConsumerMaster
             {
                 using (SqlCommand cmd = new SqlCommand())
                 {
-
                     try
                     {
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = deleteQuery;
 
+                        cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
 
-                        SqlCommand.CommandText = deleteQuery;
-                        SqlCommand.Connection = SqlConnection;
-                        SqlCommand.ExecuteNonQuery();
-
-                        //Close the SqlConnection 
-                        SqlConnection.Close();
+                        con.Open();
+                        cmd.ExecuteNonQuery();
                     }
                     catch (Exception ex)
                     {
-                        DisplayMessage("Unable to delete Consumers. Reason: " + ex.Message);
-                        Logger.Info("Unable to delete Consumers. Reason: " + ex.Message);
+                        var message = $"Consumer: {consumerId} cannot be deleted. Reason: ";
+                        DisplayMessage(message + ex.Message);
+                        Logger.Info(message + ex.Message);
                         e.Canceled = true;
                     }
                 }
