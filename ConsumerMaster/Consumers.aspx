@@ -3,7 +3,6 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
 <style>
     .register-form {
         line-height: 1.4;
@@ -124,12 +123,6 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-                    <telerik:GridTemplateColumn HeaderText="Trading Partners" ReadOnly="True">
-                        <ItemTemplate>
-                            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" DropDownAutoWidth="Enabled" Enabled="False"
-                                                 DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" />
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>
                     <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
                 </Columns>
                 <EditFormSettings EditFormType="Template">
@@ -217,7 +210,7 @@
                             <li>
                                 <label for="nickname_last">Nickname Last:</label> 
                                 <telerik:RadTextBox ID="nickname_last" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="18"/>
-                            </li>    
+                            </li>  
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"

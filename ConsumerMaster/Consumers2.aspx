@@ -111,38 +111,23 @@
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone" />
     <div class="demo-container no-bg">
         <h5><strong>CONSUMERS2:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" AllowFilteringByColumn="true" 
-                         OnNeedDataSource="RadGrid1_NeedDataSource" >
-            <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number">
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" AllowFilteringByColumn="true" OnItemCommand="RadGrid1_ItemCommand"
+                         OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand">
+            <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EnableViewState="False">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>
-                    <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
+                    <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" Display="False" />
                     <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" AllowFiltering="false"/>
                     <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
-                    <telerik:GridBoundColumn DataField="city" HeaderText="City" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                        
-                    <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-                    <telerik:GridTemplateColumn HeaderText="Trading Partners">
-                        <ItemTemplate>
-                            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" DropDownAutoWidth="Enabled" 
-                                                 DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" />
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>
 
-                    <telerik:GridTemplateColumn HeaderText="Trading Partners2">  
-                        <ItemTemplate>
-                            <telerik:RadCheckBoxList runat="server" ID="Questionnaire" AutoPostBack="false" CssClass="content">
-                                <Items>
-                                    <telerik:ButtonListItem Text="Game apps" Value="0" />
-                                    <telerik:ButtonListItem Text="Sports apps" Value="1" />
-                                    <telerik:ButtonListItem Text="Travel apps" Value="2" />
-                                    <telerik:ButtonListItem Text="News apps" Value="3" />
-                                </Items>
-                            </telerik:RadCheckBoxList>   
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>
-                    
+                    <telerik:GridDropDownColumn DataField="trading_partner_id1" UniqueName="trading_partner_id1" ListTextField="name" ListValueField="trading_partner_id" HeaderStyle-Width="300px" ItemStyle-Width="300px"
+                             DataSourceID="TradingPartnerDataSource" HeaderText="Trading Partner 1" DropDownControlType="RadComboBox" AllowSorting="true" />
+                    <telerik:GridDropDownColumn DataField="trading_partner_id2" UniqueName="trading_partner_id2" ListTextField="name" ListValueField="trading_partner_id" HeaderStyle-Width="300px" ItemStyle-Width="300px"
+                             DataSourceID="TradingPartnerDataSource" HeaderText="Trading Partner 2"  DropDownControlType="RadComboBox" AllowSorting="true" />                   
+                    <telerik:GridDropDownColumn DataField="trading_partner_id3" UniqueName="trading_partner_id3" ListTextField="name" ListValueField="trading_partner_id" HeaderStyle-Width="300px" ItemStyle-Width="300px" 
+                             DataSourceID="TradingPartnerDataSource" HeaderText="Trading Partner 3"  DropDownControlType="RadComboBox" AllowSorting="true" Display="False" />
 
                     <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
                 </Columns>
@@ -232,6 +217,21 @@
                                 <label for="nickname_last">Nickname Last:</label> 
                                 <telerik:RadTextBox ID="nickname_last" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="18"/>
                             </li>    
+                            <li>
+                                <label for="trading_partners1">Trading Partner 1:</label> 
+                                <telerik:RadDropDownList ID="trading_partners1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id1") %>'
+                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" Width="300px" DropDownWidth="300px" />
+                            </li>
+                            <li>
+                                <label for="trading_partners2">Trading Partner 2:</label> 
+                                <telerik:RadDropDownList ID="trading_partners2" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id2") %>'
+                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" Width="300px" DropDownWidth="300px" />
+                            </li>
+                            <li>
+                                <label for="trading_partners3">Trading Partner 3:</label> 
+                                <telerik:RadDropDownList ID="trading_partners3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id3") %>'
+                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" Width="300px" DropDownWidth="300px" />
+                            </li>                            
                         </section>
                         <section class="form-submit">
                             <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
@@ -241,7 +241,7 @@
                     </FormTemplate>
                 </EditFormSettings>              
             </MasterTableView>
-            <ClientSettings AllowKeyboardNavigation="true" EnablePostBackOnRowClick="true">
+            <ClientSettings AllowKeyboardNavigation="true">
                 <Selecting AllowRowSelect="true"></Selecting>
             </ClientSettings>
             <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
@@ -251,71 +251,6 @@
         <br />
         <br />
     </div>
-    
-<%--    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-        DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
-        InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last) VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
-        SelectCommand="SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last" 
-        UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, address_line_2 = @address_line_2, city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, nickname_first = @nickname_first, nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
-        <DeleteParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </DeleteParameters>
-        <InsertParameters>
-            <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="consumer_last" Type="String"></asp:Parameter>
-            <asp:Parameter Name="date_of_birth" Type="DateTime"></asp:Parameter>
-            <asp:Parameter Name="address_line_1" Type="String"></asp:Parameter>
-            <asp:Parameter Name="address_line_2" Type="String"></asp:Parameter>
-            <asp:Parameter Name="city" Type="String"></asp:Parameter>
-            <asp:Parameter Name="state" Type="String"></asp:Parameter>
-            <asp:Parameter Name="zip_code" Type="String"></asp:Parameter>
-            <asp:Parameter Name="identifier" Type="String"></asp:Parameter>
-            <asp:Parameter Name="gender" Type="String"></asp:Parameter>
-            <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
-        </InsertParameters>
-        <UpdateParameters>
-            <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="consumer_last" Type="String"></asp:Parameter>
-            <asp:Parameter Name="date_of_birth" Type="DateTime"></asp:Parameter>
-            <asp:Parameter Name="address_line_1" Type="String"></asp:Parameter>
-            <asp:Parameter Name="address_line_2" Type="String"></asp:Parameter>
-            <asp:Parameter Name="city" Type="String"></asp:Parameter>
-            <asp:Parameter Name="state" Type="String"></asp:Parameter>
-            <asp:Parameter Name="zip_code" Type="String"></asp:Parameter>
-            <asp:Parameter Name="identifier" Type="String"></asp:Parameter>
-            <asp:Parameter Name="gender" Type="String"></asp:Parameter>
-            <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </UpdateParameters>
-    </asp:SqlDataSource> --%>       
-   
-<%--    <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
-                       ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-                       DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
-                       InsertCommand="INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id) VALUES (@consumer_internal_number, @trading_partner_id)"
-                       SelectCommand="SELECT ctp.consumer_internal_number, ctp.trading_partner_id, tp.name AS trading_partner_name FROM ConsumerTradingPartner ctp INNER JOIN TradingPartners tp ON ctp.trading_partner_id = tp.id WHERE consumer_internal_number = @consumer_internal_number"
-                       UpdateCommand="UPDATE ConsumerTradingPartner SET trading_partner_id = @trading_partner_id WHERE consumer_internal_number = @consumer_internal_number">
-        <SelectParameters>
-            <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
-        </SelectParameters>
-        <DeleteParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </DeleteParameters>
-        <InsertParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
-        </InsertParameters>
-        <UpdateParameters>
-            <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </UpdateParameters>
-    </asp:SqlDataSource> --%>
-
 <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT name, abbreviation FROM States"/>
 <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
 <asp:SqlDataSource ID="PartnerProgramDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, partner_name, program_name FROM PartnerPrograms2"/>

@@ -16,8 +16,9 @@ namespace ConsumerMaster
         {
             //Populate the Radgrid 
             DataTable dtTable = new DataTable();
-            string selectQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, " + 
-                                 "address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last";
+            string selectQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, " +
+            "city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3 FROM ConsumersEI " +
+            "ORDER BY consumer_last";
 
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
@@ -65,9 +66,18 @@ namespace ConsumerMaster
             string nicknameFirst = ((TextBox)insertedItem.FindControl("nickname_first")).Text;
             string nicknameLast = ((TextBox)insertedItem.FindControl("nickname_last")).Text;
 
+            DropDownList tp1 = (DropDownList)insertedItem.FindControl("trading_partner_id1");
+            string tradingPartnerId1 = tp1.SelectedValue;
+            DropDownList tp2 = (DropDownList)insertedItem.FindControl("trading_partner_id2");
+            string tradingPartnerId2 = tp2.SelectedValue;
+            DropDownList tp3 = (DropDownList)insertedItem.FindControl("trading_partner_id3");
+            string tradingPartnerId3 = tp3.SelectedValue;
+
             string insertQuery =
-                "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last)" +
-                " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)";
+                "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, " +
+                "nickname_first, nickname_last, trading_partner_id1, trading_partner_id2, trading_partner_id3)" +
+                " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, " +
+                "@nickname_first, @nickname_last, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3)";
 
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
@@ -96,6 +106,10 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
                         cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
 
+                        cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
+                        cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
+                        cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
+
                         con.Open();
                         cmd.ExecuteNonQuery();
                     }
@@ -116,10 +130,10 @@ namespace ConsumerMaster
             GridEditableItem editedItem = e.Item as GridEditableItem;
 
             //Get the primary key value using the DataKeyValue. 
-            string consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["CustomerID"].ToString();
+            string consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["consumer_internal_number"].ToString();
             Int32.TryParse(consumerId, out int consumer_internal_number);
 
-            //Access the textbox from the edit form template and store the values in string variables. 
+            //Access the controls from the edit form template and store the values. 
             string consumerFirst = ((TextBox)editedItem.FindControl("consumer_first")).Text;
             string consumerLast = ((TextBox)editedItem.FindControl("consumer_last"))?.Text;
             RadDatePicker dateOfBirth = editedItem.FindControl("date_of_birth") as RadDatePicker;
@@ -134,8 +148,16 @@ namespace ConsumerMaster
             string nicknameFirst = ((TextBox)editedItem.FindControl("nickname_first")).Text;
             string nicknameLast = ((TextBox)editedItem.FindControl("nickname_last")).Text;
 
-            string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
-                   "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " + 
+            DropDownList tp1 = (DropDownList)editedItem.FindControl("trading_partner_id1");
+            string tradingPartnerId1 = tp1.SelectedValue;
+            DropDownList tp2 = (DropDownList)editedItem.FindControl("trading_partner_id2");
+            string tradingPartnerId2 = tp2.SelectedValue;
+            DropDownList tp3 = (DropDownList)editedItem.FindControl("trading_partner_id3");
+            string tradingPartnerId3 = tp3.SelectedValue;
+
+            string updateQuery = "UPDATE ConsumersEI SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
+                   "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " +
+                   "trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3 " +
                    " WHERE consumer_internal_number=@consumer_internal_number";
 
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
@@ -147,7 +169,7 @@ namespace ConsumerMaster
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = updateQuery;
-                        cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
+                        cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumer_internal_number;
                         cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
                         cmd.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
 
@@ -164,6 +186,10 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
                         cmd.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
                         cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
+
+                        cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
+                        cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
+                        cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
 
                         con.Open();
                         cmd.ExecuteNonQuery();
@@ -222,29 +248,49 @@ namespace ConsumerMaster
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
 
-
-
-
         protected void RadGrid1_ItemDataBound(object sender, GridItemEventArgs e)
         {
-            if (e.Item is GridEditableItem && e.Item.IsInEditMode)
+
+            if (e.Item is GridItem)
+            {
+
+            }
+            else if (e.Item is GridEditableItem && e.Item.IsInEditMode)
             {
                 GridEditableItem editItem = (GridEditableItem)e.Item;
-                CheckBoxList Colors = (CheckBoxList)editItem.FindControl("Colors");
+                RadComboBox tradingPartners = (RadComboBox)editItem.FindControl("TradingPartnersComboBox");
 
-                string value = ((DataRowView)e.Item.DataItem)["Colors"].ToString();
+                string value = ((DataRowView)e.Item.DataItem)["trading_partners"].ToString();
 
-                string[] selectedColors = value.Split(',');
-                for (int j = 0; j < Colors.Items.Count; j++)
+                string[] selectedTradingPartners = value.Split(',');
+                for (int j = 0; j < tradingPartners.Items.Count; j++)
                 {
-                    for (int i = 0; i < selectedColors.Length; i++)
+                    for (int i = 0; i < selectedTradingPartners.Length; i++)
                     {
-                        if (Colors.Items[j].Text == selectedColors[i])
+                        if (tradingPartners.Items[j].Text == selectedTradingPartners[i])
                         {
-                            Colors.Items[j].Selected = true;
+                            tradingPartners.Items[j].Selected = true;
                         }
                     }
                 }
+            }
+        }
+
+        protected void RadGrid1_ItemCommand(object sender, GridCommandEventArgs e)
+        {
+            if (e.CommandName == "YourCommandName")
+            {
+                // For Normal mode
+                GridDataItem item = e.Item as GridDataItem;
+                TextBox TextBox1 = item.FindControl("TextBox1") as TextBox;
+                // Access your TextBox Here
+
+
+                // For Edit mode
+                GridEditableItem eitem = e.Item as GridEditableItem;
+                TextBox TextBox2 = eitem.FindControl("TextBox2") as TextBox; // From Item Template
+                TextBox TextBox3 = eitem["ColumnUniqueName"].Controls[0] as TextBox; // From Bound Column
+                // Access your TextBox Here
             }
         }
 
