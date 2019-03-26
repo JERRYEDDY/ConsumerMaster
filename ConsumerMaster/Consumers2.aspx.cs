@@ -136,7 +136,7 @@ namespace ConsumerMaster
             //Access the controls from the edit form template and store the values. 
             string consumerFirst = ((TextBox)editedItem.FindControl("consumer_first")).Text;
             string consumerLast = ((TextBox)editedItem.FindControl("consumer_last"))?.Text;
-            RadDatePicker dateOfBirth = editedItem.FindControl("date_of_birth") as RadDatePicker;
+            RadDatePicker dateOfBirth = (RadDatePicker)editedItem.FindControl("date_of_birth");
             string addressLine1 = ((TextBox)editedItem.FindControl("address_line_1")).Text;
             string addressLine2 = ((TextBox)editedItem.FindControl("address_line_2")).Text;
             string city = ((TextBox)editedItem.FindControl("city")).Text;
@@ -148,12 +148,9 @@ namespace ConsumerMaster
             string nicknameFirst = ((TextBox)editedItem.FindControl("nickname_first")).Text;
             string nicknameLast = ((TextBox)editedItem.FindControl("nickname_last")).Text;
 
-            DropDownList tp1 = (DropDownList)editedItem.FindControl("trading_partner_id1");
-            string tradingPartnerId1 = tp1.SelectedValue;
-            DropDownList tp2 = (DropDownList)editedItem.FindControl("trading_partner_id2");
-            string tradingPartnerId2 = tp2.SelectedValue;
-            DropDownList tp3 = (DropDownList)editedItem.FindControl("trading_partner_id3");
-            string tradingPartnerId3 = tp3.SelectedValue;
+            string tradingPartnerId1 = ((DropDownList)editedItem.FindControl("trading_partner_id1")).SelectedValue;
+            string tradingPartnerId2 = ((DropDownList) editedItem.FindControl("trading_partner_id2")).SelectedValue;
+            string tradingPartnerId3 = ((DropDownList) editedItem.FindControl("trading_partner_id3")).SelectedValue;
 
             string updateQuery = "UPDATE ConsumersEI SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
                    "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " +
