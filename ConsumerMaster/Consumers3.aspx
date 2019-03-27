@@ -110,13 +110,15 @@
     <div class="demo-container no-bg">
         <h5><strong>CONSUMERS3:</strong></h5>
 
+        <%--                         DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True"  AllowAutomaticInserts="True" AllowAutomaticUpdates="True" 
+                         OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnItemDeleted="RadGrid1_ItemDeleted"--%>       
+        
+
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
                          OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" 
                          OnDeleteCommand="RadGrid1_DeleteCommand" OnItemCommand="RadGrid1_ItemCommand"                        
-<%--                         DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True"  AllowAutomaticInserts="True" AllowAutomaticUpdates="True" 
-                         OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnItemDeleted="RadGrid1_ItemDeleted"--%>
                          AllowFilteringByColumn="true" >
-            <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" EditMode="EditForms">
+            <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EditMode="EditForms">
                 <CommandItemTemplate>
                     <div style="padding: 5px 5px;">
                         <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
@@ -241,12 +243,15 @@
         <br />
         <br />
         <h5><strong>TRADING PARTNER:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
+        
+        <%--                     DataSourceID="SqlDataSource2" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" 
+                     OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated"--%>      
 
-                     DataSourceID="SqlDataSource2" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" 
-                     OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" 
-                     AllowFilteringByColumn="false" >
-            <MasterTableView Width="100%" Name="TradingPartners" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top" EditMode="EditForms">
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
+                    OnNeedDataSource="RadGrid2_NeedDataSource" OnInsertCommand="RadGrid2_InsertCommand" OnUpdateCommand="RadGrid2_UpdateCommand" 
+                    OnDeleteCommand="RadGrid2_DeleteCommand" OnItemCommand="RadGrid2_ItemCommand"  
+                    AllowFilteringByColumn="false" >
+            <MasterTableView Width="100%" Name="TradingPartners" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" CommandItemDisplay="Top" EditMode="EditForms">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn2">
                         <HeaderStyle Width="20px"></HeaderStyle>
@@ -286,7 +291,7 @@
         <br />
     </div>
     
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+<%--    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
         DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
         InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last) VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
@@ -348,7 +353,7 @@
             <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
         </UpdateParameters>
-    </asp:SqlDataSource> 
+    </asp:SqlDataSource> --%>
 
 <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT name, abbreviation FROM States"/>
 <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
