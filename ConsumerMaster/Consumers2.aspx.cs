@@ -131,7 +131,7 @@ namespace ConsumerMaster
 
             //Get the primary key value using the DataKeyValue. 
             string consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["consumer_internal_number"].ToString();
-            Int32.TryParse(consumerId, out int consumer_internal_number);
+            Int32.TryParse(consumerId, out int consumerInternalNumber);
 
             //Access the controls from the edit form template and store the values. 
             string consumerFirst = ((TextBox)editedItem.FindControl("consumer_first")).Text;
@@ -166,7 +166,7 @@ namespace ConsumerMaster
                         cmd.Connection = con;
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = updateQuery;
-                        cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumer_internal_number;
+                        cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumerInternalNumber;
                         cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
                         cmd.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
 
@@ -213,7 +213,6 @@ namespace ConsumerMaster
             Int32.TryParse(consumerId, out int consumerInternalNumber);
 
             string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
-
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
                 using (SqlCommand cmd = new SqlCommand())

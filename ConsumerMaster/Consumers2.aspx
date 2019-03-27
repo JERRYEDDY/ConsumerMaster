@@ -111,8 +111,10 @@
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone" />
     <div class="demo-container no-bg">
         <h5><strong>CONSUMERS2:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" AllowFilteringByColumn="true" OnItemCommand="RadGrid1_ItemCommand"
-                         OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand">
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" AllowFilteringByColumn="true" 
+                         OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" 
+                         OnDeleteCommand="RadGrid1_DeleteCommand" OnItemCommand="RadGrid1_ItemCommand"  
+                         >
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EnableViewState="False">
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn" HeaderStyle-Width="50px" ItemStyle-Width="50px"/>

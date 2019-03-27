@@ -109,8 +109,12 @@
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone" />
     <div class="demo-container no-bg">
         <h5><strong>CONSUMERS3:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource1" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
-                         AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" 
+
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
+                         OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" 
+                         OnDeleteCommand="RadGrid1_DeleteCommand" OnItemCommand="RadGrid1_ItemCommand"                        
+<%--                         DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True"  AllowAutomaticInserts="True" AllowAutomaticUpdates="True" 
+                         OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated" OnItemDeleted="RadGrid1_ItemDeleted"--%>
                          AllowFilteringByColumn="true" >
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataSourceID="SqlDataSource1" DataKeyNames="consumer_internal_number" EditMode="EditForms">
                 <CommandItemTemplate>
@@ -237,8 +241,10 @@
         <br />
         <br />
         <h5><strong>TRADING PARTNER:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10" DataSourceID="SqlDataSource2" AutoGenerateColumns="False" AllowAutomaticDeletes="True" 
-                     AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" 
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
+
+                     DataSourceID="SqlDataSource2" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" 
+                     OnItemDeleted="RadGrid2_ItemDeleted" OnItemInserted="RadGrid2_ItemInserted" OnItemUpdated="RadGrid2_ItemUpdated" 
                      AllowFilteringByColumn="false" >
             <MasterTableView Width="100%" Name="TradingPartners" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" DataSourceID="SqlDataSource2" CommandItemDisplay="Top" EditMode="EditForms">
                 <Columns>
