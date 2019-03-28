@@ -116,22 +116,17 @@ namespace ConsumerMaster
             }
         }
 
+        /// <summary>
+        /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        ///
+        ///
 
-
-
-/// <summary>
-/// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// </summary>
-/// <param name="source"></param>
-/// <param name="e"></param>
-
-        protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
+        private DataTable GetDataTable(string selectQuery, params SqlParameter[] parameters)
         {
-            //Populate the Radgrid1
             DataTable dtTable = new DataTable();
-            string selectQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, " +
-                                "city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last";
-
             using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
             {
                 using (SqlCommand cmd = new SqlCommand())
@@ -142,6 +137,14 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = selectQuery;
 
+                        if (parameters != null)
+                        {
+                            foreach (SqlParameter parm in parameters)
+                            {
+                                cmd.Parameters.Add(parm);
+                            }
+                        }
+
                         SqlDataAdapter adapter = new SqlDataAdapter
                         {
                             SelectCommand = cmd
@@ -151,11 +154,21 @@ namespace ConsumerMaster
                     }
                     catch (Exception ex)
                     {
-                        DisplayMessage("Cannot select Consumers. Reason: " + ex.Message);
-                        Logger.Info("Cannot select Consumers. Reason: " + ex.Message);
+                        DisplayMessage("Cannot create datatable. Reason: " + ex.Message);
+                        Logger.Info("Cannot create datatable. Reason: " + ex.Message);
                     }
                 }
             }
+
+            return dtTable;
+        }
+
+        protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
+        {
+            //Populate the Radgrid1
+            string selectQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, " +
+                                "city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last";
+            RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
         protected void RadGrid1_InsertCommand(object source, GridCommandEventArgs e)
@@ -332,193 +345,9 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadGrid1_ItemCommand(object sender, GridCommandEventArgs e)
-        {
-            if (e.CommandName == "YourCommandName")
-            {
-                // For Normal mode
-                GridDataItem item = e.Item as GridDataItem;
-                TextBox textBox1 = item.FindControl("TextBox1") as TextBox;
-                // Access your TextBox Here
-
-
-                // For Edit mode
-                GridEditableItem eitem = e.Item as GridEditableItem;
-                TextBox textBox2 = eitem.FindControl("TextBox2") as TextBox; // From Item Template
-                TextBox textBox3 = eitem["ColumnUniqueName"].Controls[0] as TextBox; // From Bound Column
-                // Access your TextBox Here
-            }
-        }
-
         private void DisplayMessage(string text)
         {
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
-        }
-        
-        protected void RadGrid2_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
-        {
-            //Populate the Radgrid2 
-            DataTable dtTable = new DataTable();
-            string selectQuery = "SELECT ctp.consumer_internal_number, ctp.trading_partner_id, tp.name AS trading_partner_name FROM ConsumerTradingPartner ctp " +
-                                 "INNER JOIN TradingPartners tp ON ctp.trading_partner_id = tp.id WHERE consumer_internal_number = @consumer_internal_number";
-
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    try
-                    {
-                        cmd.Connection = con;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = selectQuery;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter
-                        {
-                            SelectCommand = cmd
-                        };
-                        adapter.Fill(dtTable);
-                        RadGrid1.DataSource = dtTable;
-                    }
-                    catch (Exception ex)
-                    {
-                        DisplayMessage("Cannot select Consumer-Trading Partner. Reason: " + ex.Message);
-                        Logger.Info("Cannot select Consumer-Trading Partner. Reason: " + ex.Message);
-                    }
-                }
-            }
-        }
-
-        protected void RadGrid2_InsertCommand(object source, GridCommandEventArgs e)
-        {
-            //Get the GridEditFormInsertItem of the RadGrid 
-            GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
-
-            //Get the primary key value using the DataKeyValue. 
-            string consumerId = insertedItem.OwnerTableView.DataKeyValues[insertedItem.ItemIndex]["consumer_internal_number"].ToString();
-            Int32.TryParse(consumerId, out int consumerInternalNumber);
-
-            string tradingPartnerId = ((DropDownList)insertedItem.FindControl("trading_partner_id")).SelectedValue;
-
-            string insertQuery = "INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id) VALUES (@consumer_internal_number, @trading_partner_id)";
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    try
-                    {
-                        cmd.Connection = con;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = insertQuery;
-
-                        cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumerInternalNumber;
-                        cmd.Parameters.Add("trading_partner_id", SqlDbType.Int).Value = tradingPartnerId;
-
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        var message = $"Consumer-Trading Partner: {consumerId} {tradingPartnerId} cannot be inserted. Reason: ";
-                        DisplayMessage(message + ex.Message);
-                        Logger.Info(message + ex.Message);
-                        e.Canceled = true;
-                    }
-                }
-            }
-        }
-
-        protected void RadGrid2_UpdateCommand(object source, GridCommandEventArgs e)
-        {
-            //Get the GridEditableItem of the RadGrid 
-            GridEditableItem editedItem = e.Item as GridEditableItem;
-
-            //Get the primary key value using the DataKeyValue. 
-            string consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["consumer_internal_number"].ToString();
-            Int32.TryParse(consumerId, out int consumerInternalNumber);
-
-            //Access the controls from the edit form template and store the values. 
-            string tradingPartnerId = ((DropDownList)editedItem.FindControl("trading_partner_id")).SelectedValue;
-
-            string updateQuery = "UPDATE ConsumerTradingPartner SET trading_partner_id = @trading_partner_id WHERE consumer_internal_number = @consumer_internal_number";
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    try
-                    {
-                        cmd.Connection = con;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = updateQuery;
-                        cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumerInternalNumber;
-                        cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId;
-
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        var message = $"Consumer-Trading Partner: {consumerId} {tradingPartnerId} cannot be updated. Reason: ";
-                        DisplayMessage(message + ex.Message);
-                        Logger.Info(message + ex.Message);
-                        e.Canceled = true;
-                    }
-
-                }
-            }
-        }
-
-        protected void RadGrid2_DeleteCommand(object source, GridCommandEventArgs e)
-        {
-            //Get the GridDataItem of the RadGrid 
-            GridDataItem item = (GridDataItem)e.Item;
-
-            //Get the primary key value using the DataKeyValue. 
-            string consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
-            Int32.TryParse(consumerId, out int consumerInternalNumber);
-
-            string deleteQuery = "DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number";
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-            {
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    try
-                    {
-                        cmd.Connection = con;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = deleteQuery;
-
-                        cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
-
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        var message = $"Consumer-Trading Partner: {consumerId} cannot be deleted. Reason: ";
-                        DisplayMessage(message + ex.Message);
-                        Logger.Info(message + ex.Message);
-                        e.Canceled = true;
-                    }
-                }
-            }
-        }
-
-        protected void RadGrid2_ItemCommand(object sender, GridCommandEventArgs e)
-        {
-            if (e.CommandName == "YourCommandName")
-            {
-                // For Normal mode
-                GridDataItem item = e.Item as GridDataItem;
-                TextBox TextBox1 = item.FindControl("TextBox1") as TextBox;
-                // Access your TextBox Here
-
-
-                // For Edit mode
-                GridEditableItem eitem = e.Item as GridEditableItem;
-                TextBox TextBox2 = eitem.FindControl("TextBox2") as TextBox; // From Item Template
-                TextBox TextBox3 = eitem["ColumnUniqueName"].Controls[0] as TextBox; // From Bound Column
-                // Access your TextBox Here
-            }
         }
     }
 }

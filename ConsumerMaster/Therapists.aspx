@@ -31,34 +31,34 @@
                 <CommandItemSettings AddNewRecordText="Add New Therapist" />
                 <Columns>
                     <telerik:GridEditCommandColumn UniqueName="EditCommandColumn"></telerik:GridEditCommandColumn>
-                    <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" ></telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" />
                     <telerik:GridBoundColumn DataField="rendering_provider_id" HeaderText="rendering_provider_id" SortExpression="rendering_provider_id" UniqueName="rendering_provider_id">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_id is required"></RequiredFieldValidator>
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_id is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
                     <telerik:GridBoundColumn DataField="rendering_provider_first_name" HeaderText="rendering_provider_first_name" SortExpression="rendering_provider_first_name" UniqueName="rendering_provider_first_name">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_first_name is required"></RequiredFieldValidator>
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_first_name is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
                     <telerik:GridBoundColumn DataField="rendering_provider_last_name" HeaderText="rendering_provider_last_name" SortExpression="rendering_provider_last_name" UniqueName="rendering_provider_last_name">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_last_name is required"></RequiredFieldValidator>
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_last_name is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
                     <telerik:GridBoundColumn DataField="rendering_provider_name" HeaderText="rendering_provider_name" SortExpression="rendering_provider_name" UniqueName="rendering_provider_name" ReadOnly="True">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_name is required"></RequiredFieldValidator>
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_name is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
                     <telerik:GridBoundColumn DataField="rendering_provider_npi" HeaderText="rendering_provider_npi" SortExpression="rendering_provider_npi" UniqueName="rendering_provider_npi">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_npi is required"></RequiredFieldValidator>
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_npi is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>

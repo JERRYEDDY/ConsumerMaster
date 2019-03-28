@@ -282,6 +282,7 @@
     <Content Include="Styles\ControlPanel.css" />
     <Content Include="Styles\ControlPanelSingle.css" />
     <Content Include="Styles\css_form.css" />
+    <Content Include="Styles\Flexbox.css" />
     <Content Include="Styles\styles.css" />
     <Content Include="Styles\StyleSheet.css" />
     <Content Include="Therapists.aspx" />
@@ -295,6 +296,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ATFConsumerRatioReport.cs" />
+    <None Include="ConsumerRadGrid2MasterDetail.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="Consumers3.aspx.cs">
       <DependentUpon>Consumers3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
