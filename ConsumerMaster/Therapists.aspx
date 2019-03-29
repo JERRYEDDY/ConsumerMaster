@@ -23,14 +23,21 @@
     </telerik:RadAjaxManager>
     <h4>Therapists</h4>
     <div id="demo" class="demo-container no-bg">
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" 
-                         PageSize="12" DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" 
-                         OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated">
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" PageSize="12" 
+            DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated">
             <PagerStyle Mode="NextPrevAndNumeric" />
             <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataSourceID="SqlDataSource1" DataKeyNames="id">
-                <CommandItemSettings AddNewRecordText="Add New Therapist" />
+                <CommandItemTemplate>
+                    <div style="padding: 5px 5px;">
+                        <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
+                            <Icon PrimaryIconCssClass="rbAdd" />
+                        </telerik:RadButton>
+                        <telerik:RadButton ID="RadButton2" runat="server" Text="Edit selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected">
+                            <Icon PrimaryIconCssClass="rbEdit" />
+                        </telerik:RadButton>&nbsp;&nbsp;
+                    </div>
+                </CommandItemTemplate> 
                 <Columns>
-                    <telerik:GridEditCommandColumn UniqueName="EditCommandColumn"></telerik:GridEditCommandColumn>
                     <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" />
                     <telerik:GridBoundColumn DataField="rendering_provider_id" HeaderText="rendering_provider_id" SortExpression="rendering_provider_id" UniqueName="rendering_provider_id">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
@@ -65,6 +72,10 @@
                     <telerik:GridButtonColumn ConfirmText="Delete this Therapist record?" Text="Delete" CommandName="Delete" />
                 </Columns>    
             </MasterTableView>
+            <ClientSettings AllowKeyboardNavigation="true">    
+                <Selecting AllowRowSelect="True" UseClientSelectColumnOnly="True"></Selecting>
+            </ClientSettings>
+            <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
         </telerik:RadGrid>
     </div>
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 

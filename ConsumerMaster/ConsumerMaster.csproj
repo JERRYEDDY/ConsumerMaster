@@ -198,10 +198,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Consumers3.aspx" />
-    <Content Include="Consumers2.aspx" />
-    <Content Include="Reports.aspx" />
     <Content Include="Consumers.aspx" />
+    <Content Include="Reports.aspx" />
     <Content Include="About.aspx" />
     <Content Include="AppEvent.aspx" />
     <Content Include="Consumer_CRUD.sql">
@@ -299,19 +297,12 @@
     <None Include="ConsumerRadGrid2MasterDetail.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Consumers3.aspx.cs">
-      <DependentUpon>Consumers3.aspx</DependentUpon>
+    <Compile Include="Consumers.aspx.cs">
+      <DependentUpon>Consumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Consumers3.aspx.designer.cs">
-      <DependentUpon>Consumers3.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Consumers2.aspx.cs">
-      <DependentUpon>Consumers2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Consumers2.aspx.designer.cs">
-      <DependentUpon>Consumers2.aspx</DependentUpon>
+    <Compile Include="Consumers.aspx.designer.cs">
+      <DependentUpon>Consumers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports.aspx.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
@@ -322,13 +313,6 @@
     </Compile>
     <Compile Include="ATFServiceExportExcelFile.cs" />
     <Compile Include="ConsumerExportExcelFile.cs" />
-    <Compile Include="Consumers.aspx.cs">
-      <DependentUpon>Consumers.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Consumers.aspx.designer.cs">
-      <DependentUpon>Consumers.aspx</DependentUpon>
-    </Compile>
     <Compile Include="AppEvent.aspx.cs">
       <DependentUpon>AppEvent.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
