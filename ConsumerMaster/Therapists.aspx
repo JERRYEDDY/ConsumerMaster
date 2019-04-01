@@ -71,7 +71,39 @@
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
                     <telerik:GridButtonColumn ConfirmText="Delete this Therapist record?" Text="Delete" CommandName="Delete" />
-                </Columns>    
+                </Columns>   
+                <EditFormSettings EditFormType="Template">
+                    <FormTemplate>
+                        <section class="form-group">
+                            <h4>Physician Info</h4>
+                            <ul class="form-fields">
+                            <li>
+                                <label for="rendering_provider_id">Provider Id:</label> 
+                                <telerik:RadTextBox ID="rendering_provider_id" runat="server" Text='<%# Bind("rendering_provider_id") %>' TabIndex="1"/>
+                                <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="rendering_provider_id" ErrorMessage="Rendering provider id is required" ValidationGroup="FormValidationGroup"/>
+                            </li>
+                            <li>
+                                <label for="rendering_provider_first_name">Provider First Name :</label> 
+                                <telerik:RadTextBox ID="rendering_provider_first_name" runat="server" Text='<%# Bind("rendering_provider_first_name") %>' TabIndex="2"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="rendering_provider_first_name" ErrorMessage="Rendering provider first name is required"  ValidationGroup="FormValidationGroup" />
+                            </li>
+                            <li>
+                                <label for="rendering_provider_last_name">Provider Last Name :</label> 
+                                <telerik:RadTextBox ID="rendering_provider_last_name" runat="server" Text='<%# Bind("rendering_provider_last_name") %>' TabIndex="2"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="rendering_provider_last_name" ErrorMessage="Rendering provider last name is required"  ValidationGroup="FormValidationGroup" />
+                            </li>
+                            <li>
+                                <label for="rendering_provider_npi">Provider NPI:</label> 
+                                <telerik:RadTextBox ID="rendering_provider_npi" Text='<%# Bind( "rendering_provider_npi") %>' runat="server" TabIndex="4"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="rendering_provider_npi" ErrorMessage="Rendering Provider NPI is required"  ValidationGroup="FormValidationGroup"/>
+                        </section>
+                        <section class="form-submit">
+                                <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
+                                      CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
+                                <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                        </section>
+                    </FormTemplate>
+                </EditFormSettings>   
             </MasterTableView>
             <ClientSettings AllowKeyboardNavigation="true">    
                 <Selecting AllowRowSelect="True" UseClientSelectColumnOnly="True"></Selecting>

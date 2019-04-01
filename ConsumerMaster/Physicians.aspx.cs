@@ -109,7 +109,7 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT id, referring_provider_id, referring_provider_name, referring_provider_first_name, referring_provider_last_name, referring_provider_npi FROM Physicians"; 
+            string selectQuery = "SELECT referring_provider_id, referring_provider_name, referring_provider_first_name, referring_provider_last_name, referring_provider_npi FROM Physicians"; 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
@@ -125,15 +125,12 @@ namespace ConsumerMaster
             try
             {
                 //Access the textbox from the insert form template and store the values in string variables. 
-                RadTextBox referring_provider_id = (RadTextBox)insertedItem.FindControl("referring_provider_id");
-                referringProviderId = referring_provider_id.Text;
-
-
+                referringProviderId = ((RadTextBox)insertedItem.FindControl("referring_provider_id"))?.Text;
                 referringProviderFirstName = ((RadTextBox)insertedItem.FindControl("referring_provider_first_name"))?.Text;
                 referringProviderLastName = ((RadTextBox)insertedItem.FindControl("referring_provider_last_name")).Text;
                 string referringProviderNPI = ((RadTextBox)insertedItem.FindControl("referring_provider_npi")).Text;
 
-                string insertQuery = "INSERT INTO Physicians(referring_provider_id, referring_provider_name, referring_provider_first_name, referring_provider_last_name, referring_provider_npi) " +
+                string insertQuery = "INSERT INTO Physicians(referring_provider_id, referring_provider_first_name, referring_provider_last_name, referring_provider_npi) " +
                     "VALUES(@referring_provider_id, @referring_provider_first_name, @referring_provider_last_name, @referring_provider_npi)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
@@ -150,7 +147,14 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("referring_provider_npi", SqlDbType.VarChar).Value = referringProviderNPI;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Physician: {referringProviderFirstName} {referringProviderLastName} is inserted.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }
@@ -167,7 +171,6 @@ namespace ConsumerMaster
         {
             //Get the GridEditableItem of the RadGrid 
             GridEditableItem editedItem = e.Item as GridEditableItem;
-            string strId = null;
             string referringProviderId = null;
             string referringProviderFirstName = null;
             string referringProviderLastName = null;
@@ -175,17 +178,16 @@ namespace ConsumerMaster
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                strId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["id"].ToString();
-                Int32.TryParse(strId, out int id);
+                referringProviderId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["referring_provider_id"].ToString();
 
                 //Access the textbox from the insert form template and store the values in string variables. 
-                referringProviderId = ((TextBox)editedItem.FindControl("referring_provider_id")).Text;
-                referringProviderFirstName = ((TextBox)editedItem.FindControl("referring_provider_first_name"))?.Text;
-                referringProviderLastName = ((TextBox)editedItem.FindControl("referring_provider_last_name")).Text;
-                string referringProviderNPI = ((TextBox)editedItem.FindControl("referring_provider_npi")).Text;
+                //referringProviderId = ((RadTextBox)editedItem.FindControl("referring_provider_id")).Text;
+                referringProviderFirstName = ((RadTextBox)editedItem.FindControl("referring_provider_first_name"))?.Text;
+                referringProviderLastName = ((RadTextBox)editedItem.FindControl("referring_provider_last_name")).Text;
+                string referringProviderNPI = ((RadTextBox)editedItem.FindControl("referring_provider_npi")).Text;
 
-                string updateQuery = "UPDATE Physicians SET referring_provider_id = @referring_provider_id, referring_provider_first_name = @referring_provider_first_name, " +
-                    "referring_provider_last_name = @referring_provider_last_name, referring_provider_npi = @referring_provider_npi WHERE id = @id";
+                string updateQuery = "UPDATE Physicians SET referring_provider_first_name = @referring_provider_first_name, " +
+                    "referring_provider_last_name = @referring_provider_last_name, referring_provider_npi = @referring_provider_npi WHERE referring_provider_id = @referring_provider_id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -201,7 +203,14 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("referring_provider_npi", SqlDbType.VarChar).Value = referringProviderNPI;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Physician: {referringProviderFirstName} {referringProviderLastName} is updated.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }
@@ -218,20 +227,19 @@ namespace ConsumerMaster
         {
             //Get the GridDataItem of the RadGrid 
             GridDataItem item = (GridDataItem)e.Item;
-            string strId = null;
+            string referringProviderId = null;
             string referringProviderFirstName = null;
             string referringProviderLastName = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                strId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["id"].ToString();
-                Int32.TryParse(strId, out int id);
+                referringProviderId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["referring_provider_id"].ToString();
 
-                referringProviderFirstName = ((TextBox)item.FindControl("referring_provider_first_name"))?.Text;
-                referringProviderLastName = ((TextBox)item.FindControl("referring_provider_last_name")).Text;
+                referringProviderFirstName = ((RadTextBox)item.FindControl("referring_provider_first_name"))?.Text;
+                referringProviderLastName = ((RadTextBox)item.FindControl("referring_provider_last_name")).Text;
 
-                string deleteQuery = "DELETE FROM Physicians WHERE id = @id";
+                string deleteQuery = "DELETE FROM Physicians WHERE referring_provider_id = @referring_provider_id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -241,10 +249,17 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = deleteQuery;
 
-                        cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
+                        cmd.Parameters.Add("referring_provider_id", SqlDbType.VarChar).Value = referringProviderId;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Physician: {referringProviderFirstName} {referringProviderLastName} is deleted.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }

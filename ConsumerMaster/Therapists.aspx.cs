@@ -146,7 +146,14 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("rendering_provider_npi", SqlDbType.VarChar).Value = renderingProviderNPI;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} is inserted.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }
@@ -197,7 +204,14 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("rendering_provider_npi", SqlDbType.VarChar).Value = renderingProviderNPI;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} is updated.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }
@@ -240,7 +254,14 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} is deleted.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }

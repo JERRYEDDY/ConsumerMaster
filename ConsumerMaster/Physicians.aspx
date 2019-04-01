@@ -28,7 +28,7 @@
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" PageSize="12" 
             OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand">
             <PagerStyle Mode="NextPrevAndNumeric" />
-            <MasterTableView CommandItemDisplay="Top" Name="Physicians" DataKeyNames="id" EditMode="EditForms">
+            <MasterTableView CommandItemDisplay="Top" Name="Physicians" DataKeyNames="referring_provider_id" EditMode="EditForms">
                 <CommandItemTemplate>
                     <div style="padding: 5px 5px;">
                         <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
@@ -40,7 +40,6 @@
                     </div>
                 </CommandItemTemplate> 
                 <Columns>
-<%--                    <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" />--%>
                     <telerik:GridBoundColumn DataField="referring_provider_id" HeaderText="referring_provider_id" SortExpression="referring_provider_id" UniqueName="referring_provider_id">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field referring_provider_id is required" />
@@ -78,11 +77,11 @@
                         <section class="form-group">
                             <h4>Physician Info</h4>
                             <ul class="form-fields">
-                            <li>
+<%--                            <li>
                                 <label for="referring_provider_id">Provider Id:</label> 
                                 <telerik:RadTextBox ID="referring_provider_id" runat="server" Text='<%# Bind("referring_provider_id") %>' TabIndex="1"/>
                                 <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="referring_provider_id" ErrorMessage="Referring provider id is required" ValidationGroup="FormValidationGroup"/>
-                            </li>
+                            </li>--%>
                             <li>
                                 <label for="referring_provider_first_name">Provider First Name :</label> 
                                 <telerik:RadTextBox ID="referring_provider_first_name" runat="server" Text='<%# Bind("referring_provider_first_name") %>' TabIndex="2"/>

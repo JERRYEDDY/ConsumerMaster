@@ -127,7 +127,14 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Consumer: {consumerFirst}  {consumerLast} is inserted.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }
@@ -199,7 +206,14 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
 
                             con.Open();
-                            cmd.ExecuteNonQuery();
+                            int result = cmd.ExecuteNonQuery();
+
+                            if (result > 0)
+                            {
+                                var message = $"Consumer: {consumerFirst}  {consumerLast} is updated.";
+                                DisplayMessage(message);
+                                Logger.Info(message);
+                            }
                     }
                 }
             }
@@ -217,12 +231,17 @@ namespace ConsumerMaster
             //Get the GridDataItem of the RadGrid 
             GridDataItem item = (GridDataItem)e.Item;
             string consumerId = null;
+            string consumerFirst = null;
+            string consumerLast = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
                 consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
                 Int32.TryParse(consumerId, out int consumerInternalNumber);
+
+                consumerFirst = ((TextBox)item.FindControl("consumer_first")).Text;
+                consumerLast = ((TextBox)item.FindControl("consumer_last"))?.Text;
 
                 string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
 
@@ -237,13 +256,20 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
 
                         con.Open();
-                        cmd.ExecuteNonQuery();
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            var message = $"Consumer: {consumerId} {consumerFirst}  {consumerLast} is deleted.";
+                            DisplayMessage(message);
+                            Logger.Info(message);
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                var message = $"Consumer: {consumerId} cannot be deleted. Reason: ";
+                var message = $"Consumer: {consumerId} {consumerFirst}  {consumerLast} cannot be deleted. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
