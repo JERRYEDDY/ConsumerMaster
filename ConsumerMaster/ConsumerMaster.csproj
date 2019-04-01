@@ -283,6 +283,7 @@
     <Content Include="Styles\Flexbox.css" />
     <Content Include="Styles\styles.css" />
     <Content Include="Styles\StyleSheet.css" />
+    <Content Include="Physicians.aspx" />
     <Content Include="Therapists.aspx" />
     <Content Include="TradingPartners.aspx" />
     <Content Include="ViewSwitcher.ascx" />
@@ -367,6 +368,13 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Physicians.aspx.cs">
+      <DependentUpon>Physicians.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Physicians.aspx.designer.cs">
+      <DependentUpon>Physicians.aspx</DependentUpon>
     </Compile>
     <Compile Include="Therapists.aspx.cs">
       <DependentUpon>Therapists.aspx</DependentUpon>

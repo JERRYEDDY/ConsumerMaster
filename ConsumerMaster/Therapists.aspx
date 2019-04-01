@@ -21,12 +21,13 @@
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
+<%--    DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated"--%>
     <h4>Therapists</h4>
     <div id="demo" class="demo-container no-bg">
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" PageSize="12" 
-            DataSourceID="SqlDataSource1" AllowAutomaticDeletes="True" AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemDeleted="RadGrid1_ItemDeleted" OnItemInserted="RadGrid1_ItemInserted" OnItemUpdated="RadGrid1_ItemUpdated">
+            OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand">
             <PagerStyle Mode="NextPrevAndNumeric" />
-            <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataSourceID="SqlDataSource1" DataKeyNames="id">
+            <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataKeyNames="id">
                 <CommandItemTemplate>
                     <div style="padding: 5px 5px;">
                         <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
@@ -38,7 +39,7 @@
                     </div>
                 </CommandItemTemplate> 
                 <Columns>
-                    <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" />
+<%--                    <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" />--%>
                     <telerik:GridBoundColumn DataField="rendering_provider_id" HeaderText="rendering_provider_id" SortExpression="rendering_provider_id" UniqueName="rendering_provider_id">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_id is required" />
@@ -78,7 +79,7 @@
             <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
         </telerik:RadGrid>
     </div>
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+<%--    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
         DeleteCommand="DELETE FROM Therapists WHERE id = @id"
         InsertCommand="INSERT INTO Therapists (rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi) VALUES (@rendering_provider_id, @rendering_provider_first_name, @rendering_provider_last_name, @rendering_provider_npi)"
@@ -99,5 +100,5 @@
             <asp:Parameter Name="rendering_provider_last_name" Type="String"></asp:Parameter>
             <asp:Parameter Name="rendering_provider_npi" Type="String"></asp:Parameter>
         </UpdateParameters>
-    </asp:SqlDataSource>  
+    </asp:SqlDataSource>  --%>
 </asp:Content>
