@@ -87,11 +87,11 @@ namespace ConsumerMaster
                 string addressLine1 = ((RadTextBox)insertedItem.FindControl("address_line_1")).Text;
                 string addressLine2 = ((RadTextBox)insertedItem.FindControl("address_line_2")).Text;
                 string city = ((RadTextBox)insertedItem.FindControl("city")).Text;
-                string state = ((RadTextBox)insertedItem.FindControl("state")).Text;
-                string zipCode = ((RadTextBox)insertedItem.FindControl("zip_code")).Text;
-                string identifier = ((RadTextBox)insertedItem.FindControl("identifier")).Text;
-                string gender = ((RadTextBox)insertedItem.FindControl("gender")).Text;
-                string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis")).Text;
+                string state = ((RadDropDownList) insertedItem.FindControl("state")).SelectedValue;
+                string zipCode = ((RadMaskedTextBox)insertedItem.FindControl("zip_code")).Text;
+                string identifier = ((RadNumericTextBox) insertedItem.FindControl("identifier")).Text;
+                string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
+                string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis_code")).Text;
                 string nicknameFirst = ((RadTextBox)insertedItem.FindControl("nickname_first")).Text;
                 string nicknameLast = ((RadTextBox)insertedItem.FindControl("nickname_last")).Text;
 
@@ -131,7 +131,7 @@ namespace ConsumerMaster
 
                         if (result > 0)
                         {
-                            var message = $"Consumer: {consumerFirst}  {consumerLast} is inserted.";
+                            var message = $"Consumer: {consumerFirst} {consumerLast} is inserted.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }
@@ -140,7 +140,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"Consumer: {consumerFirst}  {consumerLast} cannot be inserted. Reason: ";
+                var message = $"Consumer: {consumerFirst} {consumerLast} cannot be inserted. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
@@ -168,15 +168,15 @@ namespace ConsumerMaster
                 string addressLine1 = ((RadTextBox)editedItem.FindControl("address_line_1")).Text;
                 string addressLine2 = ((RadTextBox)editedItem.FindControl("address_line_2")).Text;
                 string city = ((RadTextBox)editedItem.FindControl("city")).Text;
-                string state = ((RadTextBox)editedItem.FindControl("state")).Text;
-                string zipCode = ((RadTextBox)editedItem.FindControl("zip_code")).Text;
-                string identifier = ((RadTextBox)editedItem.FindControl("identifier")).Text;
-                string gender = ((RadTextBox)editedItem.FindControl("gender")).Text;
-                string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis")).Text;
+                string state = ((RadDropDownList) editedItem.FindControl("state")).SelectedValue;
+                string zipCode = ((RadMaskedTextBox)editedItem.FindControl("zip_code")).Text;
+                string identifier = ((RadNumericTextBox)editedItem.FindControl("identifier")).Text;
+                string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
+                string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis_code")).Text;
                 string nicknameFirst = ((RadTextBox)editedItem.FindControl("nickname_first")).Text;
                 string nicknameLast = ((RadTextBox)editedItem.FindControl("nickname_last")).Text;
 
-                string updateQuery = "UPDATE ConsumersEI SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
+                string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
                        "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " +
                        " WHERE consumer_internal_number=@consumer_internal_number";
 
@@ -210,7 +210,7 @@ namespace ConsumerMaster
 
                             if (result > 0)
                             {
-                                var message = $"Consumer: {consumerFirst}  {consumerLast} is updated.";
+                                var message = $"Consumer: {consumerFirst} {consumerLast} is updated.";
                                 DisplayMessage(message);
                                 Logger.Info(message);
                             }
@@ -219,7 +219,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"Consumer: {consumerId} {consumerFirst}  {consumerLast} cannot be updated. Reason: ";
+                var message = $"Consumer: {consumerId} {consumerFirst} {consumerLast} cannot be updated. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
@@ -240,8 +240,8 @@ namespace ConsumerMaster
                 consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
                 Int32.TryParse(consumerId, out int consumerInternalNumber);
 
-                consumerFirst = ((RadTextBox)item.FindControl("consumer_first")).Text;
-                consumerLast = ((RadTextBox)item.FindControl("consumer_last"))?.Text;
+                consumerFirst = item["consumer_first"].Text;
+                consumerLast = item["consumer_last"].Text;
 
                 string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
 
@@ -260,7 +260,7 @@ namespace ConsumerMaster
 
                         if (result > 0)
                         {
-                            var message = $"Consumer: {consumerId} {consumerFirst}  {consumerLast} is deleted.";
+                            var message = $"Consumer: {consumerId} {consumerFirst} {consumerLast} is deleted.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }

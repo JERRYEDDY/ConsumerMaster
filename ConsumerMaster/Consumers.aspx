@@ -46,7 +46,10 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-                    <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>       
+<%--                    <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>  --%>
+                    <telerik:GridButtonColumn ButtonType="ImageButton" ConfirmText="Are you sure you want to delete?" CommandName="Delete" ImageUrl="~/Images/Del.png" Text="Click to delete" UniqueName="Delete">
+                    </telerik:GridButtonColumn>
+
                 </Columns>
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
@@ -95,7 +98,9 @@
                             </li>  
                             <li>
                                 <label for="identifier">Identifier:</label> 
-                                <telerik:RadTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="9"/>
+                                <telerik:RadNumericTextbox ID="identifier" DbValue='<%# Bind("identifier") %>' MinValue="0000000000" MaxValue="9999999999" runat="server" TabIndex="9">
+                                    <NumberFormat GroupSeparator="" DecimalDigits="0" /> 
+                                </telerik:RadNumericTextbox>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" />
                                 <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="identifier" ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />
                             </li>                                     
@@ -135,6 +140,7 @@
                 <Selecting AllowRowSelect="True" UseClientSelectColumnOnly="True"></Selecting>
             </ClientSettings>
             <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
+            <GroupingSettings CaseSensitive="false"></GroupingSettings>
         </telerik:RadGrid>
         <br />
         <br />
