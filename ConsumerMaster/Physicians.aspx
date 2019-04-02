@@ -77,23 +77,29 @@
                         <section class="form-group">
                             <h4>Physician Info</h4>
                             <ul class="form-fields">
-<%--                            <li>
-                                <label for="referring_provider_id">Provider Id:</label> 
-                                <telerik:RadTextBox ID="referring_provider_id" runat="server" Text='<%# Bind("referring_provider_id") %>' TabIndex="1"/>
-                                <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="referring_provider_id" ErrorMessage="Referring provider id is required" ValidationGroup="FormValidationGroup"/>
-                            </li>--%>
                             <li>
-                                <label for="referring_provider_first_name">Provider First Name :</label> 
+                                <label for="referring_provider_id">Referring Id:</label> 
+                                <telerik:RadTextBox ID="referring_provider_id" runat="server" Text='<%# Bind("referring_provider_id") %>' TabIndex="1"/>
+                                
+<%--                                <telerik:RadNumericTextBox ID="referring_provider_id" runat="server" MaxLength="13" MinValue="0" Visible="false" MaxValue="9999999999999" AutoCompleteType="Disabled" Text='<%# Bind("referring_provider_id") %>' TabIndex="1">
+                                    <NumberFormat GroupSeparator="" DecimalDigits="0" /> 
+                                    <ClientEvents OnKeyPress="preventDecimalSeparator" /> 
+                                </telerik:RadNumericTextBox>  --%>                    
+
+                                <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="referring_provider_id" ErrorMessage="Referring provider id is required" ValidationGroup="FormValidationGroup"/>
+                            </li>
+                            <li>
+                                <label for="referring_provider_first_name">Referring First :</label> 
                                 <telerik:RadTextBox ID="referring_provider_first_name" runat="server" Text='<%# Bind("referring_provider_first_name") %>' TabIndex="2"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="referring_provider_first_name" ErrorMessage="Referring provider first name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="referring_provider_last_name">Provider Last Name :</label> 
+                                <label for="referring_provider_last_name">Referring Last :</label> 
                                 <telerik:RadTextBox ID="referring_provider_last_name" runat="server" Text='<%# Bind("referring_provider_last_name") %>' TabIndex="2"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="referring_provider_last_name" ErrorMessage="Referring provider last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="referring_provider_npi">Provider NPI:</label> 
+                                <label for="referring_provider_npi">Referring NPI:</label> 
                                 <telerik:RadTextBox ID="referring_provider_npi" Text='<%# Bind( "referring_provider_npi") %>' runat="server" TabIndex="4"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="referring_provider_npi" ErrorMessage="Referring Provider NPI is required"  ValidationGroup="FormValidationGroup"/>
                         </section>

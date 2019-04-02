@@ -96,8 +96,7 @@
                             <li>
                                 <label for="identifier">Identifier:</label> 
                                 <telerik:RadTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="9"/>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier"
-                                                            ErrorMessage="Identifier is required" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" />
                                 <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="identifier" ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />
                             </li>                                     
                             <li>

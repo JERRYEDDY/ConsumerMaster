@@ -3,6 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link href="Styles/Flexbox.css" rel="stylesheet" />
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
     <telerik:RadFormDecorator RenderMode="Lightweight" runat="server" DecorationZoneID="demo" EnableRoundedCorners="false" DecoratedControls="All" />   
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
@@ -27,7 +28,7 @@
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="True" ShowFooter="true" AllowSorting="True" AutoGenerateColumns="False" ShowStatusBar="true" PageSize="12" 
             OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand">
             <PagerStyle Mode="NextPrevAndNumeric" />
-            <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataKeyNames="id">
+            <MasterTableView CommandItemDisplay="Top" Name="Therapists" DataKeyNames="rendering_provider_id">
                 <CommandItemTemplate>
                     <div style="padding: 5px 5px;">
                         <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
@@ -39,7 +40,6 @@
                     </div>
                 </CommandItemTemplate> 
                 <Columns>
-<%--                    <telerik:GridBoundColumn DataField="id" HeaderText="id" SortExpression="id" UniqueName="id" ReadOnly="true" />--%>
                     <telerik:GridBoundColumn DataField="rendering_provider_id" HeaderText="rendering_provider_id" SortExpression="rendering_provider_id" UniqueName="rendering_provider_id">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field rendering_provider_id is required" />

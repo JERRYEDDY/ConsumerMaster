@@ -158,14 +158,13 @@ protected void RadGrid2_ItemCommand(object sender, GridCommandEventArgs e)
     {
         // For Normal mode
         GridDataItem item = e.Item as GridDataItem;
-        TextBox TextBox1 = item.FindControl("TextBox1") as TextBox;
-        // Access your TextBox Here
+        RadTextBox TextBox1 = (RadTextBox)item.FindControl("TextBox1");
+        // Access your RadTextBox Here
 
 
         // For Edit mode
         GridEditableItem eitem = e.Item as GridEditableItem;
-        TextBox TextBox2 = eitem.FindControl("TextBox2") as TextBox; // From Item Template
-        TextBox TextBox3 = eitem["ColumnUniqueName"].Controls[0] as TextBox; // From Bound Column
-                                                                             // Access your TextBox Here
+        RadTextBox TextBox2 = (RadTextBox)eitem.FindControl("TextBox2"); 
+        RadTextBox TextBox3 = (RadTextBox)eitem["ColumnUniqueName"].Controls[0]; 
     }
 }

@@ -109,7 +109,7 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT id, rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi FROM Therapists"; 
+            string selectQuery = "SELECT rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi FROM Therapists"; 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
@@ -124,12 +124,12 @@ namespace ConsumerMaster
             try
             {
                 //Access the textbox from the insert form template and store the values in string variables. 
-                renderingProviderId = ((TextBox)insertedItem.FindControl("rendering_provider_id")).Text;
-                renderingProviderFirstName = ((TextBox)insertedItem.FindControl("rendering_provider_first_name"))?.Text;
-                renderingProviderLastName = ((TextBox)insertedItem.FindControl("rendering_provider_last_name")).Text;
-                string renderingProviderNPI = ((TextBox)insertedItem.FindControl("rendering_provider_npi")).Text;
+                renderingProviderId = ((RadTextBox)insertedItem.FindControl("rendering_provider_id")).Text;
+                renderingProviderFirstName = ((RadTextBox)insertedItem.FindControl("rendering_provider_first_name"))?.Text;
+                renderingProviderLastName = ((RadTextBox)insertedItem.FindControl("rendering_provider_last_name")).Text;
+                string renderingProviderNPI = ((RadTextBox)insertedItem.FindControl("rendering_provider_npi")).Text;
 
-                string insertQuery = "INSERT INTO Therapists(rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi) " +
+                string insertQuery = "INSERT INTO Therapists(rendering_provider_id, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi, rendering_provider_name) " +
                     "VALUES(@rendering_provider_id, @rendering_provider_first_name, @rendering_provider_last_name, @rendering_provider_npi)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
@@ -170,7 +170,6 @@ namespace ConsumerMaster
         {
             //Get the GridEditableItem of the RadGrid 
             GridEditableItem editedItem = e.Item as GridEditableItem;
-            string strId = null;
             string renderingProviderId = null;
             string renderingProviderFirstName = null;
             string renderingProviderLastName = null;
@@ -178,17 +177,15 @@ namespace ConsumerMaster
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                strId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["id"].ToString();
-                Int32.TryParse(strId, out int id);
+                renderingProviderId = ((RadTextBox)editedItem.FindControl("rendering_provider_id")).Text;
 
                 //Access the textbox from the insert form template and store the values in string variables. 
-                renderingProviderId = ((TextBox)editedItem.FindControl("rendering_provider_id")).Text;
-                renderingProviderFirstName = ((TextBox)editedItem.FindControl("rendering_provider_first_name"))?.Text;
-                renderingProviderLastName = ((TextBox)editedItem.FindControl("rendering_provider_last_name")).Text;
-                string renderingProviderNPI = ((TextBox)editedItem.FindControl("rendering_provider_npi")).Text;
+                renderingProviderFirstName = ((RadTextBox)editedItem.FindControl("rendering_provider_first_name"))?.Text;
+                renderingProviderLastName = ((RadTextBox)editedItem.FindControl("rendering_provider_last_name")).Text;
+                string renderingProviderNPI = ((RadTextBox)editedItem.FindControl("rendering_provider_npi")).Text;
 
-                string updateQuery = "UPDATE Therapists SET rendering_provider_id = @rendering_provider_id, rendering_provider_first_name = @rendering_provider_first_name, " +
-                    "rendering_provider_last_name = @rendering_provider_last_name, rendering_provider_npi = @rendering_provider_npi WHERE id = @id";
+                string updateQuery = "UPDATE Therapists SET rendering_provider_first_name = @rendering_provider_first_name, " +
+                    "rendering_provider_last_name = @rendering_provider_last_name, rendering_provider_npi = @rendering_provider_npi WHERE rendering_provider_id = @rendering_provider_id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -198,7 +195,7 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = updateQuery;
 
-                        cmd.Parameters.Add("rendering_provider_id", SqlDbType.VarChar).Value = renderingProviderId;
+                        //cmd.Parameters.Add("rendering_provider_id", SqlDbType.VarChar).Value = renderingProviderId;
                         cmd.Parameters.Add("rendering_provider_first_name", SqlDbType.VarChar).Value = renderingProviderFirstName;
                         cmd.Parameters.Add("rendering_provider_last_name", SqlDbType.VarChar).Value = renderingProviderLastName;
                         cmd.Parameters.Add("rendering_provider_npi", SqlDbType.VarChar).Value = renderingProviderNPI;
@@ -228,20 +225,18 @@ namespace ConsumerMaster
         {
             //Get the GridDataItem of the RadGrid 
             GridDataItem item = (GridDataItem)e.Item;
-            string strId = null;
+            string renderingProviderId = null;
             string renderingProviderFirstName = null;
             string renderingProviderLastName = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                strId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["id"].ToString();
-                Int32.TryParse(strId, out int id);
+                renderingProviderId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["rendering_provider_id"].ToString();
+                renderingProviderFirstName = ((RadTextBox)item.FindControl("rendering_provider_first_name"))?.Text;
+                renderingProviderLastName = ((RadTextBox)item.FindControl("rendering_provider_last_name")).Text;
 
-                renderingProviderFirstName = ((TextBox)item.FindControl("rendering_provider_first_name"))?.Text;
-                renderingProviderLastName = ((TextBox)item.FindControl("rendering_provider_last_name")).Text;
-
-                string deleteQuery = "DELETE FROM Therapists WHERE id = @id";
+                string deleteQuery = "DELETE FROM Therapists WHERE rendering_provider_id = @rendering_provider_id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -251,7 +246,7 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = deleteQuery;
 
-                        cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
+                        cmd.Parameters.Add("rendering_provider_id", SqlDbType.Int).Value = renderingProviderId;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();

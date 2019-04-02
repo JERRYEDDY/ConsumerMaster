@@ -81,19 +81,19 @@ namespace ConsumerMaster
             try
             {
                 //Access the textbox from the insert form template and store the values in string variables. 
-                consumerFirst = ((TextBox)insertedItem.FindControl("consumer_first")).Text;
-                consumerLast = ((TextBox)insertedItem.FindControl("consumer_last"))?.Text;
-                RadDatePicker dateOfBirth = insertedItem.FindControl("date_of_birth") as RadDatePicker;
-                string addressLine1 = ((TextBox)insertedItem.FindControl("address_line_1")).Text;
-                string addressLine2 = ((TextBox)insertedItem.FindControl("address_line_2")).Text;
-                string city = ((TextBox)insertedItem.FindControl("city")).Text;
-                string state = ((TextBox)insertedItem.FindControl("state")).Text;
-                string zipCode = ((TextBox)insertedItem.FindControl("zip_code")).Text;
-                string identifier = ((TextBox)insertedItem.FindControl("identifier")).Text;
-                string gender = ((TextBox)insertedItem.FindControl("gender")).Text;
-                string diagnosis = ((TextBox)insertedItem.FindControl("diagnosis")).Text;
-                string nicknameFirst = ((TextBox)insertedItem.FindControl("nickname_first")).Text;
-                string nicknameLast = ((TextBox)insertedItem.FindControl("nickname_last")).Text;
+                consumerFirst = ((RadTextBox)insertedItem.FindControl("consumer_first")).Text;
+                consumerLast = ((RadTextBox)insertedItem.FindControl("consumer_last"))?.Text;
+                RadDatePicker dateOfBirth = (RadDatePicker)insertedItem.FindControl("date_of_birth");
+                string addressLine1 = ((RadTextBox)insertedItem.FindControl("address_line_1")).Text;
+                string addressLine2 = ((RadTextBox)insertedItem.FindControl("address_line_2")).Text;
+                string city = ((RadTextBox)insertedItem.FindControl("city")).Text;
+                string state = ((RadTextBox)insertedItem.FindControl("state")).Text;
+                string zipCode = ((RadTextBox)insertedItem.FindControl("zip_code")).Text;
+                string identifier = ((RadTextBox)insertedItem.FindControl("identifier")).Text;
+                string gender = ((RadTextBox)insertedItem.FindControl("gender")).Text;
+                string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis")).Text;
+                string nicknameFirst = ((RadTextBox)insertedItem.FindControl("nickname_first")).Text;
+                string nicknameLast = ((RadTextBox)insertedItem.FindControl("nickname_last")).Text;
 
                 string insertQuery =
                     "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, " +
@@ -162,19 +162,19 @@ namespace ConsumerMaster
                 Int32.TryParse(consumerId, out int consumer_internal_number);
 
                 //Access the controls from the edit form template and store the values. 
-                consumerFirst = ((TextBox)editedItem.FindControl("consumer_first")).Text;
-                consumerLast = ((TextBox)editedItem.FindControl("consumer_last"))?.Text;
+                consumerFirst = ((RadTextBox)editedItem.FindControl("consumer_first")).Text;
+                consumerLast = ((RadTextBox)editedItem.FindControl("consumer_last"))?.Text;
                 RadDatePicker dateOfBirth = (RadDatePicker)editedItem.FindControl("date_of_birth");
-                string addressLine1 = ((TextBox)editedItem.FindControl("address_line_1")).Text;
-                string addressLine2 = ((TextBox)editedItem.FindControl("address_line_2")).Text;
-                string city = ((TextBox)editedItem.FindControl("city")).Text;
-                string state = ((TextBox)editedItem.FindControl("state")).Text;
-                string zipCode = ((TextBox)editedItem.FindControl("zip_code")).Text;
-                string identifier = ((TextBox)editedItem.FindControl("identifier")).Text;
-                string gender = ((TextBox)editedItem.FindControl("gender")).Text;
-                string diagnosis = ((TextBox)editedItem.FindControl("diagnosis")).Text;
-                string nicknameFirst = ((TextBox)editedItem.FindControl("nickname_first")).Text;
-                string nicknameLast = ((TextBox)editedItem.FindControl("nickname_last")).Text;
+                string addressLine1 = ((RadTextBox)editedItem.FindControl("address_line_1")).Text;
+                string addressLine2 = ((RadTextBox)editedItem.FindControl("address_line_2")).Text;
+                string city = ((RadTextBox)editedItem.FindControl("city")).Text;
+                string state = ((RadTextBox)editedItem.FindControl("state")).Text;
+                string zipCode = ((RadTextBox)editedItem.FindControl("zip_code")).Text;
+                string identifier = ((RadTextBox)editedItem.FindControl("identifier")).Text;
+                string gender = ((RadTextBox)editedItem.FindControl("gender")).Text;
+                string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis")).Text;
+                string nicknameFirst = ((RadTextBox)editedItem.FindControl("nickname_first")).Text;
+                string nicknameLast = ((RadTextBox)editedItem.FindControl("nickname_last")).Text;
 
                 string updateQuery = "UPDATE ConsumersEI SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
                        "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " +
@@ -240,8 +240,8 @@ namespace ConsumerMaster
                 consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
                 Int32.TryParse(consumerId, out int consumerInternalNumber);
 
-                consumerFirst = ((TextBox)item.FindControl("consumer_first")).Text;
-                consumerLast = ((TextBox)item.FindControl("consumer_last"))?.Text;
+                consumerFirst = ((RadTextBox)item.FindControl("consumer_first")).Text;
+                consumerLast = ((RadTextBox)item.FindControl("consumer_last"))?.Text;
 
                 string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
 
