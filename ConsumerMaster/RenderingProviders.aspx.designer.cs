@@ -10,7 +10,7 @@
 namespace ConsumerMaster {
     
     
-    public partial class Physicians {
+    public partial class RenderingProviders {
         
         /// <summary>
         /// RadSkinManager1 control.

@@ -46,8 +46,7 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-<%--                    <telerik:GridClientDeleteColumn ConfirmText="Are you sure you want to delete the selected row?" HeaderText="Delete"><HeaderStyle Width="70px"/></telerik:GridClientDeleteColumn>  --%>
-                    <telerik:GridButtonColumn ButtonType="ImageButton" ConfirmText="Are you sure you want to delete?" CommandName="Delete" ImageUrl="~/Images/Del.png" Text="Click to delete" UniqueName="Delete">
+                    <telerik:GridButtonColumn ButtonType="ImageButton" ConfirmText="Are you sure you want to delete?" CommandName="Delete" ImageUrl="~/Images/tDelete.png" Text="Click to delete" UniqueName="Delete">
                     </telerik:GridButtonColumn>
 
                 </Columns>
@@ -55,24 +54,25 @@
                     <FormTemplate>
                         <section class="form-group">
                             <h4>Consumer Info</h4>
+                            <p id="formInstructions">Fields marked with an asterisk (*) are required.</p>
                             <ul class="form-fields">
                             <li>
-                                <label for="consumer_first">First Name:</label> 
+                                <label for="consumer_first">First Name *</label> 
                                 <telerik:RadTextBox ID="consumer_first" runat="server" Text='<%# Bind("consumer_first") %>' TabIndex="1"/>
                                 <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="consumer_first" ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="consumer_last">Last name :</label> 
+                                <label for="consumer_last">Last name *</label> 
                                 <telerik:RadTextBox ID="consumer_last" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="2"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="consumer_last" ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="date_of_birth">Birth Date:</label> 
+                                <label for="date_of_birth">Birth Date *</label> 
                                 <telerik:RadDatePicker ID="date_of_birth" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="date_of_birth" ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="address_line_1">Address1:</label> 
+                                <label for="address_line_1">Address1 *</label> 
                                 <telerik:RadTextBox ID="address_line_1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="4"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="address_line_1" ErrorMessage="Address1 is required"  ValidationGroup="FormValidationGroup"/>
                             </li>                                    
@@ -81,23 +81,23 @@
                                 <telerik:RadTextBox ID="address_line_2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="5"/>
                             </li>                                   
                             <li>
-                                <label for="city">City:</label> 
+                                <label for="city">City *</label> 
                                 <telerik:RadTextBox ID="city" Text='<%# Bind("city") %>' runat="server" TabIndex="6"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" ControlToValidate="city" ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="state">State:</label> 
+                                <label for="state">State *</label> 
                                 <telerik:RadDropDownList ID="state" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
                                                          DataTextField="name" DataValueField="abbreviation" TabIndex="7" DefaultMessage="Select" /> 
                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="state" ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                             </li>                                    
                             <li>
-                                <label for="zip_code">Zip Code:</label> 
+                                <label for="zip_code">Zip Code *</label> 
                                 <telerik:RadMaskedTextBox ID="zip_code" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="8" Mask="#####-####" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" ControlToValidate="zip_code" ErrorMessage="Zip code is required"  ValidationGroup="FormValidationGroup"/>
                             </li>  
                             <li>
-                                <label for="identifier">Identifier:</label> 
+                                <label for="identifier">Identifier *</label> 
                                 <telerik:RadNumericTextbox ID="identifier" DbValue='<%# Bind("identifier") %>' MinValue="0000000000" MaxValue="9999999999" runat="server" TabIndex="9">
                                     <NumberFormat GroupSeparator="" DecimalDigits="0" /> 
                                 </telerik:RadNumericTextbox>
@@ -105,7 +105,7 @@
                                 <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="identifier" ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />
                             </li>                                     
                             <li>
-                                <label for="gender">Gender:</label> 
+                                <label for="gender">Gender *</label> 
                                 <telerik:RadRadioButtonList ID="gender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Horizontal">
                                     <Items>
                                         <telerik:ButtonListItem Text="Male" Value="M"/>
@@ -115,7 +115,7 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="gender"  Display="Dynamic" ErrorMessage="Gender is required" ValidationGroup="GenderGroup" />
                             </li>                                      
                             <li>
-                                <label for="diagnosis_code">Diagnosis Code:</label> 
+                                <label for="diagnosis_code">Diagnosis Code *</label> 
                                 <telerik:RadTextBox ID="diagnosis_code" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="11"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="diagnosis_code" ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
                             </li>  
@@ -196,49 +196,6 @@
         <br />
         <br />
     </div>
-    
-<%--    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-        DeleteCommand="DELETE FROM Consumers WHERE consumer_internal_number = @consumer_internal_number"
-        InsertCommand="INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last) VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @nickname_first, @nickname_last)"
-        SelectCommand="SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last" 
-        UpdateCommand="UPDATE Consumers SET consumer_first = @consumer_first, consumer_last = @consumer_last, date_of_birth = @date_of_birth, address_line_1 = @address_line_1, address_line_2 = @address_line_2, city = @city, state = @state, zip_code = @zip_code, identifier = @identifier, gender = @gender, diagnosis = @diagnosis, nickname_first = @nickname_first, nickname_last = @nickname_last WHERE consumer_internal_number = @consumer_internal_number">
-        <DeleteParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </DeleteParameters>
-        <InsertParameters>
-            <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="consumer_last" Type="String"></asp:Parameter>
-            <asp:Parameter Name="date_of_birth" Type="DateTime"></asp:Parameter>
-            <asp:Parameter Name="address_line_1" Type="String"></asp:Parameter>
-            <asp:Parameter Name="address_line_2" Type="String"></asp:Parameter>
-            <asp:Parameter Name="city" Type="String"></asp:Parameter>
-            <asp:Parameter Name="state" Type="String"></asp:Parameter>
-            <asp:Parameter Name="zip_code" Type="String"></asp:Parameter>
-            <asp:Parameter Name="identifier" Type="String"></asp:Parameter>
-            <asp:Parameter Name="gender" Type="String"></asp:Parameter>
-            <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
-        </InsertParameters>
-        <UpdateParameters>
-            <asp:Parameter Name="consumer_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="consumer_last" Type="String"></asp:Parameter>
-            <asp:Parameter Name="date_of_birth" Type="DateTime"></asp:Parameter>
-            <asp:Parameter Name="address_line_1" Type="String"></asp:Parameter>
-            <asp:Parameter Name="address_line_2" Type="String"></asp:Parameter>
-            <asp:Parameter Name="city" Type="String"></asp:Parameter>
-            <asp:Parameter Name="state" Type="String"></asp:Parameter>
-            <asp:Parameter Name="zip_code" Type="String"></asp:Parameter>
-            <asp:Parameter Name="identifier" Type="String"></asp:Parameter>
-            <asp:Parameter Name="gender" Type="String"></asp:Parameter>
-            <asp:Parameter Name="diagnosis" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_first" Type="String"></asp:Parameter>
-            <asp:Parameter Name="nickname_last" Type="String"></asp:Parameter>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
-        </UpdateParameters>
-    </asp:SqlDataSource>  --%>      
-   
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
        DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
@@ -260,7 +217,6 @@
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
        </UpdateParameters>
     </asp:SqlDataSource> 
-
 <asp:SqlDataSource ID="StatesSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT name, abbreviation FROM States"/>
 <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
 <asp:SqlDataSource ID="PartnerProgramDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, partner_name, program_name FROM PartnerPrograms2"/>

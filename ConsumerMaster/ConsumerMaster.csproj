@@ -199,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Consumers.aspx" />
+    <Content Include="RenderingProviders.aspx" />
     <Content Include="Reports.aspx" />
     <Content Include="About.aspx" />
     <Content Include="AppEvent.aspx" />
@@ -283,8 +284,7 @@
     <Content Include="Styles\Flexbox.css" />
     <Content Include="Styles\styles.css" />
     <Content Include="Styles\StyleSheet.css" />
-    <Content Include="Physicians.aspx" />
-    <Content Include="Therapists.aspx" />
+    <Content Include="ReferringProviders.aspx" />
     <Content Include="TradingPartners.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config">
@@ -304,6 +304,13 @@
     </Compile>
     <Compile Include="Consumers.aspx.designer.cs">
       <DependentUpon>Consumers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RenderingProviders.aspx.cs">
+      <DependentUpon>RenderingProviders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RenderingProviders.aspx.designer.cs">
+      <DependentUpon>RenderingProviders.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports.aspx.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
@@ -369,19 +376,12 @@
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
-    <Compile Include="Physicians.aspx.cs">
-      <DependentUpon>Physicians.aspx</DependentUpon>
+    <Compile Include="ReferringProviders.aspx.cs">
+      <DependentUpon>ReferringProviders.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Physicians.aspx.designer.cs">
-      <DependentUpon>Physicians.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Therapists.aspx.cs">
-      <DependentUpon>Therapists.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Therapists.aspx.designer.cs">
-      <DependentUpon>Therapists.aspx</DependentUpon>
+    <Compile Include="ReferringProviders.aspx.designer.cs">
+      <DependentUpon>ReferringProviders.aspx</DependentUpon>
     </Compile>
     <Compile Include="TradingPartners.aspx.cs">
       <DependentUpon>TradingPartners.aspx</DependentUpon>

@@ -8,7 +8,7 @@ using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
-    public partial class Therapists : Page
+    public partial class ReferringProviders : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -16,21 +16,21 @@ namespace ConsumerMaster
         {
 
         }
-
+        
         //protected void RadGrid1_ItemUpdated(object source, GridUpdatedEventArgs e)
         //{
         //    if (e.Exception != null)
         //    {
         //        e.ExceptionHandled = true;
         //        e.KeepInEditMode = true;
-        //        DisplayMessage("Therapist " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
-        //        Logger.Error("Therapist " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+        //        DisplayMessage("Physician " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+        //        Logger.Error("Physician " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
         //        Logger.Error(e);
         //    }
         //    else
         //    {
-        //        DisplayMessage("Therapist " + e.Item["id"].Text + " updated");
-        //        Logger.Info("Therapist " + e.Item["id"].Text + " updated");
+        //        DisplayMessage("Physician " + e.Item["id"].Text + " updated");
+        //        Logger.Info("Physician " + e.Item["id"].Text + " updated");
         //    }
         //}
 
@@ -40,13 +40,13 @@ namespace ConsumerMaster
         //    {
         //        e.ExceptionHandled = true;
         //        e.KeepInInsertMode = true;
-        //        DisplayMessage("Therapist " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
-        //        Logger.Error("Therapist " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
+        //        DisplayMessage("Physician " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
+        //        Logger.Error("Physician " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
         //    }
         //    else
         //    {
-        //        DisplayMessage("Therapist " + e.Item["id"].Text + " inserted");
-        //        Logger.Info("Therapist " + e.Item["id"].Text + " inserted");
+        //        DisplayMessage("Physician " + e.Item["id"].Text + " inserted");
+        //        Logger.Info("Physician " + e.Item["id"].Text + " inserted");
         //        Logger.Error(e);
         //    }
         //}
@@ -56,14 +56,14 @@ namespace ConsumerMaster
         //    if (e.Exception != null)
         //    {
         //        e.ExceptionHandled = true;
-        //        DisplayMessage("Therapist " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
-        //        Logger.Info("Therapist " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+        //        DisplayMessage("Physician " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+        //        Logger.Info("Physician " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
         //        Logger.Error(e);
         //    }
         //    else
         //    {
-        //        DisplayMessage("Therapist " + e.Item["id"].Text + " deleted");
-        //        Logger.Info("Therapist " + e.Item["id"].Text + " deleted");
+        //        DisplayMessage("Physician " + e.Item["id"].Text + " deleted");
+        //        Logger.Info("Physician " + e.Item["id"].Text + " deleted");
         //    }
         //}
 
@@ -109,7 +109,7 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT rendering_provider_id, rendering_provider_name, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi FROM Therapists"; 
+            string selectQuery = "SELECT id, first_name, last_name, medicad_number, npi_number, taxonomy_number, name FROM ReferringProviders"; 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
@@ -117,20 +117,21 @@ namespace ConsumerMaster
         {
             //Get the GridEditFormInsertItem of the RadGrid 
             GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
-            string renderingProviderId = null;
-            string renderingProviderFirstName = null;
-            string renderingProviderLastName = null;
+            string firstName = null;
+            string lastName = null;
 
             try
             {
                 //Access the textbox from the insert form template and store the values in string variables. 
-                renderingProviderId = ((RadTextBox)insertedItem.FindControl("rendering_provider_id")).Text;
-                renderingProviderFirstName = ((RadTextBox)insertedItem.FindControl("rendering_provider_first_name"))?.Text;
-                renderingProviderLastName = ((RadTextBox)insertedItem.FindControl("rendering_provider_last_name")).Text;
-                string renderingProviderNPI = ((RadTextBox)insertedItem.FindControl("rendering_provider_npi")).Text;
+                //id = ((RadTextBox)insertedItem.FindControl("id"))?.Text;
+                firstName = ((RadTextBox)insertedItem.FindControl("first_name"))?.Text;
+                lastName = ((RadTextBox)insertedItem.FindControl("last_name")).Text;
+                string medicadNumber = ((RadTextBox)insertedItem.FindControl("medicad_number")).Text;
+                string npiNumber = ((RadTextBox)insertedItem.FindControl("npi_number")).Text;
+                string taxonomyNumber = ((RadTextBox)insertedItem.FindControl("taxonomy_number")).Text;
 
-                string insertQuery = "INSERT INTO Therapists(rendering_provider_id, rendering_provider_first_name, rendering_provider_last_name, rendering_provider_npi, rendering_provider_name) " +
-                    "VALUES(@rendering_provider_id, @rendering_provider_first_name, @rendering_provider_last_name, @rendering_provider_npi)";
+                string insertQuery = "INSERT INTO ReferringProviders(id, first_name, last_name, medicad_number, npi_number, taxonomy_number) " +
+                    "VALUES(@id, @first_name, @last_name, @medicad_number, @npi_number, @taxonomy_number)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -140,17 +141,18 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = insertQuery;
 
-                        cmd.Parameters.Add("rendering_provider_id", SqlDbType.VarChar).Value = renderingProviderId;
-                        cmd.Parameters.Add("rendering_provider_first_name", SqlDbType.VarChar).Value = renderingProviderFirstName;
-                        cmd.Parameters.Add("rendering_provider_last_name", SqlDbType.VarChar).Value = renderingProviderLastName;
-                        cmd.Parameters.Add("rendering_provider_npi", SqlDbType.VarChar).Value = renderingProviderNPI;
+                        cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
+                        cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
+                        cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
+                        cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
+                        cmd.Parameters.Add("taxonomy_number", SqlDbType.VarChar).Value = taxonomyNumber;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
 
                         if (result > 0)
                         {
-                            var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} is inserted.";
+                            var message = $"ReferringProviders: {firstName} {lastName} is inserted.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }
@@ -159,7 +161,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} cannot be inserted. Reason: ";
+                var message = $"ReferringProviders: {firstName} {lastName} cannot be inserted. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
@@ -170,22 +172,23 @@ namespace ConsumerMaster
         {
             //Get the GridEditableItem of the RadGrid 
             GridEditableItem editedItem = e.Item as GridEditableItem;
-            string renderingProviderId = null;
-            string renderingProviderFirstName = null;
-            string renderingProviderLastName = null;
+            string id = null;
+            string firstName = null;
+            string lastName = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                renderingProviderId = ((RadTextBox)editedItem.FindControl("rendering_provider_id")).Text;
+                id = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["id"].ToString();
 
-                //Access the textbox from the insert form template and store the values in string variables. 
-                renderingProviderFirstName = ((RadTextBox)editedItem.FindControl("rendering_provider_first_name"))?.Text;
-                renderingProviderLastName = ((RadTextBox)editedItem.FindControl("rendering_provider_last_name")).Text;
-                string renderingProviderNPI = ((RadTextBox)editedItem.FindControl("rendering_provider_npi")).Text;
+                firstName = ((RadTextBox)editedItem.FindControl("first_name"))?.Text;
+                lastName = ((RadTextBox)editedItem.FindControl("last_name")).Text;
+                string medicadNumber = ((RadTextBox)editedItem.FindControl("medicad_number")).Text;
+                string npiNumber = ((RadTextBox)editedItem.FindControl("npi_number")).Text;
+                string taxonomyNumber = ((RadTextBox)editedItem.FindControl("taxonomy_number")).Text;
 
-                string updateQuery = "UPDATE Therapists SET rendering_provider_first_name = @rendering_provider_first_name, " +
-                    "rendering_provider_last_name = @rendering_provider_last_name, rendering_provider_npi = @rendering_provider_npi WHERE rendering_provider_id = @rendering_provider_id";
+                string updateQuery = "UPDATE ReferringProviders SET first_name = @first_name, last_name = @last_name, medicad_number = @medicad_number, " +
+                                     "npi_number = @npi_number, taxonomy_number = @taxonomy_number WHERE id = @id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -195,17 +198,18 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = updateQuery;
 
-                        //cmd.Parameters.Add("rendering_provider_id", SqlDbType.VarChar).Value = renderingProviderId;
-                        cmd.Parameters.Add("rendering_provider_first_name", SqlDbType.VarChar).Value = renderingProviderFirstName;
-                        cmd.Parameters.Add("rendering_provider_last_name", SqlDbType.VarChar).Value = renderingProviderLastName;
-                        cmd.Parameters.Add("rendering_provider_npi", SqlDbType.VarChar).Value = renderingProviderNPI;
+                        cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
+                        cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
+                        cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
+                        cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
+                        cmd.Parameters.Add("taxonomy_number", SqlDbType.VarChar).Value = taxonomyNumber;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
 
                         if (result > 0)
                         {
-                            var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} is updated.";
+                            var message = $"ReferringProviders: {firstName} {lastName} is updated.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }
@@ -214,7 +218,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} cannot be updated. Reason: ";
+                var message = $"ReferringProviders: {firstName} {lastName} cannot be updated. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
@@ -225,18 +229,19 @@ namespace ConsumerMaster
         {
             //Get the GridDataItem of the RadGrid 
             GridDataItem item = (GridDataItem)e.Item;
-            string renderingProviderId = null;
-            string renderingProviderFirstName = null;
-            string renderingProviderLastName = null;
+            string id = null;
+            string firstName = null;
+            string lastName = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                renderingProviderId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["rendering_provider_id"].ToString();
-                renderingProviderFirstName = ((RadTextBox)item.FindControl("rendering_provider_first_name"))?.Text;
-                renderingProviderLastName = ((RadTextBox)item.FindControl("rendering_provider_last_name")).Text;
+                id = item.OwnerTableView.DataKeyValues[item.ItemIndex]["id"].ToString();
 
-                string deleteQuery = "DELETE FROM Therapists WHERE rendering_provider_id = @rendering_provider_id";
+                firstName = ((RadTextBox)item.FindControl("first_name"))?.Text;
+                lastName = ((RadTextBox)item.FindControl("last_name")).Text;
+
+                string deleteQuery = "DELETE FROM ReferringProviders WHERE id = @id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -246,14 +251,14 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = deleteQuery;
 
-                        cmd.Parameters.Add("rendering_provider_id", SqlDbType.Int).Value = renderingProviderId;
+                        cmd.Parameters.Add("id", SqlDbType.VarChar).Value = id;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
 
                         if (result > 0)
                         {
-                            var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} is deleted.";
+                            var message = $"ReferringProviders: {firstName} {lastName} is deleted.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }
@@ -262,7 +267,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"Therapist: {renderingProviderFirstName} {renderingProviderLastName} cannot be deleted. Reason: ";
+                var message = $"ReferringProviders: {firstName} {lastName} cannot be deleted. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
