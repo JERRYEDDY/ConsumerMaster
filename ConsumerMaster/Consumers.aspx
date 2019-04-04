@@ -36,6 +36,12 @@
                         <telerik:RadButton ID="RadButton2" runat="server" Text="Edit selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected">
                             <Icon PrimaryIconCssClass="rbEdit" />
                         </telerik:RadButton>&nbsp;&nbsp;
+                        <telerik:RadButton ID="RadButton3" runat="server" Text="Delete selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected" OnClientClicked="javascript:return confirm('Delete selected consumer?')">
+                            <Icon PrimaryIconCssClass="rbCancel" />
+                        </telerik:RadButton>&nbsp;&nbsp;
+<%--                        <telerik:RadButton ID="RadButton3" runat="server" Text="Delete selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSlelected" OnClientClicked="javascript:return confirm('Delete selected consumer?')">
+                            <Icon PrimaryIconCssClass="rbCancel" />
+                        </telerik:RadButton>&nbsp;&nbsp;--%>
                     </div>
                 </CommandItemTemplate>               
                 <Columns>
@@ -46,8 +52,7 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-                    <telerik:GridButtonColumn ButtonType="ImageButton" ConfirmText="Are you sure you want to delete?" CommandName="Delete" ImageUrl="~/Images/tDelete.png" Text="Click to delete" UniqueName="Delete">
-                    </telerik:GridButtonColumn>
+<%--                    <telerik:GridButtonColumn ButtonType="ImageButton" ConfirmText="Are you sure you want to delete?" CommandName="Delete" ImageUrl="~/Images/tDelete.png" Text="Click to delete" UniqueName="Delete" />--%>
 
                 </Columns>
                 <EditFormSettings EditFormType="Template">
@@ -98,11 +103,10 @@
                             </li>  
                             <li>
                                 <label for="identifier">Identifier *</label> 
-                                <telerik:RadNumericTextbox ID="identifier" DbValue='<%# Bind("identifier") %>' MinValue="0000000000" MaxValue="9999999999" runat="server" TabIndex="9">
-                                    <NumberFormat GroupSeparator="" DecimalDigits="0" /> 
-                                </telerik:RadNumericTextbox>
+                                <telerik:RadMaskedTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="8" Mask="##########" />
+<%--                                <telerik:RadTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="9"/>--%>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" />
-                                <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="identifier" ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />
+<%--                                <asp:RegularExpressionValidator ID="rvDigits" runat="server" ControlToValidate="identifier" ErrorMessage="10 digit number is required" ValidationExpression="[0-9]{10}" />--%>
                             </li>                                     
                             <li>
                                 <label for="gender">Gender *</label> 

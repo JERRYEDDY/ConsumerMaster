@@ -4,6 +4,11 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 <link href="Styles/Flexbox.css" rel="stylesheet" />
+    <style>
+        b {
+font-color: red;
+}
+    </style>
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
     <p id="divMsgs" runat="server">
         <asp:Label ID="Label1" runat="server" EnableViewState="False" Font-Bold="True" ForeColor="#FF8080">
