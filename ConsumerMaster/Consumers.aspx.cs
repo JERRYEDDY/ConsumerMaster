@@ -326,5 +326,10 @@ namespace ConsumerMaster
         {
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
+
+        protected void RadButton_Click(object sender, EventArgs e)
+        {
+            Response.Write("A server click has been executed!");
+        }
     }
 }

@@ -3,8 +3,19 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+<script>
+    function showPrompt(sender, args) {
+        var answer = confirm("Do you want to execute a server button click");
+        if (answer == true) {
+            sender.click();
+        }
+        else args.set_cancel(true);
+    }
+</script>
+
 <link href="Styles/Flexbox.css" rel="stylesheet" />
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
+    <telerik:RadWindowManager ID="RadWindowManager1" runat="server"></telerik:RadWindowManager>
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         <AjaxSettings>
             <telerik:AjaxSetting AjaxControlID="RadGrid1">
@@ -36,12 +47,6 @@
                         <telerik:RadButton ID="RadButton2" runat="server" Text="Edit selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected">
                             <Icon PrimaryIconCssClass="rbEdit" />
                         </telerik:RadButton>&nbsp;&nbsp;
-                        <telerik:RadButton ID="RadButton3" runat="server" Text="Delete selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected" OnClientClicked="javascript:return confirm('Delete selected consumer?')">
-                            <Icon PrimaryIconCssClass="rbCancel" />
-                        </telerik:RadButton>&nbsp;&nbsp;
-<%--                        <telerik:RadButton ID="RadButton3" runat="server" Text="Delete selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSlelected" OnClientClicked="javascript:return confirm('Delete selected consumer?')">
-                            <Icon PrimaryIconCssClass="rbCancel" />
-                        </telerik:RadButton>&nbsp;&nbsp;--%>
                     </div>
                 </CommandItemTemplate>               
                 <Columns>
@@ -52,6 +57,8 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
+                    <telerik:GridButtonColumn ConfirmText="Delete this consumer?" ConfirmDialogType="RadWindow" ConfirmTitle="Delete" ButtonType="FontIconButton" CommandName="Delete" />
+                    
 <%--                    <telerik:GridButtonColumn ButtonType="ImageButton" ConfirmText="Are you sure you want to delete?" CommandName="Delete" ImageUrl="~/Images/tDelete.png" Text="Click to delete" UniqueName="Delete" />--%>
 
                 </Columns>
