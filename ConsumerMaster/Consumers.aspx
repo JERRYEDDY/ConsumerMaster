@@ -3,17 +3,16 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<script>
-    function showPrompt(sender, args) {
-        var answer = confirm("Do you want to execute a server button click");
-        if (answer == true) {
-            sender.click();
-        }
-        else args.set_cancel(true);
-    }
-</script>
-
 <link href="Styles/Flexbox.css" rel="stylesheet" />
+<script type="text/javascript" language="javascript"> 
+    function RowClick(sender, eventArgs)  
+    {  
+        var tableView = eventArgs.get_tableView();   
+        var rowIndex = eventArgs.get_itemIndexHierarchical(); 
+ 
+        tableView.editItem(rowIndex); 
+    } 
+</script>
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
     <telerik:RadWindowManager ID="RadWindowManager1" runat="server"></telerik:RadWindowManager>
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
@@ -37,7 +36,7 @@
         <h5><strong>CONSUMERS:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
                          OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand"                        
-                         AllowFilteringByColumn="true" >
+                         AllowFilteringByColumn="true" AllowSorting="true">
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EditMode="EditForms">
                 <CommandItemTemplate>
                     <div style="padding: 5px 5px;">
@@ -148,7 +147,8 @@
                 </EditFormSettings>              
             </MasterTableView>
             <ClientSettings AllowKeyboardNavigation="true" EnablePostBackOnRowClick="true">    
-                <Selecting AllowRowSelect="True" UseClientSelectColumnOnly="True"></Selecting>
+                <Selecting AllowRowSelect="True" UseClientSelectColumnOnly="True"/>
+                <ClientEvents OnRowClick="RowClick" /> 
             </ClientSettings>
             <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
             <GroupingSettings CaseSensitive="false"></GroupingSettings>

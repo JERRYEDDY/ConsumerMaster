@@ -170,7 +170,7 @@ namespace ConsumerMaster
                 string city = ((RadTextBox)editedItem.FindControl("city")).Text;
                 string state = ((RadDropDownList) editedItem.FindControl("state")).SelectedValue;
                 string zipCode = ((RadMaskedTextBox)editedItem.FindControl("zip_code")).Text;
-                string identifier = ((RadNumericTextBox)editedItem.FindControl("identifier")).Text;
+                string identifier = ((RadMaskedTextBox)editedItem.FindControl("identifier")).Text;
                 string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis_code")).Text;
                 string nicknameFirst = ((RadTextBox)editedItem.FindControl("nickname_first")).Text;
