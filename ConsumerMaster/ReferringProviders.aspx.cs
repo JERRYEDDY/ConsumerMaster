@@ -123,15 +123,14 @@ namespace ConsumerMaster
             try
             {
                 //Access the textbox from the insert form template and store the values in string variables. 
-                //id = ((RadTextBox)insertedItem.FindControl("id"))?.Text;
                 firstName = ((RadTextBox)insertedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)insertedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadTextBox)insertedItem.FindControl("medicad_number")).Text;
-                string npiNumber = ((RadTextBox)insertedItem.FindControl("npi_number")).Text;
+                string medicadNumber = ((RadMaskedTextBox)insertedItem.FindControl("medicad_number")).Text;
+                string npiNumber = ((RadMaskedTextBox)insertedItem.FindControl("npi_number")).Text;
                 string taxonomyNumber = ((RadTextBox)insertedItem.FindControl("taxonomy_number")).Text;
 
-                string insertQuery = "INSERT INTO ReferringProviders(id, first_name, last_name, medicad_number, npi_number, taxonomy_number) " +
-                    "VALUES(@id, @first_name, @last_name, @medicad_number, @npi_number, @taxonomy_number)";
+                string insertQuery = "INSERT INTO ReferringProviders(first_name, last_name, medicad_number, npi_number, taxonomy_number) " +
+                    "VALUES(@first_name, @last_name, @medicad_number, @npi_number, @taxonomy_number)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -172,19 +171,21 @@ namespace ConsumerMaster
         {
             //Get the GridEditableItem of the RadGrid 
             GridEditableItem editedItem = e.Item as GridEditableItem;
-            string id = null;
+            string referId = null;
             string firstName = null;
             string lastName = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                id = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["id"].ToString();
+                referId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["id"].ToString();
+                Int32.TryParse(referId, out int id);
+
 
                 firstName = ((RadTextBox)editedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)editedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadTextBox)editedItem.FindControl("medicad_number")).Text;
-                string npiNumber = ((RadTextBox)editedItem.FindControl("npi_number")).Text;
+                string medicadNumber = ((RadMaskedTextBox)editedItem.FindControl("medicad_number")).Text;
+                string npiNumber = ((RadMaskedTextBox)editedItem.FindControl("npi_number")).Text;
                 string taxonomyNumber = ((RadTextBox)editedItem.FindControl("taxonomy_number")).Text;
 
                 string updateQuery = "UPDATE ReferringProviders SET first_name = @first_name, last_name = @last_name, medicad_number = @medicad_number, " +
@@ -198,6 +199,7 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = updateQuery;
 
+                        cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
                         cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
@@ -209,7 +211,7 @@ namespace ConsumerMaster
 
                         if (result > 0)
                         {
-                            var message = $"ReferringProviders: {firstName} {lastName} is updated.";
+                            var message = $"ReferringProviders: {referId} {firstName} {lastName} is updated.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }
@@ -218,7 +220,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"ReferringProviders: {firstName} {lastName} cannot be updated. Reason: ";
+                var message = $"ReferringProviders: {referId} {firstName} {lastName} cannot be updated. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;
@@ -229,14 +231,15 @@ namespace ConsumerMaster
         {
             //Get the GridDataItem of the RadGrid 
             GridDataItem item = (GridDataItem)e.Item;
-            string id = null;
+            string referId = null;
             string firstName = null;
             string lastName = null;
 
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                id = item.OwnerTableView.DataKeyValues[item.ItemIndex]["id"].ToString();
+                referId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["id"].ToString();
+                Int32.TryParse(referId, out int id);
 
                 firstName = ((RadTextBox)item.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)item.FindControl("last_name")).Text;
@@ -251,14 +254,14 @@ namespace ConsumerMaster
                         cmd.CommandType = CommandType.Text;
                         cmd.CommandText = deleteQuery;
 
-                        cmd.Parameters.Add("id", SqlDbType.VarChar).Value = id;
+                        cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
 
                         if (result > 0)
                         {
-                            var message = $"ReferringProviders: {firstName} {lastName} is deleted.";
+                            var message = $"ReferringProviders: {referId} {firstName} {lastName} is deleted.";
                             DisplayMessage(message);
                             Logger.Info(message);
                         }
@@ -267,7 +270,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                var message = $"ReferringProviders: {firstName} {lastName} cannot be deleted. Reason: ";
+                var message = $"ReferringProviders: {referId} {firstName} {lastName} cannot be deleted. Reason: ";
                 DisplayMessage(message + ex.Message);
                 Logger.Info(message + ex.Message);
                 e.Canceled = true;

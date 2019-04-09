@@ -98,16 +98,16 @@ font-color: red;
                             </li>
                             <li>
                                 <label for="medicad_number">Medicad No *</label> 
-                                <telerik:RadTextBox ID="medicad_number" Text='<%# Bind("medicad_number") %>' runat="server" TabIndex="3"/>
+                                <telerik:RadMaskedTextBox ID="medicad_number" Text='<%# Bind("medicad_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="medicad_number" ErrorMessage="Medicad number is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
                                 <label for="npi_number">NPI No</label> 
-                                <telerik:RadTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4"/>
+                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########"/>
                             </li>
                             <li>
                                 <label for="taxonomy_number">Taxonomy No:</label> 
-                                <telerik:RadTextBox ID="taxonomy_number" Text='<%# Bind("taxonomy_number") %>' runat="server" TabIndex="5"/>
+                                <telerik:RadTextBox ID="taxonomy_number" Text='<%# Bind("taxonomy_number") %>' runat="server" TabIndex="5" MaxLength="10"/>
                             </li>                            
                         </section>
                         <section class="form-submit">
