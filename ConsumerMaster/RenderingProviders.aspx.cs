@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace ConsumerMaster
@@ -59,7 +58,7 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT id, first_name, last_name, medicad_number, npi_number, taxonomy_number, name FROM RenderingProviders"; 
+            string selectQuery = "SELECT id, first_name, last_name, ma_number, taxonomy_number, name FROM RenderingProviders"; 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
@@ -75,12 +74,10 @@ namespace ConsumerMaster
                 //Access the textbox from the insert form template and store the values in string variables. 
                 firstName = ((RadTextBox)insertedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)insertedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadMaskedTextBox)insertedItem.FindControl("medicad_number")).Text;
-                string npiNumber = ((RadMaskedTextBox)insertedItem.FindControl("npi_number")).Text;
+                string medicadNumber = ((RadMaskedTextBox)insertedItem.FindControl("ma_number")).Text;
                 string taxonomyNumber = ((RadTextBox)insertedItem.FindControl("taxonomy_number")).Text;
 
-                string insertQuery = "INSERT INTO RenderingProviders(first_name, last_name, medicad_number, npi_number, taxonomy_number) " +
-                    "VALUES(@first_name, @last_name, @medicad_number, @npi_number, @taxonomy_number)";
+                string insertQuery = "INSERT INTO RenderingProviders(first_name, last_name, ma_number, taxonomy_number) VALUES(@first_name, @last_name, @ma_number, @taxonomy_number)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -92,8 +89,7 @@ namespace ConsumerMaster
 
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
-                        cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
-                        cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
+                        cmd.Parameters.Add("ma_number", SqlDbType.VarChar).Value = medicadNumber;
                         cmd.Parameters.Add("taxonomy_number", SqlDbType.VarChar).Value = taxonomyNumber;
 
                         con.Open();
@@ -134,12 +130,10 @@ namespace ConsumerMaster
 
                 firstName = ((RadTextBox)editedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)editedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadMaskedTextBox)editedItem.FindControl("medicad_number")).Text;
-                string npiNumber = ((RadMaskedTextBox)editedItem.FindControl("npi_number")).Text;
+                string medicadNumber = ((RadMaskedTextBox)editedItem.FindControl("ma_number")).Text;
                 string taxonomyNumber = ((RadTextBox)editedItem.FindControl("taxonomy_number")).Text;
 
-                string updateQuery = "UPDATE RenderingProviders SET first_name = @first_name, last_name = @last_name, medicad_number = @medicad_number, " +
-                                     "npi_number = @npi_number, taxonomy_number = @taxonomy_number WHERE id = @id";
+                string updateQuery = "UPDATE RenderingProviders SET first_name = @first_name, last_name = @last_name, ma_number = @ma_number, taxonomy_number = @taxonomy_number WHERE id = @id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -152,8 +146,7 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
-                        cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
-                        cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
+                        cmd.Parameters.Add("ma_number", SqlDbType.VarChar).Value = medicadNumber;
                         cmd.Parameters.Add("taxonomy_number", SqlDbType.VarChar).Value = taxonomyNumber;
 
                         con.Open();

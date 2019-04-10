@@ -17,56 +17,6 @@ namespace ConsumerMaster
 
         }
         
-        //protected void RadGrid1_ItemUpdated(object source, GridUpdatedEventArgs e)
-        //{
-        //    if (e.Exception != null)
-        //    {
-        //        e.ExceptionHandled = true;
-        //        e.KeepInEditMode = true;
-        //        DisplayMessage("Physician " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
-        //        Logger.Error("Physician " + e.Item["id"].Text + " cannot be updated. Reason: " + e.Exception.Message);
-        //        Logger.Error(e);
-        //    }
-        //    else
-        //    {
-        //        DisplayMessage("Physician " + e.Item["id"].Text + " updated");
-        //        Logger.Info("Physician " + e.Item["id"].Text + " updated");
-        //    }
-        //}
-
-        //protected void RadGrid1_ItemInserted(object source, GridInsertedEventArgs e)
-        //{
-        //    if (e.Exception != null)
-        //    {
-        //        e.ExceptionHandled = true;
-        //        e.KeepInInsertMode = true;
-        //        DisplayMessage("Physician " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
-        //        Logger.Error("Physician " + e.Item["id"].Text + "cannot be inserted. Reason: " + e.Exception.Message);
-        //    }
-        //    else
-        //    {
-        //        DisplayMessage("Physician " + e.Item["id"].Text + " inserted");
-        //        Logger.Info("Physician " + e.Item["id"].Text + " inserted");
-        //        Logger.Error(e);
-        //    }
-        //}
-
-        //protected void RadGrid1_ItemDeleted(object source, GridDeletedEventArgs e)
-        //{
-        //    if (e.Exception != null)
-        //    {
-        //        e.ExceptionHandled = true;
-        //        DisplayMessage("Physician " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
-        //        Logger.Info("Physician " + e.Item["id"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
-        //        Logger.Error(e);
-        //    }
-        //    else
-        //    {
-        //        DisplayMessage("Physician " + e.Item["id"].Text + " deleted");
-        //        Logger.Info("Physician " + e.Item["id"].Text + " deleted");
-        //    }
-        //}
-
         private DataTable GetDataTable(string selectQuery, params SqlParameter[] parameters)
         {
             DataTable dtTable = new DataTable();
@@ -109,7 +59,7 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT id, first_name, last_name, medicad_number, npi_number, taxonomy_number, name FROM ReferringProviders"; 
+            string selectQuery = "SELECT id, first_name, last_name, npi_number, name FROM ReferringProviders"; 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
@@ -125,12 +75,9 @@ namespace ConsumerMaster
                 //Access the textbox from the insert form template and store the values in string variables. 
                 firstName = ((RadTextBox)insertedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)insertedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadMaskedTextBox)insertedItem.FindControl("medicad_number")).Text;
                 string npiNumber = ((RadMaskedTextBox)insertedItem.FindControl("npi_number")).Text;
-                string taxonomyNumber = ((RadTextBox)insertedItem.FindControl("taxonomy_number")).Text;
 
-                string insertQuery = "INSERT INTO ReferringProviders(first_name, last_name, medicad_number, npi_number, taxonomy_number) " +
-                    "VALUES(@first_name, @last_name, @medicad_number, @npi_number, @taxonomy_number)";
+                string insertQuery = "INSERT INTO ReferringProviders(first_name, last_name, npi_number) VALUES(@first_name, @last_name, @npi_number)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -142,9 +89,7 @@ namespace ConsumerMaster
 
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
-                        cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
                         cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
-                        cmd.Parameters.Add("taxonomy_number", SqlDbType.VarChar).Value = taxonomyNumber;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
@@ -181,15 +126,11 @@ namespace ConsumerMaster
                 referId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["id"].ToString();
                 Int32.TryParse(referId, out int id);
 
-
                 firstName = ((RadTextBox)editedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)editedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadMaskedTextBox)editedItem.FindControl("medicad_number")).Text;
                 string npiNumber = ((RadMaskedTextBox)editedItem.FindControl("npi_number")).Text;
-                string taxonomyNumber = ((RadTextBox)editedItem.FindControl("taxonomy_number")).Text;
 
-                string updateQuery = "UPDATE ReferringProviders SET first_name = @first_name, last_name = @last_name, medicad_number = @medicad_number, " +
-                                     "npi_number = @npi_number, taxonomy_number = @taxonomy_number WHERE id = @id";
+                string updateQuery = "UPDATE ReferringProviders SET first_name = @first_name, last_name = @last_name, npi_number = @npi_number WHERE id = @id";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -202,9 +143,7 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
-                        cmd.Parameters.Add("medicad_number", SqlDbType.VarChar).Value = medicadNumber;
                         cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
-                        cmd.Parameters.Add("taxonomy_number", SqlDbType.VarChar).Value = taxonomyNumber;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();

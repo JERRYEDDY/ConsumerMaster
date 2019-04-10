@@ -49,18 +49,12 @@
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
-                    <telerik:GridBoundColumn DataField="medicad_number" HeaderText="Medicad #" SortExpression="medicad_number" UniqueName="medicad_number">
+                    <telerik:GridBoundColumn DataField="ma_number" HeaderText="Medicad #" SortExpression="ma_number" UniqueName="ma_number">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field medicad_number is required" />
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field ma_number is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>                    
-                    <telerik:GridBoundColumn DataField="npi_number" HeaderText="NPI #" SortExpression="npi_number" UniqueName="npi_number">
-                        <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field npi_number is required" />
-                            <ModelErrorMessage BackColor="Red" />
-                        </ColumnValidationSettings>
-                    </telerik:GridBoundColumn>
                     <telerik:GridBoundColumn DataField="taxonomy_number" HeaderText="Taxonomy #" SortExpression="taxonomy_number" UniqueName="taxonomy_number">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field taxonomy_number is required" />
@@ -92,9 +86,9 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="last_name" ErrorMessage="Last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="medicad_number">Medicad No *</label> 
-                                <telerik:RadMaskedTextBox ID="medicad_number" Text='<%# Bind("medicad_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="medicad_number" ErrorMessage="Medicad number is required"  ValidationGroup="FormValidationGroup"/>
+                                <label for="ma_number">Medicad No *</label> 
+                                <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="Medicad number is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
                                 <label for="npi_number">NPI No:</label> 

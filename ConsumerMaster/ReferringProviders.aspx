@@ -54,21 +54,9 @@ font-color: red;
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
-                    <telerik:GridBoundColumn DataField="medicad_number" HeaderText="Medicad #" SortExpression="medicad_number" UniqueName="medicad_number">
-                        <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field medicad_number is required" />
-                            <ModelErrorMessage BackColor="Red" />
-                        </ColumnValidationSettings>
-                    </telerik:GridBoundColumn>                    
-                    <telerik:GridBoundColumn DataField="npi_number" HeaderText="NPI #" SortExpression="npi_number" UniqueName="npi_number">
+                    <telerik:GridBoundColumn DataField="npi_number" HeaderText="NPI No" SortExpression="npi_number" UniqueName="npi_number">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field npi_number is required" />
-                            <ModelErrorMessage BackColor="Red" />
-                        </ColumnValidationSettings>
-                    </telerik:GridBoundColumn>
-                    <telerik:GridBoundColumn DataField="taxonomy_number" HeaderText="Taxonomy #" SortExpression="taxonomy_number" UniqueName="taxonomy_number">
-                        <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field taxonomy_number is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
@@ -87,28 +75,22 @@ font-color: red;
                             <p id="formInstructions">Fields marked with an asterisk (*) are required.</p>
                             <ul class="form-fields">
                             <li>
-                                <label for="first_name">First Name *</label> 
+                                <label for="first_name">First Name *:</label> 
                                 <telerik:RadTextBox ID="first_name" runat="server" Text='<%# Bind("first_name") %>' TabIndex="1"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="first_name" ErrorMessage="First name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="last_name">Last Name *</label> 
+                                <label for="last_name">Last Name *:</label> 
                                 <telerik:RadTextBox ID="last_name" runat="server" Text='<%# Bind("last_name") %>' TabIndex="2"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="last_name" ErrorMessage="Last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="medicad_number">Medicad No *</label> 
-                                <telerik:RadMaskedTextBox ID="medicad_number" Text='<%# Bind("medicad_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="medicad_number" ErrorMessage="Medicad number is required"  ValidationGroup="FormValidationGroup"/>
-                            </li>
-                            <li>
-                                <label for="npi_number">NPI No</label> 
+                                <label for="npi_number">NPI No *:</label> 
                                 <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="npi_number" ErrorMessage="NPI # is required"  ValidationGroup="FormValidationGroup" />
+
                             </li>
-                            <li>
-                                <label for="taxonomy_number">Taxonomy No:</label> 
-                                <telerik:RadTextBox ID="taxonomy_number" Text='<%# Bind("taxonomy_number") %>' runat="server" TabIndex="5" MaxLength="10"/>
-                            </li>                            
+                          
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
