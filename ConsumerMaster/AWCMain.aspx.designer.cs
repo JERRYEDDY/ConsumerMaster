@@ -10,7 +10,7 @@
 namespace ConsumerMaster {
     
     
-    public partial class EIMain {
+    public partial class AWCMain {
         
         /// <summary>
         /// RadPanelBar1 control.

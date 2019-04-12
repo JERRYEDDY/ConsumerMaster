@@ -199,7 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Consumers.aspx" />
-    <Content Include="EIMain.aspx" />
+    <Content Include="AWCMain.aspx" />
     <Content Include="RenderingProviders.aspx" />
     <Content Include="Reports.aspx" />
     <Content Include="About.aspx" />
@@ -306,12 +306,12 @@
     <Compile Include="Consumers.aspx.designer.cs">
       <DependentUpon>Consumers.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EIMain.aspx.cs">
-      <DependentUpon>EIMain.aspx</DependentUpon>
+    <Compile Include="AWCMain.aspx.cs">
+      <DependentUpon>AWCMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EIMain.aspx.designer.cs">
-      <DependentUpon>EIMain.aspx</DependentUpon>
+    <Compile Include="AWCMain.aspx.designer.cs">
+      <DependentUpon>AWCMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="RenderingProviders.aspx.cs">
       <DependentUpon>RenderingProviders.aspx</DependentUpon>

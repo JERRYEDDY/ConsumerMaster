@@ -1,6 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EIMain.aspx.cs" Inherits="ConsumerMaster.EIMain" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
 <div class="demo-container no-bg">
         <div id="grid">
         </div>
@@ -38,6 +37,4 @@
             </table>
         </div>
     </div>
-
-
 </asp:Content>

@@ -1,27 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
-using System;
-using System.Web.UI;
 using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
-using System.Web;
-using System.Data.SqlClient;
-using System.Data;
-using System.Configuration;
-using System.Text;
-using System.Web.UI.WebControls;
-using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
-    public partial class EIMain : System.Web.UI.Page
+    public partial class AWCMain : System.Web.UI.Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         protected void Page_Load(object sender, EventArgs e)
