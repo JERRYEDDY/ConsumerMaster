@@ -98,8 +98,8 @@
                             </li>
                             <li>
                                 <label for="state">State *</label> 
-                                <telerik:RadDropDownList ID="state" runat="server" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>'
-                                                         DataTextField="name" DataValueField="abbreviation" TabIndex="7" DefaultMessage="Select" /> 
+                                <telerik:RadComboBox runat="server" ID="state" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>' 
+                                                     DataTextField="name" DataValueField="abbreviation" TabIndex="7" EmptyMessage="Select" Height="200" />
                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="state" ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                             </li>                                    
                             <li>
@@ -218,7 +218,7 @@
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
        </DeleteParameters>
        <InsertParameters>
-            <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
+           <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
             <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
        </InsertParameters>
        <UpdateParameters>

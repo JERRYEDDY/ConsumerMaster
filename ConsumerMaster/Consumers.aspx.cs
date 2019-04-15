@@ -87,7 +87,7 @@ namespace ConsumerMaster
                 string addressLine1 = ((RadTextBox)insertedItem.FindControl("address_line_1")).Text;
                 string addressLine2 = ((RadTextBox)insertedItem.FindControl("address_line_2")).Text;
                 string city = ((RadTextBox)insertedItem.FindControl("city")).Text;
-                string state = ((RadDropDownList) insertedItem.FindControl("state")).SelectedValue;
+                string state = ((RadComboBox) insertedItem.FindControl("state")).SelectedValue;
                 string zipCode = ((RadMaskedTextBox)insertedItem.FindControl("zip_code")).Text;
                 string identifier = ((RadMaskedTextBox) insertedItem.FindControl("identifier")).Text;
                 string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
@@ -168,7 +168,7 @@ namespace ConsumerMaster
                 string addressLine1 = ((RadTextBox)editedItem.FindControl("address_line_1")).Text;
                 string addressLine2 = ((RadTextBox)editedItem.FindControl("address_line_2")).Text;
                 string city = ((RadTextBox)editedItem.FindControl("city")).Text;
-                string state = ((RadDropDownList) editedItem.FindControl("state")).SelectedValue;
+                string state = ((RadComboBox) editedItem.FindControl("state")).SelectedValue;
                 string zipCode = ((RadMaskedTextBox)editedItem.FindControl("zip_code")).Text;
                 string identifier = ((RadMaskedTextBox)editedItem.FindControl("identifier")).Text;
                 string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
@@ -282,13 +282,30 @@ namespace ConsumerMaster
             if (e.Exception != null)
             {
                 e.ExceptionHandled = true;
-                DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be inserted. Reason: " + e.Exception.Message);
-                Logger.Error(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be inserted. Reason: " + e.Exception.Message);
+                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " cannot be inserted. Reason: " + e.Exception.Message;
+                DisplayMessage(message);
+                Logger.Error(message);
             }
             else
             {
-                DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be inserted. Reason: " + e.Exception.Message);
-                Logger.Info(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be inserted. Reason: " + e.Exception.Message);
+
+
+                ((GridNestedViewItem)e.PageView.MultiPage.NamingContainer).ParentItem.GetDataKeyValue("YourDataKeyID");
+
+                GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
+
+                GridEditableItem editedItem = (GridEditableItem)e.Item;
+
+                editedItem.GetDataKeyValue("consumer_internal_number").ToString();
+                //var cin = insertedItem.GetDataKeyValue("consumer_internal_number").ToString();
+                string consumerId = insertedItem.OwnerTableView.DataKeyValues[insertedItem.ItemIndex]["consumer_internal_number"].ToString();
+                //var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " is inserted.";
+                RadDropDownList list = (RadDropDownList)insertedItem.FindControl("trading_partners");
+                var tradingPartnerId = list.SelectedValue;
+
+                const string message = "Trading partner is inserted";
+                DisplayMessage(message);
+                Logger.Info(message);
             }
         }
 
@@ -297,13 +314,15 @@ namespace ConsumerMaster
             if (e.Exception != null)
             {
                 e.ExceptionHandled = true;
-                DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be updated. Reason: " + e.Exception.Message);
-                Logger.Error(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be updated. Reason: " + e.Exception.Message);
+                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " cannot be updated. Reason: " + e.Exception.Message;
+                DisplayMessage(message);
+                Logger.Error(message);
             }
             else
             {
-                DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " updated");
-                Logger.Info(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " updated");
+                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " is updated";
+                DisplayMessage(message);
+                Logger.Info(message);
             }
         }
 
@@ -312,13 +331,15 @@ namespace ConsumerMaster
             if (e.Exception != null)
             {
                 e.ExceptionHandled = true;
-                DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
-                Logger.Error(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " cannot be deleted. Reason: " + e.Exception.Message);
+                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " cannot be deleted. Reason: " + e.Exception.Message;
+                DisplayMessage(message);
+                Logger.Error(message);
             }
             else
             {
-                DisplayMessage(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " deleted");
-                Logger.Info(e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["Trading Partners"].Text + " deleted");
+                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " is deleted";
+                DisplayMessage(message);
+                Logger.Info(message);
             }
         }
 

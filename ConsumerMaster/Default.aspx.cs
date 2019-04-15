@@ -16,13 +16,13 @@ namespace ConsumerMaster
 {
     public partial class _Default : Page
     {
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger IndexLogger = NLog.LogManager.GetCurrentClassLogger();
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!this.IsPostBack)
             {
-                Logger.Info("ConsumerMaster started");
+                IndexLogger.Info("ConsumerMaster started");
 
                 //ServiceExportFormat sef = new ServiceExportFormat();
                 //string[] list = sef.ColumnStrings;
@@ -40,20 +40,20 @@ namespace ConsumerMaster
 
                 //string connection = builder.ConnectionString;
 
-                RadComboBoxItem item1 = new RadComboBoxItem();
-                item1.Text = "Item1";
-                item1.Value = "1";
-                RadComboBox1.Items.Add(item1);
-                RadComboBoxItem item2 = new RadComboBoxItem();
-                item2.Text = "Item2";
-                item2.Value = "2";
-                item2.Checked = true;
-                RadComboBox1.Items.Add(item2);
-                RadComboBoxItem item3 = new RadComboBoxItem();
-                item3.Text = "Item3";
-                item3.Value = "3";
-                item3.Checked = true;
-                RadComboBox1.Items.Add(item3);
+                //RadComboBoxItem item1 = new RadComboBoxItem();
+                //item1.Text = "Item1";
+                //item1.Value = "1";
+                //RadComboBox1.Items.Add(item1);
+                //RadComboBoxItem item2 = new RadComboBoxItem();
+                //item2.Text = "Item2";
+                //item2.Value = "2";
+                //item2.Checked = true;
+                //RadComboBox1.Items.Add(item2);
+                //RadComboBoxItem item3 = new RadComboBoxItem();
+                //item3.Text = "Item3";
+                //item3.Value = "3";
+                //item3.Checked = true;
+                //RadComboBox1.Items.Add(item3);
 
                 BindToTPDropDownList(TPRadDropDownList);
                 BindToATF_TPDropDownList(ATFConsumerList);
@@ -94,7 +94,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -109,7 +109,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -124,7 +124,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -141,7 +141,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -156,7 +156,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -172,7 +172,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -188,7 +188,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -218,7 +218,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
@@ -243,35 +243,35 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                IndexLogger.Error(ex);
             }
         }
 
-        private static void ShowCheckedItems(RadComboBox comboBox, Literal literal)
-        {
-            var sb = new StringBuilder();
-            var collection = comboBox.CheckedItems;
+        //private static void ShowCheckedItems(RadComboBox comboBox, Literal literal)
+        //{
+        //    var sb = new StringBuilder();
+        //    var collection = comboBox.CheckedItems;
 
-            if (collection.Count != 0)
-            {
-                sb.Append("<h3>Checked Items:</h3><ul class=\"results\">");
+        //    if (collection.Count != 0)
+        //    {
+        //        sb.Append("<h3>Checked Items:</h3><ul class=\"results\">");
 
-                foreach (var item in collection)
-                    sb.Append("<li>" + item.Text + "</li>");
+        //        foreach (var item in collection)
+        //            sb.Append("<li>" + item.Text + "</li>");
 
-                sb.Append("</ul>");
+        //        sb.Append("</ul>");
 
-                literal.Text = sb.ToString();
-            }
-            else
-            {
-                literal.Text = "<p>No items selected</p>";
-            }
-        }
+        //        literal.Text = sb.ToString();
+        //    }
+        //    else
+        //    {
+        //        literal.Text = "<p>No items selected</p>";
+        //    }
+        //}
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            ShowCheckedItems(RadComboBox1, itemsClientSide);
-        }
+        //protected void Button1_Click(object sender, EventArgs e)
+        //{
+        //    ShowCheckedItems(RadComboBox1, itemsClientSide);
+        //}
     }
 }
