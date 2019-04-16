@@ -7,7 +7,7 @@ using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
-    public partial class Consumers : Page
+    public partial class NewConsumers : Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -17,9 +17,9 @@ namespace ConsumerMaster
         }
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
-            RadGrid1.SelectedIndexes.Add(0);
-            RadGrid2.SelectedIndexes.Add(0);
+            //if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
+            //RadGrid1.SelectedIndexes.Add(0);
+            //RadGrid2.SelectedIndexes.Add(0);
         }
 
  /***********RADGRID1******************************************************************************************************************************/
@@ -283,7 +283,7 @@ namespace ConsumerMaster
             try
             {
                 string consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
-                string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partner_name")).SelectedText;
+                string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partners")).SelectedText;
 
                 if (e.Exception != null)
                 {
@@ -306,58 +306,6 @@ namespace ConsumerMaster
                 throw;
             }
         }
-
-        protected void RadGrid2_DeleteCommand(object source, GridCommandEventArgs e)
-        {
-            //Get the GridDataItem of the RadGrid 
-            GridDataItem item = (GridDataItem)e.Item;
-            string consumerId = null;
-            string tpId = null;
-
-            try
-            {
-                //Get the primary key value using the DataKeyValue. 
-                consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
-                Int32.TryParse(consumerId, out int consumerInternalNumber);
-
-                tpId = item["trading_partner_id"].Text;
-                Int32.TryParse(tpId, out int tradingPartnerId);
-
-                string deleteQuery = "DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumerInternalNumber AND trading_partner_id = @tradingPartnerId";
-
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-                {
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = con;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = deleteQuery;
-
-                        cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
-                        cmd.Parameters.Add("tradingPartnerId", SqlDbType.Int).Value = tradingPartnerId;
-                        
-                        con.Open();
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
-                        {
-                            var message = $"Consumer: {consumerId} Trading Partner: {tpId} is deleted.";
-                            DisplayMessage(message);
-                            Logger.Info(message);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                var message = $"Consumer: {consumerId}  Trading Partner: {tpId} cannot be deleted. Reason: ";
-                DisplayMessage(message + ex.Message);
-                Logger.Info(message + ex.Message);
-                e.Canceled = true;
-            }
-        }
-
-
 
         protected void RadGrid2_ItemDeleted(object source, GridDeletedEventArgs e)
         {

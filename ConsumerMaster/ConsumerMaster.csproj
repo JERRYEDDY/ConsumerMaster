@@ -198,6 +198,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NewConsumers.aspx" />
     <Content Include="Consumers.aspx" />
     <Content Include="AWCMain.aspx" />
     <Content Include="RenderingProviders.aspx" />
@@ -299,6 +300,13 @@
     <None Include="ConsumerRadGrid2MasterDetail.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="NewConsumers.aspx.cs">
+      <DependentUpon>NewConsumers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NewConsumers.aspx.designer.cs">
+      <DependentUpon>NewConsumers.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Consumers.aspx.cs">
       <DependentUpon>Consumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
