@@ -169,8 +169,8 @@
                     </div>
                 </CommandItemTemplate>   
                 <Columns>
-                    <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
-                    <telerik:GridBoundColumn DataField="trading_partner_name" HeaderText="Trading Partner" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                    
+                    <telerik:GridBoundColumn DataField="consumer_internal_number" UniqueName="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
+                    <telerik:GridBoundColumn DataField="trading_partner_name" UniqueName="trading_partner_name" HeaderText="Trading Partner" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                    
                     <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
                         <HeaderStyle Width="20px"></HeaderStyle>
                         <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
@@ -185,8 +185,7 @@
                                 <label for="trading_partners">Trading Partner:</label>
                                 <telerik:RadDropDownList ID="trading_partners" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id") %>'
                                                          DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" Width="300px" DropDownWidth="300px" /> 
-                                <asp:RequiredFieldValidator ID="Validator" ControlToValidate="trading_partners" 
-                                                            ErrorMessage="Trading Partner is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
+                                <asp:RequiredFieldValidator ID="Validator" ControlToValidate="trading_partners" ErrorMessage="Trading Partner is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                             </li>
                         </section>
                         <section class="form-submit">
@@ -207,7 +206,7 @@
     </div>
     <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
        ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>"
-       DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number"
+       DeleteCommand="DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumer_internal_number AND trading_partner_id = @"
        InsertCommand="INSERT INTO ConsumerTradingPartner (consumer_internal_number, trading_partner_id) VALUES (@consumer_internal_number, @trading_partner_id)"
        SelectCommand="SELECT ctp.consumer_internal_number, ctp.trading_partner_id, tp.name AS trading_partner_name FROM ConsumerTradingPartner ctp INNER JOIN TradingPartners tp ON ctp.trading_partner_id = tp.id WHERE consumer_internal_number = @consumer_internal_number"
        UpdateCommand="UPDATE ConsumerTradingPartner SET trading_partner_id = @trading_partner_id WHERE consumer_internal_number = @consumer_internal_number">
@@ -215,6 +214,7 @@
             <asp:ControlParameter ControlID="RadGrid1" Name="consumer_internal_number" PropertyName="SelectedValues['consumer_internal_number']" Type="Int32" />
        </SelectParameters>
        <DeleteParameters>
+           <asp:Parameter Name="trading_partner_id" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="consumer_internal_number" Type="Int32"></asp:Parameter>
        </DeleteParameters>
        <InsertParameters>

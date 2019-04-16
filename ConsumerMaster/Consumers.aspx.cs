@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -279,67 +280,95 @@ namespace ConsumerMaster
  /***********RADGRID2******************************************************************************************************************************/
         protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)
         {
-            if (e.Exception != null)
+            GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
+
+            try
             {
-                e.ExceptionHandled = true;
-                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " cannot be inserted. Reason: " + e.Exception.Message;
-                DisplayMessage(message);
-                Logger.Error(message);
+                string consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
+                string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partners")).SelectedText;
+
+                if (e.Exception != null)
+                {
+                    e.ExceptionHandled = true;
+                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName} cannot be inserted. Reason: {e.Exception.Message}";
+                    DisplayMessage(message);
+                    Logger.Error(message);
+                }
+                else
+                {
+                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName}  is inserted";
+                    DisplayMessage(message);
+                    Logger.Info(message);
+                }
             }
-            else
+            catch (Exception ex)
             {
-
-
-                ((GridNestedViewItem)e.PageView.MultiPage.NamingContainer).ParentItem.GetDataKeyValue("YourDataKeyID");
-
-                GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
-
-                GridEditableItem editedItem = (GridEditableItem)e.Item;
-
-                editedItem.GetDataKeyValue("consumer_internal_number").ToString();
-                //var cin = insertedItem.GetDataKeyValue("consumer_internal_number").ToString();
-                string consumerId = insertedItem.OwnerTableView.DataKeyValues[insertedItem.ItemIndex]["consumer_internal_number"].ToString();
-                //var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " is inserted.";
-                RadDropDownList list = (RadDropDownList)insertedItem.FindControl("trading_partners");
-                var tradingPartnerId = list.SelectedValue;
-
-                const string message = "Trading partner is inserted";
-                DisplayMessage(message);
-                Logger.Info(message);
+                DisplayMessage(ex.Message);
+                Logger.Info(ex.Message);
+                throw;
             }
         }
 
         protected void RadGrid2_ItemUpdated(object source, GridUpdatedEventArgs e)
         {
-            if (e.Exception != null)
+            GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
+
+            try
             {
-                e.ExceptionHandled = true;
-                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " cannot be updated. Reason: " + e.Exception.Message;
-                DisplayMessage(message);
-                Logger.Error(message);
+                string consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
+                RadDropDownList list = (RadDropDownList)insertedItem.FindControl("trading_partners");
+                string tradingPartnerName = list.SelectedText;
+
+                if (e.Exception != null)
+                {
+                    e.ExceptionHandled = true;
+                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName} cannot be updated. Reason: {e.Exception.Message}";
+                    DisplayMessage(message);
+                    Logger.Error(message);
+                }
+                else
+                {
+                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName}  is updated";
+                    DisplayMessage(message);
+                    Logger.Info(message);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " is updated";
-                DisplayMessage(message);
-                Logger.Info(message);
+                DisplayMessage(ex.Message);
+                Logger.Info(ex.Message);
+                throw;
             }
         }
 
         protected void RadGrid2_ItemDeleted(object source, GridDeletedEventArgs e)
         {
-            if (e.Exception != null)
+            GridDataItem deletedItem = (GridDataItem)e.Item;
+
+            try
             {
-                e.ExceptionHandled = true;
-                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " cannot be deleted. Reason: " + e.Exception.Message;
-                DisplayMessage(message);
-                Logger.Error(message);
+                string consumerId = deletedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
+                string cId = deletedItem["consumer_internal_number"].Text;
+                string tradingPartnerName = deletedItem["trading_partner_name"].Text;
+
+                if (e.Exception != null)
+                {
+                    e.ExceptionHandled = true;
+                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName} cannot be deleted. Reason: {e.Exception.Message}";
+                    Logger.Error(message);
+                }
+                else
+                {
+                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName}  is deleted";
+                    DisplayMessage(message);
+                    Logger.Info(message);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var message = e.Item["consumer_internal_number"].Text + "-" + "Trading Partners " + e.Item["trading_partners"].Text + " is deleted";
-                DisplayMessage(message);
-                Logger.Info(message);
+                DisplayMessage(ex.Message);
+                Logger.Info(ex.Message);
+                throw;
             }
         }
 
