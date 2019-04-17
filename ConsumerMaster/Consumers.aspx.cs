@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -282,19 +283,29 @@ namespace ConsumerMaster
 
             try
             {
-                string consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
-                string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partner_name")).SelectedText;
+                string consumerId = null; 
+                if (insertedItem.OwnerTableView.DataKeyValues.Count > 0)
+                {
+                    consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
+                }
+                else
+                {
+                    consumerId = RadGrid1.SelectedValue?.ToString();
+                }
+
+
+                string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partner")).SelectedText;
 
                 if (e.Exception != null)
                 {
                     e.ExceptionHandled = true;
-                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName} cannot be inserted. Reason: {e.Exception.Message}";
+                    var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName} cannot be inserted. Reason: {e.Exception.Message}";
                     DisplayMessage(message);
                     Logger.Error(message);
                 }
                 else
                 {
-                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName}  is inserted";
+                    var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName}  is inserted";
                     DisplayMessage(message);
                     Logger.Info(message);
                 }
@@ -372,7 +383,7 @@ namespace ConsumerMaster
                 if (e.Exception != null)
                 {
                     e.ExceptionHandled = true;
-                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName} cannot be deleted. Reason: {e.Exception.Message}";
+                    var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName} cannot be deleted. Reason: {e.Exception.Message}";
                     Logger.Error(message);
                 }
                 else
@@ -389,12 +400,10 @@ namespace ConsumerMaster
                 throw;
             }
         }
-
         private void DisplayMessage(string text)
         {
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
-
         protected void RadButton_Click(object sender, EventArgs e)
         {
             Response.Write("A server click has been executed!");
