@@ -42,7 +42,7 @@
             <div class="container">
                 <div class="navbar-header">
                     <div class="navbar-header pull-left">
-                        <a class="navbar-brand" href="Default.aspx")"><img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>
+                        <a class="navbar-brand" href="Default.aspx")><img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>
                     </div>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
@@ -57,8 +57,9 @@
                         <li><a runat="server" href="~/Consumers">Consumers</a></li>
                         <li><a runat="server" href="~/Reports">Reports</a></li>
                         <li><a runat="server" href="~/AWCMain">AWCMain</a></li>
+                        <li><a runat="server" href="~/ATFMain">ATFMain</a></li>
                         <li><a runat="server" href="~/RenderingProviders">RenderingProviders</a></li>
-                        <li><a runat="server" href="~/NewConsumers">NewConsumers</a></li>
+                        <!--<li><a runat="server" href="~/NewConsumers">NewConsumers</a></li>-->
                         <li><a runat="server" href="~/ReferringProviders">ReferringProviders</a></li>
                     </ul>
                 </div>

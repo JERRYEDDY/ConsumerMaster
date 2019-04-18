@@ -8,8 +8,6 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
-using System.Text;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace ConsumerMaster
@@ -56,8 +54,6 @@ namespace ConsumerMaster
                 //RadComboBox1.Items.Add(item3);
 
                 BindToTPDropDownList(TPRadDropDownList);
-                BindToATF_TPDropDownList(ATFConsumerList);
-                BindToATF_TPDropDownList(ATFServiceList);
             }
         }
 
@@ -159,39 +155,6 @@ namespace ConsumerMaster
                 IndexLogger.Error(ex);
             }
         }
-
-        protected void ATFConsumerExportDownload_Click(object sender, EventArgs e)
-        {
-            const string filename = @"ATFConsumerExport.xlsx";
-            try
-            {
-                string selectedValue = ATFConsumerList.SelectedValue;
-                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-                Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                DownloadExcelFile(workbook, filename);
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
-        protected void ATFServiceExportDownload_Click(object sender, EventArgs e)
-        {
-            const string filename = @"ATFServiceExport.xlsx";
-            try
-            {
-                string selectedValue = ATFServiceList.SelectedValue;
-                ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
-                Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
-                DownloadExcelFile(workbook, filename);
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
         private void BindToTPDropDownList(RadDropDownList dropdownlist)
         {
             try

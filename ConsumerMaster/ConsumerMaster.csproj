@@ -198,6 +198,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ATFMain.aspx" />
     <Content Include="NewConsumers.aspx" />
     <Content Include="Consumers.aspx" />
     <Content Include="AWCMain.aspx" />
@@ -300,6 +301,13 @@
     <None Include="ConsumerRadGrid2MasterDetail.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="ATFMain.aspx.cs">
+      <DependentUpon>ATFMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ATFMain.aspx.designer.cs">
+      <DependentUpon>ATFMain.aspx</DependentUpon>
+    </Compile>
     <Compile Include="NewConsumers.aspx.cs">
       <DependentUpon>NewConsumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -176,12 +176,8 @@
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
                         <section class="form-group">
-                            <h4>Trading Partner Info</h4>
+<%--                            <h4>Trading Partner Info</h4>--%>
                             <ul class="form-fields">
-                            <li>
-                                <label for="consumer_internal_number">First Name *</label> 
-                                <telerik:RadTextBox ID="consumer_internal_number" runat="server" Text='<%# Bind("consumer_internal_number") %>' TabIndex="1" ReadOnly="True"/>
-                             </li>
                             <li>
                                 <label for="trading_partners">Trading Partner:</label>
                                 <telerik:RadDropDownList ID="trading_partner" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id") %>'
