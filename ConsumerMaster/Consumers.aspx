@@ -56,20 +56,6 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-<%--                    <telerik:GridTemplateColumn ReadOnly="True">
-                        <ItemTemplate>
-                            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" DataSourceID="TradingPartnerDataSource2" DataTextField="short_name" DropDownWidth="300px" />
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>--%>      
-                    
-                    <telerik:GridTemplateColumn ReadOnly="True">
-                        <ItemTemplate>                    
-                            <telerik:RadDropDownTree RenderMode="Lightweight" ID="RadDropDownTree3" runat="server" Width="300px" DefaultMessage="Please select" DataFieldID="id" DataTextField="short_name" 
-                                                     CheckBoxes="SingleCheck" DataSourceID="TradingPartnerDataSource2">
-                            </telerik:RadDropDownTree> 
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>       
-
                     <telerik:GridButtonColumn ConfirmText="Delete this consumer?" ConfirmDialogType="RadWindow" ConfirmTitle="Delete" ButtonType="FontIconButton" CommandName="Delete" />
                 </Columns>
                 <EditFormSettings EditFormType="Template">
