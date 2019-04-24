@@ -30,7 +30,10 @@ namespace ConsumerMaster
                 Utility util = new Utility();
 
                 List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 1 or trading_partner_id = 2");
-                                                                                      //Adult Training Facility;Jefferson = 1 or Adult Training Facility;Bill George = 2 
+
+                List<string> cpcList1 = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id IN (1,2)");
+
+                //Adult Training Facility;Jefferson = 1 or Adult Training Facility;Bill George = 2 
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat();
 

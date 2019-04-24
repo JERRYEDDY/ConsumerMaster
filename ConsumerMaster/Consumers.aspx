@@ -50,14 +50,13 @@
                 </CommandItemTemplate>               
                 <Columns>
                     <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
-                    <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" AllowFiltering="false"/>
-                    <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="120px" ItemStyle-Width="120px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
-                    <telerik:GridBoundColumn DataField="city" HeaderText="City" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" />                        
-                    <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
+                    <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="180px" ItemStyle-Width="180px" AllowFiltering="false"/>
+                    <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="180px" ItemStyle-Width="180px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="tpName1" HeaderText="T Partner1" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                    
-                    <telerik:GridBoundColumn DataField="tpName2" HeaderText="T Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
+                    <telerik:GridBoundColumn DataField="tpName2" HeaderText="T Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />    
+                    <telerik:GridBoundColumn DataField="tpName3" HeaderText="T Partner3" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" /> 
                     <telerik:GridButtonColumn ConfirmText="Delete this consumer?" ConfirmDialogType="RadWindow" ConfirmTitle="Delete" ButtonType="FontIconButton" CommandName="Delete" />
                 </Columns>
                 <EditFormSettings EditFormType="Template">
@@ -132,16 +131,22 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="diagnosis_code" ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
                             </li>  
                             <li>
-                                <label for="trading_partner1">Trading Partner 1:</label> 
+                                <label for="trading_partner1">Trading Partner 1 *</label> 
                                 <telerik:RadDropDownList ID="trading_partner1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId1") %>'
                                                          DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="12" /> 
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" ControlToValidate="trading_partner1" ErrorMessage="Trading partner 1 is required" ValidationGroup="FormValidationGroup" />
+
                             </li>                                      
                             <li>
                                 <label for="trading_partner2">Trading Partner 2:</label> 
                                 <telerik:RadDropDownList ID="trading_partner2" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId2") %>'
                                                          DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="13" /> 
-
                             </li>  
+                            <li>
+                                <label for="trading_partner3">Trading Partner 3:</label> 
+                                <telerik:RadDropDownList ID="trading_partner3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId3") %>'
+                                                         DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="14" /> 
+                            </li> 
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"

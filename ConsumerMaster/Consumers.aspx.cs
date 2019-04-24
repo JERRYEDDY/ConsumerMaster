@@ -67,9 +67,11 @@ namespace ConsumerMaster
             //Populate the Radgrid1
             string selectQuery =
                 "SELECT c.consumer_internal_number,c.consumer_first,c.consumer_last,c.date_of_birth,c.address_line_1,c.address_line_2,c.city, " +
-                "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis,tp1.id AS tpId1,tp1.short_name AS tpName1,tp2.id AS tpId2,tp2.short_name AS tpName2 FROM[ConsumerMaster].[dbo].[Consumers] AS c " +
+                "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis, tp1.id AS tpId1, tp1.short_name AS tpName1, tp2.id AS tpId2, tp2.short_name AS tpName2, tp3.id AS tpId3,tp3.short_name AS tpName3 " + 
+                "FROM[ConsumerMaster].[dbo].[Consumers] AS c " +
                 "LEFT JOIN TradingPartners AS tp1 ON c.trading_partner_id1 = tp1.id " + 
-                "LEFT JOIN TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id " + 
+                "LEFT JOIN TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id " +
+                "LEFT JOIN TradingPartners AS tp3 ON c.trading_partner_id3 = tp3.id " +
                 " ORDER BY consumer_last";
 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
@@ -98,15 +100,17 @@ namespace ConsumerMaster
                 string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis_code")).Text;
 
                 string tradingPartner1 = ((RadDropDownList)insertedItem.FindControl("trading_partner1")).SelectedValue;
-                Int32.TryParse(tradingPartner1, out int trading_partner_id1);
+                Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
                 string tradingPartner2 = ((RadDropDownList)insertedItem.FindControl("trading_partner2")).SelectedValue;
-                Int32.TryParse(tradingPartner2, out int trading_partner_id2);
+                Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
+                string tradingPartner3 = ((RadDropDownList)insertedItem.FindControl("trading_partner2")).SelectedValue;
+                Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
                 string insertQuery =
                     "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis" +
-                    ",trading_partner_id1,trading_partner_id2" +
+                    ",trading_partner_id1, trading_partner_id2, trading_partner_id3" +
                     " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis" +
-                    ",@trading_partner_id1,@trading_partner_id2";
+                    ",@trading_partner_id1, @trading_partner_id2, @trading_partner_id3";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -130,8 +134,9 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
                         cmd.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
                         cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
-                        cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = trading_partner_id1;
-                        cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = trading_partner_id2;
+                        cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
+                        cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
+                        cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
@@ -182,14 +187,15 @@ namespace ConsumerMaster
                 string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis_code")).Text;
 
                 string tradingPartner1 = ((RadDropDownList) editedItem.FindControl("trading_partner1")).SelectedValue;
-                Int32.TryParse(tradingPartner1, out int trading_partner_id1);
+                Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
                 string tradingPartner2 = ((RadDropDownList)editedItem.FindControl("trading_partner2")).SelectedValue;
-                Int32.TryParse(tradingPartner2, out int trading_partner_id2);
+                Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
+                string tradingPartner3 = ((RadDropDownList)editedItem.FindControl("trading_partner3")).SelectedValue;
+                Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
                 string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
                        "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis" +
-                       " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2 " +
-                       " WHERE consumer_internal_number=@consumer_internal_number";
+                       " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3 WHERE consumer_internal_number=@consumer_internal_number";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -213,8 +219,9 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
                             cmd.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
                             cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
-                            cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = trading_partner_id1;
-                            cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = trading_partner_id2;
+                            cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
+                            cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
+                            cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
 
                         con.Open();
                             int result = cmd.ExecuteNonQuery();
