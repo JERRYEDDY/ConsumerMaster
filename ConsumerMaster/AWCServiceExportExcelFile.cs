@@ -11,56 +11,8 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //private static readonly int IndexColumnConsumerFirst = 0;
-        //private static readonly int IndexColumnConsumerLast = 1;
-        //private static readonly int IndexColumnConsumerInternalNumber = 2;
-        //private static readonly int IndexColumnDiagnosisCode1Code = 3;
-        //private static readonly int IndexColumnTradingPartnerString = 4;
-        //private static readonly int IndexColumnTradingPartnerProgramString = 5;
-        //private static readonly int IndexColumnStartDateString = 6;
-        //private static readonly int IndexColumnEndDateString = 7;
-        //private static readonly int IndexColumnCompositeProcedureCodeString = 8;
-        //private static readonly int IndexColumnHours = 9;
-        //private static readonly int IndexColumnUnits = 10;
-        //private static readonly int IndexColumnManualBillableRate = 11;
-        //private static readonly int IndexColumnPriorAuthorizationNumber = 12;
-        //private static readonly int IndexColumnReferralNumber = 13;
-        //private static readonly int IndexColumnReferringProviderId = 14;
-        //private static readonly int IndexColumnReferringProviderFirstName = 15;
-        //private static readonly int IndexColumnReferringProviderLastName = 16;
-        //private static readonly int IndexColumnRenderingProviderId = 17;
-        //private static readonly int IndexColumnRenderingProviderFirstName = 18;
-        //private static readonly int IndexColumnRenderingProviderLastName = 19;
-        //private static readonly int IndexColumnBillingNote = 20;
-
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
-        //private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-
-        //readonly Dictionary<int, string> _ceHeader = new Dictionary<int, string>
-        //{
-        //    {0, "consumer_first"},
-        //    {1, "consumer_last"},
-        //    {2, "consumer_internal_number"},
-        //    {3, "diagnosis_code_1_code"},
-        //    {4, "trading_partner_string"},
-        //    {5, "trading_partner_program_string"},
-        //    {6, "start_date_string"},
-        //    {7, "end_date_string"},
-        //    {8, "composite_procedure_code_string"},
-        //    {9, "hours"},
-        //    {10, "units"},
-        //    {11, "manual_billable_rate"},
-        //    {12, "prior_authorization_number"},
-        //    {13, "referral_number"},
-        //    {14, "referring_provider_id"},
-        //    {15, "referring_provider_first_name"},
-        //    {16, "referring_provider_last_name"},
-        //    {17, "rendering_provider_id"},
-        //    {18, "rendering_provider_first_name"},
-        //    {19, "rendering_provider_last_name"},
-        //    {20, "billing_note" }
-        //};
 
         public Workbook CreateWorkbook()
         {
@@ -99,7 +51,6 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    //CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, IndexColumnConsumerInternalNumber];
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
@@ -181,13 +132,6 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, 22);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerFirst);
-                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnRenderingProviderLastName);
-                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
                 ServiceExportFormat sef = new ServiceExportFormat(true);
                 string[] columnsList = sef.ColumnStrings;
 
@@ -205,72 +149,6 @@ namespace ConsumerMaster
                         worksheet.Cells[IndexRowItemStart, columnKey].SetFill(solidPatternFill);
                     }
                 }
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetValue(_ceHeader[IndexColumnConsumerFirst]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetFill(solidPatternFill);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetValue(_ceHeader[IndexColumnConsumerLast]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetFill(solidPatternFill);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(_ceHeader[IndexColumnConsumerInternalNumber]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetValue(_ceHeader[IndexColumnDiagnosisCode1Code]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnDiagnosisCode1Code].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(_ceHeader[IndexColumnTradingPartnerString]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerProgramString].SetValue(_ceHeader[IndexColumnTradingPartnerProgramString]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerProgramString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnStartDateString].SetValue(_ceHeader[IndexColumnStartDateString]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnStartDateString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetValue(_ceHeader[IndexColumnEndDateString]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnEndDateString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetValue(_ceHeader[IndexColumnCompositeProcedureCodeString]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnCompositeProcedureCodeString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetValue(_ceHeader[IndexColumnHours]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnHours].SetFill(solidPatternFill);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetValue(_ceHeader[IndexColumnUnits]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnUnits].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetValue(_ceHeader[IndexColumnManualBillableRate]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnManualBillableRate].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetValue(_ceHeader[IndexColumnPriorAuthorizationNumber]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnPriorAuthorizationNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetValue(_ceHeader[IndexColumnReferralNumber]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferralNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetValue(_ceHeader[IndexColumnReferringProviderId]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetValue(_ceHeader[IndexColumnReferringProviderFirstName]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetValue(_ceHeader[IndexColumnReferringProviderLastName]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnReferringProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetValue(_ceHeader[IndexColumnRenderingProviderId]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderId].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetValue(_ceHeader[IndexColumnRenderingProviderFirstName]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderFirstName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetValue(_ceHeader[IndexColumnRenderingProviderLastName]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnRenderingProviderLastName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-
-                //worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetValue(_ceHeader[IndexColumnBillingNote]);
-                //worksheet.Cells[IndexRowItemStart, IndexColumnBillingNote].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
             catch (Exception ex)
             {
@@ -282,12 +160,6 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
-
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }

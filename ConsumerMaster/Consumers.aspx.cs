@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -66,8 +65,13 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT consumer_internal_number, consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, " +
-                                "city, state, zip_code, identifier, gender, diagnosis, nickname_first, nickname_last FROM Consumers ORDER BY consumer_last";
+            string selectQuery =
+                "SELECT c.consumer_internal_number,c.consumer_first,c.consumer_last,c.date_of_birth,c.address_line_1,c.address_line_2,c.city, " +
+                "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis,tp1.id AS tpId1,tp1.short_name AS tpName1,tp2.id AS tpId2,tp2.short_name AS tpName2 FROM[ConsumerMaster].[dbo].[Consumers] AS c " +
+                "LEFT JOIN TradingPartners AS tp1 ON c.trading_partner_id1 = tp1.id " + 
+                "LEFT JOIN TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id " + 
+                " ORDER BY consumer_last";
+
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
@@ -92,14 +96,17 @@ namespace ConsumerMaster
                 string identifier = ((RadMaskedTextBox) insertedItem.FindControl("identifier")).Text;
                 string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis_code")).Text;
-                string nicknameFirst = ((RadTextBox)insertedItem.FindControl("nickname_first")).Text;
-                string nicknameLast = ((RadTextBox)insertedItem.FindControl("nickname_last")).Text;
+
+                string tradingPartner1 = ((RadDropDownList)insertedItem.FindControl("trading_partner1")).SelectedValue;
+                Int32.TryParse(tradingPartner1, out int trading_partner_id1);
+                string tradingPartner2 = ((RadDropDownList)insertedItem.FindControl("trading_partner2")).SelectedValue;
+                Int32.TryParse(tradingPartner2, out int trading_partner_id2);
 
                 string insertQuery =
-                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, " +
-                    "nickname_first, nickname_last)" +
-                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, " +
-                    "@nickname_first, @nickname_last)";
+                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis" +
+                    ",trading_partner_id1,trading_partner_id2" +
+                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis" +
+                    ",@trading_partner_id1,@trading_partner_id2";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -123,8 +130,8 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
                         cmd.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
                         cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
-                        cmd.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
-                        cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
+                        cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = trading_partner_id1;
+                        cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = trading_partner_id2;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
@@ -173,11 +180,15 @@ namespace ConsumerMaster
                 string identifier = ((RadMaskedTextBox)editedItem.FindControl("identifier")).Text;
                 string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis_code")).Text;
-                string nicknameFirst = ((RadTextBox)editedItem.FindControl("nickname_first")).Text;
-                string nicknameLast = ((RadTextBox)editedItem.FindControl("nickname_last")).Text;
+
+                string tradingPartner1 = ((RadDropDownList) editedItem.FindControl("trading_partner1")).SelectedValue;
+                Int32.TryParse(tradingPartner1, out int trading_partner_id1);
+                string tradingPartner2 = ((RadDropDownList)editedItem.FindControl("trading_partner2")).SelectedValue;
+                Int32.TryParse(tradingPartner2, out int trading_partner_id2);
 
                 string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
-                       "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis, nickname_first=@nickname_first, nickname_last=@nickname_last " +
+                       "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis" +
+                       " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2 " +
                        " WHERE consumer_internal_number=@consumer_internal_number";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
@@ -202,10 +213,10 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("identifier", SqlDbType.VarChar).Value = identifier;
                             cmd.Parameters.Add("gender", SqlDbType.VarChar).Value = gender;
                             cmd.Parameters.Add("diagnosis", SqlDbType.VarChar).Value = diagnosis;
-                            cmd.Parameters.Add("nickname_first", SqlDbType.VarChar).Value = nicknameFirst;
-                            cmd.Parameters.Add("nickname_last", SqlDbType.VarChar).Value = nicknameLast;
+                            cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = trading_partner_id1;
+                            cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = trading_partner_id2;
 
-                            con.Open();
+                        con.Open();
                             int result = cmd.ExecuteNonQuery();
 
                             if (result > 0)

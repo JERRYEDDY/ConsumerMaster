@@ -56,6 +56,8 @@
                     <telerik:GridBoundColumn DataField="state" HeaderText="State" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
+                    <telerik:GridBoundColumn DataField="tpName1" HeaderText="T Partner1" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                    
+                    <telerik:GridBoundColumn DataField="tpName2" HeaderText="T Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridButtonColumn ConfirmText="Delete this consumer?" ConfirmDialogType="RadWindow" ConfirmTitle="Delete" ButtonType="FontIconButton" CommandName="Delete" />
                 </Columns>
                 <EditFormSettings EditFormType="Template">
@@ -63,6 +65,11 @@
                         <section class="form-group">
                             <h4>Consumer Info</h4>
                             <p id="formInstructions">Fields marked with an asterisk (*) are required.</p>
+                            <ul class="form-fields">
+                            <li>
+                                <label for="consumerInternalNumber">CIN </label> 
+                                <telerik:RadTextBox ID="consumerInternalNumber" runat="server" Text='<%# Bind("consumer_internal_number") %>' TabIndex="1" ReadOnly="True"/>
+                            </li>
                             <ul class="form-fields">
                             <li>
                                 <label for="consumer_first">First Name *</label> 
@@ -125,12 +132,15 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="diagnosis_code" ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
                             </li>  
                             <li>
-                                <label for="nickname_first">Nickname First:</label> 
-                                <telerik:RadTextBox ID="nickname_first" Text='<%# Bind("nickname_first") %>' runat="server" TabIndex="12"/>
+                                <label for="trading_partner1">Trading Partner 1:</label> 
+                                <telerik:RadDropDownList ID="trading_partner1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId1") %>'
+                                                         DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="12" /> 
                             </li>                                      
                             <li>
-                                <label for="nickname_last">Nickname Last:</label> 
-                                <telerik:RadTextBox ID="nickname_last" Text='<%# Bind("nickname_last") %>' runat="server" TabIndex="13"/>
+                                <label for="trading_partner2">Trading Partner 2:</label> 
+                                <telerik:RadDropDownList ID="trading_partner2" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId2") %>'
+                                                         DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="13" /> 
+
                             </li>  
                         </section>
                         <section class="form-submit">
@@ -176,7 +186,6 @@
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
                         <section class="form-group">
-<%--                            <h4>Trading Partner Info</h4>--%>
                             <ul class="form-fields">
                             <li>
                                 <label for="trading_partners">Trading Partner:</label>
