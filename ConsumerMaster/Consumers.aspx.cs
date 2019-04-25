@@ -107,10 +107,8 @@ namespace ConsumerMaster
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
                 string insertQuery =
-                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis" +
-                    ",trading_partner_id1, trading_partner_id2, trading_partner_id3" +
-                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis" +
-                    ",@trading_partner_id1, @trading_partner_id2, @trading_partner_id3";
+                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, trading_partner_id1, trading_partner_id2, trading_partner_id3)" +
+                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -167,6 +165,10 @@ namespace ConsumerMaster
             string consumerFirst = null;
             string consumerLast = null;
 
+            string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1," +
+                                 " address_line_2=@address_line_2, city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis," +
+                                 " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3" + 
+                                 " WHERE consumer_internal_number=@consumer_internal_number";
             try
             {
                 //Get the primary key value using the DataKeyValue. 
@@ -192,10 +194,6 @@ namespace ConsumerMaster
                 Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
                 string tradingPartner3 = ((RadDropDownList)editedItem.FindControl("trading_partner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
-
-                string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1, address_line_2=@address_line_2, " +
-                       "city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis" +
-                       " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3 WHERE consumer_internal_number=@consumer_internal_number";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {

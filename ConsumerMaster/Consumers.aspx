@@ -47,16 +47,20 @@
                             <Icon PrimaryIconCssClass="rbEdit" />
                         </telerik:RadButton>&nbsp;&nbsp;
                     </div>
-                </CommandItemTemplate>               
+                </CommandItemTemplate>    
+                <ColumnGroups>
+                    <telerik:GridColumnGroup HeaderText="Trading" Name="Trading" HeaderStyle-HorizontalAlign="Center"/>
+                </ColumnGroups>                
+
                 <Columns>
                     <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
-                    <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="180px" ItemStyle-Width="180px" AllowFiltering="false"/>
-                    <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="180px" ItemStyle-Width="180px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
+                    <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" AllowFiltering="false"/>
+                    <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
                     <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
-                    <telerik:GridBoundColumn DataField="tpName1" HeaderText="T Partner1" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                    
-                    <telerik:GridBoundColumn DataField="tpName2" HeaderText="T Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />    
-                    <telerik:GridBoundColumn DataField="tpName3" HeaderText="T Partner3" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" /> 
+                    <telerik:GridBoundColumn DataField="tpName1" ColumnGroupName="Trading" HeaderText="Partner1" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                    
+                    <telerik:GridBoundColumn DataField="tpName2" ColumnGroupName="Trading" HeaderText="Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />    
+                    <telerik:GridBoundColumn DataField="tpName3" ColumnGroupName="Trading" HeaderText="Partner3" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" /> 
                     <telerik:GridButtonColumn ConfirmText="Delete this consumer?" ConfirmDialogType="RadWindow" ConfirmTitle="Delete" ButtonType="FontIconButton" CommandName="Delete" />
                 </Columns>
                 <EditFormSettings EditFormType="Template">
@@ -64,11 +68,6 @@
                         <section class="form-group">
                             <h4>Consumer Info</h4>
                             <p id="formInstructions">Fields marked with an asterisk (*) are required.</p>
-                            <ul class="form-fields">
-                            <li>
-                                <label for="consumerInternalNumber">CIN </label> 
-                                <telerik:RadTextBox ID="consumerInternalNumber" runat="server" Text='<%# Bind("consumer_internal_number") %>' TabIndex="1" ReadOnly="True"/>
-                            </li>
                             <ul class="form-fields">
                             <li>
                                 <label for="consumer_first">First Name *</label> 
