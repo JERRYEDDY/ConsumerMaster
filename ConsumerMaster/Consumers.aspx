@@ -20,21 +20,21 @@
             <telerik:AjaxSetting AjaxControlID="RadGrid1">
                 <UpdatedControls>
                     <telerik:AjaxUpdatedControl ControlID="RadGrid1"></telerik:AjaxUpdatedControl>
-                    <telerik:AjaxUpdatedControl ControlID="RadGrid2" LoadingPanelID="RadAjaxLoadingPanel1"></telerik:AjaxUpdatedControl>
+<%--                    <telerik:AjaxUpdatedControl ControlID="RadGrid2" LoadingPanelID="RadAjaxLoadingPanel1"></telerik:AjaxUpdatedControl>--%>
                 </UpdatedControls>
             </telerik:AjaxSetting>
-            <telerik:AjaxSetting AjaxControlID="RadGrid2">
+<%--            <telerik:AjaxSetting AjaxControlID="RadGrid2">
                 <UpdatedControls>
                     <telerik:AjaxUpdatedControl ControlID="RadGrid2"></telerik:AjaxUpdatedControl>
                 </UpdatedControls>
-            </telerik:AjaxSetting>
+            </telerik:AjaxSetting>--%>
         </AjaxSettings>
     </telerik:RadAjaxManager>
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"></telerik:RadAjaxLoadingPanel>
     <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone" />
     <div class="demo-container no-bg">
         <h5><strong>CONSUMERS:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" 
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="15"  AutoGenerateColumns="False" 
                          OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand"                        
                          AllowFilteringByColumn="true" AllowSorting="true">
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EditMode="EditForms">
@@ -51,7 +51,6 @@
                 <ColumnGroups>
                     <telerik:GridColumnGroup HeaderText="Trading" Name="Trading" HeaderStyle-HorizontalAlign="Center"/>
                 </ColumnGroups>                
-
                 <Columns>
                     <telerik:GridBoundColumn DataField="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
                     <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" AllowFiltering="false"/>
@@ -164,7 +163,7 @@
         </telerik:RadGrid>
         <br />
         <br />
-        <h5><strong>TRADING PARTNER:</strong></h5>
+<%--        <h5><strong>TRADING PARTNER:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" DataSourceID="SqlDataSource2" 
             AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemInserted="RadGrid2_ItemInserted" OnDeleteCommand="RadGrid2_DeleteCommand"
             AllowFilteringByColumn="false" >
@@ -210,7 +209,7 @@
                 <Selecting AllowRowSelect="True"></Selecting>
             </ClientSettings>
             <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
-        </telerik:RadGrid>
+        </telerik:RadGrid>--%>
         <br />
         <br />
     </div>

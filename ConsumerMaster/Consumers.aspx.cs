@@ -17,9 +17,12 @@ namespace ConsumerMaster
         }
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
+            if (RadGrid1.SelectedIndexes.Count != 0) return;
             RadGrid1.SelectedIndexes.Add(0);
-            RadGrid2.SelectedIndexes.Add(0);
+
+            //if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
+            //RadGrid1.SelectedIndexes.Add(0);
+            //RadGrid2.SelectedIndexes.Add(0);
         }
 
  /***********RADGRID1******************************************************************************************************************************/
@@ -293,129 +296,127 @@ namespace ConsumerMaster
         }
 
  /***********RADGRID2******************************************************************************************************************************/
-        protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)
-        {
-            GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
+        //protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)
+        //{
+        //    GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
 
-            try
-            {
-                string consumerId = null; 
-                if (insertedItem.OwnerTableView.DataKeyValues.Count > 0)
-                {
-                    consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
-                }
-                else
-                {
-                    consumerId = RadGrid1.SelectedValue?.ToString();
-                }
+        //    try
+        //    {
+        //        string consumerId = null; 
+        //        if (insertedItem.OwnerTableView.DataKeyValues.Count > 0)
+        //        {
+        //            consumerId = insertedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
+        //        }
+        //        else
+        //        {
+        //            consumerId = RadGrid1.SelectedValue?.ToString();
+        //        }
 
 
-                string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partner")).SelectedText;
+        //        string tradingPartnerName = ((RadDropDownList)insertedItem.FindControl("trading_partner")).SelectedText;
 
-                if (e.Exception != null)
-                {
-                    e.ExceptionHandled = true;
-                    var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName} cannot be inserted. Reason: {e.Exception.Message}";
-                    DisplayMessage(message);
-                    Logger.Error(message);
-                }
-                else
-                {
-                    var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName}  is inserted";
-                    DisplayMessage(message);
-                    Logger.Info(message);
-                }
-            }
-            catch (Exception ex)
-            {
-                DisplayMessage(ex.Message);
-                Logger.Info(ex.Message);
-                throw;
-            }
-        }
+        //        if (e.Exception != null)
+        //        {
+        //            e.ExceptionHandled = true;
+        //            var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName} cannot be inserted. Reason: {e.Exception.Message}";
+        //            DisplayMessage(message);
+        //            Logger.Error(message);
+        //        }
+        //        else
+        //        {
+        //            var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName}  is inserted";
+        //            DisplayMessage(message);
+        //            Logger.Info(message);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        DisplayMessage(ex.Message);
+        //        Logger.Info(ex.Message);
+        //        throw;
+        //    }
+        //}
 
-        protected void RadGrid2_DeleteCommand(object source, GridCommandEventArgs e)
-        {
-            //Get the GridDataItem of the RadGrid 
-            GridDataItem item = (GridDataItem)e.Item;
-            string consumerId = null;
-            string tpId = null;
+        //protected void RadGrid2_DeleteCommand(object source, GridCommandEventArgs e)
+        //{
+        //    //Get the GridDataItem of the RadGrid 
+        //    GridDataItem item = (GridDataItem)e.Item;
+        //    string consumerId = null;
+        //    string tpId = null;
 
-            try
-            {
-                //Get the primary key value using the DataKeyValue. 
-                consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
-                Int32.TryParse(consumerId, out int consumerInternalNumber);
+        //    try
+        //    {
+        //        //Get the primary key value using the DataKeyValue. 
+        //        consumerId = item.OwnerTableView.DataKeyValues[item.ItemIndex]["consumer_internal_number"].ToString();
+        //        Int32.TryParse(consumerId, out int consumerInternalNumber);
 
-                tpId = item["trading_partner_id"].Text;
-                Int32.TryParse(tpId, out int tradingPartnerId);
+        //        tpId = item["trading_partner_id"].Text;
+        //        Int32.TryParse(tpId, out int tradingPartnerId);
 
-                string deleteQuery = "DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumerInternalNumber AND trading_partner_id = @tradingPartnerId";
+        //        string deleteQuery = "DELETE FROM ConsumerTradingPartner WHERE consumer_internal_number = @consumerInternalNumber AND trading_partner_id = @tradingPartnerId";
 
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-                {
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = con;
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = deleteQuery;
+        //        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand())
+        //            {
+        //                cmd.Connection = con;
+        //                cmd.CommandType = CommandType.Text;
+        //                cmd.CommandText = deleteQuery;
 
-                        cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
-                        cmd.Parameters.Add("tradingPartnerId", SqlDbType.Int).Value = tradingPartnerId;
+        //                cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
+        //                cmd.Parameters.Add("tradingPartnerId", SqlDbType.Int).Value = tradingPartnerId;
                         
-                        con.Open();
-                        int result = cmd.ExecuteNonQuery();
+        //                con.Open();
+        //                int result = cmd.ExecuteNonQuery();
 
-                        if (result > 0)
-                        {
-                            var message = $"Consumer: {consumerId} Trading Partner: {tpId} is deleted.";
-                            DisplayMessage(message);
-                            Logger.Info(message);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                var message = $"Consumer: {consumerId}  Trading Partner: {tpId} cannot be deleted. Reason: ";
-                DisplayMessage(message + ex.Message);
-                Logger.Info(message + ex.Message);
-                e.Canceled = true;
-            }
-        }
+        //                if (result > 0)
+        //                {
+        //                    var message = $"Consumer: {consumerId} Trading Partner: {tpId} is deleted.";
+        //                    DisplayMessage(message);
+        //                    Logger.Info(message);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var message = $"Consumer: {consumerId}  Trading Partner: {tpId} cannot be deleted. Reason: ";
+        //        DisplayMessage(message + ex.Message);
+        //        Logger.Info(message + ex.Message);
+        //        e.Canceled = true;
+        //    }
+        //}
 
+        //protected void RadGrid2_ItemDeleted(object source, GridDeletedEventArgs e)
+        //{
+        //    GridDataItem deletedItem = (GridDataItem)e.Item;
 
+        //    try
+        //    {
+        //        string consumerId = deletedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
+        //        string cId = deletedItem["consumer_internal_number"].Text;
+        //        string tradingPartnerName = deletedItem["trading_partner_name"].Text;
 
-        protected void RadGrid2_ItemDeleted(object source, GridDeletedEventArgs e)
-        {
-            GridDataItem deletedItem = (GridDataItem)e.Item;
-
-            try
-            {
-                string consumerId = deletedItem.OwnerTableView.DataKeyValues[0]["consumer_internal_number"].ToString();
-                string cId = deletedItem["consumer_internal_number"].Text;
-                string tradingPartnerName = deletedItem["trading_partner_name"].Text;
-
-                if (e.Exception != null)
-                {
-                    e.ExceptionHandled = true;
-                    var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName} cannot be deleted. Reason: {e.Exception.Message}";
-                    Logger.Error(message);
-                }
-                else
-                {
-                    var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName}  is deleted";
-                    DisplayMessage(message);
-                    Logger.Info(message);
-                }
-            }
-            catch (Exception ex)
-            {
-                DisplayMessage(ex.Message);
-                Logger.Info(ex.Message);
-                throw;
-            }
-        }
+        //        if (e.Exception != null)
+        //        {
+        //            e.ExceptionHandled = true;
+        //            var message = $"Consumer: {consumerId} - Trading Partner: {tradingPartnerName} cannot be deleted. Reason: {e.Exception.Message}";
+        //            Logger.Error(message);
+        //        }
+        //        else
+        //        {
+        //            var message = $"Consumer: {consumerId} - Trading Partners: {tradingPartnerName}  is deleted";
+        //            DisplayMessage(message);
+        //            Logger.Info(message);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        DisplayMessage(ex.Message);
+        //        Logger.Info(ex.Message);
+        //        throw;
+        //    }
+        //}
         private void DisplayMessage(string text)
         {
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
