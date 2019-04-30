@@ -111,7 +111,7 @@
                             <li>
                                 <label for="identifier">Identifier *</label> 
                                 <telerik:RadMaskedTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="8" Mask="##########" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" ValidationGroup="FormValidationGroup"/>
                             </li>                                     
                             <li>
                                 <label for="gender">Gender *</label> 
@@ -121,7 +121,7 @@
                                         <telerik:ButtonListItem Text="Female" Value="F"/>
                                     </Items>
                                 </telerik:RadRadioButtonList>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="gender"  Display="Dynamic" ErrorMessage="Gender is required" ValidationGroup="GenderGroup" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="gender"  Display="Dynamic" ErrorMessage="Gender is required"  ValidationGroup="FormValidationGroup" />
                             </li>                                      
                             <li>
                                 <label for="diagnosis_code">Diagnosis Code *</label> 
@@ -144,11 +144,13 @@
                                 <label for="trading_partner3">Trading Partner 3:</label> 
                                 <telerik:RadDropDownList ID="trading_partner3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId3") %>'
                                                          DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="14" /> 
-                            </li> 
+                                
+                                <asp:CustomValidator runat="server" id="cusCustom" controltovalidate="trading_partner3" onservervalidate="TradingPartner_ServerValidate" errormessage="The text must be exactly 8 characters long!" />
+                         </li> 
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
-                                      CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
+                                      CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' OnClick="btnUpdate_Click" ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
                                 <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
                         </section>
                     </FormTemplate>

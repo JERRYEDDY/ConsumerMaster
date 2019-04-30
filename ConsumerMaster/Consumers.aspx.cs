@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace ConsumerMaster
@@ -295,7 +297,7 @@ namespace ConsumerMaster
             }
         }
 
- /***********RADGRID2******************************************************************************************************************************/
+        /***********RADGRID2******************************************************************************************************************************/
         //protected void RadGrid2_ItemInserted(object source, GridInsertedEventArgs e)
         //{
         //    GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
@@ -365,7 +367,7 @@ namespace ConsumerMaster
 
         //                cmd.Parameters.Add("consumerInternalNumber", SqlDbType.Int).Value = consumerInternalNumber;
         //                cmd.Parameters.Add("tradingPartnerId", SqlDbType.Int).Value = tradingPartnerId;
-                        
+
         //                con.Open();
         //                int result = cmd.ExecuteNonQuery();
 
@@ -417,7 +419,44 @@ namespace ConsumerMaster
         //        throw;
         //    }
         //}
-        private void DisplayMessage(string text)
+
+        
+
+        protected void TradingPartner_ServerValidate(object source, ServerValidateEventArgs args)
+        {
+            CustomValidator val = source as CustomValidator;
+
+            GridEditFormItem editForm = (GridEditFormItem)val.NamingContainer;
+            RadDropDownList ddl1 = (RadDropDownList)editForm.FindControl("trading_partner1");
+
+
+
+            if (ddl1.SelectedValue == "0")
+            {
+                val.ErrorMessage = "* Ship Name should contain 11";
+                args.IsValid = false;
+            }
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+            CustomValidator val = sender as CustomValidator;
+
+            GridEditFormItem editForm = (GridEditFormItem)val.NamingContainer;
+            RadDropDownList ddl1 = (RadDropDownList)editForm.FindControl("trading_partner1");
+
+
+
+            if (ddl1.SelectedValue == "0")
+            {
+                val.ErrorMessage = "* Ship Name should contain 11";
+                //e.IsValid = false;
+            }
+        }
+
+
+
+    private void DisplayMessage(string text)
         {
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
