@@ -36,7 +36,7 @@
         <h5><strong>CONSUMERS:</strong></h5>
         <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="15"  AutoGenerateColumns="False" 
                          OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand"                        
-                         AllowFilteringByColumn="true" AllowSorting="true">
+                         OnItemDataBound="RadGrid1_ItemDataBound" AllowFilteringByColumn="true" AllowSorting="true">
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EditMode="EditForms">
                 <CommandItemTemplate>
                     <div style="padding: 5px 5px;">
@@ -130,10 +130,15 @@
                             </li>  
                             <li>
                                 <label for="trading_partner1">Trading Partner 1 *</label> 
-                                <telerik:RadDropDownList ID="trading_partner1" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId1") %>'
-                                                         DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="12" /> 
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" ControlToValidate="trading_partner1" ErrorMessage="Trading partner 1 is required" ValidationGroup="FormValidationGroup" />
+                                
 
+                                <telerik:RadDropDownList ID="trading_partner1" runat="server" SelectedValue='<%# Bind("tpId1") %>' DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" 
+                                                         DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="12" AppendDataBoundItems="True">
+                                    <Items>
+                                        <telerik:DropDownListItem Text="None" Value="0" />
+                                    </Items>
+                                </telerik:RadDropDownList>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" ControlToValidate="trading_partner1" ErrorMessage="Trading partner 1 is required" InitialValue="None" ValidationGroup="FormValidationGroup" />
                             </li>                                      
                             <li>
                                 <label for="trading_partner2">Trading Partner 2:</label> 
@@ -144,7 +149,6 @@
                                 <label for="trading_partner3">Trading Partner 3:</label> 
                                 <telerik:RadDropDownList ID="trading_partner3" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("tpId3") %>'
                                                          DataTextField="name" DataValueField="trading_partner_id" DefaultMessage="Select" Width="300px" DropDownWidth="300px" TabIndex="14" /> 
-                                
                                 <asp:CustomValidator runat="server" id="cusCustom" controltovalidate="trading_partner3" onservervalidate="TradingPartner_ServerValidate" errormessage="The text must be exactly 8 characters long!" />
                          </li> 
                         </section>
