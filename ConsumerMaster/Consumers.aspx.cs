@@ -103,11 +103,11 @@ namespace ConsumerMaster
                 string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis_code")).Text;
 
-                string tradingPartner1 = ((RadDropDownList)insertedItem.FindControl("trading_partner1")).SelectedValue;
+                string tradingPartner1 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner1")).SelectedValue;
                 Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
-                string tradingPartner2 = ((RadDropDownList)insertedItem.FindControl("trading_partner2")).SelectedValue;
+                string tradingPartner2 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner2")).SelectedValue;
                 Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
-                string tradingPartner3 = ((RadDropDownList)insertedItem.FindControl("trading_partner2")).SelectedValue;
+                string tradingPartner3 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
                 string insertQuery =
@@ -192,11 +192,11 @@ namespace ConsumerMaster
                 string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis_code")).Text;
 
-                string tradingPartner1 = ((RadDropDownList) editedItem.FindControl("trading_partner1")).SelectedValue;
+                string tradingPartner1 = ((RadComboBox) editedItem.FindControl("cbTradingPartner1")).SelectedValue;
                 Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
-                string tradingPartner2 = ((RadDropDownList)editedItem.FindControl("trading_partner2")).SelectedValue;
+                string tradingPartner2 = ((RadComboBox)editedItem.FindControl("cbTradingPartner2")).SelectedValue;
                 Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
-                string tradingPartner3 = ((RadDropDownList)editedItem.FindControl("trading_partner3")).SelectedValue;
+                string tradingPartner3 = ((RadComboBox)editedItem.FindControl("cbTradingPartner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))

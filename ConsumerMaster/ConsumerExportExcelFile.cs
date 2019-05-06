@@ -10,7 +10,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateWorkbook(string tradingPartnerID)
+        public Workbook CreateWorkbook(string tradingPartnerId)
         {
             Workbook workbook = new Workbook();
 
@@ -19,32 +19,12 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
-                                 "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, c.address_line_2 AS address_line_2, " +
+                string ceQuery ="SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
+                                 "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, ISNULL(c.address_line_2, ' ') AS address_line_2, " +
                                  "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +
-                                 "INNER JOIN TradingPartners AS tp ON " + tradingPartnerID + " = tp.id"
-                " WHERE c.trading_partner_id1 = " + tradingPartnerID + " OR c.trading_partner_id2 = " + tradingPartnerID + " OR c.trading_partner_id3 = " + tradingPartnerID +
-                    " ORDER BY consumer_last";
-
-                string seQuery =
-                    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number," +
-                    " tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, " +
-                    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
-                    " ' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ' ' AS rendering_provider_id, " +
-                    "' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
-                    "INNER JOIN TradingPartners AS tp ON " + tradingPartnerID + " = tp.id" +
-
-
-
-
-
-
-                if (!String.Equals(tradingPartnerId,"0"))
-                {
-                    ceQuery += " WHERE ctp.trading_partner_id = " + tradingPartnerId;
-                }
-
-                ceQuery += " ORDER BY consumer_last";
+                                 "INNER JOIN TradingPartners AS tp ON " + tradingPartnerId + " = tp.id" +
+                                " WHERE c.trading_partner_id1 = " + tradingPartnerId + " OR c.trading_partner_id2 = " + tradingPartnerId + " OR c.trading_partner_id3 = " + tradingPartnerId +
+                                " ORDER BY consumer_last";
 
                 Utility util = new Utility();
                 ConsumerExportFormat cef = new ConsumerExportFormat();
@@ -57,7 +37,6 @@ namespace ConsumerMaster
                 foreach (DataRow dr in ceDataTable.Rows)
                 {
                     worksheet.Cells[currentRow, cef.GetIndex("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    //CellSelection cellLeadingZeros1 = worksheet.Cells[currentRow, cef.GetIndex("consumer_internal_number")];
 
                     worksheet.Cells[currentRow, cef.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
                     worksheet.Cells[currentRow, cef.GetIndex("consumer_first")].SetValue(dr["consumer_first"].ToString());

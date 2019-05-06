@@ -45,7 +45,11 @@
                         </telerik:RadButton>
                         <telerik:RadButton ID="RadButton2" runat="server" Text="Edit selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected">
                             <Icon PrimaryIconCssClass="rbEdit" />
-                        </telerik:RadButton>&nbsp;&nbsp;
+                        </telerik:RadButton>
+                        <telerik:RadButton ID="RadButton3" runat="server" Text="Refresh" Skin="Default" RenderMode="Lightweight" CommandName="Rebind">
+                            <Icon PrimaryIconCssClass="rbRefresh" />
+                        </telerik:RadButton>
+                        &nbsp;&nbsp;
                     </div>
                 </CommandItemTemplate>    
                 <ColumnGroups>

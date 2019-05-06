@@ -15,7 +15,7 @@ namespace ConsumerMaster
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
 
-        public Workbook CreateWorkbook(string tradingPartnerID)
+        public Workbook CreateWorkbook(string tradingPartnerId)
         {
             Workbook workbook = new Workbook();
 
@@ -38,23 +38,14 @@ namespace ConsumerMaster
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat();
 
-                //string seQuery =
-                //    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number," + 
-                //    " tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, " + 
-                //    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " + 
-                //    " ' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ' ' AS rendering_provider_id, " + 
-                //    "' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " + 
-                //    " INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " + 
-                //    "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id=tp.id WHERE ctp.trading_partner_id = " + tradingPartnerID + " ORDER BY consumer_last";
-
                 string seQuery =
                     "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number," +
                     " tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, " +
                     "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
                     " ' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ' ' AS rendering_provider_id, " +
                     "' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
-                    "INNER JOIN TradingPartners AS tp ON " + tradingPartnerID + " = tp.id" + 
-                    " WHERE c.trading_partner_id1 = " + tradingPartnerID + " OR c.trading_partner_id2 = " + tradingPartnerID + " OR c.trading_partner_id3 = " + tradingPartnerID + 
+                    "INNER JOIN TradingPartners AS tp ON " + tradingPartnerId + " = tp.id" + 
+                    " WHERE c.trading_partner_id1 = " + tradingPartnerId + " OR c.trading_partner_id2 = " + tradingPartnerId + " OR c.trading_partner_id3 = " + tradingPartnerId + 
                     " ORDER BY consumer_last";
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
@@ -148,16 +139,8 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
                 ServiceExportFormat sef = new ServiceExportFormat();
                 string[] columnsList = sef.ColumnStrings;
-
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, columnsList.Length);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetIndex("consumer_first"));
-                //CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, sef.GetIndex("rendering_provider_last_name"));
-                //CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
 
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
@@ -184,12 +167,6 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
-                //CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-                //CellIndex firstRowLastCellIndex = new CellIndex(0, itemsCount);
-                //CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnName);
-
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
