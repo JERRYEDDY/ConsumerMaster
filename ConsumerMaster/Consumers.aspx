@@ -39,7 +39,26 @@
                          AllowFilteringByColumn="true" AllowSorting="true">
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EditMode="EditForms">
                 <CommandItemTemplate>
-                    <div style="padding: 5px 5px;">
+                    <table>
+                        <tr>
+                            <td width="30%">
+                                <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
+                                    <Icon PrimaryIconCssClass="rbAdd" />
+                                </telerik:RadButton>
+                            </td>
+                            <td width="40%">
+                                <telerik:RadButton ID="RadButton2" runat="server" Text="Edit selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected">
+                                    <Icon PrimaryIconCssClass="rbEdit" />
+                                </telerik:RadButton>
+                            </td>
+                            <td width="30%">
+                                <telerik:RadButton ID="RadButton3" runat="server" Text="Refresh" Skin="Default" RenderMode="Lightweight" CommandName="RebindGrid">
+                                    <Icon PrimaryIconCssClass="rbRefresh" />
+                                </telerik:RadButton>
+                            </td>
+                        </tr>
+                    </table>                   
+<%--                    <div style="padding: 5px 5px;">
                         <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
                             <Icon PrimaryIconCssClass="rbAdd" />
                         </telerik:RadButton>
@@ -50,7 +69,7 @@
                             <Icon PrimaryIconCssClass="rbRefresh" />
                         </telerik:RadButton>
                         &nbsp;&nbsp;
-                    </div>
+                    </div>--%>
                 </CommandItemTemplate>    
                 <ColumnGroups>
                     <telerik:GridColumnGroup HeaderText="Trading" Name="Trading" HeaderStyle-HorizontalAlign="Center"/>
@@ -175,53 +194,6 @@
         </telerik:RadGrid>
         <br />
         <br />
-<%--        <h5><strong>TRADING PARTNER:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2" runat="server" AllowPaging="true" PageSize="10"  AutoGenerateColumns="False" DataSourceID="SqlDataSource2" 
-            AllowAutomaticInserts="True" AllowAutomaticUpdates="True" OnItemInserted="RadGrid2_ItemInserted" OnDeleteCommand="RadGrid2_DeleteCommand"
-            AllowFilteringByColumn="false" >
-            <MasterTableView Width="100%" Name="TradingPartners" AutoGenerateColumns="False" DataKeyNames="consumer_internal_number" CommandItemDisplay="Top" EditMode="EditForms">
-                <CommandItemTemplate>
-                    <div style="padding: 5px 5px;">
-                        <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
-                            <Icon PrimaryIconCssClass="rbAdd" />
-                        </telerik:RadButton>
-                    </div>
-                </CommandItemTemplate>   
-                <Columns>
-                   <telerik:GridBoundColumn DataField="consumer_internal_number" UniqueName="consumer_internal_number" HeaderText="CIN" ReadOnly="true" HeaderStyle-Width="50px" ItemStyle-Width="50px" AllowFiltering="false" />
-                   <telerik:GridBoundColumn DataField="trading_partner_id" UniqueName="trading_partner_id" HeaderText="Trading Partner" HeaderStyle-Width="150px" ItemStyle-Width="150px" AllowFiltering="false" Display="False" ReadOnly="True" />  
-                   <telerik:GridDropDownColumn DataField="trading_partner_id" UniqueName="trading_partner_name" ListTextField="name" ListValueField="trading_partner_id" DataSourceID="TradingPartnerDataSource" HeaderText="Trading Partner"
-                                                DropDownControlType="RadComboBox" AllowSorting="true" ItemStyle-Width="500px" >
-                    </telerik:GridDropDownColumn>
-                    <telerik:GridButtonColumn ConfirmText="Delete these details record?" CommandName="Delete" Text="Delete" UniqueName="DeleteColumn2">
-                        <HeaderStyle Width="20px"></HeaderStyle>
-                        <ItemStyle HorizontalAlign="Center" CssClass="MyImageButton"></ItemStyle>
-                    </telerik:GridButtonColumn>
-                </Columns>
-                <EditFormSettings EditFormType="Template">
-                    <FormTemplate>
-                        <section class="form-group">
-                            <ul class="form-fields">
-                            <li>
-                                <label for="trading_partners">Trading Partner:</label>
-                                <telerik:RadDropDownList ID="trading_partner" runat="server" DataSourceID="TradingPartnerDataSource" SelectedValue='<%# Bind("trading_partner_id") %>'
-                                                         DataTextField="name" DataValueField="trading_partner_id" TabIndex="12" DefaultMessage="Select" Width="300px" DropDownWidth="300px" /> 
-                                <asp:RequiredFieldValidator ID="Validator" ControlToValidate="trading_partner" ErrorMessage="Trading Partner is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
-                            </li>
-                        </section>
-                        <section class="form-submit">
-                            <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
-                                 CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
-                            <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
-                        </section>
-                    </FormTemplate>
-                </EditFormSettings>   
-            </MasterTableView>
-            <ClientSettings AllowKeyboardNavigation="true">
-                <Selecting AllowRowSelect="True"></Selecting>
-            </ClientSettings>
-            <PagerStyle Mode="NextPrevAndNumeric"></PagerStyle>
-        </telerik:RadGrid>--%>
         <br />
         <br />
     </div>

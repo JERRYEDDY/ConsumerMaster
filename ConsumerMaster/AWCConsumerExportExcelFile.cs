@@ -10,19 +10,6 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //private static readonly int IndexColumnConsumerInternalNumber = 0;
-        //private static readonly int IndexColumnTradingPartnerString = 1;
-        //private static readonly int IndexColumnConsumerFirst = 2;
-        //private static readonly int IndexColumnConsumerLast = 3;
-        //private static readonly int IndexColumnDateOfBirth = 4;
-        //private static readonly int IndexColumnAddressLine1 = 5;
-        //private static readonly int IndexColumnAddressLine2 = 6;
-        //private static readonly int IndexColumnCity = 7;
-        //private static readonly int IndexColumnState = 8;
-        //private static readonly int IndexColumnZipCode = 9;
-        //private static readonly int IndexColumnIdentifier = 10;
-        //private static readonly int IndexColumnGender = 11;
-
         private static readonly int IndexRowItemStart = 0;
 
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
@@ -52,11 +39,13 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " + 
-                                 "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, c.address_line_2 AS address_line_2, " +
-                                 "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " + 
-                                 "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " + 
-                                 "INNER JOIN TradingPartners AS tp ON  ctp.trading_partner_id = tp.id WHERE ctp.trading_partner_id = 5 ORDER BY consumer_last"; //Agency With Choice = 5
+                string tradingPartnerId = "5";//Agency With Choice = 5
+                string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
+                                "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, ISNULL(c.address_line_2, ' ') AS address_line_2, " +
+                                "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +
+                                "INNER JOIN TradingPartners AS tp ON " + tradingPartnerId + " = tp.id " +
+                                "WHERE c.trading_partner_id1 = " + tradingPartnerId + " OR c.trading_partner_id2 = " + tradingPartnerId + " OR c.trading_partner_id3 = " + tradingPartnerId +
+                                " ORDER BY consumer_last";
 
                 Utility util = new Utility();
                 ConsumerExportFormat cef = new ConsumerExportFormat();

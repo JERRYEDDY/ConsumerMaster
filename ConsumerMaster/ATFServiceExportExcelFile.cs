@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
-using System.Linq;
 using System.Windows.Media;
 
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
@@ -29,12 +28,9 @@ namespace ConsumerMaster
                 Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
                 Utility util = new Utility();
-
-                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 1 or trading_partner_id = 2");
-
-                List<string> cpcList1 = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id IN (1,2)");
-
                 //Adult Training Facility;Jefferson = 1 or Adult Training Facility;Bill George = 2 
+                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id IN (1,2)");
+
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat();
 
