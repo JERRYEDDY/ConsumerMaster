@@ -225,7 +225,7 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
                             cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
 
-                        con.Open();
+                            con.Open();
                             int result = cmd.ExecuteNonQuery();
 
                             if (result > 0)
@@ -295,85 +295,6 @@ namespace ConsumerMaster
                 e.Canceled = true;
             }
         }
-
-        protected void RadGrid1_ItemDataBound(object sender, GridItemEventArgs e)
-        {
-            if (e.Item is GridEditFormItem && e.Item.IsInEditMode)
-            {
-                GridEditFormItem d = (GridEditFormItem)e.Item;
-                RadDropDownList tPartner1 = (RadDropDownList)d.FindControl("trading_partner1");
-
-                //BindToTPDropDownList(tPartner1);
-            }
-        }
-
-
-        protected void TradingPartner_ServerValidate(object source, ServerValidateEventArgs args)
-        {
-            CustomValidator val = source as CustomValidator;
-
-            GridEditFormItem editForm = (GridEditFormItem)val.NamingContainer;
-            RadDropDownList ddl1 = (RadDropDownList)editForm.FindControl("trading_partner1");
-
-
-
-            if (ddl1.SelectedValue == "0")
-            {
-                val.ErrorMessage = "* Ship Name should contain 11";
-                args.IsValid = false;
-            }
-        }
-
-        protected void btnUpdate_Click(object sender, EventArgs e)
-        {
-            GridEditableItem editedItem = (sender as Button).NamingContainer as GridEditableItem;
-            RadDropDownList tPartner1 = (RadDropDownList)editedItem.FindControl("trading_partner1");
-            string tpValue1 = tPartner1.SelectedValue;
-            RadDropDownList tPartner2 = (RadDropDownList)editedItem.FindControl("trading_partner2");
-            string tpValue2 = tPartner2.SelectedValue;
-            RadDropDownList tPartner3 = (RadDropDownList)editedItem.FindControl("trading_partner3");
-            string tpValue3 = tPartner3.SelectedValue;
-
-
-
-
-        }
-
-
-
-
-        private void BindToTPDropDownList(RadDropDownList dropdownlist)
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-                {
-                    con.Open();
-                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners", con))
-                    {
-                        DataTable tradingPartners = new DataTable();
-                        adapter.Fill(tradingPartners);
-
-                        DataRow dr = tradingPartners.NewRow();
-                        dr["trading_partner_id"] = "0";
-                        dr["name"] = "None";
-                        tradingPartners.Rows.InsertAt(dr, 0);
-
-                        dropdownlist.DataTextField = "name";
-                        dropdownlist.DataValueField = "trading_partner_id";
-                        dropdownlist.DataSource = tradingPartners;
-                        dropdownlist.DataBind();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
-
-
 
         private void DisplayMessage(string text)
         {

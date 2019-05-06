@@ -59,7 +59,6 @@
                         <li><a runat="server" href="~/AWCMain">AWCMain</a></li>
                         <li><a runat="server" href="~/ATFMain">ATFMain</a></li>
                         <li><a runat="server" href="~/RenderingProviders">RenderingProviders</a></li>
-                        <!--<li><a runat="server" href="~/NewConsumers">NewConsumers</a></li>-->
                         <li><a runat="server" href="~/ReferringProviders">ReferringProviders</a></li>
                     </ul>
                 </div>

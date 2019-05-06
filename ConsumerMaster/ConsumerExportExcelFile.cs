@@ -10,7 +10,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateWorkbook(string tradingPartnerId)
+        public Workbook CreateWorkbook(string tradingPartnerID)
         {
             Workbook workbook = new Workbook();
 
@@ -22,10 +22,24 @@ namespace ConsumerMaster
                 string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
                                  "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, c.address_line_2 AS address_line_2, " +
                                  "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +
-                                 "INNER JOIN ConsumerTradingPartner AS ctp ON c.consumer_internal_number = ctp.consumer_internal_number " +
-                                 "INNER JOIN TradingPartners AS tp ON ctp.trading_partner_id = tp.id";
+                                 "INNER JOIN TradingPartners AS tp ON " + tradingPartnerID + " = tp.id"
+                " WHERE c.trading_partner_id1 = " + tradingPartnerID + " OR c.trading_partner_id2 = " + tradingPartnerID + " OR c.trading_partner_id3 = " + tradingPartnerID +
+                    " ORDER BY consumer_last";
 
-                if(!String.Equals(tradingPartnerId,"0"))
+                string seQuery =
+                    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number," +
+                    " tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, " +
+                    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
+                    " ' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ' ' AS rendering_provider_id, " +
+                    "' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
+                    "INNER JOIN TradingPartners AS tp ON " + tradingPartnerID + " = tp.id" +
+
+
+
+
+
+
+                if (!String.Equals(tradingPartnerId,"0"))
                 {
                     ceQuery += " WHERE ctp.trading_partner_id = " + tradingPartnerId;
                 }
