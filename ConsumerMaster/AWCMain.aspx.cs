@@ -3,6 +3,7 @@ using System.Web;
 using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.TextBased.Csv;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace ConsumerMaster
@@ -14,7 +15,7 @@ namespace ConsumerMaster
         {
 
         }
-        public void DownloadExcelFile(Workbook workbook, string filename)
+        public void DownloadExcelFile(Workbook workbook, string fileName)
         {
             try
             {
@@ -29,7 +30,7 @@ namespace ConsumerMaster
 
                 HttpContext.Current.Response.ClearHeaders();
                 HttpContext.Current.Response.ClearContent();
-                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + filename);
+                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + fileName);
                 HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 HttpContext.Current.Response.BinaryWrite(renderedBytes);
                 HttpContext.Current.Response.Flush();
@@ -41,6 +42,25 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+
+        public void DownloadCSVFile(Workbook workbook, string fileName)
+        {
+            try
+            {
+                IWorkbookFormatProvider formatProvider = new CsvFormatProvider();
+
+                using (Stream output = new FileStream(fileName, FileMode.Create))
+                {
+                    formatProvider.Export(workbook, output);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
 
         protected void AWCConsumerExportDownload_Click(object sender, EventArgs e)
         {

@@ -91,50 +91,6 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private void PrepareWorksheet(Worksheet worksheet, int itemsCount)
-        {
-            //try
-            //{
-            //    int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
-            //    CellIndex firstRowFirstCellIndex = new CellIndex(0, 0);
-            //    CellIndex firstRowLastCellIndex = new CellIndex(0, 11);
-            //    CellIndex lastRowFirstCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnConsumerInternalNumber);
-            //    CellIndex lastRowLastCellIndex = new CellIndex(lastItemIndexRow + 1, IndexColumnGender);
-
-            //    CellBorder border = new CellBorder(CellBorderStyle.Medium, InvoiceBackground);
-
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetValue(ceHeader[0]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerInternalNumber].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetValue(ceHeader[1]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnTradingPartnerString].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetValue(ceHeader[2]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerFirst].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetValue(ceHeader[3]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnConsumerLast].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnDateOfBirth].SetValue(ceHeader[4]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnDateOfBirth].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine1].SetValue(ceHeader[5]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine1].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine2].SetValue(ceHeader[6]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnAddressLine2].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnCity].SetValue(ceHeader[7]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnCity].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnState].SetValue(ceHeader[8]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnState].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnZipCode].SetValue(ceHeader[9]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnZipCode].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnIdentifier].SetValue(ceHeader[10]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnIdentifier].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnGender].SetValue(ceHeader[11]);
-            //    worksheet.Cells[IndexRowItemStart, IndexColumnGender].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.Error(ex);
-            //}
-        }
-
         private void PrepareWorksheet(Worksheet worksheet)
         {
             try
