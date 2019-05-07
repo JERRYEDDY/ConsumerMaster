@@ -153,7 +153,7 @@
                             </li>  
                             <li>
                                 <label for="cbTradingPartner1">Trading Partner 1 *</label> 
-                                <telerik:RadComboBox ID="cbTradingPartner1" runat="server" SelectedValue='<%# Bind("tpId1") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="300px">
+                                <telerik:RadComboBox ID="cbTradingPartner1" runat="server" SelectedValue='<%# Bind("tpId1") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
                                     </Items>
@@ -162,7 +162,7 @@
                             </li>                                      
                             <li>
                                 <label for="cbTradingPartner2">Trading Partner 2:</label> 
-                                <telerik:RadComboBox ID="cbTradingPartner2" runat="server" SelectedValue='<%# Bind("tpId2") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="300px">
+                                <telerik:RadComboBox ID="cbTradingPartner2" runat="server" SelectedValue='<%# Bind("tpId2") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
                                     </Items>
@@ -170,7 +170,7 @@
                             </li>  
                             <li>
                                 <label for="cbTradingPartner3">Trading Partner 3:</label> 
-                                <telerik:RadComboBox ID="cbTradingPartner3" runat="server" SelectedValue='<%# Bind("tpId3") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="300px">
+                                <telerik:RadComboBox ID="cbTradingPartner3" runat="server" SelectedValue='<%# Bind("tpId3") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
                                     </Items>
