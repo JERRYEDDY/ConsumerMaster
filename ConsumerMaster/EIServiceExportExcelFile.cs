@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Media;
 using Telerik.Windows.Documents.Spreadsheet.Model;
-using FileHelpers;
+using System.Data;
+using System.Windows.Media;
+
+using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
 {
@@ -15,7 +14,7 @@ namespace ConsumerMaster
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
 
-        public Workbook CreateWorkbook()
+        public Workbook CreateWorkbook(string tradingPartnerId)
         {
             Workbook workbook = new Workbook();
 
@@ -23,60 +22,39 @@ namespace ConsumerMaster
             {
                 WorksheetCollection worksheets = workbook.Worksheets;
                 worksheets.Add();
+                worksheets.Add();
+                worksheets.Add();
+
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
+                Worksheet sheet2Worksheet = worksheets["Sheet2"];  //Trading Partner Programs
+                Worksheet sheet3Worksheet = worksheets["Sheet3"];  //Composite Procedure Codes
+
+
                 Utility util = new Utility();
 
+                List<string> tppList = util.GetList("SELECT symbol FROM TradingPartnerPrograms");
+                CreateDropDownListWorksheet(sheet2Worksheet, tppList);
+
+                //Early Intervention Direct Therapy; In Home = 7 or Early Intervention Special Instruction; In Home = 8 
+                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = " + tradingPartnerId);
+                CreateDropDownListWorksheet(sheet3Worksheet, cpcList);
+
                 ServiceExportFormat sef = new ServiceExportFormat();
-                string inFileName = @"C:\Billing Software\EI\GREENE CTY DEC 2018 -FINAL.tsv";
-                var inEngine = new FileHelperEngine<EIBillingTransactions>();
-                var inResult = inEngine.ReadFile(inFileName);
 
-                DataTable billingDataTable = new DataTable();
-                billingDataTable.Columns.Add("Therapists", typeof(string));
-                billingDataTable.Columns.Add("BillDate", typeof(string));
-                billingDataTable.Columns.Add("LastName", typeof(string));
-                billingDataTable.Columns.Add("FirstName", typeof(string));
-                billingDataTable.Columns.Add("County", typeof(string));
-                billingDataTable.Columns.Add("FundingSource", typeof(string));
-                billingDataTable.Columns.Add("VisitType", typeof(string));
-                billingDataTable.Columns.Add("Discipline", typeof(string));
-                billingDataTable.Columns.Add("TotalUnits", typeof(string));
+                string seQuery =
+                    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number," +
+                    " tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, " +
+                    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
+                    " ' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ' ' AS rendering_provider_id, " +
+                    "' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
+                    "INNER JOIN TradingPartners AS tp ON " + tradingPartnerId + " = tp.id" + 
+                    " WHERE c.trading_partner_id1 = " + tradingPartnerId + " OR c.trading_partner_id2 = " + tradingPartnerId + " OR c.trading_partner_id3 = " + tradingPartnerId + 
+                    " ORDER BY consumer_last";
 
-                foreach (EIBillingTransactions ebi in inResult)
-                {
-                    DataRow dr = billingDataTable.NewRow();
-
-                    dr[0] = ebi.Therapists;
-                    dr[1] = ebi.BillDate.ToString("MM/dd/yyyy");
-                    dr[2] = ebi.LastName;
-                    dr[3] = ebi.FirstName;
-                    dr[4] = ebi.County;
-                    dr[5] = ebi.FundingSource;
-                    dr[6] = ebi.VisitType;
-                    dr[7] = ebi.Discipline;
-                    dr[8] = ebi.TotalUnits;
-
-                    billingDataTable.Rows.Add(dr);
-                }
-
-                DataTable seDataTable = new DataTable();
-                using (SqlConnection sqlConnection1 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-                {
-                    using (SqlCommand cmd = new SqlCommand("sp_GetEIBillingTransactions", sqlConnection1))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        SqlParameter tvpParam = cmd.Parameters.AddWithValue("@EIBillingTableType", billingDataTable);
-                        tvpParam.SqlDbType = SqlDbType.Structured;
-
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                        adapter.Fill(seDataTable);
-                    }
-                }
-
+                DataTable seDataTable = util.GetDataTable(seQuery);
                 int totalConsumers = seDataTable.Rows.Count;
-                PrepareSheet1Worksheet(sheet1Worksheet);
 
-                //string[] columnsList = esef.GetColumns();
+                PrepareSheet1Worksheet(sheet1Worksheet);
 
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in seDataTable.Rows)
@@ -85,67 +63,45 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_last")].SetValue(dr["consumer_last"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_internal_number")].SetValue(dr["consumer_internal_number"].ToString());
-                    //CellSelection cellLeadingZeros1 = sheet1Worksheet.Cells[currentRow, sef.GetIndex("consumer_internal_number")];
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
+
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
-                    string tradingPartnerProgram = " ";
-                    switch (dr["FundingSource"])
-                    {
-                        case "MA":
-                            tradingPartnerProgram = "ma" + "_" + dr["County"].ToString().ToLower();
-                            break;
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_program_string")].SetValue(dr["trading_partner_program_string"].ToString());
 
-                        case "COUNTY":
-                            tradingPartnerProgram = "b" + "_" + dr["County"].ToString().ToLower();
-                            break;
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["start_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("end_date_string")].SetValue(dr["end_date_string"].ToString());
 
-                        case "WAIVER":
-                            tradingPartnerProgram = "w" + "_" + dr["County"].ToString().ToLower();
-                            break;
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
 
-                    }
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_program_string")].SetValue(tradingPartnerProgram);
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["bill_date"].ToString());
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("end_date_string")].SetValue(dr["bill_date"].ToString());
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
+                    CellIndex dataValidationRuleCellIndex = new CellIndex(currentRow, sef.GetIndex("composite_procedure_code_string"));
+                    ListDataValidationRuleContext context = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex)
+                    {
+                        InputMessageTitle = "Restricted input",
+                        InputMessageContent = "The input is restricted to the composite procedure codes.",
+                        ErrorStyle = ErrorStyle.Stop,
+                        ErrorAlertTitle = "Wrong value",
+                        ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
+                        InCellDropdown = true
+                    };
+                    string cpcRange = "=Sheet2!$A$2:$A$" + cpcList.Count + 1;  //= Sheet2!$A$2:$A$73
+                    context.Argument1 = cpcRange; //   
+                    ListDataValidationRule rule = new ListDataValidationRule(context);
+                    sheet1Worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
+
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["units"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("manual_billable_rate")].SetValue(" ");                                                            //"manual_billable_rate"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("prior_authorization_number")].SetValue(" ");                                                      //"prior_authorization_number"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referral_number")].SetValue(" ");                                                                 //"referral_number"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_id")].SetValue(" ");                                                           //"referring_provider_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_first_name")].SetValue(" ");                                                   //"referring_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_last_name")].SetValue(" ");                                                    //"referring_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());                          //"manual_billable_rate"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());              //"prior_authorization_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referral_number")].SetValue(dr["referral_number"].ToString());                                    //"referral_number"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_id")].SetValue(dr["referring_provider_id"].ToString());                        //"referring_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());        //"referring_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());          //"referring_provider_last_name"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                        //"rendering_provider_id"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());        //"rendering_provider_first_name"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());          //"rendering_provider_last_name"
-
-                    string billingNote = " ";
-                    switch (dr["County"])
-                    {
-                        case "ALLEGHENY":
-                            billingNote = "CC11006"; //ALLEGHENY
-                            break;
-
-                        case "FAYETTE":
-                            billingNote = "CC11029"; //FAYETTE
-                            break;
-
-                        case "GREENE":
-                            billingNote = "CC11032"; //GREENE
-                            break;
-
-                        case "WASHINGTON":
-                            billingNote = "CC11049"; //WASHINGTON
-                            break;
-
-                        case "WESTMORELAND":
-                            billingNote = "CC11050"; //WESTMORELAND
-                            break;
-                    }
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(billingNote);                                                            //"billing_note"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(dr["rendering_provider_secondary_id"].ToString());    //"rendering_provider_secondary_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(" ");                                                                    //"billing_note"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(" ");                                                 //"rendering_provider_secondary_id"
 
                     currentRow++;
                 }
@@ -157,9 +113,28 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                 Logger.Error(ex);
+                Logger.Error(ex);
             }
             return workbook;
+        }
+
+        private void CreateDropDownListWorksheet(Worksheet worksheet, List<string> cpcList)
+        {
+            try
+            {
+                PrepareSheet2Worksheet(worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (String cpCode in cpcList)
+                {
+                    worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
+                    currentRow++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
 
         private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet, List<string> cpcList)
@@ -185,8 +160,6 @@ namespace ConsumerMaster
         {
             try
             {
-                //int lastItemIndexRow = IndexRowItemStart + itemsCount;
-
                 ServiceExportFormat sef = new ServiceExportFormat();
                 string[] columnsList = sef.ColumnStrings;
 
@@ -203,7 +176,6 @@ namespace ConsumerMaster
                     {
                         worksheet.Cells[IndexRowItemStart, columnKey].SetFill(solidPatternFill);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -226,3 +198,5 @@ namespace ConsumerMaster
         }
     }
 }
+
+

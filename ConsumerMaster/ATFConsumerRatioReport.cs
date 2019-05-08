@@ -12,7 +12,7 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 4;
-        private static readonly int IndexColumnName = 0;
+        //private static readonly int IndexColumnName = 0;
 
         public Workbook CreateWorkbook(DateTime startDate, DateTime endDate, int siteId, string siteName)
         {

@@ -10,7 +10,7 @@ namespace ConsumerMaster
 {
     public partial class Consumers : Page
     {
-        private static readonly NLog.Logger IndexLogger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,7 +58,7 @@ namespace ConsumerMaster
                     catch (Exception ex)
                     {
                         DisplayMessage("Cannot create datatable. Reason: " + ex.Message);
-                        IndexLogger.Info("Cannot create datatable. Reason: " + ex.Message);
+                        Logger.Info("Cannot create datatable. Reason: " + ex.Message);
                     }
                 }
             }
@@ -147,7 +147,7 @@ namespace ConsumerMaster
                         {
                             var message = $"Consumer: {consumerFirst} {consumerLast} is inserted.";
                             DisplayMessage(message);
-                            IndexLogger.Info(message);
+                            Logger.Info(message);
                         }
                     }
                 }
@@ -156,7 +156,7 @@ namespace ConsumerMaster
             {
                 var message = $"Consumer: {consumerFirst} {consumerLast} cannot be inserted. Reason: ";
                 DisplayMessage(message + ex.Message);
-                IndexLogger.Info(message + ex.Message);
+                Logger.Info(message + ex.Message);
                 e.Canceled = true;
             }
         }
@@ -232,7 +232,7 @@ namespace ConsumerMaster
                             {
                                 var message = $"Consumer: {consumerFirst} {consumerLast} is updated.";
                                 DisplayMessage(message);
-                                IndexLogger.Info(message);
+                                Logger.Info(message);
                             }
                     }
                 }
@@ -241,7 +241,7 @@ namespace ConsumerMaster
             {
                 var message = $"Consumer: {consumerId} {consumerFirst} {consumerLast} cannot be updated. Reason: ";
                 DisplayMessage(message + ex.Message);
-                IndexLogger.Info(message + ex.Message);
+                Logger.Info(message + ex.Message);
                 e.Canceled = true;
             }
         }
@@ -282,7 +282,7 @@ namespace ConsumerMaster
                         {
                             var message = $"Consumer: {consumerId} {consumerFirst} {consumerLast} is deleted.";
                             DisplayMessage(message);
-                            IndexLogger.Info(message);
+                            Logger.Info(message);
                         }
                     }
                 }
@@ -291,7 +291,7 @@ namespace ConsumerMaster
             {
                 var message = $"Consumer: {consumerId} {consumerFirst}  {consumerLast} cannot be deleted. Reason: ";
                 DisplayMessage(message + ex.Message);
-                IndexLogger.Info(message + ex.Message);
+                Logger.Info(message + ex.Message);
                 e.Canceled = true;
             }
         }

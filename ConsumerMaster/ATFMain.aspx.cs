@@ -9,7 +9,7 @@ namespace ConsumerMaster
 {
     public partial class ATFMain : System.Web.UI.Page
     {
-        private static readonly NLog.Logger IndexLogger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -30,7 +30,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                IndexLogger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -47,7 +47,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                IndexLogger.Error(ex);
+                Logger.Error(ex);
             }
         }
 
@@ -72,7 +72,7 @@ namespace ConsumerMaster
             }
             catch (Exception ex)
             {
-                IndexLogger.Error(ex);
+                Logger.Error(ex);
             }
         }
     }

@@ -6,8 +6,8 @@
 <link href="Styles/Flexbox.css" rel="stylesheet" />
     <style>
         b {
-font-color: red;
-}
+        font-color: red;
+        }
     </style>
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
     <p id="divMsgs" runat="server">

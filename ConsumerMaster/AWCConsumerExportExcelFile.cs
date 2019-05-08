@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 
@@ -21,7 +20,7 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                string tradingPartnerId = "5";//Agency With Choice = 5
+                string tradingPartnerId = "5";  //Agency With Choice = 5
                 string ceQuery = "SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
                                 "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, ISNULL(c.address_line_2, ' ') AS address_line_2, " +
                                 "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +

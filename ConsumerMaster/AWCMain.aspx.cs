@@ -16,8 +16,9 @@ namespace ConsumerMaster
             const string filename = @"AWCConsumerExport.xlsx";
             try
             {
-                AWCConsumerExportExcelFile consumerExport = new AWCConsumerExportExcelFile();
-                Workbook workbook = consumerExport.CreateWorkbook();
+                string tradingPartnerId = "5"; //Agency With Choice;In Home
+                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                Workbook workbook = consumerExport.CreateWorkbook(tradingPartnerId);
                 Utility utility = new Utility();
                 utility.DownloadExcelFile(workbook, filename);
             }

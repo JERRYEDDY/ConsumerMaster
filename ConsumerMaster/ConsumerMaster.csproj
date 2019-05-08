@@ -199,6 +199,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="EIMain.aspx" />
+    <Content Include="Images\ATFLogo1.png" />
+    <Content Include="Images\EILogo1.png" />
     <Content Include="NewConsumers.aspx" />
     <Content Include="Consumers.aspx" />
     <Content Include="AWCMain.aspx" />
@@ -308,6 +311,14 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EIServiceExportExcelFile.cs" />
+    <Compile Include="EIMain.aspx.cs">
+      <DependentUpon>EIMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EIMain.aspx.designer.cs">
+      <DependentUpon>EIMain.aspx</DependentUpon>
+    </Compile>
     <Compile Include="NewConsumers.aspx.cs">
       <DependentUpon>NewConsumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -370,7 +381,7 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="EIBillingTransactions.cs" />
-    <Compile Include="EIServiceExportExcelFile.cs" />
+    <Compile Include="EIServiceExportExcelFileReadWrite.cs" />
     <Compile Include="ConsumerExportFormat.cs" />
     <Compile Include="ConsumerRatioReportFormat.cs" />
     <Compile Include="ServiceExportFormat.cs" />
