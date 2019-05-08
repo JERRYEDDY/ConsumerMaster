@@ -66,63 +66,35 @@ namespace ConsumerMaster
             string connString = csb.ToString();
         }
 
-        public void DownloadExcelFile(Workbook workbook, string filename)
-        {
-            try
-            {
-                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-                byte[] renderedBytes;
+        //protected void AWCConsumerExportDownload_Click(object sender, EventArgs e)
+        //{
+        //    const string filename = @"AWCConsumerExport.xlsx";
+        //    try
+        //    {
+        //        AWCConsumerExportExcelFile consumerExport = new AWCConsumerExportExcelFile();
+        //        Workbook workbook = consumerExport.CreateWorkbook();
+        //        DownloadExcelFile(workbook,filename);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        IndexLogger.Error(ex);
+        //    }
+        //}
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    formatProvider.Export(workbook, ms);
-                    renderedBytes = ms.ToArray();
-                }
-
-                HttpContext.Current.Response.ClearHeaders();
-                HttpContext.Current.Response.ClearContent();
-                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + filename);
-                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                HttpContext.Current.Response.BinaryWrite(renderedBytes);
-                HttpContext.Current.Response.Flush();
-                HttpContext.Current.Response.SuppressContent = true;
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
-        protected void AWCConsumerExportDownload_Click(object sender, EventArgs e)
-        {
-            const string filename = @"AWCConsumerExport.xlsx";
-            try
-            {
-                AWCConsumerExportExcelFile consumerExport = new AWCConsumerExportExcelFile();
-                Workbook workbook = consumerExport.CreateWorkbook();
-                DownloadExcelFile(workbook,filename);
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
-        protected void AWCServiceExportDownload_Click(object sender, EventArgs e)
-        {
-            const string filename = @"AWCServiceExport.xlsx";
-            try
-            {
-                AWCServiceExportExcelFile serviceExport = new AWCServiceExportExcelFile();
-                Workbook workbook = serviceExport.CreateWorkbook();
-                DownloadExcelFile(workbook, filename);
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
+        //protected void AWCServiceExportDownload_Click(object sender, EventArgs e)
+        //{
+        //    const string filename = @"AWCServiceExport.xlsx";
+        //    try
+        //    {
+        //        AWCServiceExportExcelFile serviceExport = new AWCServiceExportExcelFile();
+        //        Workbook workbook = serviceExport.CreateWorkbook();
+        //        DownloadExcelFile(workbook, filename);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        IndexLogger.Error(ex);
+        //    }
+        //}
 
         protected void ConsumerExportDownload_Click(object sender, EventArgs e)
         {
@@ -133,7 +105,8 @@ namespace ConsumerMaster
 
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                DownloadExcelFile(workbook, filename);
+                Utility utility = new Utility();
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
@@ -148,13 +121,15 @@ namespace ConsumerMaster
             {
                 EIServiceExportExcelFile serviceExport = new EIServiceExportExcelFile();
                 Workbook workbook = serviceExport.CreateWorkbook();
-                DownloadExcelFile(workbook, filename);
+                Utility utility = new Utility();
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
                 IndexLogger.Error(ex);
             }
         }
+
         private void BindToTPDropDownList(RadDropDownList dropdownlist)
         {
             try
@@ -185,56 +160,29 @@ namespace ConsumerMaster
             }
         }
 
-        private void BindToATF_TPDropDownList(RadDropDownList dropdownlist)
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
-                {
-                    con.Open();
-                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
-                    {
-                        DataTable tradingPartners = new DataTable();
-                        adapter.Fill(tradingPartners);
-
-                        dropdownlist.DataTextField = "name";
-                        dropdownlist.DataValueField = "trading_partner_id";
-                        dropdownlist.DataSource = tradingPartners;
-                        dropdownlist.DataBind();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
-        //private static void ShowCheckedItems(RadComboBox comboBox, Literal literal)
+        //private void BindToATF_TPDropDownList(RadDropDownList dropdownlist)
         //{
-        //    var sb = new StringBuilder();
-        //    var collection = comboBox.CheckedItems;
-
-        //    if (collection.Count != 0)
+        //    try
         //    {
-        //        sb.Append("<h3>Checked Items:</h3><ul class=\"results\">");
+        //        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+        //        {
+        //            con.Open();
+        //            using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT id AS trading_partner_id, name FROM TradingPartners WHERE id IN (1, 2, 3, 4)", con))
+        //            {
+        //                DataTable tradingPartners = new DataTable();
+        //                adapter.Fill(tradingPartners);
 
-        //        foreach (var item in collection)
-        //            sb.Append("<li>" + item.Text + "</li>");
-
-        //        sb.Append("</ul>");
-
-        //        literal.Text = sb.ToString();
+        //                dropdownlist.DataTextField = "name";
+        //                dropdownlist.DataValueField = "trading_partner_id";
+        //                dropdownlist.DataSource = tradingPartners;
+        //                dropdownlist.DataBind();
+        //            }
+        //        }
         //    }
-        //    else
+        //    catch (Exception ex)
         //    {
-        //        literal.Text = "<p>No items selected</p>";
+        //        IndexLogger.Error(ex);
         //    }
-        //}
-
-        //protected void Button1_Click(object sender, EventArgs e)
-        //{
-        //    ShowCheckedItems(RadComboBox1, itemsClientSide);
         //}
     }
 }

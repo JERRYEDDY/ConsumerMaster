@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Reflection;
+using System.Web;
+using System.IO;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.TextBased.Csv;
+using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace ConsumerMaster
 {
@@ -61,6 +65,51 @@ namespace ConsumerMaster
                 Logger.Error(ex);
                 return cpcData;
             };
+        }
+
+        public void DownloadExcelFile(Workbook workbook, string fileName)
+        {
+            try
+            {
+                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+                byte[] renderedBytes;
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    formatProvider.Export(workbook, ms);
+                    renderedBytes = ms.ToArray();
+                }
+
+                HttpContext.Current.Response.ClearHeaders();
+                HttpContext.Current.Response.ClearContent();
+                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + fileName);
+                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                HttpContext.Current.Response.BinaryWrite(renderedBytes);
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.SuppressContent = true;
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        public void DownloadCSVFile(Workbook workbook, string fileName)
+        {
+            try
+            {
+                IWorkbookFormatProvider formatProvider = new CsvFormatProvider();
+
+                using (Stream output = new FileStream(fileName, FileMode.Create))
+                {
+                    formatProvider.Export(workbook, output);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
     }
 }

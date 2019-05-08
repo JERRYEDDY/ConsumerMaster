@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Web;
-using System.IO;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data.SqlClient;
 using System.Data;
@@ -29,35 +25,8 @@ namespace ConsumerMaster
                 string selectedValue = ATFConsumerList.SelectedValue;
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                DownloadExcelFile(workbook, filename);
-            }
-            catch (Exception ex)
-            {
-                IndexLogger.Error(ex);
-            }
-        }
-
-        public void DownloadExcelFile(Workbook workbook, string filename)
-        {
-            try
-            {
-                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-                byte[] renderedBytes;
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    formatProvider.Export(workbook, ms);
-                    renderedBytes = ms.ToArray();
-                }
-
-                HttpContext.Current.Response.ClearHeaders();
-                HttpContext.Current.Response.ClearContent();
-                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + filename);
-                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                HttpContext.Current.Response.BinaryWrite(renderedBytes);
-                HttpContext.Current.Response.Flush();
-                HttpContext.Current.Response.SuppressContent = true;
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
+                Utility utility = new Utility();
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
@@ -73,7 +42,8 @@ namespace ConsumerMaster
                 string selectedValue = ATFServiceList.SelectedValue;
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
                 Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
-                DownloadExcelFile(workbook, filename);
+                Utility utility = new Utility();
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 
@@ -11,24 +10,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         private static readonly int IndexRowItemStart = 0;
-
         private static readonly ThemableColor InvoiceBackground = ThemableColor.FromArgb(255, 44, 62, 80);
-
-        //Dictionary<int, string> ceHeader = new Dictionary<int, string>
-        //{
-        //    {0, "consumer_internal_number"},
-        //    {1, "trading_partner_string"},
-        //    {2, "consumer_first"},
-        //    {3, "consumer_last"},
-        //    {4, "date_of_birth"},
-        //    {5, "address_line_1"},
-        //    {6, "address_line_2"},
-        //    {7, "city"},
-        //    {8, "state"},
-        //    {9, "zip_code"},
-        //    {10, "identifier"},
-        //    {11, "gender"}
-        //};
 
         public Workbook CreateWorkbook()
         {

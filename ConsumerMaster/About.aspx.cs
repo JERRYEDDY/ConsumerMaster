@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Web.UI;
-using System.IO;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
-using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.Model;
-using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
@@ -61,35 +57,8 @@ namespace ConsumerMaster
 
                 ATFConsumerRatioReport ratioReport = new ATFConsumerRatioReport();
                 Workbook workbook = ratioReport.CreateWorkbook(startDate, endDate, siteId, siteName);
-                DownloadExcelFile(workbook, filename);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        public void DownloadExcelFile(Workbook workbook, string filename)
-        {
-            try
-            {
-                IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
-                byte[] renderedBytes;
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    formatProvider.Export(workbook, ms);
-                    renderedBytes = ms.ToArray();
-                }
-
-                HttpContext.Current.Response.ClearHeaders();
-                HttpContext.Current.Response.ClearContent();
-                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + filename);
-                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                HttpContext.Current.Response.BinaryWrite(renderedBytes);
-                HttpContext.Current.Response.Flush();
-                HttpContext.Current.Response.SuppressContent = true;
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
+                Utility utility = new Utility();
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
