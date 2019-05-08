@@ -33,11 +33,11 @@ namespace ConsumerMaster
                 Utility util = new Utility();
 
                 List<string> tppList = util.GetList("SELECT symbol FROM TradingPartnerPrograms");
-                CreateDropDownListWorksheet(sheet2Worksheet, tppList);
+                CreateDropDownListWorksheet(sheet2Worksheet, tppList, "trading_partner_program");
 
                 //Early Intervention Direct Therapy; In Home = 7 or Early Intervention Special Instruction; In Home = 8 
                 List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = " + tradingPartnerId);
-                CreateDropDownListWorksheet(sheet3Worksheet, cpcList);
+                CreateDropDownListWorksheet(sheet3Worksheet, cpcList, "composite_procedure_code");
 
                 ServiceExportFormat sef = new ServiceExportFormat();
 
@@ -118,44 +118,6 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private void CreateDropDownListWorksheet(Worksheet worksheet, List<string> cpcList)
-        {
-            try
-            {
-                PrepareSheet2Worksheet(worksheet);
-
-                int currentRow = IndexRowItemStart + 1;
-                foreach (String cpCode in cpcList)
-                {
-                    worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
-                    currentRow++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        private void CreateCompositeProcedureCodesWorksheet(Worksheet worksheet, List<string> cpcList)
-        {
-            try
-            {
-                PrepareSheet2Worksheet(worksheet);
-
-                int currentRow = IndexRowItemStart + 1;
-                foreach (String cpCode in cpcList)
-                {
-                    worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
-                    currentRow++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
         private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
             try
@@ -184,11 +146,29 @@ namespace ConsumerMaster
             }
         }
 
-        private void PrepareSheet2Worksheet(Worksheet worksheet)
+        private void CreateDropDownListWorksheet(Worksheet worksheet, List<string> cpcList, string header)
         {
             try
             {
-                worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue("composite_procedure_code");
+                PrepareDropDownListWorksheet(worksheet, header);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (String cpCode in cpcList)
+                {
+                    worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
+                    currentRow++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+        private void PrepareDropDownListWorksheet(Worksheet worksheet, string header)
+        {
+            try
+            {
+                worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue(header);
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
             catch (Exception ex)
