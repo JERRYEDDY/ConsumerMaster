@@ -36,7 +36,7 @@ namespace ConsumerMaster
             {14, new ServiceExportColumn {Include=true,Name="referring_provider_id"} },
             {15, new ServiceExportColumn {Include=true,Name="referring_provider_first_name"} },
             {16, new ServiceExportColumn {Include=true,Name="referring_provider_last_name"} },
-            {17, new ServiceExportColumn {Include=true,Name="renderingnames"} },
+            {17, new ServiceExportColumn {Include=true,Name="rendering_names"} },
             {18, new ServiceExportColumn {Include=true,Name="rendering_provider_id"} },
             {19, new ServiceExportColumn {Include=true,Name="rendering_provider_secondary_id"} },
             {20, new ServiceExportColumn {Include=true,Name="rendering_provider_first_name"} },

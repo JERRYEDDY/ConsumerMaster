@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
+using System.Text;
 using System.Windows.Media;
 
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
@@ -42,21 +43,28 @@ namespace ConsumerMaster
                 List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = " + tradingPartnerId);
                 CreateDropDownListWorksheet(sheet3Worksheet, cpcList, "composite_procedure_code");
 
+                DataTable rnDataTable = util.GetDataTable("SELECT name, '   ' AS npi, ma_number, first_name, last_name FROM RenderingProviders WHERE npi IS NULL ORDER BY last_name");
+                int rnCount = rnDataTable.Rows.Count;
+                PrepareSheet4Worksheet(sheet4Worksheet);
 
                 List<string> bnList = new List<string>() { "CC11006", "CC11029", "CC11032", "CC11049", "CC11050" };     //Billing Note List
                 CreateDropDownListWorksheet(sheet5Worksheet, bnList, "billing_note");
 
-
                 EISIServiceExportFormat sef = new EISIServiceExportFormat();
-                string seQuery =
-                    "SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number," +
-                    " tp.symbol AS trading_partner_string, 'waiver' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, " +
-                    "c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, " +
-                    " ' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ' ' AS rendering_provider_id, " +
-                    "' ' AS rendering_provider_first_name, ' ' AS rendering_provider_last_name FROM Consumers AS c " +
-                    "INNER JOIN TradingPartners AS tp ON " + tradingPartnerId + " = tp.id" + 
-                    " WHERE c.trading_partner_id1 = " + tradingPartnerId + " OR c.trading_partner_id2 = " + tradingPartnerId + " OR c.trading_partner_id3 = " + tradingPartnerId + 
-                    " ORDER BY consumer_last";
+
+                StringBuilder queryBuilder = new StringBuilder();
+                queryBuilder.Append("SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, ");
+                queryBuilder.Append("tp.symbol AS trading_partner_string, ' ' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, ");
+                queryBuilder.Append("c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, ");
+                queryBuilder.Append("' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ");
+                queryBuilder.Append("' ' AS rendering_names, ' ' AS rendering_provider_id, ' ' AS rendering_provider_secondary_id, ' ' AS rendering_provider_first_name, ");
+                queryBuilder.Append("' ' AS rendering_provider_last_name, ' ' AS rendering_provider_taxonomy_code, ' ' AS billing_note FROM Consumers AS c ");
+                queryBuilder.AppendFormat("INNER JOIN TradingPartners AS tp ON {0} = tp.id ", tradingPartnerId);
+                queryBuilder.AppendFormat("WHERE c.trading_partner_id1 = {0} ", tradingPartnerId);
+                queryBuilder.AppendFormat("OR c.trading_partner_id2 = {0} ", tradingPartnerId);
+                queryBuilder.AppendFormat("OR c.trading_partner_id3 = {0} ", tradingPartnerId);
+                queryBuilder.Append("ORDER BY consumer_last");
+                string seQuery = queryBuilder.ToString();
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
                 int totalConsumers = seDataTable.Rows.Count;
@@ -74,30 +82,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("trading_partner_program_string")].SetValue(dr["trading_partner_program_string"].ToString());
-                    CellIndex dataValidationRuleCellIndex1 = new CellIndex(currentRow, sef.GetIndex("composite_procedure_code_string"));
-                    ListDataValidationRuleContext context1 = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex1)
-                    {
-                        InputMessageTitle = "Restricted input",
-                        InputMessageContent = "The input is restricted to the composite procedure codes.",
-                        ErrorStyle = ErrorStyle.Stop,
-                        ErrorAlertTitle = "Wrong value",
-                        ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
-                        InCellDropdown = true
-                    };
-                    string listRange1 = "=Sheet2!$A$2:$A$" + tppList.Count + 1;  //= Sheet2!$A$2:$A$73
-                    context1.Argument1 = listRange1; //   
-                    ListDataValidationRule rule1 = new ListDataValidationRule(context1);
-                    sheet1Worksheet.Cells[dataValidationRuleCellIndex1].SetDataValidationRule(rule1);
-
-
-
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["start_date_string"].ToString());
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("end_date_string")].SetValue(dr["end_date_string"].ToString());
-
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
-
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
-                    CellIndex dataValidationRuleCellIndex2 = new CellIndex(currentRow, sef.GetIndex("composite_procedure_code_string"));
+                    CellIndex dataValidationRuleCellIndex2 = new CellIndex(currentRow, sef.GetIndex("trading_partner_program_string"));
                     ListDataValidationRuleContext context2 = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex2)
                     {
                         InputMessageTitle = "Restricted input",
@@ -107,10 +92,31 @@ namespace ConsumerMaster
                         ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
                         InCellDropdown = true
                     };
-                    string listRange2 = "=Sheet3!$A$2:$A$" + cpcList.Count + 1;  //= Sheet2!$A$2:$A$73
+                    string listRange2 = "=Sheet2!$A$2:$A$" + tppList.Count + 1;  //= Sheet2!$A$2:$A$
                     context2.Argument1 = listRange2; //   
-                    ListDataValidationRule rule = new ListDataValidationRule(context2);
-                    sheet1Worksheet.Cells[dataValidationRuleCellIndex2].SetDataValidationRule(rule);
+                    ListDataValidationRule rule2 = new ListDataValidationRule(context2);
+                    sheet1Worksheet.Cells[dataValidationRuleCellIndex2].SetDataValidationRule(rule2);
+
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["start_date_string"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("end_date_string")].SetValue(dr["end_date_string"].ToString());
+
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("diagnosis_code_1_code")].SetValue(dr["diagnosis_code_1_code"].ToString());
+
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("composite_procedure_code_string")].SetValue(dr["composite_procedure_code_string"].ToString());
+                    CellIndex dataValidationRuleCellIndex3 = new CellIndex(currentRow, sef.GetIndex("composite_procedure_code_string"));
+                    ListDataValidationRuleContext context3 = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex3)
+                    {
+                        InputMessageTitle = "Restricted input",
+                        InputMessageContent = "The input is restricted to the composite procedure codes.",
+                        ErrorStyle = ErrorStyle.Stop,
+                        ErrorAlertTitle = "Wrong value",
+                        ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
+                        InCellDropdown = true
+                    };
+                    string listRange3 = "=Sheet3!$A$2:$A$" + cpcList.Count + 1;  //= Sheet3!$A$2:$A$
+                    context3.Argument1 = listRange3; //   
+                    ListDataValidationRule rule3 = new ListDataValidationRule(context3);
+                    sheet1Worksheet.Cells[dataValidationRuleCellIndex3].SetDataValidationRule(rule3);
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["units"].ToString());
 
@@ -121,15 +127,44 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_first_name")].SetValue(dr["referring_provider_first_name"].ToString());          //"referring_provider_first_name"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("referring_provider_last_name")].SetValue(dr["referring_provider_last_name"].ToString());            //"referring_provider_last_name"
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_names")].SetValue(" ");                                                                   //"rendering_names"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());                          //"rendering_provider_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(" ");                                                   //"rendering_provider_secondary_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_names")].SetValue(dr["rendering_names"].ToString());                                      //"rendering_names"
+                    CellIndex dataValidationRuleCellIndex4 = new CellIndex(currentRow, sef.GetIndex("rendering_names"));
+                    ListDataValidationRuleContext context4 = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex4)
+                    {
+                        InputMessageTitle = "Restricted input",
+                        InputMessageContent = "The input is restricted to the composite procedure codes.",
+                        ErrorStyle = ErrorStyle.Stop,
+                        ErrorAlertTitle = "Wrong value",
+                        ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
+                        InCellDropdown = true
+                    };
+                    string listRange4 = "=Sheet4!$A$2:$A$" + rnCount + 1;  //= Sheet4!$A$2:$A$
+                    context4.Argument1 = listRange4; //   
+                    ListDataValidationRule rule4 = new ListDataValidationRule(context4);
+                    sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
+
+                    string rpId = "VLOOKUP(Q2, Sheet4!A2:E" + (rnCount + 1) + ", 2, FALSE)";
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue("=VLOOKUP(Q2,Sheet4!A2:E189,2,FALSE)");                          //"rendering_provider_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(dr["rendering_provider_secondary_id"].ToString());      //"rendering_provider_secondary_id"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(dr["rendering_provider_first_name"].ToString());          //"rendering_provider_first_name"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());            //"rendering_provider_last_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(" ");                                                  //"rendering_provider_taxonomy_code"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(dr["rendering_provider_taxonomy_code"].ToString());                                                  //"rendering_provider_taxonomy_code"
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(" ");                                                                      //"billing_note"
-
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(dr["billing_note"].ToString());                                            //"billing_note"
+                    CellIndex dataValidationRuleCellIndex5 = new CellIndex(currentRow, sef.GetIndex("billing_note"));
+                    ListDataValidationRuleContext context5 = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex5)
+                    {
+                        InputMessageTitle = "Restricted input",
+                        InputMessageContent = "The input is restricted to the composite procedure codes.",
+                        ErrorStyle = ErrorStyle.Stop,
+                        ErrorAlertTitle = "Wrong value",
+                        ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
+                        InCellDropdown = true
+                    };
+                    string listRange5 = "=Sheet5!$A$2:$A$" + bnList.Count + 1;  //= Sheet5!$A$2:$A$
+                    context5.Argument1 = listRange5; //   
+                    ListDataValidationRule rule5 = new ListDataValidationRule(context5);
+                    sheet1Worksheet.Cells[dataValidationRuleCellIndex5].SetDataValidationRule(rule5);
 
                     currentRow++;
                 }
@@ -192,12 +227,58 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
         private void PrepareDropDownListWorksheet(Worksheet worksheet, string header)
         {
             try
             {
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue(header);
                 worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        private void PrepareSheet4Worksheet(Worksheet worksheet)
+        {
+            try
+            {
+                string[] columnsList = { "name", "npi", "ma_number", "first_name", "last_name" };
+                foreach (string column in columnsList)
+                {
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
+
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        private void CreateSheet4Worksheet(Worksheet worksheet, DataTable dTable)
+        {
+            try
+            {
+                PrepareSheet4Worksheet(worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+
+
+                foreach (DataRow dr in dTable.Rows)
+                {
+                    worksheet.Cells[currentRow, 0].SetValue(dr["name"].ToString());
+                    worksheet.Cells[currentRow, 0].SetValue(dr["npi"].ToString());
+                    worksheet.Cells[currentRow, 0].SetValue(dr["ma_number"].ToString());
+                    worksheet.Cells[currentRow, 0].SetValue(dr["first_name"].ToString());
+                    worksheet.Cells[currentRow, 0].SetValue(dr["last_name"].ToString());
+                    currentRow++;
+                }
             }
             catch (Exception ex)
             {
