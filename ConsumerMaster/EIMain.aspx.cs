@@ -40,7 +40,7 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = EIServiceList.SelectedValue;
-                EIServiceExportExcelFile serviceExport = new EIServiceExportExcelFile();
+                EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
                 Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
                 Utility utility = new Utility();
                 utility.DownloadExcelFile(workbook, filename);
