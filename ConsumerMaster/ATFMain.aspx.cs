@@ -11,6 +11,8 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
+        public string[] Program = new string[] {" ", "W", "G", "TW", "TG"};
+
         protected void Page_Load(object sender, EventArgs e)
         {
             BindToATF_TPDropDownList(ATFConsumerList);
@@ -19,10 +21,12 @@ namespace ConsumerMaster
 
         protected void ATFConsumerExportDownload_Click(object sender, EventArgs e)
         {
-            const string filename = @"ATFConsumerExport.xlsx";
             try
             {
                 string selectedValue = ATFConsumerList.SelectedValue;
+                int id = Convert.ToInt32(selectedValue);
+                string filename = @"ATF" + Program[id] + "ConsumerExport.xlsx";
+
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
                 Utility utility = new Utility();
@@ -36,10 +40,12 @@ namespace ConsumerMaster
 
         protected void ATFServiceExportDownload_Click(object sender, EventArgs e)
         {
-            const string filename = @"ATFServiceExport.xlsx";
             try
             {
                 string selectedValue = ATFServiceList.SelectedValue;
+                int id = Convert.ToInt32(selectedValue);
+                string filename = @"ATF" + Program[id] + "ServiceExport.xlsx";
+
                 ATFServiceExportExcelFile serviceExport = new ATFServiceExportExcelFile();
                 Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
                 Utility utility = new Utility();
