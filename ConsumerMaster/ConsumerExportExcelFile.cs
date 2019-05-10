@@ -2,6 +2,7 @@
 using System;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
+using System.Text;
 
 namespace ConsumerMaster
 {
@@ -19,12 +20,16 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                string ceQuery ="SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, " +
-                                 "c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, ISNULL(c.address_line_2, ' ') AS address_line_2, " +
-                                 "c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c " +
-                                 "INNER JOIN TradingPartners AS tp ON " + tradingPartnerId + " = tp.id" +
-                                " WHERE c.trading_partner_id1 = " + tradingPartnerId + " OR c.trading_partner_id2 = " + tradingPartnerId + " OR c.trading_partner_id3 = " + tradingPartnerId +
-                                " ORDER BY consumer_last";
+                StringBuilder queryBuilder = new StringBuilder();
+                queryBuilder.Append("SELECT c.consumer_internal_number AS consumer_internal_number, tp.symbol AS trading_partner_string, c.consumer_first AS consumer_first, ");
+                queryBuilder.Append("c.consumer_last AS consumer_last, c.date_of_birth AS date_of_birth, c.address_line_1 AS address_line_1, ISNULL(c.address_line_2, ' ') AS address_line_2, ");
+                queryBuilder.Append("c.city AS city, c.state AS state, c.zip_code AS zip_code, c.identifier AS identifier, c.gender AS gender FROM Consumers AS c ");
+                queryBuilder.AppendFormat("INNER JOIN TradingPartners AS tp ON {0} = tp.id ", tradingPartnerId);
+                queryBuilder.AppendFormat("WHERE c.trading_partner_id1 = {0} ", tradingPartnerId);
+                queryBuilder.AppendFormat("OR c.trading_partner_id2 = {0} ", tradingPartnerId);
+                queryBuilder.AppendFormat("OR c.trading_partner_id3 = {0} ", tradingPartnerId);
+                queryBuilder.Append(" ORDER BY consumer_last");
+                string ceQuery = queryBuilder.ToString();
 
                 Utility util = new Utility();
                 ConsumerExportFormat cef = new ConsumerExportFormat();
