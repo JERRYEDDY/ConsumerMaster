@@ -143,17 +143,17 @@ namespace ConsumerMaster
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
 
-                    string rpIdLookup = "=VLOOKUP(R" + rowNumber + ", Sheet4!A2:E" + (rnCount + 1) + ", 2, FALSE)";
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(rpIdLookup);                          //"rendering_provider_id"
+                    string baseForm = $"=VLOOKUP(R{rowNumber}, Sheet4!A2:E{(rnCount + 1)}";
+                    string lookupFormula = string.Format(baseForm + ",{0},FALSE)", 2);
 
-                    string rpSecondaryIdLookup = "=VLOOKUP(S" + rowNumber + ", Sheet4!A2:E" + (rnCount + 1) + ", 3, FALSE)";
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(rpSecondaryIdLookup);      //"rendering_provider_secondary_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());             //"rendering_provider_id"
 
-                    string rpFirstNameLookup = "=VLOOKUP(T" + rowNumber + ", Sheet4!A2:E" + (rnCount + 1) + ", 4, FALSE)";
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(rpFirstNameLookup);          //"rendering_provider_first_name"
+                    CellValueFormat maNumberCellValueFormat = new CellValueFormat("0000000000000");
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetFormat(maNumberCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(string.Format(baseForm + ",{0},FALSE)", 3));   //"rendering_provider_secondary_id"
 
-                    string rpLastNameLookup = "=VLOOKUP(U" + rowNumber + ", Sheet4!A2:E" + (rnCount + 1) + ", 5, FALSE)";
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(rpLastNameLookup);            //"rendering_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(string.Format(baseForm + ",{0},FALSE)", 4));     //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(string.Format(baseForm + ",{0},FALSE)", 5));      //"rendering_provider_last_name"
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(dr["rendering_provider_taxonomy_code"].ToString());    //"rendering_provider_taxonomy_code"
 
