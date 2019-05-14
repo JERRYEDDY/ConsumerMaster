@@ -40,10 +40,21 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = EIServiceList.SelectedValue;
-                EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
-                Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
-                Utility utility = new Utility();
-                utility.DownloadExcelFile(workbook, filename);
+
+                if (selectedValue.Equals("7")) // Direct Therapy
+                {
+                    EIDTServiceExportExcelFile serviceExport = new EIDTServiceExportExcelFile();
+                    Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
+                    Utility utility = new Utility();
+                    utility.DownloadExcelFile(workbook, filename);
+                }
+                else if (selectedValue.Equals("8")) //Special Instruction
+                {
+                    EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
+                    Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
+                    Utility utility = new Utility();
+                    utility.DownloadExcelFile(workbook, filename);
+                }
             }
             catch (Exception ex)
             {

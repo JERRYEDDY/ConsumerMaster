@@ -176,6 +176,15 @@
                                     </Items>
                                 </telerik:RadComboBox>                                
                             </li> 
+                            <p id="formInstructions2">Referring providers are required for Early Intervention Direct Therapy Consumers only.</p>
+                            <li>
+                                <label for="cbReferringProvider">Referring Provider:</label> 
+                                <telerik:RadComboBox ID="cbReferringProvider" runat="server" SelectedValue='<%# Bind("referring_provider_id") %>' EmptyMessage="Select" DataSourceID="ReferringProviderDataSource" DataTextField="name" DataValueField="id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
+                                    <Items>
+                                        <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
+                                    </Items>
+                                </telerik:RadComboBox>                                
+                            </li> 
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
@@ -220,4 +229,6 @@
 <asp:SqlDataSource ID="TradingPartnerDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, short_name FROM TradingPartners"/>
 <asp:SqlDataSource ID="PartnerProgramDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, partner_name, program_name FROM PartnerPrograms2"/>
 <asp:SqlDataSource ID="CompositeProcedureCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>
+<asp:SqlDataSource ID="ReferringProviderDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM ReferringProviders"></asp:SqlDataSource>
+
 </asp:Content>

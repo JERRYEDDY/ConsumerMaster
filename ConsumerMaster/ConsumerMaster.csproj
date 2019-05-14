@@ -311,6 +311,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EIDTServiceExportExcelFile.cs" />
     <Compile Include="EISIServiceExportExcelFile.cs" />
     <Compile Include="EIMain.aspx.cs">
       <DependentUpon>EIMain.aspx</DependentUpon>
@@ -319,6 +320,7 @@
     <Compile Include="EIMain.aspx.designer.cs">
       <DependentUpon>EIMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EIDTServiceExportFormat.cs" />
     <Compile Include="NewConsumers.aspx.cs">
       <DependentUpon>NewConsumers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

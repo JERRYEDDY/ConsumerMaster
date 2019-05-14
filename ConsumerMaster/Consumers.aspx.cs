@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 namespace ConsumerMaster
@@ -71,7 +70,8 @@ namespace ConsumerMaster
             //Populate the Radgrid1
             string selectQuery =
                 "SELECT c.consumer_internal_number,c.consumer_first,c.consumer_last,c.date_of_birth,c.address_line_1,c.address_line_2,c.city, " +
-                "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis, tp1.id AS tpId1, tp1.short_name AS tpName1, tp2.id AS tpId2, tp2.short_name AS tpName2, tp3.id AS tpId3,tp3.short_name AS tpName3 " + 
+                "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis, tp1.id AS tpId1, tp1.short_name AS tpName1, tp2.id AS tpId2, tp2.short_name AS tpName2, " + 
+                " tp3.id AS tpId3,tp3.short_name AS tpName3, referring_provider_id " + 
                 "FROM[ConsumerMaster].[dbo].[Consumers] AS c " +
                 "LEFT JOIN TradingPartners AS tp1 ON c.trading_partner_id1 = tp1.id " + 
                 "LEFT JOIN TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id " +
@@ -300,6 +300,7 @@ namespace ConsumerMaster
         {
             RadGrid1.Controls.Add(new LiteralControl($"<span style='color:red'>{text}</span>"));
         }
+
         protected void RadButton_Click(object sender, EventArgs e)
         {
             Response.Write("A server click has been executed!");
