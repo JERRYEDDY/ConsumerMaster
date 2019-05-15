@@ -19,10 +19,6 @@ namespace ConsumerMaster
         {
             if (RadGrid1.SelectedIndexes.Count != 0) return;
             RadGrid1.SelectedIndexes.Add(0);
-
-            //if (RadGrid1.SelectedIndexes.Count != 0 || RadGrid2.SelectedIndexes.Count != 0) return;
-            //RadGrid1.SelectedIndexes.Add(0);
-            //RadGrid2.SelectedIndexes.Add(0);
         }
 
  /***********RADGRID1******************************************************************************************************************************/

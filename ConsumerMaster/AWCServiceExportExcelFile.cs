@@ -95,6 +95,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(dr["rendering_provider_last_name"].ToString());
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(" ");
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(" ");
 
                     currentRow++;
                 }

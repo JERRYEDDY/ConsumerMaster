@@ -44,7 +44,7 @@ namespace ConsumerMaster
                 CreateSheet3Worksheet(sheet3Worksheet,cpcDataTable);
                 //CreateDropDownListWorksheet(sheet3Worksheet, cpcList, "composite_procedure_code");
 
-                DataTable rnDataTable = util.GetDataTable("SELECT name, '   ' AS npi, ma_number, first_name, last_name FROM RenderingProviders WHERE npi IS NULL ORDER BY last_name");
+                DataTable rnDataTable = util.GetDataTable("SELECT name, npi_number, ma_number, first_name, last_name FROM RenderingProviders WHERE npi_number IS NOT NULL ORDER BY last_name");
                 int rnCount = rnDataTable.Rows.Count;
                 CreateSheet4Worksheet(sheet4Worksheet, rnDataTable);
 
@@ -120,7 +120,6 @@ namespace ConsumerMaster
                     context3.Argument1 = listRange3; //   
                     ListDataValidationRule rule3 = new ListDataValidationRule(context3);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex3].SetDataValidationRule(rule3);
-
                     string taxonomyLookup = "=VLOOKUP(J" + rowNumber + ",Sheet3!A2:B4,2,FALSE)";
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(taxonomyLookup);    //"rendering_provider_taxonomy_code"
 
@@ -148,16 +147,17 @@ namespace ConsumerMaster
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());   //"rendering_provider_id"
-                    CellValueFormat maNumberCellValueFormat = new CellValueFormat("0000000000000");
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetFormat(maNumberCellValueFormat);
-
                     string rpString = $"=VLOOKUP(S{rowNumber}, Sheet4!A2:E{rnCount}, ";
-                    string rpSecondary = rpString + "3, FALSE)";
+                    string rpNPI = rpString + "2, FALSE)";
                     string rpFirstName = rpString + "4, FALSE)";
-                    string rpLastName =  rpString + "5, FALSE)";
+                    string rpLastName = rpString + "5, FALSE)";
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(rpSecondary);   //"rendering_provider_secondary_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(rpNPI);   //"rendering_provider_id"
+                    CellValueFormat npiNumberCellValueFormat = new CellValueFormat("0000000000000");
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetFormat(npiNumberCellValueFormat);
+
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(dr["rendering_provider_secondary_id"].ToString());   //"rendering_provider_secondary_id"
+
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(rpFirstName);     //"rendering_provider_first_name"
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(rpLastName);      //"rendering_provider_last_name"
 
@@ -328,7 +328,7 @@ namespace ConsumerMaster
         {
             try
             {
-                string[] columnsList = { "name", "npi", "ma_number", "first_name", "last_name" };
+                string[] columnsList = { "name", "npi_number", "ma_number", "first_name", "last_name" };
                 foreach (string column in columnsList)
                 {
                     int columnKey = Array.IndexOf(columnsList, column);
@@ -354,7 +354,7 @@ namespace ConsumerMaster
                 foreach (DataRow dr in dTable.Rows)
                 {
                     worksheet.Cells[currentRow, 0].SetValue(dr["name"].ToString());
-                    worksheet.Cells[currentRow, 1].SetValue(dr["npi"].ToString());
+                    worksheet.Cells[currentRow, 1].SetValue(dr["npi_number"].ToString());
                     worksheet.Cells[currentRow, 2].SetValue(dr["ma_number"].ToString());
                     worksheet.Cells[currentRow, 3].SetValue(dr["first_name"].ToString());
                     worksheet.Cells[currentRow, 4].SetValue(dr["last_name"].ToString());

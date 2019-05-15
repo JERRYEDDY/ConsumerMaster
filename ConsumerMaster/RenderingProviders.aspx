@@ -49,18 +49,18 @@
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
                     </telerik:GridBoundColumn>
-                    <telerik:GridBoundColumn DataField="ma_number" HeaderText="Medicad #" SortExpression="ma_number" UniqueName="ma_number">
+                    <telerik:GridBoundColumn DataField="ma_number" HeaderText="MA Number" SortExpression="ma_number" UniqueName="ma_number">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field ma_number is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
-                    </telerik:GridBoundColumn>                    
-                    <telerik:GridBoundColumn DataField="taxonomy_number" HeaderText="Taxonomy #" SortExpression="taxonomy_number" UniqueName="taxonomy_number">
+                    </telerik:GridBoundColumn>     
+                    <telerik:GridBoundColumn DataField="npi_number" HeaderText="NPI Number" SortExpression="npi_number" UniqueName="npi_number">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
-                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field taxonomy_number is required" />
+                            <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field npi_number is required" />
                             <ModelErrorMessage BackColor="Red" />
                         </ColumnValidationSettings>
-                    </telerik:GridBoundColumn>
+                    </telerik:GridBoundColumn> 
                     <telerik:GridBoundColumn DataField="name" HeaderText="Name" SortExpression="name" UniqueName="name" ReadOnly="True">
                         <ColumnValidationSettings EnableRequiredFieldValidation="true" EnableModelErrorMessageValidation="true">
                             <RequiredFieldValidator ForeColor="Red" ErrorMessage="This field name is required" />
@@ -86,18 +86,14 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="last_name" ErrorMessage="Last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="ma_number">Medicad No *</label> 
+                                <label for="ma_number">MA Number *</label> 
                                 <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="Medicad number is required"  ValidationGroup="FormValidationGroup"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="MA number is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="npi_number">NPI No:</label> 
+                                <label for="npi_number">NPI Number:</label> 
                                 <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########"/>
                             </li>
-                            <li>
-                                <label for="taxonomy_number">Taxonomy No:</label> 
-                                <telerik:RadTextBox ID="taxonomy_number" Text='<%# Bind("taxonomy_number") %>' runat="server" TabIndex="5" MaxLength="10"/>
-                           </li>                            
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"

@@ -41,6 +41,7 @@ namespace ConsumerMaster
             {19, new ServiceExportColumn {Include=true,Name="rendering_provider_last_name"} },
             {20, new ServiceExportColumn {Include=true,Name="billing_note"} },
             {21, new ServiceExportColumn {Include=true,Name="rendering_provider_secondary_id"} },
+            {22, new ServiceExportColumn {Include=true,Name="rendering_provider_taxonomy_code"} },
         };
 
         public string[] ColumnStrings;

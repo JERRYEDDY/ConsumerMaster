@@ -42,7 +42,7 @@ namespace ConsumerMaster
                 List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = " + tradingPartnerId);
                 CreateDropDownListWorksheet(sheet3Worksheet, cpcList, "composite_procedure_code");
 
-                DataTable rnDataTable = util.GetDataTable("SELECT name, '   ' AS npi, ma_number, first_name, last_name FROM RenderingProviders WHERE npi IS NULL ORDER BY last_name");
+                DataTable rnDataTable = util.GetDataTable("SELECT name, npi_number, ma_number, first_name, last_name FROM RenderingProviders WHERE npi_number IS NULL ORDER BY last_name");
                 int rnCount = rnDataTable.Rows.Count;
                 CreateSheet4Worksheet(sheet4Worksheet, rnDataTable);
 

@@ -88,9 +88,7 @@
                                 <label for="npi_number">NPI No *:</label> 
                                 <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="npi_number" ErrorMessage="NPI # is required"  ValidationGroup="FormValidationGroup" />
-
                             </li>
-                          
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
