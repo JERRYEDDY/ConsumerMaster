@@ -110,9 +110,12 @@ namespace ConsumerMaster
                 string tradingPartner3 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
+                string referringProvider = ((RadComboBox)insertedItem.FindControl("cbReferringProvider")).SelectedValue;
+                Int32.TryParse(referringProvider, out int referring_provider_id);
+
                 string insertQuery =
-                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, trading_partner_id1, trading_partner_id2, trading_partner_id3)" +
-                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3)";
+                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, trading_partner_id1, trading_partner_id2, trading_partner_id3, referring_provider_id)" +
+                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3, @referring_provider_id)";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -139,6 +142,7 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
                         cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
                         cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
+                        cmd.Parameters.Add("referring_provider_id", SqlDbType.Int).Value = referring_provider_id;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
@@ -171,7 +175,7 @@ namespace ConsumerMaster
 
             string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1," +
                                  " address_line_2=@address_line_2, city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis," +
-                                 " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3" + 
+                                 " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3, referring_provider_id=@referring_provider_id" + 
                                  " WHERE consumer_internal_number=@consumer_internal_number";
             try
             {
@@ -199,6 +203,10 @@ namespace ConsumerMaster
                 string tradingPartner3 = ((RadComboBox)editedItem.FindControl("cbTradingPartner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
+                string referringProvider = ((RadComboBox)editedItem.FindControl("cbReferringProvider")).SelectedValue;
+                Int32.TryParse(referringProvider, out int referring_provider_id);
+
+
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
                     using (SqlCommand cmd = new SqlCommand())
@@ -224,6 +232,8 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
                             cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
                             cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
+
+                            cmd.Parameters.Add("referring_provider_id", SqlDbType.Int).Value = referring_provider_id;
 
                             con.Open();
                             int result = cmd.ExecuteNonQuery();

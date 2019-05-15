@@ -54,10 +54,11 @@ namespace ConsumerMaster
                 queryBuilder.Append("SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, ");
                 queryBuilder.Append("tp.symbol AS trading_partner_string, ' ' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, ");
                 queryBuilder.Append("c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, ");
-                queryBuilder.Append("' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ");
+                queryBuilder.Append("' ' AS referral_number, c.referring_provider_id AS referring_id, rp.npi_number AS referring_provider_id, rp.first_name AS referring_provider_first_name, rp.last_name AS referring_provider_last_name, ");
                 queryBuilder.Append("' ' AS rendering_names, ' ' AS rendering_provider_id, ' ' AS rendering_provider_secondary_id, ' ' AS rendering_provider_first_name, ");
                 queryBuilder.Append("' ' AS rendering_provider_last_name, ' ' AS rendering_provider_taxonomy_code, ' ' AS billing_note FROM Consumers AS c ");
                 queryBuilder.AppendFormat("INNER JOIN TradingPartners AS tp ON {0} = tp.id ", tradingPartnerId);
+                queryBuilder.AppendFormat("LEFT JOIN ReferringProviders rp ON rp.id = c.referring_provider_id ");
                 queryBuilder.AppendFormat("WHERE c.trading_partner_id1 = {0} ", tradingPartnerId);
                 queryBuilder.AppendFormat("OR c.trading_partner_id2 = {0} ", tradingPartnerId);
                 queryBuilder.AppendFormat("OR c.trading_partner_id3 = {0} ", tradingPartnerId);
@@ -90,7 +91,7 @@ namespace ConsumerMaster
                         ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
                         InCellDropdown = true
                     };
-                    string listRange2 = "=Sheet2!$A$2:$A$" + tppCount + 1;  //= Sheet2!$A$2:$A$
+                    string listRange2 = "=Sheet2!$A$2:$A$" + (tppCount + 1);  //= Sheet2!$A$2:$A$
                     context2.Argument1 = listRange2; //   
                     ListDataValidationRule rule2 = new ListDataValidationRule(context2);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex2].SetDataValidationRule(rule2);
@@ -120,9 +121,8 @@ namespace ConsumerMaster
                     ListDataValidationRule rule3 = new ListDataValidationRule(context3);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex3].SetDataValidationRule(rule3);
 
-                    Lookup lu1 = new Lookup(rowNumber, "Sheet3", rnCount);
-                    string ex = lu1.Append(3);
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(lu1.Append(2));    //"rendering_provider_taxonomy_code"
+                    string taxonomyLookup = "=VLOOKUP(J" + rowNumber + ",Sheet3!A2:B4,2,FALSE)";
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(taxonomyLookup);    //"rendering_provider_taxonomy_code"
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["units"].ToString());
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());                            //"manual_billable_rate"
@@ -148,16 +148,18 @@ namespace ConsumerMaster
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
 
-                    Lookup lu2 = new Lookup(rowNumber, "Sheet4", rnCount);
-                    string ex2 = lu2.Append(3);
-
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());   //"rendering_provider_id"
                     CellValueFormat maNumberCellValueFormat = new CellValueFormat("0000000000000");
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetFormat(maNumberCellValueFormat);
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(lu2.Append(3));   //"rendering_provider_secondary_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(lu2.Append(4));     //"rendering_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(lu2.Append(5));      //"rendering_provider_last_name"
+                    string rpString = $"=VLOOKUP(S{rowNumber}, Sheet4!A2:E{rnCount}, ";
+                    string rpSecondary = rpString + "3, FALSE)";
+                    string rpFirstName = rpString + "4, FALSE)";
+                    string rpLastName =  rpString + "5, FALSE)";
+
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(rpSecondary);   //"rendering_provider_secondary_id"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(rpFirstName);     //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(rpLastName);      //"rendering_provider_last_name"
 
                     currentRow++;
                 }
@@ -362,21 +364,6 @@ namespace ConsumerMaster
             catch (Exception ex)
             {
                 Logger.Error(ex);
-            }
-        }
-
-        class Lookup
-        {
-            private readonly string formula = string.Empty; 
-            public Lookup(int row, string sheet, int count)
-            {
-                formula = $"=VLOOKUP(R{row},{sheet}!A2:E{(count + 1)}";
-            }
-
-            public string Append(int column)
-            {
-                string append = $",{column},FALSE)";
-                return (formula + append);
             }
         }
     }
