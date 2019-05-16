@@ -67,11 +67,12 @@ namespace ConsumerMaster
             string selectQuery =
                 "SELECT c.consumer_internal_number,c.consumer_first,c.consumer_last,c.date_of_birth,c.address_line_1,c.address_line_2,c.city, " +
                 "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis, tp1.id AS tpId1, tp1.short_name AS tpName1, tp2.id AS tpId2, tp2.short_name AS tpName2, " + 
-                " tp3.id AS tpId3,tp3.short_name AS tpName3, referring_provider_id " + 
+                " tp3.id AS tpId3,tp3.short_name AS tpName3, referring_provider_id, rp.name AS rpName " + 
                 "FROM[ConsumerMaster].[dbo].[Consumers] AS c " +
                 "LEFT JOIN TradingPartners AS tp1 ON c.trading_partner_id1 = tp1.id " + 
                 "LEFT JOIN TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id " +
                 "LEFT JOIN TradingPartners AS tp3 ON c.trading_partner_id3 = tp3.id " +
+                "LEFT JOIN ReferringProviders rp ON rp.id = c.referring_provider_id " +
                 " ORDER BY consumer_last";
 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);

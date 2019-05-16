@@ -58,18 +58,6 @@
                             </td>
                         </tr>
                     </table>                   
-<%--                    <div style="padding: 5px 5px;">
-                        <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
-                            <Icon PrimaryIconCssClass="rbAdd" />
-                        </telerik:RadButton>
-                        <telerik:RadButton ID="RadButton2" runat="server" Text="Edit selected" Skin="Default" RenderMode="Lightweight" CommandName="EditSelected">
-                            <Icon PrimaryIconCssClass="rbEdit" />
-                        </telerik:RadButton>
-                        <telerik:RadButton ID="RadButton3" runat="server" Text="Refresh" Skin="Default" RenderMode="Lightweight" CommandName="Rebind">
-                            <Icon PrimaryIconCssClass="rbRefresh" />
-                        </telerik:RadButton>
-                        &nbsp;&nbsp;
-                    </div>--%>
                 </CommandItemTemplate>    
                 <ColumnGroups>
                     <telerik:GridColumnGroup HeaderText="Trading" Name="Trading" HeaderStyle-HorizontalAlign="Center"/>
@@ -79,10 +67,11 @@
                     <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" AllowFiltering="false"/>
                     <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
-                    <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />
+<%--                    <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />--%>
                     <telerik:GridBoundColumn DataField="tpName1" ColumnGroupName="Trading" HeaderText="Partner1" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                    
                     <telerik:GridBoundColumn DataField="tpName2" ColumnGroupName="Trading" HeaderText="Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />    
                     <telerik:GridBoundColumn DataField="tpName3" ColumnGroupName="Trading" HeaderText="Partner3" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" /> 
+                    <telerik:GridBoundColumn DataField="rpName" HeaderText="Referring" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" /> 
                     <telerik:GridButtonColumn ConfirmText="Delete this consumer?" ConfirmDialogType="RadWindow" ConfirmTitle="Delete" ButtonType="FontIconButton" CommandName="Delete" />
                 </Columns>
                 <EditFormSettings EditFormType="Template">
