@@ -146,14 +146,19 @@ namespace ConsumerMaster
                     Lookup lu = new Lookup(rowNumber, "Sheet4", rnCount);
                     string ex = lu.Append(3);
 
+                    string rpString = $"=VLOOKUP(R{rowNumber}, Sheet4!A2:E{rnCount}, ";
+                    string rpMA = rpString + "3, FALSE)";
+                    string rpFirstName = rpString + "4, FALSE)";
+                    string rpLastName = rpString + "5, FALSE)";
+
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_id")].SetValue(dr["rendering_provider_id"].ToString());   //"rendering_provider_id"
+
                     CellValueFormat maNumberCellValueFormat = new CellValueFormat("0000000000000");
-
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetFormat(maNumberCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(rpMA);   //"rendering_provider_secondary_id"
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_secondary_id")].SetValue(lu.Append(3));   //"rendering_provider_secondary_id"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(lu.Append(4));     //"rendering_provider_first_name"
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(lu.Append(5));      //"rendering_provider_last_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_first_name")].SetValue(rpFirstName);     //"rendering_provider_first_name"
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_last_name")].SetValue(rpLastName);      //"rendering_provider_last_name"
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(dr["rendering_provider_taxonomy_code"].ToString());    //"rendering_provider_taxonomy_code"
 
@@ -285,7 +290,7 @@ namespace ConsumerMaster
         {
             try
             {
-                string[] columnsList = { "name", "npi", "ma_number", "first_name", "last_name" };
+                string[] columnsList = { "name", "npi_number", "ma_number", "first_name", "last_name" };
                 foreach (string column in columnsList)
                 {
                     int columnKey = Array.IndexOf(columnsList, column);
@@ -311,7 +316,7 @@ namespace ConsumerMaster
                 foreach (DataRow dr in dTable.Rows)
                 {
                     worksheet.Cells[currentRow, 0].SetValue(dr["name"].ToString());
-                    worksheet.Cells[currentRow, 1].SetValue(dr["npi"].ToString());
+                    worksheet.Cells[currentRow, 1].SetValue(dr["npi_number"].ToString());
                     worksheet.Cells[currentRow, 2].SetValue(dr["ma_number"].ToString());
                     worksheet.Cells[currentRow, 3].SetValue(dr["first_name"].ToString());
                     worksheet.Cells[currentRow, 4].SetValue(dr["last_name"].ToString());

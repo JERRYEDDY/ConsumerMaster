@@ -17,7 +17,7 @@ namespace ConsumerMaster
             if (!this.IsPostBack)
             {
                 Logger.Info("ConsumerMaster started");
-                BindToTPDropDownList(TPRadDropDownList);
+                //BindToTPDropDownList(TPRadDropDownList);
             }
         }
 
@@ -26,12 +26,12 @@ namespace ConsumerMaster
             const string filename = @"ConsumerExport.xlsx";
             try
             {
-                string selectedValue = TPRadDropDownList.SelectedValue;
+                //string selectedValue = TPRadDropDownList.SelectedValue;
 
-                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-                Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                Utility utility = new Utility();
-                utility.DownloadExcelFile(workbook, filename);
+                //ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                //Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
+                //Utility utility = new Utility();
+                //utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {

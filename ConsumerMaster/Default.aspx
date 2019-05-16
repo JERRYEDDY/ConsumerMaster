@@ -30,7 +30,7 @@
             <br/>
             <telerik:RadPanelBar ID="RadPanelBar2" runat="server"></telerik:RadPanelBar>
             
-            <div class="demo-container size-thin">
+<%--            <div class="demo-container size-thin">
                 <h4>Consumer Export File</h4>
                 <telerik:RadDropDownList RenderMode="Lightweight" ID="TPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Trading Partner" ValidationGroup="TPValidationGroup" />
                 <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="TPValidationGroup" OnClick="ConsumerExportDownload_Click" runat="server" >
@@ -49,7 +49,7 @@
                 <p>
                     <asp:Label runat="server" ID="Label1" />
                 </p>
-            </div>     
+            </div> --%>    
         </div>
     </div><br/><br/>
     
