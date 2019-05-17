@@ -19,14 +19,26 @@ namespace ConsumerMaster
 
         protected void EIConsumerExportDownload_Click(object sender, EventArgs e)
         {
-            const string filename = @"EIConsumerExport.xlsx";
             try
             {
                 string selectedValue = EIConsumerList.SelectedValue;
-                ConsumerExportExcelFile consumerExport =  new ConsumerExportExcelFile();
-                Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                Utility utility = new Utility();
-                utility.DownloadExcelFile(workbook, filename);
+
+                if (selectedValue.Equals("7")) // Direct Therapy
+                {
+                    string filename = @"EIDTConsumerExport.xlsx";
+                    ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                    Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
+                    Utility utility = new Utility();
+                    utility.DownloadExcelFile(workbook, filename);
+                }
+                else if (selectedValue.Equals("8")) //Special Instruction
+                {
+                    string filename = @"EISIConsumerExport.xlsx";
+                    ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                    Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
+                    Utility utility = new Utility();
+                    utility.DownloadExcelFile(workbook, filename);
+                }
             }
             catch (Exception ex)
             {
@@ -36,13 +48,13 @@ namespace ConsumerMaster
 
         protected void EIServiceExportDownload_Click(object sender, EventArgs e)
         {
-            const string filename = @"EIServiceExport.xlsx";
             try
             {
                 string selectedValue = EIServiceList.SelectedValue;
 
                 if (selectedValue.Equals("7")) // Direct Therapy
                 {
+                    string filename = @"EIDTServiceExport.xlsx";
                     EIDTServiceExportExcelFile serviceExport = new EIDTServiceExportExcelFile();
                     Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
                     Utility utility = new Utility();
@@ -50,6 +62,7 @@ namespace ConsumerMaster
                 }
                 else if (selectedValue.Equals("8")) //Special Instruction
                 {
+                    string filename = @"EISIServiceExport.xlsx";
                     EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
                     Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
                     Utility utility = new Utility();
