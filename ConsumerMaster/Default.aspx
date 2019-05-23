@@ -29,27 +29,6 @@
         <div>
             <br/>
             <telerik:RadPanelBar ID="RadPanelBar2" runat="server"></telerik:RadPanelBar>
-            
-<%--            <div class="demo-container size-thin">
-                <h4>Consumer Export File</h4>
-                <telerik:RadDropDownList RenderMode="Lightweight" ID="TPRadDropDownList" runat="server"  Width="350px" DropDownHeight="200" DefaultMessage="Select Trading Partner" ValidationGroup="TPValidationGroup" />
-                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="TPValidationGroup" OnClick="ConsumerExportDownload_Click" runat="server" >
-                    <Icon PrimaryIconCssClass="rbDownload"></Icon>
-                </telerik:RadButton>
-                <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator3" ControlToValidate="TPRadDropDownList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="TPValidationGroup" />
-                <p>
-                    <asp:Label runat="server" ID="Label2" />
-                </p>
-            </div>
-            <div class="demo-container size-thin">
-                <h3>EI Service Export</h3>
-                <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton4" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="EIServiceExportDownload_Click" runat="server" >
-                    <Icon PrimaryIconCssClass="rbDownload"></Icon>
-                </telerik:RadButton>
-                <p>
-                    <asp:Label runat="server" ID="Label1" />
-                </p>
-            </div> --%>    
         </div>
     </div><br/><br/>
     

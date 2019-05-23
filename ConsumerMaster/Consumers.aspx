@@ -21,14 +21,8 @@
             <telerik:AjaxSetting AjaxControlID="RadGrid1">
                 <UpdatedControls>
                     <telerik:AjaxUpdatedControl ControlID="RadGrid1"></telerik:AjaxUpdatedControl>
-<%--                    <telerik:AjaxUpdatedControl ControlID="RadGrid2" LoadingPanelID="RadAjaxLoadingPanel1"></telerik:AjaxUpdatedControl>--%>
                 </UpdatedControls>
             </telerik:AjaxSetting>
-<%--            <telerik:AjaxSetting AjaxControlID="RadGrid2">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="RadGrid2"></telerik:AjaxUpdatedControl>
-                </UpdatedControls>
-            </telerik:AjaxSetting>--%>
         </AjaxSettings>
     </telerik:RadAjaxManager>
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"></telerik:RadAjaxLoadingPanel>
@@ -43,7 +37,7 @@
                     <table>
                         <tr>
                             <td width="30%">
-                                <telerik:RadButton ID="RadButton1" runat="server" Text="Add new record" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
+                                <telerik:RadButton ID="RadButton1" runat="server" Text="Add new" Skin="Default" RenderMode="Lightweight" CommandName="InitInsert">
                                     <Icon PrimaryIconCssClass="rbAdd" />
                                 </telerik:RadButton>
                             </td>
@@ -68,7 +62,6 @@
                     <telerik:GridBoundColumn DataField="consumer_first" HeaderText="First Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" AllowFiltering="false"/>
                     <telerik:GridBoundColumn DataField="consumer_last" HeaderText="Last Name" ColumnEditorID="GridTextBoxEditor" HeaderStyle-Width="170px" ItemStyle-Width="170px" CurrentFilterFunction="Contains" AutoPostBackOnFilter="true" ShowFilterIcon="False" />
                     <telerik:GridBoundColumn DataField="identifier" HeaderText="Identifier" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                       
-<%--                    <telerik:GridBoundColumn DataField="diagnosis" HeaderText="Diagnosis" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />--%>
                     <telerik:GridBoundColumn DataField="tpName1" ColumnGroupName="Trading" HeaderText="Partner1" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />                    
                     <telerik:GridBoundColumn DataField="tpName2" ColumnGroupName="Trading" HeaderText="Partner2" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" />    
                     <telerik:GridBoundColumn DataField="tpName3" ColumnGroupName="Trading" HeaderText="Partner3" ColumnEditorID="GridTextBoxEditor" AllowFiltering="false" /> 

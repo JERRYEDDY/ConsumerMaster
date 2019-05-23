@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Text;
@@ -13,7 +12,7 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
-        private static readonly int IndexColumnName = 0;
+        //private static readonly int IndexColumnName = 0;
 
         public Workbook CreateWorkbook(string tradingPartnerId)
         {
@@ -66,7 +65,7 @@ namespace ConsumerMaster
                 string seQuery = queryBuilder.ToString();
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
-                int totalConsumers = seDataTable.Rows.Count;
+                //int totalConsumers = seDataTable.Rows.Count;
 
                 PrepareSheet1Worksheet(sheet1Worksheet);
 
@@ -212,37 +211,37 @@ namespace ConsumerMaster
             }
         }
 
-        private void CreateDropDownListWorksheet(Worksheet worksheet, List<string> cpcList, string header)
-        {
-            try
-            {
-                PrepareDropDownListWorksheet(worksheet, header);
+        //private void CreateDropDownListWorksheet(Worksheet worksheet, List<string> cpcList, string header)
+        //{
+        //    try
+        //    {
+        //        PrepareDropDownListWorksheet(worksheet, header);
 
-                int currentRow = IndexRowItemStart + 1;
-                foreach (String cpCode in cpcList)
-                {
-                    worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
-                    currentRow++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
+        //        int currentRow = IndexRowItemStart + 1;
+        //        foreach (String cpCode in cpcList)
+        //        {
+        //            worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
+        //            currentRow++;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
 
-        private void PrepareDropDownListWorksheet(Worksheet worksheet, string header)
-        {
-            try
-            {
-                worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue(header);
-                worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
+        //private void PrepareDropDownListWorksheet(Worksheet worksheet, string header)
+        //{
+        //    try
+        //    {
+        //        worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue(header);
+        //        worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
 
         private void PrepareSheet2Worksheet(Worksheet worksheet)
         {

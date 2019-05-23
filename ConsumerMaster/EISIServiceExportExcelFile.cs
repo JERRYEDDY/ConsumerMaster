@@ -4,7 +4,6 @@ using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Text;
 using System.Windows.Media;
-
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
@@ -63,7 +62,7 @@ namespace ConsumerMaster
                 string seQuery = queryBuilder.ToString();
 
                 DataTable seDataTable = util.GetDataTable(seQuery);
-                int totalConsumers = seDataTable.Rows.Count;
+                //int totalConsumers = seDataTable.Rows.Count;
 
                 PrepareSheet1Worksheet(sheet1Worksheet);
 
@@ -142,9 +141,6 @@ namespace ConsumerMaster
                     context4.Argument1 = listRange4; //   
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
-
-                    Lookup lu = new Lookup(rowNumber, "Sheet4", rnCount);
-                    string ex = lu.Append(3);
 
                     string rpString = $"=VLOOKUP(R{rowNumber}, Sheet4!A2:E{rnCount}, ";
                     string rpMA = rpString + "3, FALSE)";
@@ -326,21 +322,6 @@ namespace ConsumerMaster
             catch (Exception ex)
             {
                 Logger.Error(ex);
-            }
-        }
-
-        class Lookup
-        {
-            private readonly string formula = string.Empty; 
-            public Lookup(int row, string sheet, int count)
-            {
-                formula = $"=VLOOKUP(R{row},{sheet}!A2:E{(count + 1)}";
-            }
-
-            public string Append(int column)
-            {
-                string append = $",{column},FALSE)";
-                return (formula + append);
             }
         }
     }

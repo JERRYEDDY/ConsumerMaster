@@ -55,25 +55,25 @@ namespace ConsumerMaster
 
         public EIDTServiceExportFormat(bool include)
         {
-            this._includeHours = include;
+            _includeHours = include;
             ColumnStrings = GetColumns();
         }
 
         private string[] GetColumns()
         {
-            StringCollection _cols = new StringCollection();
+            StringCollection cols = new StringCollection();
             try
             {
                 foreach (var column in _columnNameList)
                 {
                     if (_includeHours)
                     {
-                        _cols.Add(column.Value.Name);
+                        cols.Add(column.Value.Name);
                     }
                     else
                     {
                         if (column.Value.Include)
-                            _cols.Add(column.Value.Name);
+                            cols.Add(column.Value.Name);
                     }
                 }
             }
@@ -82,7 +82,7 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
 
-            return _cols.Cast<string>().ToArray();
+            return cols.Cast<string>().ToArray();
         }
 
         public int GetIndex(string value)

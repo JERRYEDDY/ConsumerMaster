@@ -108,7 +108,7 @@ namespace ConsumerMaster
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
                 string referringProvider = ((RadComboBox)insertedItem.FindControl("cbReferringProvider")).SelectedValue;
-                Int32.TryParse(referringProvider, out int referring_provider_id);
+                Int32.TryParse(referringProvider, out int referringProviderId);
 
                 string insertQuery =
                     "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, trading_partner_id1, trading_partner_id2, trading_partner_id3, referring_provider_id)" +
@@ -139,7 +139,7 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("trading_partner_id1", SqlDbType.Int).Value = tradingPartnerId1;
                         cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
                         cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
-                        cmd.Parameters.Add("referring_provider_id", SqlDbType.Int).Value = referring_provider_id;
+                        cmd.Parameters.Add("referring_provider_id", SqlDbType.Int).Value = referringProviderId;
 
                         con.Open();
                         int result = cmd.ExecuteNonQuery();
@@ -177,46 +177,51 @@ namespace ConsumerMaster
             try
             {
                 //Get the primary key value using the DataKeyValue. 
-                consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["consumer_internal_number"].ToString();
-                Int32.TryParse(consumerId, out int consumer_internal_number);
-
-                //Access the controls from the edit form template and store the values. 
-                consumerFirst = ((RadTextBox)editedItem.FindControl("consumer_first")).Text;
-                consumerLast = ((RadTextBox)editedItem.FindControl("consumer_last"))?.Text;
-                RadDatePicker dateOfBirth = (RadDatePicker)editedItem.FindControl("date_of_birth");
-                string addressLine1 = ((RadTextBox)editedItem.FindControl("address_line_1")).Text;
-                string addressLine2 = ((RadTextBox)editedItem.FindControl("address_line_2")).Text;
-                string city = ((RadTextBox)editedItem.FindControl("city")).Text;
-                string state = ((RadComboBox) editedItem.FindControl("state")).SelectedValue;
-                string zipCode = ((RadMaskedTextBox)editedItem.FindControl("zip_code")).Text;
-                string identifier = ((RadMaskedTextBox)editedItem.FindControl("identifier")).Text;
-                string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
-                string diagnosis = ((RadTextBox)editedItem.FindControl("diagnosis_code")).Text;
-
-                string tradingPartner1 = ((RadComboBox) editedItem.FindControl("cbTradingPartner1")).SelectedValue;
-                Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
-                string tradingPartner2 = ((RadComboBox)editedItem.FindControl("cbTradingPartner2")).SelectedValue;
-                Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
-                string tradingPartner3 = ((RadComboBox)editedItem.FindControl("cbTradingPartner3")).SelectedValue;
-                Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
-
-                string referringProvider = ((RadComboBox)editedItem.FindControl("cbReferringProvider")).SelectedValue;
-                Int32.TryParse(referringProvider, out int referring_provider_id);
-
-
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+                if (editedItem != null)
                 {
-                    using (SqlCommand cmd = new SqlCommand())
+                    consumerId = editedItem.OwnerTableView.DataKeyValues[editedItem.ItemIndex]["consumer_internal_number"].ToString();
+                    Int32.TryParse(consumerId, out int consumerInternalNumber);
+
+                    //Access the controls from the edit form template and store the values. 
+                    consumerFirst = ((RadTextBox) editedItem.FindControl("consumer_first")).Text;
+                    consumerLast = ((RadTextBox) editedItem.FindControl("consumer_last"))?.Text;
+                    RadDatePicker dateOfBirth = (RadDatePicker) editedItem.FindControl("date_of_birth");
+                    string addressLine1 = ((RadTextBox) editedItem.FindControl("address_line_1")).Text;
+                    string addressLine2 = ((RadTextBox) editedItem.FindControl("address_line_2")).Text;
+                    string city = ((RadTextBox) editedItem.FindControl("city")).Text;
+                    string state = ((RadComboBox) editedItem.FindControl("state")).SelectedValue;
+                    string zipCode = ((RadMaskedTextBox) editedItem.FindControl("zip_code")).Text;
+                    string identifier = ((RadMaskedTextBox) editedItem.FindControl("identifier")).Text;
+                    string gender = ((RadRadioButtonList) editedItem.FindControl("gender")).SelectedValue;
+                    string diagnosis = ((RadTextBox) editedItem.FindControl("diagnosis_code")).Text;
+
+                    string tradingPartner1 = ((RadComboBox) editedItem.FindControl("cbTradingPartner1")).SelectedValue;
+                    Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
+                    string tradingPartner2 = ((RadComboBox) editedItem.FindControl("cbTradingPartner2")).SelectedValue;
+                    Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
+                    string tradingPartner3 = ((RadComboBox) editedItem.FindControl("cbTradingPartner3")).SelectedValue;
+                    Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
+
+                    string referringProvider =
+                        ((RadComboBox) editedItem.FindControl("cbReferringProvider")).SelectedValue;
+                    Int32.TryParse(referringProvider, out int referringProviderId);
+
+
+                    using (SqlConnection con =
+                        new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                     {
+                        using (SqlCommand cmd = new SqlCommand())
+                        {
                             cmd.Connection = con;
                             cmd.CommandType = CommandType.Text;
                             cmd.CommandText = updateQuery;
-                            cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumer_internal_number;
+                            cmd.Parameters.Add("consumer_internal_number", SqlDbType.Int).Value = consumerInternalNumber;
                             cmd.Parameters.Add("consumer_first", SqlDbType.VarChar).Value = consumerFirst;
                             cmd.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
 
                             if (dateOfBirth != null)
-                                cmd.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value = dateOfBirth.SelectedDate;
+                                cmd.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value =
+                                    dateOfBirth.SelectedDate;
 
                             cmd.Parameters.Add("address_line_1", SqlDbType.VarChar).Value = addressLine1;
                             cmd.Parameters.Add("address_line_2", SqlDbType.VarChar).Value = addressLine2;
@@ -230,7 +235,7 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("trading_partner_id2", SqlDbType.Int).Value = tradingPartnerId2;
                             cmd.Parameters.Add("trading_partner_id3", SqlDbType.Int).Value = tradingPartnerId3;
 
-                            cmd.Parameters.Add("referring_provider_id", SqlDbType.Int).Value = referring_provider_id;
+                            cmd.Parameters.Add("referring_provider_id", SqlDbType.Int).Value = referringProviderId;
 
                             con.Open();
                             int result = cmd.ExecuteNonQuery();
@@ -241,6 +246,7 @@ namespace ConsumerMaster
                                 DisplayMessage(message);
                                 Logger.Info(message);
                             }
+                        }
                     }
                 }
             }
