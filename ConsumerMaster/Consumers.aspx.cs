@@ -64,16 +64,24 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery =
-                "SELECT c.consumer_internal_number,c.consumer_first,c.consumer_last,c.date_of_birth,c.address_line_1,c.address_line_2,c.city, " +
-                "c.state,c.zip_code,c.identifier,c.gender,c.diagnosis, tp1.id AS tpId1, tp1.short_name AS tpName1, tp2.id AS tpId2, tp2.short_name AS tpName2, " + 
-                " tp3.id AS tpId3,tp3.short_name AS tpName3, referring_provider_id, rp.name AS rpName " + 
-                "FROM[ConsumerMaster].[dbo].[Consumers] AS c " +
-                "LEFT JOIN TradingPartners AS tp1 ON c.trading_partner_id1 = tp1.id " + 
-                "LEFT JOIN TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id " +
-                "LEFT JOIN TradingPartners AS tp3 ON c.trading_partner_id3 = tp3.id " +
-                "LEFT JOIN ReferringProviders rp ON rp.id = c.referring_provider_id " +
-                " ORDER BY consumer_last";
+            string selectQuery = 
+            @"
+                SELECT 
+                    c.consumer_internal_number,c.consumer_first,c.consumer_last,c.date_of_birth,c.address_line_1,c.address_line_2,c.city
+                    ,c.state,c.zip_code,c.identifier,c.gender,c.diagnosis, tp1.id AS tpId1, tp1.short_name AS tpName1, tp2.id AS tpId2, tp2.short_name AS tpName2
+                    ,tp3.id AS tpId3,tp3.short_name AS tpName3, referring_provider_id, rp.name AS rpName
+                FROM 
+                    [ConsumerMaster].[dbo].[Consumers] AS c
+                LEFT JOIN 
+                    TradingPartners AS tp1 ON c.trading_partner_id1 = tp1.id
+                LEFT JOIN 
+                    TradingPartners AS tp2 ON c.trading_partner_id2 = tp2.id 
+                LEFT JOIN 
+                    TradingPartners AS tp3 ON c.trading_partner_id3 = tp3.id 
+                LEFT JOIN 
+                    ReferringProviders rp ON rp.id = c.referring_provider_id 
+                ORDER BY consumer_last
+            ";
 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
@@ -110,9 +118,15 @@ namespace ConsumerMaster
                 string referringProvider = ((RadComboBox)insertedItem.FindControl("cbReferringProvider")).SelectedValue;
                 Int32.TryParse(referringProvider, out int referringProviderId);
 
-                string insertQuery =
-                    "INSERT INTO Consumers (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis, trading_partner_id1, trading_partner_id2, trading_partner_id3, referring_provider_id)" +
-                    " VALUES (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender, @diagnosis, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3, @referring_provider_id)";
+                string insertQuery = 
+                @"
+                    INSERT INTO Consumers 
+                        (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis
+                        ,trading_partner_id1,trading_partner_id2, trading_partner_id3, referring_provider_id)
+                    VALUES 
+                        (@consumer_first, @consumer_last, @date_of_birth, @address_line_1, @address_line_2, @city, @state, @zip_code, @identifier, @gender
+                        ,@diagnosis, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3, @referring_provider_id)
+                ";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
@@ -170,10 +184,18 @@ namespace ConsumerMaster
             string consumerFirst = null;
             string consumerLast = null;
 
-            string updateQuery = "UPDATE Consumers SET consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1," +
-                                 " address_line_2=@address_line_2, city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis," +
-                                 " trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3, referring_provider_id=@referring_provider_id" + 
-                                 " WHERE consumer_internal_number=@consumer_internal_number";
+            string updateQuery = 
+            @"
+                UPDATE Consumers 
+                SET 
+                    consumer_first=@consumer_first, consumer_last=@consumer_last, date_of_birth=@date_of_birth, address_line_1=@address_line_1
+                    ,address_line_2=@address_line_2, city=@city, state=@state, zip_code=@zip_code, identifier=@identifier, gender=@gender, diagnosis=@diagnosis
+                    ,trading_partner_id1=@trading_partner_id1, trading_partner_id2=@trading_partner_id2, trading_partner_id3=@trading_partner_id3
+                    ,referring_provider_id=@referring_provider_id 
+                WHERE 
+                    consumer_internal_number=@consumer_internal_number
+            ";
+
             try
             {
                 //Get the primary key value using the DataKeyValue. 
@@ -220,8 +242,7 @@ namespace ConsumerMaster
                             cmd.Parameters.Add("consumer_last", SqlDbType.VarChar).Value = consumerLast;
 
                             if (dateOfBirth != null)
-                                cmd.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value =
-                                    dateOfBirth.SelectedDate;
+                                cmd.Parameters.Add("date_of_birth", SqlDbType.DateTime).Value = dateOfBirth.SelectedDate;
 
                             cmd.Parameters.Add("address_line_1", SqlDbType.VarChar).Value = addressLine1;
                             cmd.Parameters.Add("address_line_2", SqlDbType.VarChar).Value = addressLine2;

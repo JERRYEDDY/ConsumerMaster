@@ -75,52 +75,52 @@
                             <p id="formInstructions">Fields marked with an asterisk (*) are required.</p>
                             <ul class="form-fields">
                             <li>
-                                <label for="consumer_first">First Name *</label> 
+                                <label>First Name *</label> 
                                 <telerik:RadTextBox ID="consumer_first" runat="server" Text='<%# Bind("consumer_first") %>' TabIndex="1"/>
                                 <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" Display="Dynamic" ControlToValidate="consumer_first" ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="consumer_last">Last name *</label> 
+                                <label>Last name *</label> 
                                 <telerik:RadTextBox ID="consumer_last" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="2"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="consumer_last" ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label for="date_of_birth">Birth Date *</label> 
+                                <label>Birth Date *</label> 
                                 <telerik:RadDatePicker ID="date_of_birth" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="date_of_birth" ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="address_line_1">Address1 *</label> 
+                                <label>Address1 *</label> 
                                 <telerik:RadTextBox ID="address_line_1" Text='<%# Bind( "address_line_1") %>' runat="server" TabIndex="4"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="address_line_1" ErrorMessage="Address1 is required"  ValidationGroup="FormValidationGroup"/>
                             </li>                                    
                             <li>
-                                <label for="address_line_2">Address2:</label> 
+                                <label>Address2:</label> 
                                 <telerik:RadTextBox ID="address_line_2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="5"/>
                             </li>                                   
                             <li>
-                                <label for="city">City *</label> 
+                                <label>City *</label> 
                                 <telerik:RadTextBox ID="city" Text='<%# Bind("city") %>' runat="server" TabIndex="6"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" Display="Dynamic" ControlToValidate="city" ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label for="state">State *</label> 
+                                <label>State *</label> 
                                 <telerik:RadComboBox runat="server" ID="state" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>' 
                                                      DataTextField="name" DataValueField="abbreviation" TabIndex="7" EmptyMessage="Select" Height="200" />
                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="state" ErrorMessage="State is required" runat="server" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
                             </li>                                    
                             <li>
-                                <label for="zip_code">Zip Code *</label> 
+                                <label>Zip Code *</label> 
                                 <telerik:RadMaskedTextBox ID="zip_code" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="8" Mask="#####-####" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" Display="Dynamic" ControlToValidate="zip_code" ErrorMessage="Zip code is required"  ValidationGroup="FormValidationGroup"/>
                             </li>  
                             <li>
-                                <label for="identifier">Identifier *</label> 
+                                <label>Identifier *</label> 
                                 <telerik:RadMaskedTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="8" Mask="##########" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" ValidationGroup="FormValidationGroup"/>
                             </li>                                     
                             <li>
-                                <label for="gender">Gender *</label> 
+                                <label>Gender *</label> 
                                 <telerik:RadRadioButtonList ID="gender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Horizontal">
                                     <Items>
                                         <telerik:ButtonListItem Text="Male" Value="M"/>
@@ -130,12 +130,12 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="gender"  Display="Dynamic" ErrorMessage="Gender is required"  ValidationGroup="FormValidationGroup" />
                             </li>                                      
                             <li>
-                                <label for="diagnosis_code">Diagnosis Code *</label> 
+                                <label>Diagnosis Code *</label> 
                                 <telerik:RadTextBox ID="diagnosis_code" Text='<%# Bind("diagnosis") %>' runat="server" TabIndex="11"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" Display="Dynamic" ControlToValidate="diagnosis_code" ErrorMessage="Diagnosis code is required" ValidationGroup="FormValidationGroup" />
                             </li>  
                             <li>
-                                <label for="cbTradingPartner1">Trading Partner 1 *</label> 
+                                <label>Trading Partner 1 *</label> 
                                 <telerik:RadComboBox ID="cbTradingPartner1" runat="server" SelectedValue='<%# Bind("tpId1") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
@@ -144,7 +144,7 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" Display="Dynamic" ControlToValidate="cbTradingPartner1" ErrorMessage="Trading partner 1 is required" ValidationGroup="FormValidationGroup" />
                             </li>                                      
                             <li>
-                                <label for="cbTradingPartner2">Trading Partner 2:</label> 
+                                <label>Trading Partner 2:</label> 
                                 <telerik:RadComboBox ID="cbTradingPartner2" runat="server" SelectedValue='<%# Bind("tpId2") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
@@ -152,7 +152,7 @@
                                 </telerik:RadComboBox>
                             </li>  
                             <li>
-                                <label for="cbTradingPartner3">Trading Partner 3:</label> 
+                                <label>Trading Partner 3:</label> 
                                 <telerik:RadComboBox ID="cbTradingPartner3" runat="server" SelectedValue='<%# Bind("tpId3") %>' EmptyMessage="Select" DataSourceID="TradingPartnerDataSource" DataTextField="name" DataValueField="trading_partner_id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>
@@ -161,7 +161,7 @@
                             </li> 
                             <p id="formInstructions2">Referring providers are required for Early Intervention Direct Therapy Consumers only.</p>
                             <li>
-                                <label for="cbReferringProvider">Referring Provider:</label> 
+                                <label>Referring Provider:</label> 
                                 <telerik:RadComboBox ID="cbReferringProvider" runat="server" SelectedValue='<%# Bind("referring_provider_id") %>' EmptyMessage="Select" DataSourceID="ReferringProviderDataSource" DataTextField="name" DataValueField="id" AppendDataBoundItems="true" Width="315" DropDownWidth="315">
                                     <Items>
                                         <telerik:RadComboBoxItem Text="None" Value="0"  runat="server"/>

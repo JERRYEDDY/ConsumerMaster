@@ -41,7 +41,6 @@ namespace ConsumerMaster
                 DataTable cpcDataTable = util.GetDataTable("SELECT name, taxonomy_code FROM CompositeProcedureCodes WHERE trading_partner_id = " + tradingPartnerId);
                 int cpcCount = cpcDataTable.Rows.Count;
                 CreateSheet3Worksheet(sheet3Worksheet,cpcDataTable);
-                //CreateDropDownListWorksheet(sheet3Worksheet, cpcList, "composite_procedure_code");
 
                 DataTable rnDataTable = util.GetDataTable("SELECT name, npi_number, ma_number, first_name, last_name FROM RenderingProviders WHERE npi_number IS NOT NULL ORDER BY last_name");
                 int rnCount = rnDataTable.Rows.Count;
@@ -49,22 +48,28 @@ namespace ConsumerMaster
 
                 EIDTServiceExportFormat sef = new EIDTServiceExportFormat();
 
-                StringBuilder queryBuilder = new StringBuilder();
-                queryBuilder.Append("SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, ");
-                queryBuilder.Append("tp.symbol AS trading_partner_string, ' ' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, ");
-                queryBuilder.Append("c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, ");
-                queryBuilder.Append("' ' AS referral_number, c.referring_provider_id AS referring_id, rp.npi_number AS referring_provider_id, rp.first_name AS referring_provider_first_name, rp.last_name AS referring_provider_last_name, ");
-                queryBuilder.Append("' ' AS rendering_names, ' ' AS rendering_provider_id, ' ' AS rendering_provider_secondary_id, ' ' AS rendering_provider_first_name, ");
-                queryBuilder.Append("' ' AS rendering_provider_last_name, ' ' AS rendering_provider_taxonomy_code, ' ' AS billing_note FROM Consumers AS c ");
-                queryBuilder.AppendFormat("INNER JOIN TradingPartners AS tp ON {0} = tp.id ", tradingPartnerId);
-                queryBuilder.AppendFormat("LEFT JOIN ReferringProviders rp ON rp.id = c.referring_provider_id ");
-                queryBuilder.AppendFormat("WHERE c.trading_partner_id1 = {0} ", tradingPartnerId);
-                queryBuilder.AppendFormat("OR c.trading_partner_id2 = {0} ", tradingPartnerId);
-                queryBuilder.AppendFormat("OR c.trading_partner_id3 = {0} ", tradingPartnerId);
-                queryBuilder.Append("ORDER BY consumer_last");
-                string seQuery = queryBuilder.ToString();
+                string selectQuery = 
+                $@"
+                    SELECT 
+                        c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number
+                        ,tp.symbol AS trading_partner_string, ' ' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string
+                        ,c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate
+                        ,' ' AS prior_authorization_number,' ' AS referral_number, c.referring_provider_id AS referring_id, rp.npi_number AS referring_provider_id
+                        ,rp.first_name AS referring_provider_first_name, rp.last_name AS referring_provider_last_name,' ' AS rendering_names, ' ' AS rendering_provider_id
+                        ,' ' AS rendering_provider_secondary_id, ' ' AS rendering_provider_first_name,' ' AS rendering_provider_last_name, ' ' AS rendering_provider_taxonomy_code
+                        ,' ' AS billing_note 
+                    FROM 
+                        Consumers AS c 
+                    INNER JOIN 
+                        TradingPartners AS tp ON {tradingPartnerId} = tp.id
+                    LEFT JOIN 
+                        ReferringProviders rp ON rp.id = c.referring_provider_id 
+                    WHERE 
+                        c.trading_partner_id1 = {tradingPartnerId} OR c.trading_partner_id2 = {tradingPartnerId} OR c.trading_partner_id3 = {tradingPartnerId}
+                    ORDER BY consumer_last
+                ";
 
-                DataTable seDataTable = util.GetDataTable(seQuery);
+                DataTable seDataTable = util.GetDataTable(selectQuery);
                 //int totalConsumers = seDataTable.Rows.Count;
 
                 PrepareSheet1Worksheet(sheet1Worksheet);
@@ -210,38 +215,6 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
-
-        //private void CreateDropDownListWorksheet(Worksheet worksheet, List<string> cpcList, string header)
-        //{
-        //    try
-        //    {
-        //        PrepareDropDownListWorksheet(worksheet, header);
-
-        //        int currentRow = IndexRowItemStart + 1;
-        //        foreach (String cpCode in cpcList)
-        //        {
-        //            worksheet.Cells[currentRow, IndexColumnName].SetValue(cpCode);
-        //            currentRow++;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex);
-        //    }
-        //}
-
-        //private void PrepareDropDownListWorksheet(Worksheet worksheet, string header)
-        //{
-        //    try
-        //    {
-        //        worksheet.Cells[IndexRowItemStart, IndexColumnName].SetValue(header);
-        //        worksheet.Cells[IndexRowItemStart, IndexColumnName].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex);
-        //    }
-        //}
 
         private void PrepareSheet2Worksheet(Worksheet worksheet)
         {

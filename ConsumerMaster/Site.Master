@@ -54,13 +54,19 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/Default">Home</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Programs
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="AWCMain">Agency With Choice</a></li>
+                                <li><a href="ATFMain">Adult Training Facility</a></li>
+                                <li><a href="EIMain">Early Intervention</a></li>
+                            </ul>
+                        </li>
                         <li><a runat="server" href="~/Consumers">Consumers</a></li>
-                        <li><a runat="server" href="~/Reports">Reports</a></li>
-                        <li><a runat="server" href="~/AWCMain">AWCMain</a></li>
-                        <li><a runat="server" href="~/ATFMain">ATFMain</a></li>
-                        <li><a runat="server" href="~/EIMain">EIMain</a></li>
                         <li><a runat="server" href="~/RenderingProviders">RenderingProviders</a></li>
                         <li><a runat="server" href="~/ReferringProviders">ReferringProviders</a></li>
+                        <li><a runat="server" href="~/Reports">Reports</a></li>
                     </ul>
                 </div>
             </div>

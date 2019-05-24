@@ -202,6 +202,7 @@
     <Content Include="EIMain.aspx" />
     <Content Include="Images\ATFLogo1.png" />
     <Content Include="Images\EILogo1.png" />
+    <Content Include="Images\Pathways LogoST.png" />
     <Content Include="NewConsumers.aspx" />
     <Content Include="Consumers.aspx" />
     <Content Include="AWCMain.aspx" />

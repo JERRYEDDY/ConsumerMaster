@@ -47,21 +47,23 @@ namespace ConsumerMaster
 
                 EISIServiceExportFormat sef = new EISIServiceExportFormat();
 
-                StringBuilder queryBuilder = new StringBuilder();
-                queryBuilder.Append("SELECT c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number, ");
-                queryBuilder.Append("tp.symbol AS trading_partner_string, ' ' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string, ");
-                queryBuilder.Append("c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate, ' ' AS prior_authorization_number, ");
-                queryBuilder.Append("' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name, ' ' AS referring_provider_last_name, ");
-                queryBuilder.Append("' ' AS rendering_names, ' ' AS rendering_provider_id, ' ' AS rendering_provider_secondary_id, ' ' AS rendering_provider_first_name, ");
-                queryBuilder.Append("' ' AS rendering_provider_last_name, ' ' AS rendering_provider_taxonomy_code, ' ' AS billing_note FROM Consumers AS c ");
-                queryBuilder.AppendFormat("INNER JOIN TradingPartners AS tp ON {0} = tp.id ", tradingPartnerId);
-                queryBuilder.AppendFormat("WHERE c.trading_partner_id1 = {0} ", tradingPartnerId);
-                queryBuilder.AppendFormat("OR c.trading_partner_id2 = {0} ", tradingPartnerId);
-                queryBuilder.AppendFormat("OR c.trading_partner_id3 = {0} ", tradingPartnerId);
-                queryBuilder.Append("ORDER BY consumer_last");
-                string seQuery = queryBuilder.ToString();
+                string selectQuery = 
+                $@"
+                    SELECT 
+                        c.consumer_first AS consumer_first, c.consumer_last AS consumer_last, c.consumer_internal_number AS consumer_internal_number
+                        ,tp.symbol AS trading_partner_string, ' ' AS trading_partner_program_string, ' ' AS start_date_string, ' ' AS end_date_string
+                        ,c.diagnosis AS diagnosis_code_1_code, ' ' AS composite_procedure_code_string, ' ' AS units, ' ' AS manual_billable_rate
+                        , ' ' AS prior_authorization_number,' ' AS referral_number, ' ' AS referring_provider_id, ' ' AS referring_provider_first_name
+                        , ' ' AS referring_provider_last_name,' ' AS rendering_names, ' ' AS rendering_provider_id, ' ' AS rendering_provider_secondary_id
+                        , ' ' AS rendering_provider_first_name,' ' AS rendering_provider_last_name, ' ' AS rendering_provider_taxonomy_code, ' ' AS billing_note 
+                    FROM 
+                        Consumers AS c
+                    INNER JOIN TradingPartners AS tp ON {tradingPartnerId} = tp.id
+                    WHERE c.trading_partner_id1 = {tradingPartnerId} OR c.trading_partner_id2 = {tradingPartnerId} OR c.trading_partner_id3 = {tradingPartnerId}
+                    ORDER BY consumer_last
+                ";
 
-                DataTable seDataTable = util.GetDataTable(seQuery);
+                DataTable seDataTable = util.GetDataTable(selectQuery);
                 //int totalConsumers = seDataTable.Rows.Count;
 
                 PrepareSheet1Worksheet(sheet1Worksheet);
