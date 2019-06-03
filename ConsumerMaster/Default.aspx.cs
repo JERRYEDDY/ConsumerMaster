@@ -26,12 +26,7 @@ namespace ConsumerMaster
             const string filename = @"ConsumerExport.xlsx";
             try
             {
-                //string selectedValue = TPRadDropDownList.SelectedValue;
 
-                //ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-                //Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                //Utility utility = new Utility();
-                //utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {

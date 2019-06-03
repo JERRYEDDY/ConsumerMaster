@@ -13,14 +13,14 @@ namespace ConsumerMaster
 
         protected void AWCConsumerExportDownload_Click(object sender, EventArgs e)
         {
-            const string filename = @"AWCConsumerExport.xlsx";
+            const string filename = @"AWCConsumerExport.csv";
             try
             {
                 string tradingPartnerId = "5"; //Agency With Choice;In Home
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(tradingPartnerId);
                 Utility utility = new Utility();
-                utility.DownloadExcelFile(workbook, filename);
+                utility.DownloadCSVFile(workbook, filename);
             }
             catch (Exception ex)
             {

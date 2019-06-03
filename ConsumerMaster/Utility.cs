@@ -100,11 +100,23 @@ namespace ConsumerMaster
             try
             {
                 IWorkbookFormatProvider formatProvider = new CsvFormatProvider();
+                byte[] renderedBytes;
 
-                using (Stream output = new FileStream(fileName, FileMode.Create))
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    formatProvider.Export(workbook, output);
+                    formatProvider.Export(workbook, ms);
+                    renderedBytes = ms.ToArray();
                 }
+
+                HttpContext.Current.Response.ClearHeaders();
+                HttpContext.Current.Response.ClearContent();
+                HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
+                HttpContext.Current.Response.ContentType = "text/csv";
+                HttpContext.Current.Response.AddHeader("Pragma", "public");
+                HttpContext.Current.Response.BinaryWrite(renderedBytes);
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.SuppressContent = true;
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
             catch (Exception ex)
             {

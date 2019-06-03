@@ -25,12 +25,12 @@ namespace ConsumerMaster
             {
                 string selectedValue = ATFConsumerList.SelectedValue;
                 int id = Convert.ToInt32(selectedValue);
-                string filename = @"ATF" + Program[id] + "ConsumerExport.xlsx";
+                string filename = @"ATF" + Program[id] + "ConsumerExport.csv";
 
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
                 Utility utility = new Utility();
-                utility.DownloadExcelFile(workbook, filename);
+                utility.DownloadCSVFile(workbook, filename);
             }
             catch (Exception ex)
             {

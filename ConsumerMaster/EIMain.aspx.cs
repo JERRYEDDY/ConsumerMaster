@@ -22,23 +22,22 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = EIConsumerList.SelectedValue;
+                string filename = "";
 
                 if (selectedValue.Equals("7")) // Direct Therapy
                 {
-                    string filename = @"EIDTConsumerExport.xlsx";
-                    ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-                    Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                    Utility utility = new Utility();
-                    utility.DownloadExcelFile(workbook, filename);
+                    filename = @"EIDTConsumerExport.csv";
                 }
                 else if (selectedValue.Equals("8")) //Special Instruction
                 {
-                    string filename = @"EISIConsumerExport.xlsx";
-                    ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
-                    Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
-                    Utility utility = new Utility();
-                    utility.DownloadExcelFile(workbook, filename);
+                    filename = @"EISIConsumerExport.csv";
                 }
+
+                ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
+                Workbook workbook = consumerExport.CreateWorkbook(selectedValue);
+                Utility utility = new Utility();
+                utility.DownloadCSVFile(workbook, filename);
+
             }
             catch (Exception ex)
             {
@@ -51,23 +50,21 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = EIServiceList.SelectedValue;
+                string filename = "";
 
                 if (selectedValue.Equals("7")) // Direct Therapy
                 {
-                    string filename = @"EIDTServiceExport.xlsx";
-                    EIDTServiceExportExcelFile serviceExport = new EIDTServiceExportExcelFile();
-                    Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
-                    Utility utility = new Utility();
-                    utility.DownloadExcelFile(workbook, filename);
+                    filename = @"EIDTServiceExport.xlsx";
                 }
                 else if (selectedValue.Equals("8")) //Special Instruction
                 {
-                    string filename = @"EISIServiceExport.xlsx";
-                    EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
-                    Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
-                    Utility utility = new Utility();
-                    utility.DownloadExcelFile(workbook, filename);
+                    filename = @"EISIServiceExport.xlsx";
                 }
+
+                EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
+                Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
+                Utility utility = new Utility();
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
