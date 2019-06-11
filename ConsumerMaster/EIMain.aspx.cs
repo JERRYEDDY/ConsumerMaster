@@ -55,16 +55,19 @@ namespace ConsumerMaster
                 if (selectedValue.Equals("7")) // Direct Therapy
                 {
                     filename = @"EIDTServiceExport.xlsx";
+                    EIDTServiceExportExcelFile serviceExport = new EIDTServiceExportExcelFile();
+                    Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
+                    Utility utility = new Utility();
+                    utility.DownloadExcelFile(workbook, filename);
                 }
                 else if (selectedValue.Equals("8")) //Special Instruction
                 {
                     filename = @"EISIServiceExport.xlsx";
+                    EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
+                    Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
+                    Utility utility = new Utility();
+                    utility.DownloadExcelFile(workbook, filename);
                 }
-
-                EISIServiceExportExcelFile serviceExport = new EISIServiceExportExcelFile();
-                Workbook workbook = serviceExport.CreateWorkbook(selectedValue);
-                Utility utility = new Utility();
-                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
