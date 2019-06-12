@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
-using System.Text;
 using System.Windows.Media;
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
@@ -95,7 +94,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex2].SetDataValidationRule(rule2);
 
                     int rowNumber = currentRow + 1;
-                    string billingNoteLookup = "=VLOOKUP(F" + rowNumber  + ",Sheet2!A2:B18,2,FALSE)";
+                    string billingNoteLookup = "=VLOOKUP(F" + rowNumber  + ",Sheet2!$A$2:$B$18,2,FALSE)";
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(billingNoteLookup);            //"billing_note"
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["start_date_string"].ToString());
@@ -144,7 +143,7 @@ namespace ConsumerMaster
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
 
-                    string rpString = $"=VLOOKUP(R{rowNumber}, Sheet4!A2:E{rnCount}, ";
+                    string rpString = $"=VLOOKUP(R{rowNumber}, Sheet4!$A$2:$E${rnCount}, ";
                     string rpMA = rpString + "3, FALSE)";
                     string rpFirstName = rpString + "4, FALSE)";
                     string rpLastName = rpString + "5, FALSE)";

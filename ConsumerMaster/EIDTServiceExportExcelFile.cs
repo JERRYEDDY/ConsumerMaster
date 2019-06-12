@@ -1,9 +1,7 @@
 ﻿using System;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
-using System.Text;
 using System.Windows.Media;
-
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
@@ -101,7 +99,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex2].SetDataValidationRule(rule2);
 
                     int rowNumber = currentRow + 1;
-                    string billingNoteLookup = "=VLOOKUP(F" + rowNumber  + ",Sheet2!A2:B18,2,FALSE)";
+                    string billingNoteLookup = "=VLOOKUP(F" + rowNumber  + ",Sheet2!$A$2:$B$18,2,FALSE)";
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("billing_note")].SetValue(billingNoteLookup);            //"billing_note"
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("start_date_string")].SetValue(dr["start_date_string"].ToString());
@@ -124,7 +122,7 @@ namespace ConsumerMaster
                     context3.Argument1 = listRange3; //   
                     ListDataValidationRule rule3 = new ListDataValidationRule(context3);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex3].SetDataValidationRule(rule3);
-                    string taxonomyLookup = "=VLOOKUP(J" + rowNumber + ",Sheet3!A2:B4,2,FALSE)";
+                    string taxonomyLookup = "=VLOOKUP(J" + rowNumber + ",Sheet3!$A$2:$B$4,2,FALSE)";
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("rendering_provider_taxonomy_code")].SetValue(taxonomyLookup);    //"rendering_provider_taxonomy_code"
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["units"].ToString());
@@ -151,7 +149,7 @@ namespace ConsumerMaster
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
 
-                    string rpString = $"=VLOOKUP(S{rowNumber}, Sheet4!A2:E{rnCount}, ";
+                    string rpString = $"=VLOOKUP(S{rowNumber}, Sheet4!$A$2:$E${rnCount}, ";
                     string rpNPI = rpString + "2, FALSE)";
                     string rpFirstName = rpString + "4, FALSE)";
                     string rpLastName = rpString + "5, FALSE)";
