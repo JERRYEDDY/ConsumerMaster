@@ -2,6 +2,7 @@
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Windows.Media;
+using Telerik.Web.UI;
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
@@ -149,7 +150,8 @@ namespace ConsumerMaster
                     ListDataValidationRule rule4 = new ListDataValidationRule(context4);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex4].SetDataValidationRule(rule4);
 
-                    string rpString = $"=VLOOKUP(S{rowNumber}, Sheet4!$A$2:$E${rnCount}, ";
+                    int rdCount = rnCount + 1;
+                    string rpString = $"=VLOOKUP(S{rowNumber}, Sheet4!$A$2:$E${rdCount}, ";
                     string rpNPI = rpString + "2, FALSE)";
                     string rpFirstName = rpString + "4, FALSE)";
                     string rpLastName = rpString + "5, FALSE)";
@@ -200,7 +202,9 @@ namespace ConsumerMaster
                         worksheet.Cells[IndexRowItemStart, columnKey].SetFill(solidPatternFill);
                     }
 
-                    if (columnName.Equals("billing_note") || columnName.Equals("rendering_provider_secondary_id") ||
+                    if (columnName.Equals("billing_note") ||
+                        columnName.Equals("rendering_provider_taxonomy_code") ||
+                        columnName.Equals("rendering_provider_id") || 
                         columnName.Equals("rendering_provider_first_name") ||
                         columnName.Equals("rendering_provider_last_name"))
                     {
