@@ -73,22 +73,22 @@
                     <FormTemplate>
                         <section class="form-group">
                             <h4>Referring Provider Info</h4>
-                            <p id="formInstructions">Fields marked with an asterisk (*) are required.</p>
+                            <p id="formInstructions"><mark>Fields marked with an asterisk (*) are required.</mark></p>
                             <ul class="form-fields">
                             <li>
                                 <label for="first_name">First Name<em>*</em></label> 
                                 <telerik:RadTextBox ID="first_name" runat="server" Text='<%# Bind("first_name") %>' TabIndex="1"/>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" Display="Dynamic" ControlToValidate="first_name" ErrorMessage="First name is required"  ValidationGroup="FormValidationGroup" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="first_name" ErrorMessage="First name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
                                 <label for="last_name">Last Name *</label> 
                                 <telerik:RadTextBox ID="last_name" runat="server" Text='<%# Bind("last_name") %>' TabIndex="2"/>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="Dynamic" ControlToValidate="last_name" ErrorMessage="Last name is required"  ValidationGroup="FormValidationGroup" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="last_name" ErrorMessage="Last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
                                 <label for="ma_number">MA Number *</label> 
                                 <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="MA number is required"  ValidationGroup="FormValidationGroup"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="MA number is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
                                 <label for="npi_number">NPI Number:</label> 

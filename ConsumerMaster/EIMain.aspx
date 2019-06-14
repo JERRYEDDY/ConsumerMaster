@@ -22,7 +22,7 @@
                         <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton5" CssClass="downloadButton" ValidationGroup="EIConsumerValidationGroup"  OnClick="EIConsumerExportDownload_Click" runat="server" >
                             <Icon PrimaryIconCssClass="rbDownload"></Icon>
                         </telerik:RadButton>
-                        <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="EIConsumerList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="EIConsumerValidationGroup" />
+                        <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="EIConsumerList" ForeColor="red" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="EIConsumerValidationGroup" />
                     </td>
                 </tr>
                 <tr>
@@ -32,10 +32,10 @@
                     <td class="space"/>
                     <td>
                         <telerik:RadDropDownList RenderMode="Lightweight" ID="EIServiceList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="EIServiceValidationGroup" />
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton7" CssClass="downloadButton" ValidationGroup="ATFServiceValidationGroup" OnClick="EIServiceExportDownload_Click" runat="server" >
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton7" CssClass="downloadButton" ValidationGroup="EIServiceValidationGroup" OnClick="EIServiceExportDownload_Click" runat="server" >
                             <Icon PrimaryIconCssClass="rbDownload"></Icon>
                         </telerik:RadButton>
-                        <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator2" ControlToValidate="EIServiceList" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="EIServiceValidationGroup" />
+                        <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator2" ControlToValidate="EIServiceList" ForeColor="red" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="EIServiceValidationGroup" />
                     </td>
                 </tr>
             </table>

@@ -170,7 +170,9 @@ namespace ConsumerMaster
 
                 for (int i = 0; i < seDataTable.Columns.Count; i++)
                 {
+
                     sheet1Worksheet.Columns[i].AutoFitWidth();
+
                 }
             }
             catch (Exception ex)
