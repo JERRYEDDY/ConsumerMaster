@@ -92,34 +92,36 @@ namespace ConsumerMaster
             GridEditFormInsertItem insertedItem = (GridEditFormInsertItem)e.Item;
             string consumerFirst = null;
             string consumerLast = null;
+            string identifier = null;
 
             try
             {
                 //Access the textbox from the insert form template and store the values in string variables. 
-                consumerFirst = ((RadTextBox)insertedItem.FindControl("consumer_first")).Text;
-                consumerLast = ((RadTextBox)insertedItem.FindControl("consumer_last"))?.Text;
-                RadDatePicker dateOfBirth = (RadDatePicker)insertedItem.FindControl("date_of_birth");
-                string addressLine1 = ((RadTextBox)insertedItem.FindControl("address_line_1")).Text;
-                string addressLine2 = ((RadTextBox)insertedItem.FindControl("address_line_2")).Text;
-                string city = ((RadTextBox)insertedItem.FindControl("city")).Text;
+                consumerFirst = ((RadTextBox) insertedItem.FindControl("consumer_first")).Text;
+                consumerLast = ((RadTextBox) insertedItem.FindControl("consumer_last"))?.Text;
+                RadDatePicker dateOfBirth = (RadDatePicker) insertedItem.FindControl("date_of_birth");
+                string addressLine1 = ((RadTextBox) insertedItem.FindControl("address_line_1")).Text;
+                string addressLine2 = ((RadTextBox) insertedItem.FindControl("address_line_2")).Text;
+                string city = ((RadTextBox) insertedItem.FindControl("city")).Text;
                 string state = ((RadComboBox) insertedItem.FindControl("state")).SelectedValue;
-                string zipCode = ((RadMaskedTextBox)insertedItem.FindControl("zip_code")).Text;
-                string identifier = ((RadMaskedTextBox) insertedItem.FindControl("identifier")).Text;
+                string zipCode = ((RadMaskedTextBox) insertedItem.FindControl("zip_code")).Text;
+                identifier = ((RadMaskedTextBox) insertedItem.FindControl("identifier")).Text;
                 string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
-                string diagnosis = ((RadTextBox)insertedItem.FindControl("diagnosis_code")).Text;
+                string diagnosis = ((RadTextBox) insertedItem.FindControl("diagnosis_code")).Text;
 
-                string tradingPartner1 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner1")).SelectedValue;
+                string tradingPartner1 = ((RadComboBox) insertedItem.FindControl("cbTradingPartner1")).SelectedValue;
                 Int32.TryParse(tradingPartner1, out int tradingPartnerId1);
-                string tradingPartner2 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner2")).SelectedValue;
+                string tradingPartner2 = ((RadComboBox) insertedItem.FindControl("cbTradingPartner2")).SelectedValue;
                 Int32.TryParse(tradingPartner2, out int tradingPartnerId2);
-                string tradingPartner3 = ((RadComboBox)insertedItem.FindControl("cbTradingPartner3")).SelectedValue;
+                string tradingPartner3 = ((RadComboBox) insertedItem.FindControl("cbTradingPartner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
-                string referringProvider = ((RadComboBox)insertedItem.FindControl("cbReferringProvider")).SelectedValue;
+                string referringProvider =
+                    ((RadComboBox) insertedItem.FindControl("cbReferringProvider")).SelectedValue;
                 Int32.TryParse(referringProvider, out int referringProviderId);
 
-                string insertQuery = 
-                @"
+                string insertQuery =
+                    @"
                     INSERT INTO Consumers 
                         (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis
                         ,trading_partner_id1,trading_partner_id2, trading_partner_id3, referring_provider_id)
@@ -128,7 +130,8 @@ namespace ConsumerMaster
                         ,@diagnosis, @trading_partner_id1, @trading_partner_id2, @trading_partner_id3, @referring_provider_id)
                 ";
 
-                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+                using (SqlConnection con =
+                    new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
                     using (SqlCommand cmd = new SqlCommand())
                     {
