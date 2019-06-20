@@ -342,5 +342,16 @@ namespace ConsumerMaster
         {
             Response.Write("A server click has been executed!");
         }
+
+        //catch(SqlException sqlEx)
+        //{
+        //    if (sqlEx.Number == 2627) //Duplicate key
+        //    {
+        //        var message = $"Consumer identifier is registered to another consumer. Reason: Duplicate consumer identifier ";
+        //        DisplayMessage(message);
+        //        Logger.Info(message + sqlEx.Message);
+        //        e.Canceled = true;
+        //    }
+        //}
     }
 }
