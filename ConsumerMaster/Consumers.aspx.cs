@@ -116,8 +116,7 @@ namespace ConsumerMaster
                 string tradingPartner3 = ((RadComboBox) insertedItem.FindControl("cbTradingPartner3")).SelectedValue;
                 Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
-                string referringProvider =
-                    ((RadComboBox) insertedItem.FindControl("cbReferringProvider")).SelectedValue;
+                string referringProvider = ((RadComboBox) insertedItem.FindControl("cbReferringProvider")).SelectedValue;
                 Int32.TryParse(referringProvider, out int referringProviderId);
 
                 string insertQuery =
@@ -227,13 +226,11 @@ namespace ConsumerMaster
                     string tradingPartner3 = ((RadComboBox) editedItem.FindControl("cbTradingPartner3")).SelectedValue;
                     Int32.TryParse(tradingPartner3, out int tradingPartnerId3);
 
-                    string referringProvider =
-                        ((RadComboBox) editedItem.FindControl("cbReferringProvider")).SelectedValue;
+                    string referringProvider = ((RadComboBox) editedItem.FindControl("cbReferringProvider")).SelectedValue;
                     Int32.TryParse(referringProvider, out int referringProviderId);
 
 
-                    using (SqlConnection con =
-                        new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
+                    using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                     {
                         using (SqlCommand cmd = new SqlCommand())
                         {
@@ -301,7 +298,6 @@ namespace ConsumerMaster
                 consumerLast = item["consumer_last"].Text;
 
                 string deleteQuery = "DELETE from Consumers where consumer_internal_number = @consumerInternalNumber";
-
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                 {
                     using (SqlCommand cmd = new SqlCommand())
@@ -341,6 +337,7 @@ namespace ConsumerMaster
         protected void RadButton_Click(object sender, EventArgs e)
         {
             Response.Write("A server click has been executed!");
+
         }
 
         //catch(SqlException sqlEx)
