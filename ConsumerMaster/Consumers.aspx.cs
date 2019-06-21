@@ -340,6 +340,20 @@ namespace ConsumerMaster
 
         }
 
+        private string TruncateMessage(string originalMessage)
+        {
+            var maxLength = 50; // set to desired value
+            var strippedMessage = originalMessage;
+
+            strippedMessage = strippedMessage.Replace("\n", string.Empty); // removes newline char
+            strippedMessage = strippedMessage.Replace("\r", string.Empty); // removes carriage return char
+
+            if (strippedMessage.Length > maxLength)
+                strippedMessage = strippedMessage.Substring(0, maxLength - 3) + "..."; // reduces the message's size
+
+            return strippedMessage;
+        }
+
         //catch(SqlException sqlEx)
         //{
         //    if (sqlEx.Number == 2627) //Duplicate key
