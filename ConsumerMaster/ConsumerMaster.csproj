@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="ResidentialMain.aspx" />
     <Content Include="EIMain.aspx" />
     <Content Include="Images\ATFLogo1.png" />
     <Content Include="Images\EILogo1.png" />
@@ -313,6 +314,14 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ResidentialMain.aspx.cs">
+      <DependentUpon>ResidentialMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ResidentialMain.aspx.designer.cs">
+      <DependentUpon>ResidentialMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResidentialServiceExportExcelFile.cs" />
     <Compile Include="EIDTServiceExportExcelFile.cs" />
     <Compile Include="EISIServiceExportExcelFile.cs" />
     <Compile Include="EIMain.aspx.cs">
