@@ -200,10 +200,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="Images\ATFLogo.png" />
+    <Content Include="Images\AWCLogo.png" />
+    <Content Include="Images\EILogo.png" />
+    <Content Include="Images\ResidentialLogo.png" />
     <Content Include="ResidentialMain.aspx" />
     <Content Include="EIMain.aspx" />
-    <Content Include="Images\ATFLogo1.png" />
-    <Content Include="Images\EILogo1.png" />
     <Content Include="Images\Pathways LogoST.png" />
     <Content Include="NewConsumers.aspx" />
     <Content Include="Consumers.aspx" />
@@ -233,7 +235,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Images\AWCLogo1.png" />
     <Content Include="Images\PathwaysLogo.png" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -314,6 +315,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ConsumerExportExcelFileRes.cs" />
     <Compile Include="ResidentialMain.aspx.cs">
       <DependentUpon>ResidentialMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

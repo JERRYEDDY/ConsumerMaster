@@ -5,7 +5,7 @@ using System.Data;
 
 namespace ConsumerMaster
 {
-    public class ConsumerExportExcelFile
+    public class ConsumerExportExcelFileRes
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
@@ -19,6 +19,8 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
+                string residentialList = "('8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18')";
+
                 string selectQuery = 
                 $@"
                     SELECT 
@@ -28,9 +30,11 @@ namespace ConsumerMaster
                     FROM 
                         Consumers AS c
                     INNER JOIN 
-                        TradingPartners AS tp ON {tradingPartnerId} = tp.id 
+                        TradingPartners AS tp ON c.trading_partner_id1 = tp.id 
                     WHERE 
-                        c.trading_partner_id1 = {tradingPartnerId} OR c.trading_partner_id2 = {tradingPartnerId} OR c.trading_partner_id3 = {tradingPartnerId} 
+                        c.trading_partner_id1 IN {residentialList} OR 
+                        c.trading_partner_id2 IN {residentialList} OR 
+                        c.trading_partner_id3 IN {residentialList} 
                     ORDER BY consumer_last
                  ";
 
