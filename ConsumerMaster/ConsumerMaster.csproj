@@ -315,7 +315,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ConsumerExportExcelFileRes.cs" />
+    <Compile Include="ResidentialConsumerExportExcelFile.cs" />
     <Compile Include="ResidentialMain.aspx.cs">
       <DependentUpon>ResidentialMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

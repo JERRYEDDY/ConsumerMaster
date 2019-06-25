@@ -14,7 +14,7 @@ namespace ConsumerMaster
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
 
-        public Workbook CreateWorkbook()
+        public Workbook CreateWorkbook(string residentialList)
         {
             Workbook workbook = new Workbook();
             try
@@ -31,7 +31,6 @@ namespace ConsumerMaster
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat(true);
 
-                string tradingPartnerId = "5";//Agency With Choice = 5
                 string selectQuery = 
                 $@"
                     SELECT 
@@ -43,9 +42,11 @@ namespace ConsumerMaster
                     FROM 
                         Consumers AS c 
                     INNER JOIN 
-                        TradingPartners AS tp ON {tradingPartnerId} = tp.id 
+                        TradingPartners AS tp ON c.trading_partner_id1 = tp.id 
                     WHERE 
-                        c.trading_partner_id1 = {tradingPartnerId} OR c.trading_partner_id2 = {tradingPartnerId} OR c.trading_partner_id3 = {tradingPartnerId} 
+                        c.trading_partner_id1 = {residentialList} OR 
+                        c.trading_partner_id2 = {residentialList} OR 
+                        c.trading_partner_id3 = {residentialList} 
                     ORDER BY consumer_last
                 ";
 

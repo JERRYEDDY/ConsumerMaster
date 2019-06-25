@@ -5,12 +5,12 @@ using System.Data;
 
 namespace ConsumerMaster
 {
-    public class ConsumerExportExcelFileRes
+    public class ResidentialConsumerExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateWorkbook(string tradingPartnerId)
+        public Workbook CreateWorkbook(string residentialList)
         {
             Workbook workbook = new Workbook();
 
@@ -18,8 +18,6 @@ namespace ConsumerMaster
             {
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
-
-                string residentialList = "('8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18')";
 
                 string selectQuery = 
                 $@"
@@ -83,7 +81,6 @@ namespace ConsumerMaster
             }
             return workbook;
         }
-
         private void PrepareWorksheet(Worksheet worksheet)
         {
             try
