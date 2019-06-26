@@ -58,7 +58,13 @@ namespace ConsumerMaster
         protected void RadGrid1_NeedDataSource(object source, GridNeedDataSourceEventArgs e)
         {
             //Populate the Radgrid1
-            string selectQuery = "SELECT id, first_name, last_name, ma_number, npi_number, name FROM RenderingProviders"; 
+            string selectQuery =
+                @"  SELECT 
+                        id, first_name, last_name, ma_number, npi_number, name 
+                    FROM 
+                        RenderingProviders
+                    ORDER BY name
+                "; 
             RadGrid1.DataSource = GetDataTable(selectQuery, null);
         }
 
