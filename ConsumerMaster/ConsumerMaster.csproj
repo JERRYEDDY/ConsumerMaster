@@ -200,6 +200,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="Images\VendorLogo.png" />
+    <Content Include="VendorMain.aspx" />
     <Content Include="Images\ATFLogo.png" />
     <Content Include="Images\AWCLogo.png" />
     <Content Include="Images\EILogo.png" />
@@ -314,6 +316,16 @@
     </Compile>
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VendorServiceExportFormat.cs" />
+    <Compile Include="ResidentialServiceExportFormat.cs" />
+    <Compile Include="VendorServiceExportExcelFile.cs" />
+    <Compile Include="VendorMain.aspx.cs">
+      <DependentUpon>VendorMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VendorMain.aspx.designer.cs">
+      <DependentUpon>VendorMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="ResidentialConsumerExportExcelFile.cs" />
     <Compile Include="ResidentialMain.aspx.cs">

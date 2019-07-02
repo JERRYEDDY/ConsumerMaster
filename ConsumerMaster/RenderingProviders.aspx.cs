@@ -80,7 +80,7 @@ namespace ConsumerMaster
                 //Access the textbox from the insert form template and store the values in string variables. 
                 firstName = ((RadTextBox)insertedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)insertedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadMaskedTextBox)insertedItem.FindControl("ma_number")).Text;
+                string maNumber = ((RadMaskedTextBox)insertedItem.FindControl("ma_number")).Text;
                 string npiNumber = ((RadMaskedTextBox)insertedItem.FindControl("npi_number")).Text;
 
                 string insertQuery = "INSERT INTO RenderingProviders(first_name, last_name, ma_number, npi_number) VALUES(@first_name, @last_name, @ma_number, @npi_number)";
@@ -95,7 +95,7 @@ namespace ConsumerMaster
 
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
-                        cmd.Parameters.Add("ma_number", SqlDbType.VarChar).Value = medicadNumber;
+                        cmd.Parameters.Add("ma_number", SqlDbType.VarChar).Value = maNumber;
                         cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
 
                         con.Open();
@@ -136,7 +136,7 @@ namespace ConsumerMaster
 
                 firstName = ((RadTextBox)editedItem.FindControl("first_name"))?.Text;
                 lastName = ((RadTextBox)editedItem.FindControl("last_name")).Text;
-                string medicadNumber = ((RadMaskedTextBox)editedItem.FindControl("ma_number")).Text;
+                string maNumber = ((RadMaskedTextBox)editedItem.FindControl("ma_number")).Text;
                 string npiNumber = ((RadMaskedTextBox)editedItem.FindControl("npi_number")).Text;
 
                 string updateQuery = "UPDATE RenderingProviders SET first_name = @first_name, last_name = @last_name, ma_number = @ma_number, npi_number = @npi_number WHERE id = @id";
@@ -152,7 +152,7 @@ namespace ConsumerMaster
                         cmd.Parameters.Add("id", SqlDbType.Int).Value = id;
                         cmd.Parameters.Add("first_name", SqlDbType.VarChar).Value = firstName;
                         cmd.Parameters.Add("last_name", SqlDbType.VarChar).Value = lastName;
-                        cmd.Parameters.Add("ma_number", SqlDbType.VarChar).Value = medicadNumber;
+                        cmd.Parameters.Add("ma_number", SqlDbType.VarChar).Value = maNumber;
                         cmd.Parameters.Add("npi_number", SqlDbType.VarChar).Value = npiNumber;
 
                         con.Open();

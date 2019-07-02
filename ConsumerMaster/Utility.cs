@@ -116,7 +116,10 @@ namespace ConsumerMaster
                 HttpContext.Current.Response.BinaryWrite(renderedBytes);
                 HttpContext.Current.Response.Flush();
                 HttpContext.Current.Response.SuppressContent = true;
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
+                HttpContext.Current.Response.Write(renderedBytes);
+                HttpContext.Current.Response.End();
+
+                //HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
             catch (Exception ex)
             {

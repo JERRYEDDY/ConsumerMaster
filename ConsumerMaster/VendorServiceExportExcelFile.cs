@@ -7,14 +7,14 @@ using System.Windows.Media;
 
 namespace ConsumerMaster
 {
-    public class ResidentialServiceExportExcelFile
+    public class VendorServiceExportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         private static readonly int IndexRowItemStart = 0;
         private static readonly int IndexColumnName = 0;
 
-        public Workbook CreateWorkbook(string residentialList)
+        public Workbook CreateWorkbook()
         {
             Workbook workbook = new Workbook();
             try
@@ -24,15 +24,14 @@ namespace ConsumerMaster
                 worksheets.Add();
 
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
-                sheet1Worksheet.Name = "Residential";
-
                 Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
                 Utility util = new Utility();
-                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 9");  //Residential;Beverly = 9
+                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = 19");  //Vendor;In Home = 19
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat(true);
 
+                string tradingPartnerId = "19";//Vendor;In Home = 19
                 string selectQuery = 
                 $@"
                     SELECT 
@@ -44,11 +43,9 @@ namespace ConsumerMaster
                     FROM 
                         Consumers AS c 
                     INNER JOIN 
-                        TradingPartners AS tp ON c.trading_partner_id1 = tp.id 
+                        TradingPartners AS tp ON {tradingPartnerId} = tp.id 
                     WHERE 
-                        c.trading_partner_id1 IN {residentialList} OR 
-                        c.trading_partner_id2 IN {residentialList} OR 
-                        c.trading_partner_id3 IN {residentialList} 
+                        c.trading_partner_id1 = {tradingPartnerId} OR c.trading_partner_id2 = {tradingPartnerId} OR c.trading_partner_id3 = {tradingPartnerId} 
                     ORDER BY consumer_last
                 ";
 
@@ -92,7 +89,7 @@ namespace ConsumerMaster
                     //sheet1Worksheet.Cells[currentRow, sef.GetIndex("hours")].SetValue(0); //Set to zero
                     //string convertToUnits = "=ROUNDDOWN(J" + (currentRow + 1) + "*4, 0)";
 
-                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["manual_billable_rate"].ToString());
+                    sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["units"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("prior_authorization_number")].SetValue(dr["prior_authorization_number"].ToString());
@@ -140,12 +137,11 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
-
         private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
             try
             {
-                ResidentialServiceExportFormat sef = new ResidentialServiceExportFormat(true);
+                VendorServiceExportFormat sef = new VendorServiceExportFormat(true);
                 string[] columnsList = sef.ColumnStrings;
 
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255,255,0,0), Colors.Transparent);

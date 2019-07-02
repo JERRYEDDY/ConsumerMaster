@@ -137,7 +137,6 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
-
         private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
             try

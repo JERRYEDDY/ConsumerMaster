@@ -62,6 +62,7 @@
                                 <li><a href="ATFMain">Adult Training Facility</a></li>
                                 <li><a href="EIMain">Early Intervention</a></li>
                                 <li><a href="ResidentialMain">Residential</a></li>
+                                <li><a href="VendorMain">Vendor</a></li>
                             </ul>
                         </li>
                         <li><a runat="server" href="~/Consumers">Consumers</a></li>
