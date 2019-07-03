@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 

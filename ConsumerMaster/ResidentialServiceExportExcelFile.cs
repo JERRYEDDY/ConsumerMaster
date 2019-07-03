@@ -89,9 +89,6 @@ namespace ConsumerMaster
                     ListDataValidationRule rule = new ListDataValidationRule(context);
                     sheet1Worksheet.Cells[dataValidationRuleCellIndex].SetDataValidationRule(rule);
 
-                    //sheet1Worksheet.Cells[currentRow, sef.GetIndex("hours")].SetValue(0); //Set to zero
-                    //string convertToUnits = "=ROUNDDOWN(J" + (currentRow + 1) + "*4, 0)";
-
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("units")].SetValue(dr["manual_billable_rate"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, sef.GetIndex("manual_billable_rate")].SetValue(dr["manual_billable_rate"].ToString());
@@ -145,7 +142,7 @@ namespace ConsumerMaster
         {
             try
             {
-                ResidentialServiceExportFormat sef = new ResidentialServiceExportFormat(true);
+                ServiceExportFormat sef = new ServiceExportFormat(false);
                 string[] columnsList = sef.ColumnStrings;
 
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255,255,0,0), Colors.Transparent);

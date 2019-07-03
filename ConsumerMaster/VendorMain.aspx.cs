@@ -33,7 +33,7 @@ namespace ConsumerMaster
             const string filename = @"VendorServiceExport.xlsx";
             try
             {
-                AWCServiceExportExcelFile serviceExport = new AWCServiceExportExcelFile();
+                VendorServiceExportExcelFile serviceExport = new VendorServiceExportExcelFile();
                 Workbook workbook = serviceExport.CreateWorkbook();
                 Utility utility = new Utility();
                 utility.DownloadExcelFile(workbook, filename);

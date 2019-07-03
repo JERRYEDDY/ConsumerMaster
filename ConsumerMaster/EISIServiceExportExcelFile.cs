@@ -82,10 +82,10 @@ namespace ConsumerMaster
                     ListDataValidationRuleContext context2 = new ListDataValidationRuleContext(sheet1Worksheet, dataValidationRuleCellIndex2)
                     {
                         InputMessageTitle = "Restricted input",
-                        InputMessageContent = "The input is restricted to the composite procedure codes.",
+                        InputMessageContent = "The input is restricted to the trading partner program string.",
                         ErrorStyle = ErrorStyle.Stop,
                         ErrorAlertTitle = "Wrong value",
-                        ErrorAlertContent = "The entered value is not valid. Allowed values are the composite procedure codes!",
+                        ErrorAlertContent = "The entered value is not valid. Allowed values are the trading partner program string!",
                         InCellDropdown = true
                     };
                     string listRange2 = "=Sheet2!$A$2:$A$" + tppCount + 1;  //= Sheet2!$A$2:$A$

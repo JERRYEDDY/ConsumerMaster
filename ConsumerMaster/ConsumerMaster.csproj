@@ -317,8 +317,6 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
-    <Compile Include="VendorServiceExportFormat.cs" />
-    <Compile Include="ResidentialServiceExportFormat.cs" />
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
       <DependentUpon>VendorMain.aspx</DependentUpon>
