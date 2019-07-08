@@ -38,7 +38,6 @@ namespace ConsumerMaster
                 CreateCompositeProcedureCodesWorksheet(sheet3Worksheet, cpcList);
 
                 ServiceExportFormat sef = new ServiceExportFormat(false);
-
                 string tradingPartnerId = "19";//Vendor;In Home = 19
                 string selectQuery = 
                 $@"
