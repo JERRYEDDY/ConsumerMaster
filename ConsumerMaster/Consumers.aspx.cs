@@ -106,6 +106,8 @@ namespace ConsumerMaster
                 string state = ((RadComboBox) insertedItem.FindControl("state")).SelectedValue;
                 string zipCode = ((RadMaskedTextBox) insertedItem.FindControl("zip_code")).Text;
                 identifier = ((RadMaskedTextBox) insertedItem.FindControl("identifier")).Text;
+
+
                 string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox) insertedItem.FindControl("diagnosis_code")).Text;
 

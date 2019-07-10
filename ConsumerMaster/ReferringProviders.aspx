@@ -86,7 +86,7 @@
                             </li>
                             <li>
                                 <label for="npi_number">NPI No *:</label> 
-                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########"/>
+                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########" Width="65"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="npi_number" ErrorMessage="NPI # is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                         </section>

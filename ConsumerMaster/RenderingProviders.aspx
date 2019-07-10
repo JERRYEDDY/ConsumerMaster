@@ -87,12 +87,12 @@
                             </li>
                             <li>
                                 <label for="ma_number">MA Number *</label> 
-                                <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" />
+                                <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" Width="80"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="MA number is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
                                 <label for="npi_number">NPI Number:</label> 
-                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########"/>
+                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########" Width="65"/>
                             </li>
                         </section>
                         <section class="form-submit">
