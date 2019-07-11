@@ -88,6 +88,8 @@
                                 <label for="npi_number">NPI No *:</label> 
                                 <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########" Width="65"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="npi_number" ErrorMessage="NPI # is required"  ValidationGroup="FormValidationGroup" />
+                                <asp:RegularExpressionValidator Display="Dynamic" ID="MaskedTextBoxRegularExpressionValidator" runat="server" ErrorMessage="10 digit number is required" 
+                                                                ControlToValidate="npi_number" ValidationExpression="^\d{10}$"/>
                             </li>
                         </section>
                         <section class="form-submit">

@@ -5,6 +5,11 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 <link href="Styles/Flexbox.css" rel="stylesheet" />
+<style type="text/css">
+    .textBoxLabel {
+        display: block !important;
+    }
+</style>
 <script type="text/javascript" language="javascript"> 
     function RowClick(sender, eventArgs)  
     {  
@@ -76,17 +81,18 @@
                             <ul class="form-fields">
                             <li>
                                 <label>First Name *</label> 
-                                <telerik:RadTextBox ID="consumer_first" runat="server" Text='<%# Bind("consumer_first") %>' TabIndex="1"/>
+                                <telerik:RadTextBox ID="consumer_first" runat="server" Text='<%# Bind("consumer_first") %>' TabIndex="1" Width="315"/>
                                 <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="consumer_first" ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
                                 <label>Last name *</label> 
-                                <telerik:RadTextBox ID="consumer_last" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="2"/>
+                                <telerik:RadTextBox ID="consumer_last" runat="server" Text='<%# Bind("consumer_last") %>' TabIndex="2" Width="315"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="consumer_last" ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
                                 <label>Birth Date *</label> 
-                                <telerik:RadDatePicker ID="date_of_birth" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3" Width="100"/>
+                                <telerik:RadDatePicker ID="date_of_birth" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3" Width="100">
+                                </telerik:RadDatePicker>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="date_of_birth" ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
@@ -96,11 +102,11 @@
                             </li>                                    
                             <li>
                                 <label>Address2:</label> 
-                                <telerik:RadTextBox ID="address_line_2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="5" Width="315"/>
+                                <telerik:RadTextBox ID="address_line_2" Text='<%# Bind( "address_line_2") %>' runat="server" TabIndex="5" Width="315" />
                             </li>                                   
                             <li>
                                 <label>City *</label> 
-                                <telerik:RadTextBox ID="city" Text='<%# Bind("city") %>' runat="server" TabIndex="6"/>
+                                <telerik:RadTextBox ID="city" Text='<%# Bind("city") %>' runat="server" TabIndex="6"  />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="city" ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
@@ -111,19 +117,19 @@
                             </li>                                    
                             <li>
                                 <label>Zip Code *</label> 
-                                <telerik:RadMaskedTextBox ID="zip_code" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="8" Mask="#####-####" Width="65"/>
+                                <telerik:RadMaskedTextBox ID="zip_code" Text='<%# Bind("zip_code") %>' runat="server" TabIndex="8" Mask="#####-####" Width="75"  />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="zip_code" ErrorMessage="Zip code is required"  ValidationGroup="FormValidationGroup"/>
                             </li>  
                             <li>
                                 <label>Identifier *</label> 
-                                <telerik:RadMaskedTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="8" Mask="##########" Width="65"/>
+                                <telerik:RadMaskedTextBox ID="identifier" Text='<%# Bind("identifier") %>' runat="server" TabIndex="8" Mask="##########" Width="75"  />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="identifier" ErrorMessage="Identifier is required" ValidationGroup="FormValidationGroup"/>
                                 <asp:RegularExpressionValidator Display="Dynamic" ID="MaskedTextBoxRegularExpressionValidator" runat="server" ErrorMessage="10 digit number is required" 
                                                                 ControlToValidate="identifier" ValidationExpression="^\d{10}$"/>
                             </li>                                     
                             <li>
                                 <label>Gender *</label> 
-                                <telerik:RadRadioButtonList ID="gender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Horizontal">
+                                <telerik:RadRadioButtonList ID="gender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Vertical">
                                     <Items>
                                         <telerik:ButtonListItem Text="Male" Value="M"/>
                                         <telerik:ButtonListItem Text="Female" Value="F"/>
