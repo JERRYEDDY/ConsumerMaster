@@ -9,6 +9,15 @@
     .textBoxLabel {
         display: block !important;
     }
+
+    .radiobuttonlist {
+    }
+    .radiobuttonlist td{
+        border:1px solid green;
+        height:50px;
+        vertical-align:bottom;
+    }
+
 </style>
 <script type="text/javascript" language="javascript"> 
     function RowClick(sender, eventArgs)  
@@ -80,7 +89,7 @@
                             <p id="formInstructions"><mark>Fields marked with an asterisk (*) are required.</mark></p>
                             <ul class="form-fields">
                             <li>
-                                <label>First Name *</label> 
+                                <label>First name *</label>
                                 <telerik:RadTextBox ID="consumer_first" runat="server" Text='<%# Bind("consumer_first") %>' TabIndex="1" Width="315"/>
                                 <asp:RequiredFieldValidator ID="TextBoxRequiredFieldValidator" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="consumer_first" ErrorMessage="Consumer first name is required" ValidationGroup="FormValidationGroup"/>
                             </li>
@@ -90,9 +99,8 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="consumer_last" ErrorMessage="Consumer last name is required"  ValidationGroup="FormValidationGroup" />
                             </li>
                             <li>
-                                <label>Birth Date *</label> 
-                                <telerik:RadDatePicker ID="date_of_birth" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3" Width="100">
-                                </telerik:RadDatePicker>
+                                <label>Birth date *</label>
+                                <telerik:RadDatePicker ID="date_of_birth" runat="server" MinDate="1/1/1900" DbSelectedDate='<%# Bind("date_of_birth") %>' TabIndex="3" Width="100"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="date_of_birth" ErrorMessage="Date of birth is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
@@ -110,7 +118,7 @@
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="city" ErrorMessage="City is required"  ValidationGroup="FormValidationGroup"/>
                             </li>
                             <li>
-                                <label>State *</label> 
+                                <label>State *</label>
                                 <telerik:RadComboBox runat="server" ID="state" DataSourceID="StatesSqlDataSource" SelectedValue='<%# Bind("state") %>' 
                                                      DataTextField="name" DataValueField="abbreviation" TabIndex="7" EmptyMessage="Select" Height="200" />
                                 <asp:RequiredFieldValidator ID="Validator" ControlToValidate="state" ErrorMessage="State is required" runat="server" ForeColor="red" Display="Dynamic"  ValidationGroup="FormValidationGroup"/>
@@ -128,7 +136,7 @@
                                                                 ControlToValidate="identifier" ValidationExpression="^\d{10}$"/>
                             </li>                                     
                             <li>
-                                <label>Gender *</label> 
+                                <label>Gender *</label>
                                 <telerik:RadRadioButtonList ID="gender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Vertical">
                                     <Items>
                                         <telerik:ButtonListItem Text="Male" Value="M"/>
