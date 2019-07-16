@@ -3,31 +3,27 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link href="Styles/Flexbox.css" rel="stylesheet" />
+    <style type="text/css">
+        .textBoxLabel {
+            display: block !important;
+        }
+        .header {
+            padding: 5px;
+            text-align: center;
+            background: #1abc9c;
 
-<link href="Styles/Flexbox.css" rel="stylesheet" />
-<style type="text/css">
-    .textBoxLabel {
-        display: block !important;
-    }
-
-    .radiobuttonlist {
-    }
-    .radiobuttonlist td{
-        border:1px solid green;
-        height:50px;
-        vertical-align:bottom;
-    }
-
-</style>
-<script type="text/javascript" language="javascript"> 
-    function RowClick(sender, eventArgs)  
-    {  
-        var tableView = eventArgs.get_tableView();   
-        var rowIndex = eventArgs.get_itemIndexHierarchical(); 
- 
-        tableView.editItem(rowIndex); 
-    } 
-</script>
+        }
+    </style>
+    <script type="text/javascript" language="javascript"> 
+        function RowClick(sender, eventArgs)  
+        {  
+            var tableView = eventArgs.get_tableView();   
+            var rowIndex = eventArgs.get_itemIndexHierarchical(); 
+     
+            tableView.editItem(rowIndex); 
+        } 
+    </script>
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" />
     <telerik:RadWindowManager ID="RadWindowManager1" runat="server"></telerik:RadWindowManager>
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
@@ -85,7 +81,8 @@
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
                         <section class="form-group">
-                            <h4>Consumer Info</h4>
+                            <h4><b>Consumer Info</b></h4>
+                            <hr style="border: 3px solid gray;" />
                             <p id="formInstructions"><mark>Fields marked with an asterisk (*) are required.</mark></p>
                             <ul class="form-fields">
                             <li>
@@ -137,7 +134,7 @@
                             </li>                                     
                             <li>
                                 <label>Gender *</label>
-                                <telerik:RadRadioButtonList ID="gender" runat="server" Layout="Flow" Columns="2" SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Vertical">
+                                <telerik:RadRadioButtonList ID="gender" runat="server"  SelectedValue='<%# Bind("gender") %>' TabIndex="10" ValidationGroup="GenderGroup" Direction="Vertical" CssClass="RBL">
                                     <Items>
                                         <telerik:ButtonListItem Text="Male" Value="M"/>
                                         <telerik:ButtonListItem Text="Female" Value="F"/>
@@ -184,11 +181,13 @@
                                     </Items>
                                 </telerik:RadComboBox>                                
                             </li> 
+
                         </section>
                         <section class="form-submit">
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
                                       CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
                                 <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                                <hr style="border: 3px solid gray;" />
                         </section>
                     </FormTemplate>
                 </EditFormSettings>              

@@ -72,7 +72,8 @@
                 <EditFormSettings EditFormType="Template">
                     <FormTemplate>
                         <section class="form-group">
-                            <h4>Referring Provider Info</h4>
+                            <h4><b>Rendering Provider Info</b></h4>
+                            <hr style="border: 3px solid gray;" />
                             <p id="formInstructions"><mark>Fields marked with an asterisk (*) are required.</mark></p>
                             <ul class="form-fields">
                             <li>
@@ -87,14 +88,14 @@
                             </li>
                             <li>
                                 <label for="ma_number">MA Number *</label> 
-                                <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" Width="80"/>
+                                <telerik:RadMaskedTextBox ID="ma_number" Text='<%# Bind("ma_number") %>' runat="server" TabIndex="3" MaxLength="13" Mask="#############" Width="95"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="red" Display="Dynamic" ControlToValidate="ma_number" ErrorMessage="MA number is required"  ValidationGroup="FormValidationGroup"/>
                                 <asp:RegularExpressionValidator Display="Dynamic" ID="MaskedTextBoxRegularExpressionValidator" runat="server" ErrorMessage="13 digit number is required" 
                                                                 ControlToValidate="ma_number" ValidationExpression="^\d{13}$"/>
                             </li>
                             <li>
                                 <label for="npi_number">NPI Number:</label> 
-                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########" Width="65"/>
+                                <telerik:RadMaskedTextBox ID="npi_number" Text='<%# Bind("npi_number") %>' runat="server" TabIndex="4" MaxLength="10" Mask="##########" Width="80"/>
                                 <asp:RegularExpressionValidator Display="Dynamic" ID="RegularExpressionValidator1" runat="server" ErrorMessage="10 digit number is required" 
                                                                 ControlToValidate="npi_number" ValidationExpression="^\d{10}$"/>
                             </li>
@@ -103,6 +104,7 @@
                                 <asp:Button ID="btnUpdate" Text='<%# (Container is GridEditFormInsertItem) ? "Insert" : "Update" %>' runat="server" CausesValidation="True"
                                       CommandName='<%# (Container is GridEditFormInsertItem) ? "PerformInsert" : "Update" %>' ValidationGroup="FormValidationGroup"></asp:Button>&nbsp;
                                 <asp:Button ID="btnCancel" Text="Cancel" runat="server" CausesValidation="False" CommandName="Cancel"></asp:Button>
+                                <hr style="border: 3px solid gray;" />
                         </section>
                     </FormTemplate>
                 </EditFormSettings>                 
