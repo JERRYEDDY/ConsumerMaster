@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="Images\BlankLogo.png" />
     <Content Include="Images\VendorLogo.png" />
     <Content Include="VendorMain.aspx" />
     <Content Include="Images\ATFLogo.png" />

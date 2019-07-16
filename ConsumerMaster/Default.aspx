@@ -4,35 +4,33 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 <style>
-.space {
-  background: none;
-  width: 0.1rem;
-}
-.ddl option  {
-    font-size: 30px;
-}
-.RadTreeView,
-.RadTreeView a.rtIn,
-.RadTreeView .rtEdit .rtIn input
-{
-   font-size:10px;
-} 
+    .images {
+        display: inline;
+        margin: 0px;
+        padding: 0px;
+        vertical-align:middle;
+        width:230px;
+    }
+    #content {
+        display: block;
+        margin: 0px;
+        padding: 0px;
+        position: relative;
+        top: 10px;
+        height: auto;
+        max-width: auto;
+        overflow-y: hidden;
+        overflow-x:auto;
+        word-wrap:normal;
+        white-space:nowrap;
+    }
 </style>
-    <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
-    <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
-    <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-    </telerik:RadAjaxManager>
     <h4>Home</h4>
-    <div class="demo-container no-bg">
-        <div id="grid">
-        </div>
-        <div>
-            <br/>
-            <telerik:RadPanelBar ID="RadPanelBar2" runat="server"></telerik:RadPanelBar>
-        </div>
-    </div><br/><br/>
-    
-    <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone"></telerik:RadFormDecorator>
-    <asp:SqlDataSource ID="TradingPartnerDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id AS trading_partner_id, name FROM TradingPartners"/>
-    <asp:SqlDataSource ID="CompProcCodeDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnStringDb1 %>" SelectCommand="SELECT id, name FROM CompositeProcedureCodes"/>
+    <div id="content">
+        <a href="AWCMain"><img src="Images/AWCLogo.png" class="images"/></a>
+        <a href="ATFMain"><img src="Images/ATFLogo.png" class="images"/></a>
+        <a href="EIMain"><img src="Images/EILogo.png" class="images"/></a>
+        <a href="ResidentialMain"><img src="Images/ResidentialLogo.png" class="images"/></a>
+        <a href="VendorMain"><img src="Images/VendorLogo.png" class="images"/></a>
+    </div>
 </asp:Content>
