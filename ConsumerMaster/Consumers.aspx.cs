@@ -107,7 +107,6 @@ namespace ConsumerMaster
                 string zipCode = ((RadMaskedTextBox) insertedItem.FindControl("zip_code")).Text;
                 identifier = ((RadMaskedTextBox) insertedItem.FindControl("identifier")).Text;
 
-
                 string gender = ((RadRadioButtonList) insertedItem.FindControl("gender")).SelectedValue;
                 string diagnosis = ((RadTextBox) insertedItem.FindControl("diagnosis_code")).Text;
 
@@ -122,7 +121,7 @@ namespace ConsumerMaster
                 Int32.TryParse(referringProvider, out int referringProviderId);
 
                 string insertQuery =
-                    @"
+                @"
                     INSERT INTO Consumers 
                         (consumer_first, consumer_last, date_of_birth, address_line_1, address_line_2, city, state, zip_code, identifier, gender, diagnosis
                         ,trading_partner_id1,trading_partner_id2, trading_partner_id3, referring_provider_id)
@@ -230,7 +229,6 @@ namespace ConsumerMaster
 
                     string referringProvider = ((RadComboBox) editedItem.FindControl("cbReferringProvider")).SelectedValue;
                     Int32.TryParse(referringProvider, out int referringProviderId);
-
 
                     using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb1"].ToString()))
                     {

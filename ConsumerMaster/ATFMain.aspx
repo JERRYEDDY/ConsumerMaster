@@ -7,7 +7,7 @@
         <table>
             <tr>
                 <td>
-                    <img src="Images/ATFLogo.png" />
+                    <img src="Images/ATFLogo.png" width="231" height="54" />
                 </td>
             </tr>
             <tr>

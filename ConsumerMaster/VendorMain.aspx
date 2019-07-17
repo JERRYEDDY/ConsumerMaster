@@ -9,7 +9,7 @@
             <table>
                 <tr>
                     <td>
-                        <img src="Images/VendorLogo.png" />
+                        <img src="Images/VendorLogo.png" width="231" height="54" />
                     </td>
                 </tr>
                 <tr>
