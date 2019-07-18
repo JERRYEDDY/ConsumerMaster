@@ -4,33 +4,45 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 <style>
-    .images {
-        display: inline;
-        margin: 0px;
-        padding: 0px;
-        vertical-align:middle;
-        width:230px;
+    .content {
+        display: flex;
     }
-    #content {
-        display: block;
-        margin: 0px;
-        padding: 0px;
-        position: relative;
-        top: 10px;
-        height: auto;
-        max-width: auto;
-        overflow-y: hidden;
-        overflow-x:auto;
-        word-wrap:normal;
-        white-space:nowrap;
+    .content div {
+        border: 1px #ccc solid;
+        padding: 10px;
+    }
+    .box-1 {
+        flex: 1;
+    }
+    .box-2 {
+        flex: 1;
+    }
+    .box-3 {
+        flex: 1;
+    }
+    .box-4 {
+        flex: 1;
+    }
+    .box-5 {
+        flex: 1;
     }
 </style>
     <h4>Home</h4>
-    <div id="content">
-        <a href="AWCMain"><img src="Images/AWCLogo.png" class="images"/></a>
-        <a href="ATFMain"><img src="Images/ATFLogo.png" class="images"/></a>
-        <a href="EIMain"><img src="Images/EILogo.png" class="images"/></a>
-        <a href="ResidentialMain"><img src="Images/ResidentialLogo.png" class="images"/></a>
-        <a href="VendorMain"><img src="Images/VendorLogo.png" class="images"/></a>
+    <div class="content">
+        <div class="box-1">
+            <a href="AWCMain"><img src="Images/AWCLogo.png" class="images"/></a>
+        </div>
+        <div class="box-2">
+            <a href="ATFMain"><img src="Images/ATFLogo.png" class="images"/></a>
+        </div>
+        <div class="box-3">
+            <a href="EIMain"><img src="Images/EILogo.png" class="images"/></a>
+        </div>
+        <div class="box-4">
+            <a href="ResidentialMain"><img src="Images/ResidentialLogo.png" class="images"/></a>
+        </div>
+        <div class="box-5">
+            <a href="VendorMain"><img src="Images/VendorLogo.png" class="images"/></a>
+        </div>
     </div>
 </asp:Content>
