@@ -28,8 +28,10 @@ namespace ConsumerMaster
                 Worksheet sheet2Worksheet = worksheets["Sheet2"];
 
                 Utility util = new Utility();
+
                 //Adult Training Facility;Jefferson = 1 or Adult Training Facility;Bill George = 2 
-                List<string> cpcList = util.GetList("SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id IN (1,2)");
+                string selectCPCQuery = $@"SELECT name FROM CompositeProcedureCodes WHERE trading_partner_id = {tradingPartnerId} ORDER BY name";
+                List<string> cpcList = util.GetList(selectCPCQuery);
 
                 CreateCompositeProcedureCodesWorksheet(sheet2Worksheet, cpcList);
                 ServiceExportFormat sef = new ServiceExportFormat();
