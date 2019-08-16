@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Windows.Media;
-
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
