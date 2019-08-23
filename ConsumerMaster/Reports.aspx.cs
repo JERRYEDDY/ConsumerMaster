@@ -15,7 +15,7 @@ namespace ConsumerMaster
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            BindToATF_TPDropDownList2(ATFPartnerList);
+            //BindToATF_TPDropDownList2(ATFPartnerList);
         }
 
         private void BindToATF_TPDropDownList2(RadDropDownList dropdownlist)

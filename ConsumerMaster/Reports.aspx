@@ -17,7 +17,7 @@
         <table>
             <tr>
                 <td>
-                    <img src="Images/ATFLogo1.png" />
+                    <img src="Images/ATFLogo.png" />
                 </td>
             </tr>
             <tr>
@@ -27,7 +27,12 @@
             </tr>
             <tr>
                 <td>
-                    <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFPartnerList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="ATFConsumerRatioReportGroup" />
+                    <telerik:RadDropDownList RenderMode="Lightweight" ID="ATFPartnerList" runat="server"  Width="350px" DefaultMessage="Select Partner" ValidationGroup="ATFConsumerRatioReportGroup">
+                        <Items>
+                            <telerik:DropDownListItem Text="Adult Training Facility; Jefferson" Value="1" />
+                            <telerik:DropDownListItem Text="Adult Training Facility; Bill George" Value="2" />
+                        </Items>
+                    </telerik:RadDropDownList>
                     <asp:RequiredFieldValidator runat="server" ID="RequiredFieldValidator1" ControlToValidate="ATFPartnerList" ForeColor="red" Display="Dynamic" ErrorMessage="You must select a trading partner!" CssClass="validationClass" ValidationGroup="ATFConsumerRatioReportGroup" />
                 </td>
             </tr>

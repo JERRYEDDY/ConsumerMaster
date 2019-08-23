@@ -12,7 +12,6 @@
             padding: 5px;
             text-align: center;
             background: #1abc9c;
-
         }
     </style>
     <script type="text/javascript" language="javascript"> 
