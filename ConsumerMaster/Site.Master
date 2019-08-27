@@ -61,8 +61,8 @@
                             </ul>
                         </li>
                         <li><a runat="server" href="~/Consumers">Consumers</a></li>
-                        <li><a runat="server" href="~/RenderingProviders">RenderingProviders</a></li>
-                        <li><a runat="server" href="~/ReferringProviders">ReferringProviders</a></li>
+                        <li><a runat="server" href="~/RenderingProviders">Rendering Providers</a></li>
+                        <li><a runat="server" href="~/ReferringProviders">Referring Providers</a></li>
                         <li><a runat="server" href="~/Reports">Reports</a></li>
                     </ul>
                 </div>

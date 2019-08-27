@@ -83,7 +83,8 @@ namespace ConsumerMaster
                 ORDER BY consumer_last
             ";
 
-            RadGrid1.DataSource = GetDataTable(selectQuery, null);
+            DataTable dt = GetDataTable(selectQuery, null);
+            RadGrid1.DataSource = dt;
         }
 
         protected void RadGrid1_InsertCommand(object source, GridCommandEventArgs e)

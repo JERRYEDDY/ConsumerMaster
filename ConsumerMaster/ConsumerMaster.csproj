@@ -203,6 +203,7 @@
     <Content Include="Images\BlankLogo.png" />
     <Content Include="Images\PWLogo.png" />
     <Content Include="Images\VendorLogo.png" />
+    <Content Include="CompositeProcedureCodes.aspx" />
     <Content Include="VendorMain.aspx" />
     <Content Include="Images\ATFLogo.png" />
     <Content Include="Images\AWCLogo.png" />
@@ -315,6 +316,13 @@
     </Compile>
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CompositeProcedureCodes.aspx.cs">
+      <DependentUpon>CompositeProcedureCodes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CompositeProcedureCodes.aspx.designer.cs">
+      <DependentUpon>CompositeProcedureCodes.aspx</DependentUpon>
     </Compile>
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
