@@ -237,6 +237,10 @@ namespace ConsumerMaster
                         sqlConnection1.Open();
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
+                            //DataTable dataTable = new DataTable();
+                            //DataTable dt = dataTable;
+                            //dt.Load(dr);
+
                             while (dr.Read())
                             {
                                 var row = consumersTable.NewRow();
