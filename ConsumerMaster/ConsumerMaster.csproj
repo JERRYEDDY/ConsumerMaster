@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="ClientConversionMain.aspx" />
     <Content Include="Images\BlankLogo.png" />
     <Content Include="Images\PWLogo.png" />
     <Content Include="Images\VendorLogo.png" />
@@ -317,6 +318,13 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ClientConversionMain.aspx.cs">
+      <DependentUpon>ClientConversionMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientConversionMain.aspx.designer.cs">
+      <DependentUpon>ClientConversionMain.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CompositeProcedureCodes.aspx.cs">
       <DependentUpon>CompositeProcedureCodes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -324,6 +332,8 @@
     <Compile Include="CompositeProcedureCodes.aspx.designer.cs">
       <DependentUpon>CompositeProcedureCodes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ClientConversionFormat.cs" />
+    <Compile Include="ClientConversionExcelFile.cs" />
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
       <DependentUpon>VendorMain.aspx</DependentUpon>

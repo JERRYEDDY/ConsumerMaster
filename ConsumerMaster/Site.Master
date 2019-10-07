@@ -58,6 +58,7 @@
                                 <li><a href="EIMain">Early Intervention</a></li>
                                 <li><a href="ResidentialMain">Residential</a></li>
                                 <li><a href="VendorMain">Vendor</a></li>
+                                <li><a href="ClientConversionMain">Client Conversion</a></li>
                             </ul>
                         </li>
                         <li><a runat="server" href="~/Consumers">Consumers</a></li>
