@@ -69,9 +69,9 @@ namespace ConsumerMaster
 
                     worksheet.Cells[currentRow, ccf.GetIndex("diagnosis_code")].SetValue(dr["diagnosis_code"].ToString());
 
-                    CellValueFormat identifierCellValueFormat = new CellValueFormat("0000000000");
-                    worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetFormat(identifierCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetFormat(new CellValueFormat("0000000000"));
                     worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetValue(dr["identifier"].ToString());
+                    //worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetValue("0000000011");
 
                     //worksheet.Cells[currentRow, ccf.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
 
