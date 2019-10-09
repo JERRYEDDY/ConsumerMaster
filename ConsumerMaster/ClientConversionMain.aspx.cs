@@ -13,13 +13,13 @@ namespace ConsumerMaster
 
         protected void ClientConversionDownload_Click(object sender, EventArgs e)
         {
-            const string filename = @"ClientConversionExport.csv";
+            const string filename = @"ClientConversionExport.xlsx";
             try
             {
                 ClientConversionExcelFile conversionExport = new ClientConversionExcelFile();
                 Workbook workbook = conversionExport.CreateWorkbook();
                 Utility utility = new Utility();
-                utility.DownloadCSVFile(workbook, filename);
+                utility.DownloadExcelFile(workbook, filename);
             }
             catch (Exception ex)
             {
