@@ -13,48 +13,124 @@ namespace ConsumerMaster
 
         class ClientConversionColumn
         {
+            public ClientConversionColumn(bool inc, string name)
+            {
+                Include = inc;
+                Name = name;
+            }
+
             public bool Include { get; set; }
             public string Name { get; set; }
         }
 
-        private readonly Dictionary<int, ClientConversionColumn> _columnNameList = new Dictionary<int, ClientConversionColumn>
-        {
-            {0, new ClientConversionColumn {Include=true,Name="client_id"} },
-            {1, new ClientConversionColumn {Include=true,Name="last_name"} },
-            {2, new ClientConversionColumn {Include=true,Name="first_name"} },
-            {3, new ClientConversionColumn {Include=true,Name="middle_name"} },
-            {4, new ClientConversionColumn {Include=true,Name="gender"} },
-            {5, new ClientConversionColumn {Include=true,Name="gender_code"} },
-            {6, new ClientConversionColumn {Include=true,Name="date_of_birth"} },
-            {7, new ClientConversionColumn {Include=true,Name="street_address_1"} },
-            {8, new ClientConversionColumn {Include=true,Name="street_address_2"} },
-            {9, new ClientConversionColumn {Include=true,Name="city"} },
-            {10, new ClientConversionColumn {Include=true,Name="state"} },
-            {11, new ClientConversionColumn {Include=true,Name="state_code"} },
-            {12, new ClientConversionColumn {Include=true,Name="zip_code"} },
-            {13, new ClientConversionColumn {Include=true,Name="day_phone"} },
-            {14, new ClientConversionColumn {Include=true,Name="evening_phone"} },
-            {15, new ClientConversionColumn {Include=true,Name="mobile_phone"} },
-            {16, new ClientConversionColumn {Include=true,Name="email_address"} },
-            {17, new ClientConversionColumn {Include=true,Name="curr_employment_name"} },
-            {18, new ClientConversionColumn {Include=true,Name="curr_employment_business"} },
-            {19, new ClientConversionColumn {Include=true,Name="curr_employment_position"} },
-            {20, new ClientConversionColumn {Include=true,Name="curr_employment_status"} },
-            {21, new ClientConversionColumn {Include=true,Name="curr_employment_status_code"} },
-            {22, new ClientConversionColumn {Include=true,Name="curr_employment_phone"} },
-            {23, new ClientConversionColumn {Include=true,Name="curr_employment_start_date"} },
-            {24, new ClientConversionColumn {Include=true,Name="education_degree"} },
-            {25, new ClientConversionColumn {Include=true,Name="education_degree_code"} },
-            {26, new ClientConversionColumn {Include=true,Name="education_highest_grade"} },
-            {27, new ClientConversionColumn {Include=true,Name="diagnosis_code"} },
-            {28, new ClientConversionColumn {Include=true,Name="identifier"} },
-        };
+        Dictionary<int, ClientConversionColumn> _columnNameList = new Dictionary<int, ClientConversionColumn>();
 
         public string[] ColumnStrings;
 
         public ClientConversionFormat()
         {
+            var columnNameList = new List<string>() {"client_id",
+                                            "last_name",
+                                            "first_name",
+                                            "middle_name",
+                                            "gender",
+                                            "gender_code",
+                                            "date_of_birth",
+                                            "ss_number",
+                                            "driver_license_number",
+                                            "city_of_birth",
+                                            "state_of_birth",
+                                            "state_of_birth_code",
+                                            "country_of_birth",
+                                            "street_address_1",
+                                            "street_address_2",
+                                            "city",
+                                            "state",
+                                            "state_code",
+                                            "zip_code",
+                                            "address_effective_date",
+                                            "religion",
+                                            "religion_code",
+                                            "citizenship",
+                                            "citizenship_code",
+                                            "marital_status",
+                                            "marital_status_code",
+                                            "ethnicity",
+                                            "ethnicity_code",
+                                            "primary_language",
+                                            "primary_language_code",
+                                            "secondary_language",
+                                            "secondary_language_code",
+                                            "day_phone",
+                                            "evening_phone",
+                                            "mobile_phone",
+                                            "pager",
+                                            "email_address",
+                                            "race_1",
+                                            "race_1_code",
+                                            "race_1_other_description",
+                                            "race_2",
+                                            "race_2_code",
+                                            "race_2_other_description",
+                                            "curr_employment_name",
+                                            "curr_employment_business",
+                                            "curr_employment_position",
+                                            "curr_employment_status",
+                                            "curr_employment_status_code",
+                                            "curr_employment_phone",
+                                            "curr_employment_start_date",
+                                            "education_degree",
+                                            "education_degree_code",
+                                            "education_highest_grade",
+                                            "education_highest_grade_code",
+                                            "urn_no",
+                                            "county",
+                                            "county_code",
+                                            "salutation",
+                                            "salutation_code",
+                                            "fax_number",
+                                            "school_attended",
+                                            "school_attended_code",
+                                            "TABS_ID",
+                                            "education_id",
+                                            "residence_type",
+                                            "residence_type_code",
+                                            "name_suffix",
+                                            "agency_id_no",
+                                            "agency_other_id_number",
+                                            "other_id_no",
+                                            "hair_color",
+                                            "hair_color_code",
+                                            "eye_color",
+                                            "eye_color_code",
+                                            "aka",
+                                            "maiden_name",
+                                            "ethnicity_details",
+                                            "ethnicity_details_code",
+                                            "original_table_name",
+                                            "ssn_unknown",
+                                            "ssn_no",
+                                            "mothers_first_name",
+                                            "veteran_status",
+                                            "veteran_status_code",
+                                            "region",
+                                            "planning_area",
+                                            "geocode",
+                                            "twn_ca_name",
+                                            "address_type",
+                                            "address_type_code",
+                                            "agency_name"
+             };
+
+
+            int index = 0;
+            foreach (string cname in columnNameList)
+            {
+                _columnNameList.Add(index++, new ClientConversionColumn(true, cname));
+            }
+
             ColumnStrings = GetColumns();
+
         }
 
         private string[] GetColumns()

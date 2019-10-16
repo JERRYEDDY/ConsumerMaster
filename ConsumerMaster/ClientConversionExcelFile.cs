@@ -57,6 +57,14 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("gender_code")].SetValue(dr["gender_code"].ToString());
 
                     worksheet.Cells[currentRow, ccf.GetIndex("date_of_birth")].SetValue(dr["date_of_birth"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("ss_number")].SetValue(dr["ss_number"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("driver_license_number")].SetValue(dr["driver_license_number"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("city_of_birth")].SetValue(dr["city_of_birth"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth")].SetValue(dr["state_of_birth"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth_code")].SetValue(dr["state_of_birth_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("country_of_birth")].SetValue(dr["country_of_birth"].ToString());
+
                     worksheet.Cells[currentRow, ccf.GetIndex("street_address_1")].SetValue(dr["street_address_1"].ToString());
 
                     string addressLine2 = dr["street_address_2"] == null ? string.Empty : dr["street_address_2"].ToString(); 
@@ -66,6 +74,44 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("state")].SetValue(dr["state"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("state_code")].SetValue(dr["state_code"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("zip_code")].SetValue(dr["zip_code"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("address_effective_date")].SetValue(dr["address_effective_date"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("religion")].SetValue(dr["religion"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("religion_code")].SetValue(dr["religion_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("citizenship")].SetValue(dr["citizenship"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("citizenship_code")].SetValue(dr["citizenship_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("marital_status")].SetValue(dr["marital_status"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("marital_status_code")].SetValue(dr["marital_status_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("ethnicity")].SetValue(dr["ethnicity"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("ethnicity_code")].SetValue(dr["ethnicity_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("primary_language")].SetValue(dr["primary_language"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("primary_language_code")].SetValue(dr["primary_language_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("secondary_language")].SetValue(dr["secondary_language"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("secondary_language_code")].SetValue(dr["secondary_language_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("day_phone")].SetValue(dr["day_phone"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("evening_phone")].SetValue(dr["evening_phone"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("mobile_phone")].SetValue(dr["mobile_phone"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("pager")].SetValue(dr["pager"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("email_address")].SetValue(dr["email_address"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("race_1")].SetValue(dr["race_1"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("race_1_code")].SetValue(dr["race_1_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("race_1_other_description")].SetValue(dr["race_1_other_description"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("race_2")].SetValue(dr["race_2"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("race_2_code")].SetValue(dr["race_2_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("race_2_other_description")].SetValue(dr["race_2_other_description"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_name")].SetValue(dr["curr_employment_name"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
+
+
 
                     worksheet.Cells[currentRow, ccf.GetIndex("diagnosis_code")].SetValue(dr["diagnosis_code"].ToString());
 
