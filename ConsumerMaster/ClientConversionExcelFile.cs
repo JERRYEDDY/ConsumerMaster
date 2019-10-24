@@ -22,12 +22,104 @@ namespace ConsumerMaster
                 string selectQuery = 
                 $@"
                     SELECT 
-                        c.consumer_internal_number AS client_id, c.consumer_last AS last_name, c.consumer_first AS first_name, ' ' AS middle_name
-                        , c.date_of_birth AS date_of_birth, c.address_line_1 AS street_address_1, ISNULL(c.address_line_2, ' ') AS street_address_2
-                        ,c.city AS city, states.name AS state, c.state AS state_code, c.zip_code AS zip_code, c.gender AS gender_code, ' ' AS day_phone, ' ' AS evening_phone
+                        c.consumer_internal_number AS client_id, c.consumer_last AS last_name, c.consumer_first AS first_name, ' ' AS middle_name,
+
+                        ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, ' ' AS ss_number, ' ' AS driver_license_number,
+
+                        ' ' AS city_of_birth, ' ' AS state_of_birth, ' ' AS state_of_birth_code, ' ' AS country_of_birth, c.address_line_1 AS street_address_1, 
+
+                        ISNULL(c.address_line_2, ' ') AS street_address_2, c.city AS city, states.name AS state, c.state AS state_code, c.zip_code AS zip_code,  
+
+
+' ' AS address_effective_date,
+' ' AS  religion,
+ ' ' AS religion_code,
+ ' ' AS citizenship,
+ ' ' AS citizenship_code,
+ ' ' AS marital_status,
+ ' ' AS marital_status_code,
+ ' ' AS ethnicity,
+ ' ' AS ethnicity_code,
+ ' ' AS primary_language,
+ ' ' AS primary_language_code,
+ secondary_language,
+ secondary_language_code,
+ day_phone,
+ evening_phone,
+ mobile_phone,
+ pager,
+ email_address,
+ race_1,
+ race_1_code,
+ race_1_other_description,
+ race_2,
+ race_2_code,
+ race_2_other_description,
+ curr_employment_name,
+ curr_employment_business,
+ curr_employment_position,
+ curr_employment_status,
+ curr_employment_status_code,
+ curr_employment_phone,
+ curr_employment_start_date,
+ education_degree,
+ education_degree_code,
+ education_highest_grade,
+ education_highest_grade_code,
+ urn_no,
+ county,
+ county_code,
+ salutation,
+ salutation_code,
+ fax_number,
+ school_attended,
+ school_attended_code,
+ TABS_ID,
+ education_id,
+ residence_type,
+ residence_type_code,
+ name_suffix,
+ agency_id_no,
+ agency_other_id_number,
+ other_id_no,
+ hair_color,
+ hair_color_code,
+ eye_color,
+ eye_color_code,
+ aka,
+ maiden_name,
+ ethnicity_details,
+ ethnicity_details_code,
+ original_table_name,
+ ssn_unknown,
+ ssn_no,
+ mothers_first_name,
+ veteran_status,
+ veteran_status_code,
+ region,
+ planning_area,
+ geocode,
+ twn_ca_name,
+ address_type,
+ address_type_code,
+ agency_name,
+
+
+
+
+
+
+' ' AS day_phone, ' ' AS evening_phone
+
                         , ' ' AS mobile_phone, ' ' AS email_address, ' ' AS curr_employment_name, ' ' AS curr_employment_business,' ' AS curr_employment_position, ' ' AS curr_employment_status
+
                         , ' ' AS curr_employment_status_code, ' ' AS urr_employment_phone, ' ' AS curr_employment_start_date, ' ' AS education_degree, ' ' AS education_degree_code
+
                         , ' ' AS education_highest_grade, tp.symbol AS trading_partner_string, c.identifier AS identifier, c.diagnosis AS diagnosis_code 
+
+
+
+
                     FROM 
                         Consumers AS c
                     INNER JOIN 
@@ -100,17 +192,53 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("race_2_code")].SetValue(dr["race_2_code"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("race_2_other_description")].SetValue(dr["race_2_other_description"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_name")].SetValue(dr["curr_employment_name"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("")].SetValue(dr[""].ToString());
-
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_business")].SetValue(dr["curr_employment_business"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_position")].SetValue(dr["curr_employment_position"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_status")].SetValue(dr["curr_employment_status"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_status_code")].SetValue(dr["curr_employment_status_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_phone")].SetValue(dr["curr_employment_phone"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("curr_employment_start_date")].SetValue(dr["curr_employment_start_date"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("education_degree")].SetValue(dr["education_degree"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("education_degree_code")].SetValue(dr["education_degree_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("education_highest_grade")].SetValue(dr["education_highest_grade"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("education_highest_grade_code")].SetValue(dr["education_highest_grade_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("urn_no")].SetValue(dr["urn_no"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("county")].SetValue(dr["county"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("county_code")].SetValue(dr["county_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("salutation")].SetValue(dr["salutation"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("salutation_code")].SetValue(dr["salutation_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("fax_number")].SetValue(dr["fax_number"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("school_attended")].SetValue(dr["school_attended"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("school_attended_code")].SetValue(dr["school_attended_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("TABS_ID")].SetValue(dr["TABS_ID"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("education_id")].SetValue(dr["education_id"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("residence_type")].SetValue(dr["residence_type"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("residence_type_code")].SetValue(dr["residence_type_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("name_suffix")].SetValue(dr["name_suffix"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("agency_id_no")].SetValue(dr["agency_id_no"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("agency_other_id_number")].SetValue(dr["agency_other_id_number"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("other_id_no")].SetValue(dr["other_id_no"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("hair_color")].SetValue(dr["hair_color"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("hair_color_code")].SetValue(dr["hair_color_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("eye_color")].SetValue(dr["eye_color"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("eye_color_code")].SetValue(dr["eye_color_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("aka")].SetValue(dr["aka"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("maiden_name")].SetValue(dr["maiden_name"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("ethnicity_details")].SetValue(dr["ethnicity_details"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("ethnicity_details_code")].SetValue(dr["ethnicity_details_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(dr["original_table_name"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("ssn_unknown")].SetValue(dr["ssn_unknown"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("ssn_no")].SetValue(dr["ssn_no"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("mothers_first_name")].SetValue(dr["mothers_first_name"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("veteran_status")].SetValue(dr["veteran_status"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("veteran_status_code")].SetValue(dr["veteran_status_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("region")].SetValue(dr["region"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("planning_area")].SetValue(dr["planning_area"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("geocode")].SetValue(dr["geocode"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("twn_ca_name")].SetValue(dr["twn_ca_name"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("address_type")].SetValue(dr["address_type"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("address_type_code")].SetValue(dr["address_type_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("agency_name")].SetValue(dr["agency_name"].ToString());
 
 
                     worksheet.Cells[currentRow, ccf.GetIndex("diagnosis_code")].SetValue(dr["diagnosis_code"].ToString());
