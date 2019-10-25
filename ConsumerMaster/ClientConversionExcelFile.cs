@@ -23,103 +23,24 @@ namespace ConsumerMaster
                 $@"
                     SELECT 
                         c.consumer_internal_number AS client_id, c.consumer_last AS last_name, c.consumer_first AS first_name, ' ' AS middle_name,
-
                         ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, ' ' AS ss_number, ' ' AS driver_license_number,
-
                         ' ' AS city_of_birth, ' ' AS state_of_birth, ' ' AS state_of_birth_code, ' ' AS country_of_birth, c.address_line_1 AS street_address_1, 
-
                         ISNULL(c.address_line_2, ' ') AS street_address_2, c.city AS city, states.name AS state, c.state AS state_code, c.zip_code AS zip_code,  
-
-
-' ' AS address_effective_date,
-' ' AS  religion,
- ' ' AS religion_code,
- ' ' AS citizenship,
- ' ' AS citizenship_code,
- ' ' AS marital_status,
- ' ' AS marital_status_code,
- ' ' AS ethnicity,
- ' ' AS ethnicity_code,
- ' ' AS primary_language,
- ' ' AS primary_language_code,
- secondary_language,
- secondary_language_code,
- day_phone,
- evening_phone,
- mobile_phone,
- pager,
- email_address,
- race_1,
- race_1_code,
- race_1_other_description,
- race_2,
- race_2_code,
- race_2_other_description,
- curr_employment_name,
- curr_employment_business,
- curr_employment_position,
- curr_employment_status,
- curr_employment_status_code,
- curr_employment_phone,
- curr_employment_start_date,
- education_degree,
- education_degree_code,
- education_highest_grade,
- education_highest_grade_code,
- urn_no,
- county,
- county_code,
- salutation,
- salutation_code,
- fax_number,
- school_attended,
- school_attended_code,
- TABS_ID,
- education_id,
- residence_type,
- residence_type_code,
- name_suffix,
- agency_id_no,
- agency_other_id_number,
- other_id_no,
- hair_color,
- hair_color_code,
- eye_color,
- eye_color_code,
- aka,
- maiden_name,
- ethnicity_details,
- ethnicity_details_code,
- original_table_name,
- ssn_unknown,
- ssn_no,
- mothers_first_name,
- veteran_status,
- veteran_status_code,
- region,
- planning_area,
- geocode,
- twn_ca_name,
- address_type,
- address_type_code,
- agency_name,
-
-
-
-
-
-
-' ' AS day_phone, ' ' AS evening_phone
-
-                        , ' ' AS mobile_phone, ' ' AS email_address, ' ' AS curr_employment_name, ' ' AS curr_employment_business,' ' AS curr_employment_position, ' ' AS curr_employment_status
-
-                        , ' ' AS curr_employment_status_code, ' ' AS urr_employment_phone, ' ' AS curr_employment_start_date, ' ' AS education_degree, ' ' AS education_degree_code
-
-                        , ' ' AS education_highest_grade, tp.symbol AS trading_partner_string, c.identifier AS identifier, c.diagnosis AS diagnosis_code 
-
-
-
-
+                        ' ' AS address_effective_date, ' ' AS religion, ' ' AS religion_code, ' ' AS citizenship, ' ' AS citizenship_code,
+                        ' ' AS marital_status, ' ' AS marital_status_code, ' ' AS ethnicity, ' ' AS ethnicity_code, ' ' AS primary_language,
+                        ' ' AS primary_language_code, ' ' AS secondary_language, ' ' AS secondary_language_code, ' ' AS day_phone,
+                        ' ' AS evening_phone, ' ' AS mobile_phone, ' ' AS pager, ' ' AS email_address, ' ' AS race_1, ' ' AS race_1_code,
+                        ' ' AS race_1_other_description, ' ' AS race_2, ' ' AS race_2_code, ' ' AS race_2_other_description, ' ' AS curr_employment_name,
+                        ' ' AS curr_employment_business, ' ' AS curr_employment_position, ' ' AS curr_employment_status, ' ' AS curr_employment_status_code,
+                        ' ' AS curr_employment_phone, ' ' AS curr_employment_start_date, ' ' AS education_degree, ' ' AS education_degree_code,
+                        ' ' AS education_highest_grade, ' ' AS education_highest_grade_code, ' ' AS urn_no, ' ' AS county, ' ' AS county_code,
+                        ' ' AS salutation, ' ' AS salutation_code, ' ' AS fax_number, ' ' AS school_attended, ' ' AS school_attended_code, ' ' AS TABS_ID,
+                        ' ' AS education_id, ' ' AS residence_type, ' ' AS residence_type_code, ' ' AS name_suffix, ' ' AS agency_id_no,
+                        ' ' AS agency_other_id_number, ' ' AS other_id_no, ' ' AS hair_color, ' ' AS hair_color_code, ' ' AS eye_color, ' ' AS eye_color_code,
+                        ' ' AS aka, ' ' AS maiden_name, ' ' AS ethnicity_details, ' ' AS ethnicity_details_code, ' ' AS original_table_name, ' ' AS ssn_unknown,
+                        ' ' AS ssn_no, ' ' AS mothers_first_name, ' ' AS veteran_status, ' ' AS veteran_status_code, ' ' AS region, ' ' AS planning_area,
+                        ' ' AS geocode, ' ' AS twn_ca_name, ' ' AS address_type, ' ' AS address_type_code, ' ' AS agency_name,
+                        tp.symbol AS trading_partner_string, c.identifier AS identifier, c.diagnosis AS diagnosis_code 
                     FROM 
                         Consumers AS c
                     INNER JOIN 
@@ -241,10 +162,12 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("agency_name")].SetValue(dr["agency_name"].ToString());
 
 
-                    worksheet.Cells[currentRow, ccf.GetIndex("diagnosis_code")].SetValue(dr["diagnosis_code"].ToString());
+                    //worksheet.Cells[currentRow, ccf.GetIndex("diagnosis_code")].SetValue(dr["diagnosis_code"].ToString());
 
-                    worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetFormat(new CellValueFormat("0000000000"));
-                    worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetValue(dr["identifier"].ToString());
+                    //worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetFormat(new CellValueFormat("0000000000"));
+                    //worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetValue(dr["identifier"].ToString());
+
+
                     //worksheet.Cells[currentRow, ccf.GetIndex("identifier")].SetValue("0000000011");
 
                     //worksheet.Cells[currentRow, ccf.GetIndex("trading_partner_string")].SetValue(dr["trading_partner_string"].ToString());
