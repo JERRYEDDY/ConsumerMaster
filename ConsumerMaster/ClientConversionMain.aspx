@@ -14,11 +14,33 @@
                 </tr>
                 <tr>
                     <td>
-                        Client Conversion File 
+                        Client Information File 
                     </td>
                     <td class="space"/>
                     <td>
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="ClientConversionDownload_Click" runat="server">
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="ClientInformationDownload_Click" runat="server">
+                            <Icon PrimaryIconCssClass="rbDownload"></Icon>
+                        </telerik:RadButton>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Client Diagnosis File 
+                    </td>
+                    <td class="space"/>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton2" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="ClientDiagnosisDownload_Click" runat="server">
+                            <Icon PrimaryIconCssClass="rbDownload"></Icon>
+                        </telerik:RadButton>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Client Benefits File 
+                    </td>
+                    <td class="space"/>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton3" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="ClientBenefitsDownload_Click" runat="server">
                             <Icon PrimaryIconCssClass="rbDownload"></Icon>
                         </telerik:RadButton>
                     </td>

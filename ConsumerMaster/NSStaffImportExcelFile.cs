@@ -5,12 +5,12 @@ using System.Data;
 
 namespace ConsumerMaster
 {
-    public class ClientConversionExcelFile
+    public class NSStaffImportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateInformationWorkbook()
+        public Workbook CreateWorkbook()
         {
             Workbook workbook = new Workbook();
 
@@ -19,49 +19,16 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                string selectQuery = 
-                $@"
-                    SELECT 
-                        c.consumer_internal_number AS client_id, c.consumer_last AS last_name, c.consumer_first AS first_name, ' ' AS middle_name,
-                        ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, ' ' AS ss_number, ' ' AS driver_license_number,
-                        ' ' AS city_of_birth, ' ' AS state_of_birth, ' ' AS state_of_birth_code, ' ' AS country_of_birth, c.address_line_1 AS street_address_1, 
-                        ISNULL(c.address_line_2, ' ') AS street_address_2, c.city AS city, states.name AS state, c.state AS state_code, c.zip_code AS zip_code,  
-                        ' ' AS address_effective_date, ' ' AS religion, ' ' AS religion_code, ' ' AS citizenship, ' ' AS citizenship_code,
-                        ' ' AS marital_status, ' ' AS marital_status_code, ' ' AS ethnicity, ' ' AS ethnicity_code, ' ' AS primary_language,
-                        ' ' AS primary_language_code, ' ' AS secondary_language, ' ' AS secondary_language_code, ' ' AS day_phone,
-                        ' ' AS evening_phone, ' ' AS mobile_phone, ' ' AS pager, ' ' AS email_address, ' ' AS race_1, ' ' AS race_1_code,
-                        ' ' AS race_1_other_description, ' ' AS race_2, ' ' AS race_2_code, ' ' AS race_2_other_description, ' ' AS curr_employment_name,
-                        ' ' AS curr_employment_business, ' ' AS curr_employment_position, ' ' AS curr_employment_status, ' ' AS curr_employment_status_code,
-                        ' ' AS curr_employment_phone, ' ' AS curr_employment_start_date, ' ' AS education_degree, ' ' AS education_degree_code,
-                        ' ' AS education_highest_grade, ' ' AS education_highest_grade_code, ' ' AS urn_no, ' ' AS county, ' ' AS county_code,
-                        ' ' AS salutation, ' ' AS salutation_code, ' ' AS fax_number, ' ' AS school_attended, ' ' AS school_attended_code, ' ' AS TABS_ID,
-                        ' ' AS education_id, ' ' AS residence_type, ' ' AS residence_type_code, ' ' AS name_suffix, ' ' AS agency_id_no,
-                        ' ' AS agency_other_id_number, ' ' AS other_id_no, ' ' AS hair_color, ' ' AS hair_color_code, ' ' AS eye_color, ' ' AS eye_color_code,
-                        ' ' AS aka, ' ' AS maiden_name, ' ' AS ethnicity_details, ' ' AS ethnicity_details_code, ' ' AS original_table_name, ' ' AS ssn_unknown,
-                        ' ' AS ssn_no, ' ' AS mothers_first_name, ' ' AS veteran_status, ' ' AS veteran_status_code, ' ' AS region, ' ' AS planning_area,
-                        ' ' AS geocode, ' ' AS twn_ca_name, ' ' AS address_type, ' ' AS address_type_code, ' ' AS agency_name,
-                        tp.symbol AS trading_partner_string, c.identifier AS identifier, c.diagnosis AS diagnosis_code 
-                    FROM 
-                        Consumers AS c
-                    INNER JOIN 
-                        TradingPartners AS tp ON c.trading_partner_id1 = tp.id 
-                    INNER JOIN
-                        States AS states ON c.state = states.Abbreviation
-                    ORDER BY consumer_last
-                 ";
-
                 Utility util = new Utility();
 
+                NSStaffImportFormat ccf = new NSStaffImportFormat();
                 DataTable dTable = util.GetEmployeePersonnelDataTable("C:/NetSmart/Import/EMPLOYEEPERSONNEL.TXT");
 
-                ClientInformationFormat ccf = new ClientInformationFormat();
-                DataTable ceDataTable = util.GetDataTable(selectQuery);
-
-                int totalConsumers = ceDataTable.Rows.Count;
+                int totalConsumers = dTable.Rows.Count;
                 PrepareInformationWorksheet(worksheet);
 
                 int currentRow = IndexRowItemStart + 1;
-                foreach (DataRow dr in ceDataTable.Rows)
+                foreach (DataRow dr in dTable.Rows)
                 {
                     worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("last_name")].SetValue(dr["last_name"].ToString());
@@ -167,7 +134,7 @@ namespace ConsumerMaster
                     currentRow++;
                 }
 
-                for (int i = 0; i < ceDataTable.Columns.Count; i++)
+                for (int i = 0; i < dTable.Columns.Count; i++)
                 {
                     worksheet.Columns[i].AutoFitWidth();
                 }

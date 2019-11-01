@@ -9,6 +9,7 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.TextBased.Csv;
 using Telerik.Windows.Documents.Spreadsheet.Model;
+using CsvHelper;
 
 namespace ConsumerMaster
 {
@@ -66,6 +67,90 @@ namespace ConsumerMaster
                 return cpcData;
             };
         }
+
+
+        public DataTable GetEmployeePersonnelDataTable(string fileName)
+        {
+            String[] columns = new string[19] {"P_ACTIVE", "P_EMPNO ", "P_FNAME ", "P_LNAME ", "P_MI ", "P_BIRTH", "P_SSN", "P_SEX ", "P_EMPEMAIL", "P_JOBCODE ", "P_JOBTITLE ", "P_RACE ", "P_LASTHIRE", "P_HCITY", "P_HSTATE", "P_HZIP", "P_HSTREET1", "P_HSTREET2", "P_HCOUNTY" };
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                using (TextReader reader = File.OpenText(fileName))
+                {
+                    //var dataTable = new DataTable();
+                    bool createColumns = true;
+
+                    using (var csv = new CsvReader(reader))
+                    {
+                        csv.Configuration.HasHeaderRecord = false;
+
+                        while (csv.Read())
+                        {
+                            if (createColumns)
+                            {
+                                if(columns.Length != csv.Context.Record.Length)
+                                {
+                                    Logger.Error("DataTable headers and data do not align");
+                                    return dataTable;
+                                }
+
+                                for (int i = 0; i < csv.Context.Record.Length; i++)
+                                {
+                                    dataTable.Columns.Add(columns[i].ToString());
+                                }
+                                createColumns = false;
+                            }
+
+                            DataRow row = dataTable.NewRow();
+                            for (int i = 0; i < csv.Context.Record.Length; i++)
+                            {
+                                row[i] = csv.Context.Record[i];
+                            }
+                            dataTable.Rows.Add(row);
+                        }
+                    }
+
+                    return dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            };
+        }
+
+
+
+
+
+        //public List<ABRAEmployeePersonnel> GetEmployeePersonnelList(string queryString)
+        //{
+        //    List<ABRAEmployeePersonnel> listData = new List<ABRAEmployeePersonnel>();
+
+        //    try
+        //    {
+        //        using (TextReader reader = File.OpenText(@"/NetSmart/Import/EMPLOYEEPERSONNEL.TXT"))
+        //        {
+        //            CsvReader csv = new CsvReader(reader);
+        //            csv.Configuration.Delimiter = ";";
+        //            csv.Configuration.MissingFieldFound = null;
+        //            while (csv.Read())
+        //            {
+        //                ABRAEmployeePersonnel Record = csv.GetRecord<ABRAEmployeePersonnel>();
+        //                listData.Add(Record);
+        //            }
+
+        //            return listData;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //        return listData;
+        //    };
+        //}
 
         public void DownloadExcelFile(Workbook workbook, string fileName)
         {

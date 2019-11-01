@@ -55,6 +55,9 @@
     <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.1.3\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="FileHelpers, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
       <HintPath>..\packages\FileHelpers.3.3.0\lib\net45\FileHelpers.dll</HintPath>
     </Reference>
@@ -100,6 +103,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -200,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="NSStaffImportMain.aspx" />
     <Content Include="ClientConversionMain.aspx" />
     <Content Include="Images\BlankLogo.png" />
     <Content Include="Images\PWLogo.png" />
@@ -318,6 +325,14 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="NSStaffImportMain.aspx.cs">
+      <DependentUpon>NSStaffImportMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NSStaffImportMain.aspx.designer.cs">
+      <DependentUpon>NSStaffImportMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="NSStaffImportExcelFile.cs" />
     <Compile Include="ClientConversionMain.aspx.cs">
       <DependentUpon>ClientConversionMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -325,6 +340,9 @@
     <Compile Include="ClientConversionMain.aspx.designer.cs">
       <DependentUpon>ClientConversionMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ClientBenefitsFormat.cs" />
+    <Compile Include="NSStaffImportFormat.cs" />
+    <Compile Include="ClientDiagnosisFormat.cs" />
     <Compile Include="CompositeProcedureCodes.aspx.cs">
       <DependentUpon>CompositeProcedureCodes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -332,7 +350,7 @@
     <Compile Include="CompositeProcedureCodes.aspx.designer.cs">
       <DependentUpon>CompositeProcedureCodes.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ClientConversionFormat.cs" />
+    <Compile Include="ClientInformationFormat.cs" />
     <Compile Include="ClientConversionExcelFile.cs" />
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
