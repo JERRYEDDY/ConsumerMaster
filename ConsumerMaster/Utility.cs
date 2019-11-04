@@ -10,6 +10,7 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
 using Telerik.Windows.Documents.Spreadsheet.FormatProviders.TextBased.Csv;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using CsvHelper;
+using Telerik.Web.UI;
 
 namespace ConsumerMaster
 {
@@ -69,14 +70,14 @@ namespace ConsumerMaster
         }
 
 
-        public DataTable GetEmployeePersonnelDataTable(string fileName)
+        public DataTable GetEmployeePersonnelDataTable(UploadedFile file)
         {
             String[] columns = new string[19] {"P_ACTIVE", "P_EMPNO ", "P_FNAME ", "P_LNAME ", "P_MI ", "P_BIRTH", "P_SSN", "P_SEX ", "P_EMPEMAIL", "P_JOBCODE ", "P_JOBTITLE ", "P_RACE ", "P_LASTHIRE", "P_HCITY", "P_HSTATE", "P_HZIP", "P_HSTREET1", "P_HSTREET2", "P_HCOUNTY" };
             DataTable dataTable = new DataTable();
 
             try
             {
-                using (TextReader reader = File.OpenText(fileName))
+                using (TextReader reader = new StreamReader(file.InputStream))
                 {
                     //var dataTable = new DataTable();
                     bool createColumns = true;
@@ -121,36 +122,6 @@ namespace ConsumerMaster
             };
         }
 
-
-
-
-
-        //public List<ABRAEmployeePersonnel> GetEmployeePersonnelList(string queryString)
-        //{
-        //    List<ABRAEmployeePersonnel> listData = new List<ABRAEmployeePersonnel>();
-
-        //    try
-        //    {
-        //        using (TextReader reader = File.OpenText(@"/NetSmart/Import/EMPLOYEEPERSONNEL.TXT"))
-        //        {
-        //            CsvReader csv = new CsvReader(reader);
-        //            csv.Configuration.Delimiter = ";";
-        //            csv.Configuration.MissingFieldFound = null;
-        //            while (csv.Read())
-        //            {
-        //                ABRAEmployeePersonnel Record = csv.GetRecord<ABRAEmployeePersonnel>();
-        //                listData.Add(Record);
-        //            }
-
-        //            return listData;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex);
-        //        return listData;
-        //    };
-        //}
 
         public void DownloadExcelFile(Workbook workbook, string fileName)
         {

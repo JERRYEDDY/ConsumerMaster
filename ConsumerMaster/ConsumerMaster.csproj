@@ -212,6 +212,7 @@
     <Content Include="Images\PWLogo.png" />
     <Content Include="Images\VendorLogo.png" />
     <Content Include="CompositeProcedureCodes.aspx" />
+    <Content Include="Styles\file_styles.css" />
     <Content Include="VendorMain.aspx" />
     <Content Include="Images\ATFLogo.png" />
     <Content Include="Images\AWCLogo.png" />

@@ -9,8 +9,21 @@
             <table>
                 <tr>
                     <td>
-                        <img src="Images/AWCLogo.png" />
+                        <img src="Images/PathwaysLogo.png" />
                     </td>
+                </tr>
+                <tr>
+                    <td>
+                        ABRA Employee Personnel Export File 
+                    </td>
+                    <td class="space"/>
+                    <td>
+                        <telerik:RadAsyncUpload RenderMode="Lightweight" runat="server" ID="RadAsyncUpload1" OnFileUploaded="RadAsyncUpload1_FileUploaded"  Height="40px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>
@@ -18,7 +31,7 @@
                     </td>
                     <td class="space"/>
                     <td>
-                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="ClientInformationDownload_Click" runat="server">
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton1" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="NSStaffImportDownload_Click" runat="server">
                             <Icon PrimaryIconCssClass="rbDownload"></Icon>
                         </telerik:RadButton>
                     </td>

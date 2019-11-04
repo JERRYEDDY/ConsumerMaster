@@ -9,7 +9,7 @@
             <table>
                 <tr>
                     <td>
-                        <img src="Images/AWCLogo.png" />
+                        <img src="Images/PathwaysLogo.png" />
                     </td>
                 </tr>
                 <tr>

@@ -52,7 +52,7 @@ namespace ConsumerMaster
 
                 Utility util = new Utility();
 
-                DataTable dTable = util.GetEmployeePersonnelDataTable("C:/NetSmart/Import/EMPLOYEEPERSONNEL.TXT");
+                //DataTable dTable = util.GetEmployeePersonnelDataTable("C:/NetSmart/Import/EMPLOYEEPERSONNEL.TXT");
 
                 ClientInformationFormat ccf = new ClientInformationFormat();
                 DataTable ceDataTable = util.GetDataTable(selectQuery);
