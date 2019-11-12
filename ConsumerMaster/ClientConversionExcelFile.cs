@@ -191,13 +191,11 @@ namespace ConsumerMaster
                 string selectQuery =
                 $@"
                     SELECT 
-                        ' ' AS diagnosis_id, c.consumer_internal_number AS client_id, i.description AS diagnosis, c.diagnosis AS diagnosis_code, ' ' AS date_diagnosed, '1' AS is_primary, 
-                        ' ' AS dsm_IV_code, ' ' AS dsm_V_code, ' ' AS icd9_code, c.diagnosis AS icd10_code, ' ' AS rule_out, ' ' AS gaf_score, ' ' AS priority, ' ' AS staff_id, 
-                        ' ' AS original_table_name 
+                        DISTINCT c.consumer_internal_number AS client_id,  d.ICD9Code AS icd9_code,c.diagnosis AS diagnosis_code, d.description AS diagnosis 
                     FROM 
                         Consumers AS c
-                    INNER JOIN 
-                        ICD10Codes AS i ON replace(c.diagnosis,'.','') = i.code 
+                    LEFT JOIN 
+                        DiagnosisCodes AS d ON replace(c.diagnosis,'.','') = d.ICD10Code 
                     ORDER BY c.consumer_internal_number
                  ";
 
@@ -217,16 +215,16 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("diagnosis")].SetValue(dr["diagnosis"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("diagnosis_code")].SetValue(dr["diagnosis_code"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("date_diagnosed")].SetValue(dr["date_diagnosed"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("is_primary")].SetValue(dr["is_primary"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("dsm_IV_code")].SetValue(dr["dsm_IV_code"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("dsm_V_code")].SetValue(dr["dsm_V_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("is_primary")].SetValue("1");
+                    worksheet.Cells[currentRow, ccf.GetIndex("dsm_IV_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("dsm_V_code")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("icd9_code")].SetValue(dr["icd9_code"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("icd10_code")].SetValue(dr["icd10_code"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("rule_out")].SetValue(dr["rule_out"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("gaf_score")].SetValue(dr["gaf_score"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("priority")].SetValue(dr["priority"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("staff_id")].SetValue(dr["staff_id"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(dr["original_table_name"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("gaf_score")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("priority")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("staff_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(" ");
 
                     currentRow++;
                 }
