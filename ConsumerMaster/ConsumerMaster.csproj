@@ -326,6 +326,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ClientEnrollmentFormat.cs" />
     <Compile Include="NSStaffImportMain.aspx.cs">
       <DependentUpon>NSStaffImportMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

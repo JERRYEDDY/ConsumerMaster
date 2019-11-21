@@ -11,7 +11,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateWorkbook(UploadedFile file)
+        public Workbook CreateWorkbook()
         {
             Workbook workbook = new Workbook();
 
@@ -20,10 +20,34 @@ namespace ConsumerMaster
                 workbook.Sheets.Add(SheetType.Worksheet);
                 Worksheet worksheet = workbook.ActiveWorksheet;
 
-                Utility util = new Utility();
+                string selectQuery =
+                $@"
+                    SELECT [P_ACTIVE]
+                          ,[P_EMPNO]
+                          ,[P_FNAME]
+                          ,[P_LNAME]
+                          ,[P_MI]
+                          ,[P_BIRTH]
+                          ,[P_SSN]
+                          ,[P_SEX]
+                          ,[P_EMPEMAIL]
+                          ,[P_JOBCODE]
+                          ,[P_JOBTITLE]
+                          ,[P_RACE]
+                          ,[P_LASTHIRE]
+                          ,[P_HCITY]
+                          ,[P_HSTATE]
+                          ,[P_HZIP]
+                          ,[P_HSTREET1]
+                          ,[P_HSTREET2]
+                          ,[P_HCOUNTY]
+                      FROM [StaffDatabase].[dbo].[Staff]
+                 ";
 
+                Utility util = new Utility();
                 NSStaffImportFormat sif = new NSStaffImportFormat();
-                DataTable dTable = util.GetEmployeePersonnelDataTable(file);
+
+                DataTable dTable = util.GetDataTable2(selectQuery);
 
                 int totalConsumers = dTable.Rows.Count;
                 PrepareInformationWorksheet(worksheet);
@@ -76,7 +100,7 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, sif.GetIndex("street_address_2")].SetValue(dr["P_HSTREET2"].ToString());
 
                     worksheet.Cells[currentRow, sif.GetIndex("county")].SetValue(dr["P_HCOUNTY"].ToString());
-                    worksheet.Cells[currentRow, sif.GetIndex("address_date")].SetValue(dr["address_date"].ToString());
+                    worksheet.Cells[currentRow, sif.GetIndex("address_date")].SetValue("");
 
                     currentRow++;
                 }

@@ -10,36 +10,54 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateInformationWorkbook()
+        public Workbook CreateAllWorkbook()
         {
             Workbook workbook = new Workbook();
 
+            WorksheetCollection worksheets = workbook.Worksheets;
+            worksheets.Add();
+            worksheets.Add();
+            worksheets.Add();
+
+            Worksheet sheet1Worksheet = worksheets[0];
+            sheet1Worksheet.Name = "Client_information"; 
+            CreateInformationWorkbook(sheet1Worksheet);
+
+            Worksheet sheet2Worksheet = worksheets[1];
+            sheet2Worksheet.Name = "client_diagnosis";
+            CreateDiagnosisWorkbook(sheet2Worksheet);
+
+            Worksheet sheet3Worksheet = worksheets[2];
+            sheet3Worksheet.Name = "Client_Benefits";
+            CreateBenefitsWorkbook(sheet3Worksheet);
+
+            return workbook;
+        }
+
+        public void CreateInformationWorkbook(Worksheet worksheet)
+        {
             try
             {
-                workbook.Sheets.Add(SheetType.Worksheet);
-                Worksheet worksheet = workbook.ActiveWorksheet;
-                worksheet.Name = "Client_information";
-
                 string selectQuery = 
                 $@"
                     SELECT 
                         c.consumer_internal_number AS client_id, c.consumer_last AS last_name, c.consumer_first AS first_name, ' ' AS middle_name,
-                        ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, c.address_line_1 AS street_address_1, 
+                        ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, i.ssnumber AS ss_number, c.address_line_1 AS street_address_1, 
                         ISNULL(c.address_line_2, ' ') AS street_address_2, c.city AS city, states.name AS state, c.state AS state_code, c.zip_code AS zip_code,  
-                        tp.symbol AS trading_partner_string 
+                        c.trading_partner_id1,c.trading_partner_id2,c.trading_partner_id3
                     FROM 
                         Consumers AS c
                     INNER JOIN 
                         TradingPartners AS tp ON c.trading_partner_id1 = tp.id 
                     INNER JOIN
                         States AS states ON c.state = states.Abbreviation
-                    ORDER BY consumer_last
+                    LEFT JOIN 
+	                    IDSSN as i ON c.identifier = i.identifier
+                    WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
+                    ORDER BY c.consumer_internal_number
                  ";
 
                 Utility util = new Utility();
-
-                //DataTable dTable = util.GetEmployeePersonnelDataTable("C:/NetSmart/Import/EMPLOYEEPERSONNEL.TXT");
-
                 ClientInformationFormat ccf = new ClientInformationFormat();
                 DataTable ceDataTable = util.GetDataTable(selectQuery);
 
@@ -63,11 +81,11 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("date_of_birth")].SetValue(dr["date_of_birth"].ToString());
 
                     worksheet.Cells[currentRow, ccf.GetIndex("ss_number")].SetValue(dr["ss_number"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("driver_license_number")].SetValue(dr["driver_license_number"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("city_of_birth")].SetValue(dr["city_of_birth"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth")].SetValue(dr["state_of_birth"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth_code")].SetValue(dr["state_of_birth_code"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("country_of_birth")].SetValue(dr["country_of_birth"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("driver_license_number")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("city_of_birth")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("country_of_birth")].SetValue(" ");
 
                     worksheet.Cells[currentRow, ccf.GetIndex("street_address_1")].SetValue(dr["street_address_1"].ToString());
 
@@ -159,24 +177,20 @@ namespace ConsumerMaster
                 {
                     worksheet.Columns[i].AutoFitWidth();
                 }
+
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
-            return workbook;
+
+
         }
 
-        public Workbook CreateDiagnosisWorkbook()
+        public void CreateDiagnosisWorkbook(Worksheet worksheet)
         {
-            Workbook workbook = new Workbook();
-
             try
             {
-                workbook.Sheets.Add(SheetType.Worksheet);
-                Worksheet worksheet = workbook.ActiveWorksheet;
-                worksheet.Name = "client_diagnoses";
-
                 string selectQuery =
                 $@"
                     SELECT 
@@ -185,6 +199,7 @@ namespace ConsumerMaster
                         Consumers AS c
                     LEFT JOIN 
                         DiagnosisCodes AS d ON replace(c.diagnosis,'.','') = d.ICD10Code 
+                    WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
                     ORDER BY c.consumer_internal_number
                  ";
 
@@ -233,25 +248,19 @@ namespace ConsumerMaster
             {
                 Logger.Error(ex);
             }
-            return workbook;
         }
 
-        public Workbook CreateBenefitsWorkbook()
+        public void CreateBenefitsWorkbook(Worksheet worksheet)
         {
-            Workbook workbook = new Workbook();
-
             try
             {
-                workbook.Sheets.Add(SheetType.Worksheet);
-                Worksheet worksheet = workbook.ActiveWorksheet;
-                worksheet.Name = "Client_Benefits";
-
                 string selectQuery =
                 $@"
                     SELECT 
                         c.consumer_internal_number AS client_id, 'Medicaid' AS payor_name,  'PA Medical Assistance Waiver' AS contract_name, ' ' AS date_start, c.identifier AS policy_number
                     FROM 
                         Consumers AS c
+                    WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
                     ORDER BY c.consumer_internal_number
                  ";
 
@@ -268,7 +277,7 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("payor_name")].SetValue(dr["payor_name"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("contract_name")].SetValue(dr["contract_name"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("co_pay_amount")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("co_pay_amount")].SetValue("0.00");  //decimal form
 
                     CellValueFormat dateStartCellValueFormat = new CellValueFormat("mm/dd/yyyy");
                     worksheet.Cells[currentRow, ccf.GetIndex("date_start")].SetFormat(dateStartCellValueFormat);
@@ -306,8 +315,91 @@ namespace ConsumerMaster
             {
                 Logger.Error(ex);
             }
-            return workbook;
         }
+
+        public void CreateEnrollmentWorkbook(Worksheet worksheet)
+        {
+            try
+            {
+                string selectQuery =
+                $@"
+                    SELECT 
+                        c.consumer_internal_number AS client_id, 'Medicaid' AS payor_name,  'PA Medical Assistance Waiver' AS contract_name, ' ' AS date_start, c.identifier AS policy_number
+                    FROM 
+                        Consumers AS c
+                    WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
+                    ORDER BY c.consumer_internal_number
+                 ";
+
+                Utility util = new Utility();
+                ClientEnrollmentFormat ccf = new ClientEnrollmentFormat();
+                DataTable ceDataTable = util.GetDataTable(selectQuery);
+
+                int totalConsumers = ceDataTable.Rows.Count;
+                PrepareEnrollmentWorksheet(worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (DataRow dr in ceDataTable.Rows)
+                {
+                    worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("program_code")].SetValue(dr["program_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("service_facility_code")].SetValue(dr["service_facility_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("foster_home_id")].SetValue("foster_home_id");  
+                    worksheet.Cells[currentRow, ccf.GetIndex("room_number")].SetValue("room_number");
+                    worksheet.Cells[currentRow, ccf.GetIndex("enrollment_id")].SetValue("enrollment_id");
+
+                    CellValueFormat dateStartCellValueFormat = new CellValueFormat("mm/dd/yyyy");
+                    worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetFormat(dateStartCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetValue("07/01/2019");
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetValue("end_date");
+                    worksheet.Cells[currentRow, ccf.GetIndex("is_planned_discharge")].SetValue("is_planned_discharge");
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("outcome")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("outcome_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("closing_reason")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("closing_reason_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("overall_discharge_date")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("org_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("referral_date")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("group_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("unit_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("schedule_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("referral_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("referral_reason")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("referral_reason_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("discharged_to_type")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("discharged_to_type_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("discharge_to_other")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("inquiry_type")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("inquiry_type_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("marketing_info")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("marketing_info_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("remarks")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("placed_by")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("placed_by_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("transfer_type")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("transfer_type_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("opening_reasons")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("opening_reasons_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("condition_at_discharge")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("condition_at_discharge_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(" ");
+
+                    currentRow++;
+                }
+
+                for (int i = 0; i < ceDataTable.Columns.Count; i++)
+                {
+                    worksheet.Columns[i].AutoFitWidth();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
 
         private void PrepareInformationWorksheet(Worksheet worksheet)
         {
@@ -374,5 +466,29 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+        private void PrepareEnrollmentWorksheet(Worksheet worksheet)
+        {
+            try
+            {
+                ClientEnrollmentFormat ccf = new ClientEnrollmentFormat();
+                string[] columnsList = ccf.ColumnStrings;
+
+                foreach (string column in columnsList)
+                {
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
+
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+
     }
 }

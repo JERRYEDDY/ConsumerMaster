@@ -41,6 +41,30 @@ namespace ConsumerMaster
             }
         }
 
+        public DataTable GetDataTable2(string queryString)
+        {
+            DataTable dataTable = new DataTable();
+            try
+            {
+                using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb2"].ConnectionString))
+                {
+                    sqlConnect.Open();
+                    using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+                    {
+
+                        sqlDataAdapter.Fill(dataTable);
+                        return dataTable;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            }
+        }
+
+
         public List<String> GetList(string queryString)
         {
             List<String> cpcData = new List<String>();
@@ -122,6 +146,31 @@ namespace ConsumerMaster
             };
         }
 
+        public DataTable GetEmployeePersonnelDataTable2(UploadedFile file)
+        {
+            String[] columns = new string[19] { "P_ACTIVE", "P_EMPNO ", "P_FNAME ", "P_LNAME ", "P_MI ", "P_BIRTH", "P_SSN", "P_SEX ", "P_EMPEMAIL", "P_JOBCODE ", "P_JOBTITLE ", "P_RACE ", "P_LASTHIRE", "P_HCITY", "P_HSTATE", "P_HZIP", "P_HSTREET1", "P_HSTREET2", "P_HCOUNTY" };
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+                using (var reader = new StreamReader(file.InputStream))
+                using (var csv = new CsvReader(reader))
+                {
+                    // Do any configuration to `CsvReader` before creating CsvDataReader.
+                    using (var dr = new CsvDataReader(csv))
+                    {
+                        dataTable.Load(dr);
+                    }
+                }
+
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            };
+        }
 
         public void DownloadExcelFile(Workbook workbook, string fileName)
         {

@@ -14,6 +14,17 @@
                 </tr>
                 <tr>
                     <td>
+                        Client All File 
+                    </td>
+                    <td class="space"/>
+                    <td>
+                        <telerik:RadButton RenderMode="Lightweight" Text="Download" ID="RadButton4" CssClass="downloadButton" ValidationGroup="FileDownloadValidationGroup" OnClick="ClientAllDownload_Click" runat="server">
+                            <Icon PrimaryIconCssClass="rbDownload"></Icon>
+                        </telerik:RadButton>
+                    </td>
+                </tr>
+<%--                <tr>
+                    <td>
                         Client Information File 
                     </td>
                     <td class="space"/>
@@ -44,7 +55,7 @@
                             <Icon PrimaryIconCssClass="rbDownload"></Icon>
                         </telerik:RadButton>
                     </td>
-                </tr>
+                </tr>--%>
             </table>
         </div>
     </div>

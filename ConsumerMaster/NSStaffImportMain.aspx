@@ -13,15 +13,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        ABRA Employee Personnel Export File 
-                    </td>
-                    <td class="space"/>
-                    <td>
-                        <telerik:RadAsyncUpload RenderMode="Lightweight" runat="server" ID="RadAsyncUpload1" OnFileUploaded="RadAsyncUpload1_FileUploaded"  Height="40px" />
-                    </td>
-                </tr>
-                <tr>
                     <td></td>
                     <td></td>
                 </tr>
