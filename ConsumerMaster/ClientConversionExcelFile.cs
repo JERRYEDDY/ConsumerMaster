@@ -18,6 +18,7 @@ namespace ConsumerMaster
             worksheets.Add();
             worksheets.Add();
             worksheets.Add();
+            worksheets.Add();
 
             Worksheet sheet1Worksheet = worksheets[0];
             sheet1Worksheet.Name = "Client_information"; 
@@ -31,6 +32,10 @@ namespace ConsumerMaster
             sheet3Worksheet.Name = "Client_Benefits";
             CreateBenefitsWorkbook(sheet3Worksheet);
 
+            Worksheet sheet4Worksheet = worksheets[3];
+            sheet4Worksheet.Name = "Client_Enrollment";
+            CreateEnrollmentWorkbook(sheet4Worksheet);
+
             return workbook;
         }
 
@@ -42,7 +47,7 @@ namespace ConsumerMaster
                 $@"
                     SELECT 
                         c.consumer_internal_number AS client_id, c.consumer_last AS last_name, c.consumer_first AS first_name, ' ' AS middle_name,
-                        ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, i.ssnumber AS ss_number, c.address_line_1 AS street_address_1, 
+                        ' ' AS gender, c.gender AS gender_code, c.date_of_birth AS date_of_birth, ' ' AS ss_number, c.address_line_1 AS street_address_1, 
                         ISNULL(c.address_line_2, ' ') AS street_address_2, c.city AS city, states.name AS state, c.state AS state_code, c.zip_code AS zip_code,  
                         c.trading_partner_id1,c.trading_partner_id2,c.trading_partner_id3
                     FROM 
@@ -51,8 +56,6 @@ namespace ConsumerMaster
                         TradingPartners AS tp ON c.trading_partner_id1 = tp.id 
                     INNER JOIN
                         States AS states ON c.state = states.Abbreviation
-                    LEFT JOIN 
-	                    IDSSN as i ON c.identifier = i.identifier
                     WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
                     ORDER BY c.consumer_internal_number
                  ";
@@ -80,7 +83,11 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("date_of_birth")].SetFormat(dateBirthCellValueFormat);
                     worksheet.Cells[currentRow, ccf.GetIndex("date_of_birth")].SetValue(dr["date_of_birth"].ToString());
 
+                    CellValueFormat identifierCellValueFormat = new CellValueFormat("000000000");
+                    worksheet.Cells[currentRow, ccf.GetIndex("ss_number")].SetFormat(identifierCellValueFormat);
                     worksheet.Cells[currentRow, ccf.GetIndex("ss_number")].SetValue(dr["ss_number"].ToString());
+
+
                     worksheet.Cells[currentRow, ccf.GetIndex("driver_license_number")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("city_of_birth")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("state_of_birth")].SetValue(" ");
@@ -257,7 +264,7 @@ namespace ConsumerMaster
                 string selectQuery =
                 $@"
                     SELECT 
-                        c.consumer_internal_number AS client_id, 'Medicaid' AS payor_name,  'PA Medical Assistance Waiver' AS contract_name, ' ' AS date_start, c.identifier AS policy_number
+                        c.consumer_internal_number AS client_id, '001' AS payor_name,  'PA_MAW' AS contract_name, ' ' AS date_start, c.identifier AS policy_number
                     FROM 
                         Consumers AS c
                     WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
@@ -275,9 +282,12 @@ namespace ConsumerMaster
                 foreach (DataRow dr in ceDataTable.Rows)
                 {
                     worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("payor_name")].SetValue(dr["payor_name"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("contract_name")].SetValue(dr["contract_name"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("co_pay_amount")].SetValue("0.00");  //decimal form
+                    worksheet.Cells[currentRow, ccf.GetIndex("payor_name")].SetValue(dr["payor_name"].ToString()); //001
+                    worksheet.Cells[currentRow, ccf.GetIndex("contract_name")].SetValue(dr["contract_name"].ToString()); //PA_MAW
+
+                    CellValueFormat co_pay_amountCellValueFormat = new CellValueFormat("0.00");
+                    worksheet.Cells[currentRow, ccf.GetIndex("co_pay_amount")].SetFormat(co_pay_amountCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("co_pay_amount")].SetValue("0");  //decimal form
 
                     CellValueFormat dateStartCellValueFormat = new CellValueFormat("mm/dd/yyyy");
                     worksheet.Cells[currentRow, ccf.GetIndex("date_start")].SetFormat(dateStartCellValueFormat);
@@ -288,14 +298,14 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("billing_sequence")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("priority")].SetValue("1");
 
-                    CellValueFormat identifierCellValueFormat = new CellValueFormat("0000000000");
-                    worksheet.Cells[currentRow, ccf.GetIndex("policy_number")].SetFormat(identifierCellValueFormat);
+                    CellValueFormat policy_numberCellValueFormat = new CellValueFormat("0000000000");
+                    worksheet.Cells[currentRow, ccf.GetIndex("policy_number")].SetFormat(policy_numberCellValueFormat);
                     worksheet.Cells[currentRow, ccf.GetIndex("policy_number")].SetValue(dr["policy_number"].ToString());
 
                     worksheet.Cells[currentRow, ccf.GetIndex("group_number")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("client_link_id")].SetValue(" ");
-                    worksheet.Cells[currentRow, ccf.GetIndex("relationship")].SetValue(" ");
-                    worksheet.Cells[currentRow, ccf.GetIndex("relationship_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("relationship")].SetValue("Self"); //Self
+                    worksheet.Cells[currentRow, ccf.GetIndex("relationship_code")].SetValue("45"); //45
                     worksheet.Cells[currentRow, ccf.GetIndex("is_medicaid_additional")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("is_deduction")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("is_deduction_percentage")].SetValue(" ");
@@ -324,7 +334,7 @@ namespace ConsumerMaster
                 string selectQuery =
                 $@"
                     SELECT 
-                        c.consumer_internal_number AS client_id, 'Medicaid' AS payor_name,  'PA Medical Assistance Waiver' AS contract_name, ' ' AS date_start, c.identifier AS policy_number
+                        c.consumer_internal_number AS client_id, 'AWC' AS program_code, '00014' AS service_facility_code, '1' AS room_number
                     FROM 
                         Consumers AS c
                     WHERE c.trading_partner_id1 = 5 OR c.trading_partner_id2 = 5 OR c.trading_partner_id3 = 5
@@ -342,18 +352,22 @@ namespace ConsumerMaster
                 foreach (DataRow dr in ceDataTable.Rows)
                 {
                     worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("program_code")].SetValue(dr["program_code"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("service_facility_code")].SetValue(dr["service_facility_code"].ToString());
-                    worksheet.Cells[currentRow, ccf.GetIndex("foster_home_id")].SetValue("foster_home_id");  
-                    worksheet.Cells[currentRow, ccf.GetIndex("room_number")].SetValue("room_number");
-                    worksheet.Cells[currentRow, ccf.GetIndex("enrollment_id")].SetValue("enrollment_id");
+                    worksheet.Cells[currentRow, ccf.GetIndex("program_code")].SetValue(dr["program_code"].ToString()); //AWC
+
+                    CellValueFormat identifierCellValueFormat = new CellValueFormat("00000");
+                    worksheet.Cells[currentRow, ccf.GetIndex("service_facility_code")].SetFormat(identifierCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("service_facility_code")].SetValue(dr["service_facility_code"].ToString()); //00014
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("foster_home_id")].SetValue(" ");  
+                    worksheet.Cells[currentRow, ccf.GetIndex("room_number")].SetValue("1"); //1
+                    worksheet.Cells[currentRow, ccf.GetIndex("enrollment_id")].SetValue(currentRow.ToString());
 
                     CellValueFormat dateStartCellValueFormat = new CellValueFormat("mm/dd/yyyy");
                     worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetFormat(dateStartCellValueFormat);
                     worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetValue("07/01/2019");
 
-                    worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetValue("end_date");
-                    worksheet.Cells[currentRow, ccf.GetIndex("is_planned_discharge")].SetValue("is_planned_discharge");
+                    worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("is_planned_discharge")].SetValue(" ");
 
                     worksheet.Cells[currentRow, ccf.GetIndex("outcome")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("outcome_code")].SetValue(" ");
