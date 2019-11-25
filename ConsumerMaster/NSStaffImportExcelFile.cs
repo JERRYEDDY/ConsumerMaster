@@ -34,19 +34,22 @@ namespace ConsumerMaster
 
                 Utility util = new Utility();
                 NSStaffImportFormat sif = new NSStaffImportFormat();
-
                 DataTable dTable = util.GetDataTable2(selectQuery);
 
                 int totalConsumers = dTable.Rows.Count;
                 PrepareInformationWorksheet(worksheet);
 
-
-
-
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in dTable.Rows)
                 {
-                    worksheet.Cells[currentRow, sif.GetIndex("id_no")].SetValue(dr["P_EMPNO"].ToString());
+                    string ssn = dr["P_SSN"].ToString();
+                    string ssNo = ParseSSN(ssn);
+
+                    string empNo = dr["P_EMPNO"].ToString();
+
+                    CellValueFormat ssnCellValueFormat = new CellValueFormat("00000");
+                    worksheet.Cells[currentRow, sif.GetIndex("id_no")].SetFormat(ssnCellValueFormat);
+                    worksheet.Cells[currentRow, sif.GetIndex("id_no")].SetValue(ssNo);
 
                     worksheet.Cells[currentRow, sif.GetIndex("last_name")].SetValue(ToTitleCase(dr["P_LNAME"].ToString()));
                     worksheet.Cells[currentRow, sif.GetIndex("first_name")].SetValue(ToTitleCase(dr["P_FNAME"].ToString()));
@@ -54,7 +57,7 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, sif.GetIndex("dob")].SetValue(dr["P_BIRTH"].ToString());
                     worksheet.Cells[currentRow, sif.GetIndex("ssn_number")].SetValue(dr["P_SSN"].ToString());
                     worksheet.Cells[currentRow, sif.GetIndex("gender_code")].SetValue(dr["P_SEX"].ToString());
-                    worksheet.Cells[currentRow, sif.GetIndex("email_address")].SetValue(dr["P_EMPEMAIL"].ToString());
+                    worksheet.Cells[currentRow, sif.GetIndex("email_address")].SetValue(dr["P_EMPEMAIL"].ToString().ToLower());
                     worksheet.Cells[currentRow, sif.GetIndex("npi_number")].SetValue("");
 
                     worksheet.Cells[currentRow, sif.GetIndex("job_title_code")].SetValue("SSP"); //SSP
@@ -70,14 +73,14 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, sif.GetIndex("billing_staff_credentials_code")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("credential_effective_date")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("credential_expiration_date")].SetValue("");
-                    worksheet.Cells[currentRow, sif.GetIndex("program_code")].SetValue("");
-                    worksheet.Cells[currentRow, sif.GetIndex("managing_office_code")].SetValue("");
+                    worksheet.Cells[currentRow, sif.GetIndex("program_code")].SetValue("AWC");  //AWC
+                    worksheet.Cells[currentRow, sif.GetIndex("managing_office_code")].SetValue("14");  //Washington Location
 
                     worksheet.Cells[currentRow, sif.GetIndex("win_domain")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("win_username")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("use_active_directory")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("is_all_incidents")].SetValue("");
-                    worksheet.Cells[currentRow, sif.GetIndex("group_name")].SetValue("");
+                    worksheet.Cells[currentRow, sif.GetIndex("group_name")].SetValue("AWC");  //AWC
                     worksheet.Cells[currentRow, sif.GetIndex("role_workgroup_code")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("workgroup_start_date")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("workgroup_end_date")].SetValue("");
@@ -109,7 +112,14 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private void PrepareInformationWorksheet(Worksheet worksheet)
+        public string ParseSSN(string ssn)
+        {
+            string newSSN = ssn[5].ToString() + ssn[7].ToString() + ssn[8].ToString() + ssn[9].ToString() + ssn[10].ToString();
+
+            return newSSN;
+        }
+
+                private void PrepareInformationWorksheet(Worksheet worksheet)
         {
             try
             {
