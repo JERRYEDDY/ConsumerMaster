@@ -42,15 +42,7 @@ namespace ConsumerMaster
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow dr in dTable.Rows)
                 {
-                    string ssn = dr["P_SSN"].ToString();
-                    string ssNo = ParseSSN(ssn);
-
-                    string empNo = dr["P_EMPNO"].ToString();
-
-                    CellValueFormat ssnCellValueFormat = new CellValueFormat("00000");
-                    worksheet.Cells[currentRow, sif.GetIndex("id_no")].SetFormat(ssnCellValueFormat);
-                    worksheet.Cells[currentRow, sif.GetIndex("id_no")].SetValue(ssNo);
-
+                    worksheet.Cells[currentRow, sif.GetIndex("id_no")].SetValue(dr["P_EMPNO"].ToString());
                     worksheet.Cells[currentRow, sif.GetIndex("last_name")].SetValue(ToTitleCase(dr["P_LNAME"].ToString()));
                     worksheet.Cells[currentRow, sif.GetIndex("first_name")].SetValue(ToTitleCase(dr["P_FNAME"].ToString()));
                     worksheet.Cells[currentRow, sif.GetIndex("middle_name")].SetValue(dr["P_MI"].ToString());
