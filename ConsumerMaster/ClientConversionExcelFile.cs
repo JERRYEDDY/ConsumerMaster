@@ -19,6 +19,7 @@ namespace ConsumerMaster
             worksheets.Add();
             worksheets.Add();
             worksheets.Add();
+            worksheets.Add();
 
             Worksheet sheet1Worksheet = worksheets[0];
             sheet1Worksheet.Name = "Client_information"; 
@@ -35,6 +36,10 @@ namespace ConsumerMaster
             Worksheet sheet4Worksheet = worksheets[3];
             sheet4Worksheet.Name = "Client_Enrollment";
             CreateEnrollmentWorkbook(sheet4Worksheet);
+
+            Worksheet sheet5Worksheet = worksheets[4];
+            sheet5Worksheet.Name = "Staff Assignment";
+            CreateStaffAssignmentsWorkbook(sheet5Worksheet);
 
             return workbook;
         }
@@ -190,8 +195,6 @@ namespace ConsumerMaster
             {
                 Logger.Error(ex);
             }
-
-
         }
 
         public void CreateDiagnosisWorkbook(Worksheet worksheet)
@@ -414,6 +417,59 @@ namespace ConsumerMaster
             }
         }
 
+        public void CreateStaffAssignmentsWorkbook(Worksheet worksheet)
+        {
+            try
+            {
+                string selectQuery =
+                $@"
+                    SELECT c.consumer_internal_number AS client_id,s.P_EMPNO AS staff_id
+                    FROM ConsumerSSP cs
+                    LEFT JOIN
+	                    Consumers AS c ON cs.consumer like CONCAT(c.consumer_last,', ',c.consumer_first)
+                    LEFT JOIN
+	                    SSPIDs AS s ON cs.SSP like s.P_SSP
+                    WHERE c.consumer_internal_number IS NOT NULL AND s.P_EMPNO IS NOT NULL
+                    ORDER BY cs.consumer
+                 ";
+
+                Utility util = new Utility();
+                ClientStaffAssignmentsFormat ccf = new ClientStaffAssignmentsFormat();
+                DataTable ceDataTable = util.GetDataTable(selectQuery);
+
+                int totalConsumers = ceDataTable.Rows.Count;
+                PrepareStaffAssignmentsWorksheet(worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (DataRow dr in ceDataTable.Rows)
+                {
+                    worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("staff_id")].SetValue(dr["staff_id"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("program_code")].SetValue("AWC");  //AWC
+
+                    CellValueFormat startDateCellValueFormat = new CellValueFormat("mm/dd/yyyy");
+                    worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetFormat(startDateCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetValue("07/01/2019");
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("role")].SetValue("AWC Support Service Professional");
+                    worksheet.Cells[currentRow, ccf.GetIndex("role_code")].SetValue("AWCSS");
+                    worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("is_primary")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(" ");
+
+                    currentRow++;
+                }
+
+                for (int i = 0; i < ceDataTable.Columns.Count; i++)
+                {
+                    worksheet.Columns[i].AutoFitWidth();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
 
         private void PrepareInformationWorksheet(Worksheet worksheet)
         {
@@ -503,6 +559,26 @@ namespace ConsumerMaster
             }
         }
 
+        private void PrepareStaffAssignmentsWorksheet(Worksheet worksheet)
+        {
+            try
+            {
+                ClientStaffAssignmentsFormat ccf = new ClientStaffAssignmentsFormat();
+                string[] columnsList = ccf.ColumnStrings;
 
+                foreach (string column in columnsList)
+                {
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
+
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
     }
 }
