@@ -104,14 +104,7 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        public string ParseSSN(string ssn)
-        {
-            string newSSN = ssn[5].ToString() + ssn[7].ToString() + ssn[8].ToString() + ssn[9].ToString() + ssn[10].ToString();
-
-            return newSSN;
-        }
-
-                private void PrepareInformationWorksheet(Worksheet worksheet)
+        private void PrepareInformationWorksheet(Worksheet worksheet)
         {
             try
             {

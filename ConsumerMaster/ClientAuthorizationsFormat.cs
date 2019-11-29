@@ -7,13 +7,13 @@ using System.Linq;
 namespace ConsumerMaster
 {
     [DelimitedRecord(",")]
-    public class ClientAuthorizationsFormat
+    public class ClientBenefitsFormat
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        class ClientAuthorizationsColumn
+        class ClientBenefitsColumn
         {
-            public ClientAuthorizationsColumn(bool inc, string name)
+            public ClientBenefitsColumn(bool inc, string name)
             {
                 Include = inc;
                 Name = name;
@@ -23,32 +23,40 @@ namespace ConsumerMaster
             public string Name { get; set; }
         }
 
-        Dictionary<int, ClientAuthorizationsColumn> _columnNameList = new Dictionary<int, ClientAuthorizationsColumn>();
+        Dictionary<int, ClientBenefitsColumn> _columnNameList = new Dictionary<int, ClientBenefitsColumn>();
 
         public string[] ColumnStrings;
 
-        public ClientAuthorizationsFormat()
+        public ClientBenefitsFormat()
         {
             var columnNameList = new List<string>() 
             {
-                "auth_original_id",
                 "client_id",
                 "payor_name",
                 "contract_name",
-                "start_date",
-                "end_date",
-                "units",
-                "authorization_number",
-                "authorization_type",
-                "authorization_type_code",
-                "service_bundle_name",
+                "co_pay_amount",
+                "date_start",
+                "date_end",
+                "is_self_pay",
+                "billing_sequence",
+                "priority",
+                "policy_number",
+                "group_number",
+                "client_link_id",
+                "relationship",
+                "relationship_code",
+                "is_medicaid_additional",
+                "is_deduction",
+                "is_deduction_percentage",
+                "deduction_percent",
+                "deduction_action_code",
                 "original_table_name"
              };
 
             int index = 0;
             foreach (string cname in columnNameList)
             {
-                _columnNameList.Add(index++, new ClientAuthorizationsColumn(true, cname));
+                _columnNameList.Add(index++, new ClientBenefitsColumn(true, cname));
             }
 
             ColumnStrings = GetColumns();

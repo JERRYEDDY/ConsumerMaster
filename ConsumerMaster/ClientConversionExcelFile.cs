@@ -20,6 +20,8 @@ namespace ConsumerMaster
             worksheets.Add();
             worksheets.Add();
             worksheets.Add();
+            worksheets.Add();
+            worksheets.Add();
 
             Worksheet sheet1Worksheet = worksheets[0];
             sheet1Worksheet.Name = "Client_information"; 
@@ -40,6 +42,14 @@ namespace ConsumerMaster
             Worksheet sheet5Worksheet = worksheets[4];
             sheet5Worksheet.Name = "Staff Assignment";
             CreateStaffAssignmentsWorkbook(sheet5Worksheet);
+
+            Worksheet sheet6Worksheet = worksheets[5];
+            sheet6Worksheet.Name = "Authorizations";
+            CreateAuthorizationsWorkbook(sheet6Worksheet);
+
+            Worksheet sheet7Worksheet = worksheets[6];
+            sheet7Worksheet.Name = "conv_authorization_details";
+            CreateServiceAuthorizationsWorkbook(sheet7Worksheet);
 
             return workbook;
         }
@@ -421,9 +431,13 @@ namespace ConsumerMaster
         {
             try
             {
+
+                string tamaraSchererID = "4681";
+                string monicaKingID = "5717";
+
                 string selectQuery =
                 $@"
-                    SELECT c.consumer_internal_number AS client_id,s.P_EMPNO AS staff_id
+                    SELECT c.consumer_internal_number AS client_id,s.P_EMPNO AS staff_id, ' ' AS is_primary
                     FROM ConsumerSSP cs
                     LEFT JOIN
 	                    Consumers AS c ON cs.consumer like CONCAT(c.consumer_last,', ',c.consumer_first)
@@ -433,9 +447,45 @@ namespace ConsumerMaster
                     ORDER BY cs.consumer
                  ";
 
+                string selectTamaraQuery =
+                $@"
+                    SELECT c.consumer_internal_number AS client_id,'4681' AS staff_id,'1' AS is_primary
+                    FROM ConsumerSSP cs
+                    LEFT JOIN
+	                    Consumers AS c ON cs.consumer like CONCAT(c.consumer_last,', ',c.consumer_first)
+                    LEFT JOIN
+	                    SSPIDs AS s ON cs.SSP like s.P_SSP
+                    LEFT JOIN
+	                    ZipCounty AS z ON SUBSTRING(c.zip_code,1,5) = z.ZipCode
+                    WHERE c.consumer_internal_number IS NOT NULL AND s.P_EMPNO IS NOT NULL AND z.County IN ('Allegheny','Lawrence','Greene')
+                    ORDER BY cs.consumer
+                ";
+
+                string selectMonicaQuery =
+                $@"
+                    SELECT c.consumer_internal_number AS client_id,'5717' AS staff_id,'1' AS is_primary
+                    FROM ConsumerSSP cs
+                    LEFT JOIN
+	                    Consumers AS c ON cs.consumer like CONCAT(c.consumer_last,', ',c.consumer_first)
+                    LEFT JOIN
+	                    SSPIDs AS s ON cs.SSP like s.P_SSP
+                    LEFT JOIN
+	                    ZipCounty AS z ON SUBSTRING(c.zip_code,1,5) = z.ZipCode
+                    WHERE c.consumer_internal_number IS NOT NULL AND s.P_EMPNO IS NOT NULL AND z.County NOT IN ('Allegheny','Lawrence','Greene')
+                    ORDER BY cs.consumer
+                ";
+                
                 Utility util = new Utility();
                 ClientStaffAssignmentsFormat ccf = new ClientStaffAssignmentsFormat();
                 DataTable ceDataTable = util.GetDataTable(selectQuery);
+
+                DataTable tamaraDataTable = util.GetDataTable(selectTamaraQuery);
+                ceDataTable.Merge(tamaraDataTable);  //Append Tamara assignments
+                ceDataTable.AcceptChanges();
+
+                DataTable monicaDataTable = util.GetDataTable(selectMonicaQuery);
+                ceDataTable.Merge(monicaDataTable); //Append Monica assignments
+                ceDataTable.AcceptChanges();
 
                 int totalConsumers = ceDataTable.Rows.Count;
                 PrepareStaffAssignmentsWorksheet(worksheet);
@@ -454,8 +504,136 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("role")].SetValue("AWC Support Service Professional");
                     worksheet.Cells[currentRow, ccf.GetIndex("role_code")].SetValue("AWCSS");
                     worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetValue(" ");
-                    worksheet.Cells[currentRow, ccf.GetIndex("is_primary")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("is_primary")].SetValue(dr["is_primary"].ToString());
                     worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(" ");
+
+                    currentRow++;
+                }
+
+                for (int i = 0; i < ceDataTable.Columns.Count; i++)
+                {
+                    worksheet.Columns[i].AutoFitWidth();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        public void CreateAuthorizationsWorkbook(Worksheet worksheet)
+        {
+            try
+            {
+                string selectQuery =
+                $@"
+                    SELECT ROW_NUMBER() OVER(ORDER BY c.consumer_internal_number) auth_original_id,
+                        c.consumer_internal_number AS client_id, '001' AS payor_name, 'PA_MAW' AS contract_name,
+                        ca.ServiceStartDate AS start_date,ca.ServiceEndDate AS end_date,ca.AuthorizedUnits AS units
+                    FROM ConsumerAuthorizations AS ca
+                    INNER JOIN
+	                    Consumers AS c ON ca.Identifier = c.identifier
+                    ORDER BY c.consumer_internal_number
+                 ";
+
+                Utility util = new Utility();
+                ClientAuthorizationsFormat ccf = new ClientAuthorizationsFormat();
+                DataTable ceDataTable = util.GetDataTable(selectQuery);
+
+                int totalConsumers = ceDataTable.Rows.Count;
+                PrepareAuthorizationsWorksheet(worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (DataRow dr in ceDataTable.Rows)
+                {
+                    worksheet.Cells[currentRow, ccf.GetIndex("auth_original_id")].SetValue(dr["auth_original_id"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("client_id")].SetValue(dr["client_id"].ToString());
+
+                    CellValueFormat payor_numberCellValueFormat = new CellValueFormat("000");
+                    worksheet.Cells[currentRow, ccf.GetIndex("payor_name")].SetFormat(payor_numberCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("payor_name")].SetValue(dr["payor_name"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("contract_name")].SetValue(dr["contract_name"].ToString());
+
+                    CellValueFormat date1CellValueFormat = new CellValueFormat("mm/dd/yyyy");
+                    worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetFormat(date1CellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("start_date")].SetValue(dr["start_date"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetFormat(date1CellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("end_date")].SetValue(dr["end_date"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("units")].SetValue(dr["units"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_number")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_type")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_type_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("service_bundle_name")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(" ");
+
+                    currentRow++;
+                }
+
+                for (int i = 0; i < ceDataTable.Columns.Count; i++)
+                {
+                    worksheet.Columns[i].AutoFitWidth();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        public void CreateServiceAuthorizationsWorkbook(Worksheet worksheet)
+        {
+            try
+            {
+                string selectQuery =
+                $@"
+                    SELECT '1' AS auth_details_original_id,ROW_NUMBER() OVER(ORDER BY c.consumer_internal_number) auth_original_id,
+                        'AWC' AS program_code, '00014' AS service_facility_code,'PA_MAW' AS profile_type,ca.ProcedureCode AS rate_code,
+                        ca.RemainingUnits AS units,ca.ServiceStartDate AS date_from,ca.ServiceEndDate AS date_to
+                    FROM ConsumerAuthorizations AS ca
+                    INNER JOIN
+	                    Consumers AS c ON ca.Identifier = c.identifier
+                    ORDER BY c.consumer_internal_number
+                 ";
+
+                Utility util = new Utility();
+                ClientServiceAuthorizationsFormat ccf = new ClientServiceAuthorizationsFormat();
+                DataTable ceDataTable = util.GetDataTable(selectQuery);
+
+                int totalConsumers = ceDataTable.Rows.Count;
+                PrepareServiceAuthorizationsWorksheet(worksheet);
+
+                int currentRow = IndexRowItemStart + 1;
+                foreach (DataRow dr in ceDataTable.Rows)
+                {
+                    worksheet.Cells[currentRow, ccf.GetIndex("auth_details_original_id")].SetValue(dr["auth_details_original_id"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("auth_original_id")].SetValue(dr["auth_original_id"].ToString());
+
+                    CellValueFormat sfc_numberCellValueFormat = new CellValueFormat("00000");
+                    worksheet.Cells[currentRow, ccf.GetIndex("service_facility_code")].SetFormat(sfc_numberCellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("service_facility_code")].SetValue(dr["service_facility_code"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("profile_type")].SetValue(dr["profile_type"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("rate_code")].SetValue(dr["rate_code"].ToString());
+                    worksheet.Cells[currentRow, ccf.GetIndex("units")].SetValue(dr["units"].ToString());
+
+                    CellValueFormat date1CellValueFormat = new CellValueFormat("mm/dd/yyyy");
+                    worksheet.Cells[currentRow, ccf.GetIndex("date_from")].SetFormat(date1CellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("date_from")].SetValue(dr["date_from"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("date_to")].SetFormat(date1CellValueFormat);
+                    worksheet.Cells[currentRow, ccf.GetIndex("date_to")].SetValue(dr["date_to"].ToString());
+
+                    worksheet.Cells[currentRow, ccf.GetIndex("staff_id")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("auth_number_override")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("is_override")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("override_rate_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("billing_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("amount_charged")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("copay_amount")].SetValue(" ");
 
                     currentRow++;
                 }
@@ -580,5 +758,50 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+        private void PrepareAuthorizationsWorksheet(Worksheet worksheet)
+        {
+            try
+            {
+                ClientAuthorizationsFormat ccf = new ClientAuthorizationsFormat();
+                string[] columnsList = ccf.ColumnStrings;
+
+                foreach (string column in columnsList)
+                {
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
+
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        private void PrepareServiceAuthorizationsWorksheet(Worksheet worksheet)
+        {
+            try
+            {
+                ClientServiceAuthorizationsFormat ccf = new ClientServiceAuthorizationsFormat();
+                string[] columnsList = ccf.ColumnStrings;
+
+                foreach (string column in columnsList)
+                {
+                    int columnKey = Array.IndexOf(columnsList, column);
+                    string columnName = column;
+
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
     }
 }

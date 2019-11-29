@@ -7,13 +7,13 @@ using System.Linq;
 namespace ConsumerMaster
 {
     [DelimitedRecord(",")]
-    public class ClientAuthorizationsFormat
+    public class ClientServiceAuthorizationsFormat
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        class ClientAuthorizationsColumn
+        class ClientServiceAuthorizationsColumn
         {
-            public ClientAuthorizationsColumn(bool inc, string name)
+            public ClientServiceAuthorizationsColumn(bool inc, string name)
             {
                 Include = inc;
                 Name = name;
@@ -23,32 +23,36 @@ namespace ConsumerMaster
             public string Name { get; set; }
         }
 
-        Dictionary<int, ClientAuthorizationsColumn> _columnNameList = new Dictionary<int, ClientAuthorizationsColumn>();
+        Dictionary<int, ClientServiceAuthorizationsColumn> _columnNameList = new Dictionary<int, ClientServiceAuthorizationsColumn>();
 
         public string[] ColumnStrings;
 
-        public ClientAuthorizationsFormat()
+        public ClientServiceAuthorizationsFormat()
         {
             var columnNameList = new List<string>() 
             {
+                "auth_details_original_id",
                 "auth_original_id",
-                "client_id",
-                "payor_name",
-                "contract_name",
-                "start_date",
-                "end_date",
+                "program_code",
+                "service_facility_code",
+                "profile_type",
+                "rate_code",
                 "units",
-                "authorization_number",
-                "authorization_type",
-                "authorization_type_code",
-                "service_bundle_name",
-                "original_table_name"
+                "date_from",
+                "date_to",
+                "staff_id",
+                "auth_number_override",
+                "is_override",
+                "override_rate_code",
+                "billing_code",
+                "amount_charged",
+                "copay_amount"
              };
 
             int index = 0;
             foreach (string cname in columnNameList)
             {
-                _columnNameList.Add(index++, new ClientAuthorizationsColumn(true, cname));
+                _columnNameList.Add(index++, new ClientServiceAuthorizationsColumn(true, cname));
             }
 
             ColumnStrings = GetColumns();
