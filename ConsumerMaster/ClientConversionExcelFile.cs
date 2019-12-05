@@ -15,13 +15,13 @@ namespace ConsumerMaster
             Workbook workbook = new Workbook();
 
             WorksheetCollection worksheets = workbook.Worksheets;
-            worksheets.Add();
-            worksheets.Add();
-            worksheets.Add();
-            worksheets.Add();
-            worksheets.Add();
-            worksheets.Add();
-            worksheets.Add();
+            worksheets.Add(); //Client_information
+            worksheets.Add(); //client_diagnosis
+            worksheets.Add(); //Client_Benefits
+            worksheets.Add(); //Client_Enrollment
+            worksheets.Add(); //Staff Assignment
+            worksheets.Add(); //Authorizations
+            //worksheets.Add();  //conv_authorization_details
 
             Worksheet sheet1Worksheet = worksheets[0];
             sheet1Worksheet.Name = "Client_information"; 
@@ -47,9 +47,9 @@ namespace ConsumerMaster
             sheet6Worksheet.Name = "Authorizations";
             CreateAuthorizationsWorkbook(sheet6Worksheet);
 
-            Worksheet sheet7Worksheet = worksheets[6];
-            sheet7Worksheet.Name = "conv_authorization_details";
-            CreateServiceAuthorizationsWorkbook(sheet7Worksheet);
+            //Worksheet sheet7Worksheet = worksheets[6];
+            //sheet7Worksheet.Name = "conv_authorization_details";
+            //CreateServiceAuthorizationsWorkbook(sheet7Worksheet);
 
             return workbook;
         }
@@ -565,8 +565,8 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, ccf.GetIndex("units")].SetValue(dr["units"].ToString());
 
                     worksheet.Cells[currentRow, ccf.GetIndex("authorization_number")].SetValue(" ");
-                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_type")].SetValue(" ");
-                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_type_code")].SetValue(" ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_type")].SetValue("Internal Use Only ");
+                    worksheet.Cells[currentRow, ccf.GetIndex("authorization_type_code")].SetValue("IU");
                     worksheet.Cells[currentRow, ccf.GetIndex("service_bundle_name")].SetValue(" ");
                     worksheet.Cells[currentRow, ccf.GetIndex("original_table_name")].SetValue(" ");
 

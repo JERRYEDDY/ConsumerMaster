@@ -62,11 +62,18 @@ namespace ConsumerMaster
                     worksheet.Cells[currentRow, sif.GetIndex("supervisor_win_username")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("can_supervise")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("security_scheme_code")].SetValue("");
-                    worksheet.Cells[currentRow, sif.GetIndex("billing_staff_credentials_code")].SetValue("");
-                    worksheet.Cells[currentRow, sif.GetIndex("credential_effective_date")].SetValue("");
+                    worksheet.Cells[currentRow, sif.GetIndex("billing_staff_credentials_code")].SetValue("SSP");
+
+                    CellValueFormat dateEffectiveCellValueFormat = new CellValueFormat("mm/dd/yyyy");
+                    worksheet.Cells[currentRow, sif.GetIndex("credential_effective_date")].SetFormat(dateEffectiveCellValueFormat);
+                    worksheet.Cells[currentRow, sif.GetIndex("credential_effective_date")].SetValue("07/01/2019");
+
                     worksheet.Cells[currentRow, sif.GetIndex("credential_expiration_date")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("program_code")].SetValue("AWC");  //AWC
-                    worksheet.Cells[currentRow, sif.GetIndex("managing_office_code")].SetValue("14");  //Washington Location
+
+                    CellValueFormat officeCellValueFormat = new CellValueFormat("00000");
+                    worksheet.Cells[currentRow, sif.GetIndex("managing_office_code")].SetFormat(officeCellValueFormat);
+                    worksheet.Cells[currentRow, sif.GetIndex("managing_office_code")].SetValue("00014");  //Washington Location
 
                     worksheet.Cells[currentRow, sif.GetIndex("win_domain")].SetValue("");
                     worksheet.Cells[currentRow, sif.GetIndex("win_username")].SetValue("");
