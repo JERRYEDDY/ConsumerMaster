@@ -525,15 +525,29 @@ namespace ConsumerMaster
         {
             try
             {
+                //string selectQuery =
+                //$@"
+                //    SELECT ROW_NUMBER() OVER(ORDER BY c.consumer_internal_number) auth_original_id,
+                //        c.consumer_internal_number AS client_id, '001' AS payor_name, 'PA_MAW' AS contract_name,
+                //        ca.ServiceStartDate AS start_date,ca.ServiceEndDate AS end_date,ca.AuthorizedUnits AS units
+                //    FROM ConsumerAuthorizations AS ca
+                //    INNER JOIN
+	               //     Consumers AS c ON ca.Identifier = c.identifier
+                //    ORDER BY c.consumer_internal_number
+                // ";
+
                 string selectQuery =
                 $@"
                     SELECT ROW_NUMBER() OVER(ORDER BY c.consumer_internal_number) auth_original_id,
-                        c.consumer_internal_number AS client_id, '001' AS payor_name, 'PA_MAW' AS contract_name,
-                        ca.ServiceStartDate AS start_date,ca.ServiceEndDate AS end_date,ca.AuthorizedUnits AS units
-                    FROM ConsumerAuthorizations AS ca
+                        c.consumer_internal_number AS client_id, 
+	                    '001' AS payor_name, 
+	                    'PA_MAW' AS contract_name,
+                        ca.ServiceStartDate AS start_date,
+	                    ca.ServiceEndDate AS end_date,
+	                    ca.AuthorizedUnits AS units
+                    FROM Consumers c
                     INNER JOIN
-	                    Consumers AS c ON ca.Identifier = c.identifier
-                    ORDER BY c.consumer_internal_number
+	                    ConsumerAuthorizations ca  ON c.Identifier = ca.identifier
                  ";
 
                 Utility util = new Utility();
