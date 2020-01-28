@@ -206,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
+    <Content Include="AWCReports.aspx" />
     <Content Include="NSStaffImportMain.aspx" />
     <Content Include="ClientConversionMain.aspx" />
     <Content Include="Images\BlankLogo.png" />
@@ -325,6 +326,13 @@
     </Compile>
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AWCReports.aspx.cs">
+      <DependentUpon>AWCReports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AWCReports.aspx.designer.cs">
+      <DependentUpon>AWCReports.aspx</DependentUpon>
     </Compile>
     <Compile Include="ClientServiceAuthorizationsFormat.cs" />
     <Compile Include="ClientAuthorizationsFormat.cs" />
