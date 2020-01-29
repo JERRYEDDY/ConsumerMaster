@@ -7,29 +7,31 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConsumerMaster {
-    
-    
-    public partial class AWCMain {
-        
+namespace ConsumerMaster
+{
+
+
+    public partial class AWCMain
+    {
+
         /// <summary>
-        /// RadPanelBar1 control.
+        /// Label4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadPanelBar RadPanelBar1;
-        
+        protected global::System.Web.UI.WebControls.Label Label4;
+
         /// <summary>
-        /// RadButton2 control.
+        /// RadAsyncUpload1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButton2;
-        
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload1;
+
         /// <summary>
         /// RadButton1 control.
         /// </summary>
@@ -38,5 +40,14 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadButton RadButton1;
+
+        /// <summary>
+        /// itemsClientSide control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal itemsClientSide;
     }
 }

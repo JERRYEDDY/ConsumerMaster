@@ -213,6 +213,7 @@
     <Content Include="Images\PWLogo.png" />
     <Content Include="Images\VendorLogo.png" />
     <Content Include="CompositeProcedureCodes.aspx" />
+    <Content Include="Styles\AWCMainStyle.css" />
     <Content Include="Styles\file_styles.css" />
     <Content Include="VendorMain.aspx" />
     <Content Include="Images\ATFLogo.png" />
@@ -327,6 +328,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AWCPayrollReportExportExcelFile.cs" />
     <Compile Include="AWCReports.aspx.cs">
       <DependentUpon>AWCReports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -336,8 +338,10 @@
     </Compile>
     <Compile Include="ClientServiceAuthorizationsFormat.cs" />
     <Compile Include="ClientAuthorizationsFormat.cs" />
+    <Compile Include="ClientShifts.cs" />
     <Compile Include="ClientStaffAssignmentsFormat.cs" />
     <Compile Include="ClientEnrollmentFormat.cs" />
+    <Compile Include="CShifts.cs" />
     <Compile Include="NSStaffImportMain.aspx.cs">
       <DependentUpon>NSStaffImportMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -365,6 +369,8 @@
     </Compile>
     <Compile Include="ClientInformationFormat.cs" />
     <Compile Include="ClientConversionExcelFile.cs" />
+    <Compile Include="Payroll40HoursReportFormat.cs" />
+    <Compile Include="SPColumn.cs" />
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
       <DependentUpon>VendorMain.aspx</DependentUpon>

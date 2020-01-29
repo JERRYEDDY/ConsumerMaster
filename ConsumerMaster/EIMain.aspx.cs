@@ -22,15 +22,7 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = EIConsumerList.SelectedValue;
-                string filename = "";
 
-                if (selectedValue.Equals("7")) // Direct Therapy
-                {
-                    filename = @"EIDTConsumerExport.csv";
-                }
-                else if (selectedValue.Equals("8")) //Special Instruction
-                {
-                    filename = @"EISIConsumerExport.csv";
                 }
 
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
