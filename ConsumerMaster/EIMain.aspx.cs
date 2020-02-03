@@ -22,8 +22,7 @@ namespace ConsumerMaster
             try
             {
                 string selectedValue = EIConsumerList.SelectedValue;
-
-                }
+                string filename = "";
 
                 ConsumerExportExcelFile consumerExport = new ConsumerExportExcelFile();
                 Workbook workbook = consumerExport.CreateWorkbook(selectedValue);

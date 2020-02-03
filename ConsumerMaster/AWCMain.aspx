@@ -29,7 +29,17 @@
             </tr>
             <tr>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton1" runat="server" text="Process" OnClick="RadButton1_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton1" runat="server" text="40 Hours" OnClick="RadButton1_Click"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton2" runat="server" text="29 Hours" OnClick="RadButton1_Click"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton3" runat="server" text="Overlap" OnClick="RadButton1_Click"/>
                 </td>
             </tr>
         </table>

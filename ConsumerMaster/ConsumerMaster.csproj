@@ -328,7 +328,9 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AWCPayrollReportExportExcelFile.cs" />
+    <Compile Include="AWCOverlapReportExportExcelFile.cs" />
+    <Compile Include="AWC29HoursReportExportExcelFile.cs" />
+    <Compile Include="AWC40HoursReportExportExcelFile.cs" />
     <Compile Include="AWCReports.aspx.cs">
       <DependentUpon>AWCReports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
