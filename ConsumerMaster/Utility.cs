@@ -174,7 +174,22 @@ namespace ConsumerMaster
             };
         }
 
-        public DataTable GetTimeAndDistanceDataTable(string spreadsheetFilename)
+        public void WorksheetColumnHeaders(string[] columns, Worksheet worksheet)
+        {
+            ColumnSelection columnSelection = worksheet.Columns[0, columns.Count()];
+            columnSelection.AutoFitWidth();
+            int IndexRowItemStart = 0;
+
+            foreach (string column in columns)
+            {
+                int columnKey = Array.IndexOf(columns, column);
+                string columnName = column;
+
+                worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
+                worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+            }
+        }
+        public DataTable GetTimeAndDistanceDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[20]
             {
@@ -200,15 +215,12 @@ namespace ConsumerMaster
                 new SPColumn("Discipline", typeof(string))
             };
 
-
             DataTable dataTable = new DataTable();
             try
             {
-                //string spreadsheetFilename = "TimeDistance_20200105_20200111.xlsx";
-                //string spreadsheetFilename = "TimeDistance_20200112_20200118.xlsx";
-
                 XlsxFormatProvider formatProvider = new XlsxFormatProvider();
-                Workbook InputWorkbook = formatProvider.Import(File.ReadAllBytes(@"C:\NetSmart\Reports Written\" + spreadsheetFilename));
+                //Workbook InputWorkbook = formatProvider.Import(File.ReadAllBytes(@"C:\NetSmart\Reports Written\" + spreadsheetFilename));
+                Workbook InputWorkbook = formatProvider.Import(input);
 
                 var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
                 for (int i = 0; i < spc.Count(); i++)
@@ -264,7 +276,7 @@ namespace ConsumerMaster
                 return dataTable;
             };
         }
-
+  
         string GetCellData(Worksheet worksheet, int i, int j)
         {
             CellSelection selection = worksheet.Cells[i, j];
@@ -275,8 +287,6 @@ namespace ConsumerMaster
             string result = formatResult.InfosText;
             return result;
         }
-
-
 
         public void DownloadExcelFile(Workbook workbook, string fileName)
         {

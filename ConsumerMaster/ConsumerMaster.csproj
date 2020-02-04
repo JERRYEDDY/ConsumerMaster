@@ -328,9 +328,9 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AWCOverlapReportExportExcelFile.cs" />
-    <Compile Include="AWC29HoursReportExportExcelFile.cs" />
-    <Compile Include="AWC40HoursReportExportExcelFile.cs" />
+    <Compile Include="AWCOverlapReportExcelFile.cs" />
+    <Compile Include="AWC29HoursReportExcelFile.cs" />
+    <Compile Include="AWC40HoursReportExcelFile.cs" />
     <Compile Include="AWCReports.aspx.cs">
       <DependentUpon>AWCReports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -373,6 +373,7 @@
     <Compile Include="ClientConversionExcelFile.cs" />
     <Compile Include="Payroll40HoursReportFormat.cs" />
     <Compile Include="SPColumn.cs" />
+    <Compile Include="AWCPayrollReportExcelFile.cs" />
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
       <DependentUpon>VendorMain.aspx</DependentUpon>

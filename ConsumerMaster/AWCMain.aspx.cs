@@ -11,9 +11,6 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        const int MaxTotalBytes = 1048576; // 1 MB
-        long totalBytes;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             RadAsyncUpload1.FileUploaded += new Telerik.Web.UI.FileUploadedEventHandler(RadAsyncUpload1_FileUploaded);
@@ -43,13 +40,16 @@ namespace ConsumerMaster
 
         protected void RadButton1_Click(object sender, EventArgs e)
         {
-            string filename = "AWC40HoursReport.csv";
+            string outFilename = "AWC40HoursReport.csv";
             try
             {
-                AWC40HoursReportExportExcelFile payrollExport = new AWC40HoursReportExportExcelFile();
-                Workbook workbook = payrollExport.CreateWorkbook();
-                Utility utility = new Utility();
-                utility.DownloadCSVFile(workbook, filename);
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                    AWC40HoursReportExcelFile payrollExport = new AWC40HoursReportExcelFile();
+                    Workbook workbook = payrollExport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream);
+                    Utility utility = new Utility();
+                    utility.DownloadCSVFile(workbook, outFilename);
+                }
 
                 int l = 1;
             }
@@ -64,10 +64,13 @@ namespace ConsumerMaster
             string filename = "AWC29HoursReport.csv";
             try
             {
-                AWC40HoursReportExportExcelFile payrollExport = new AWC40HoursReportExportExcelFile();
-                Workbook workbook = payrollExport.CreateWorkbook();
-                Utility utility = new Utility();
-                utility.DownloadCSVFile(workbook, filename);
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                    AWC29HoursReportExcelFile payrollExport = new AWC29HoursReportExcelFile();
+                    Workbook workbook = payrollExport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream);
+                    Utility utility = new Utility();
+                    utility.DownloadCSVFile(workbook, filename);
+                }
 
                 int l = 1;
             }
@@ -82,10 +85,13 @@ namespace ConsumerMaster
             string filename = "AWCOverlapShiftsReport.csv";
             try
             {
-                AWC40HoursReportExportExcelFile payrollExport = new AWC40HoursReportExportExcelFile();
-                Workbook workbook = payrollExport.CreateWorkbook();
-                Utility utility = new Utility();
-                utility.DownloadCSVFile(workbook, filename);
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                    AWCOverlapReportExcelFile payrollExport = new AWCOverlapReportExcelFile();
+                    Workbook workbook = payrollExport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream);
+                    Utility utility = new Utility();
+                    utility.DownloadCSVFile(workbook, filename);
+                }
 
                 int l = 1;
             }

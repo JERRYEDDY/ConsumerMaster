@@ -1,5 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+<script>
+    function validateUpload(sender, args) {
+        var upload = $find("<%=RadAsyncUpload1.ClientID%>");
+        args.IsValid = upload.getUploadedFiles().length != 0;
+    }
+</script>
+
     <div class="demo-container no-bg">
         <p>
             <asp:Label runat="server" ID="Label4" />
@@ -25,21 +32,31 @@
                 <td class="space"/>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnFileUploaded="RadAsyncUpload1_FileUploaded" PostbackTriggers="RadButton1" />
+                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>
                </td>
             </tr>
             <tr>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton1" runat="server" text="40 Hours" OnClick="RadButton1_Click"/>
+                    40 Hours Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton1" runat="server" text="Process" OnClick="RadButton1_Click"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton2" runat="server" text="29 Hours" OnClick="RadButton1_Click"/>
+                    29 Hours Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton2" runat="server" text="Process" OnClick="RadButton2_Click"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton3" runat="server" text="Overlap" OnClick="RadButton1_Click"/>
+                    Overlap Shifts Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton3" runat="server" text="Process" OnClick="RadButton3_Click"/>
                 </td>
             </tr>
         </table>

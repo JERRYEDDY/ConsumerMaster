@@ -33,6 +33,15 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload1;
 
         /// <summary>
+        /// CustomValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator;
+
+        /// <summary>
         /// RadButton1 control.
         /// </summary>
         /// <remarks>
