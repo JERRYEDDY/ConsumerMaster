@@ -13,6 +13,10 @@ using Telerik.Windows.Documents.Spreadsheet.FormatProviders.TextBased.Csv;
 using Telerik.Windows.Documents.Spreadsheet.Formatting.FormatStrings;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Linq;
+using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
+using Telerik.Windows.Documents.Fixed.Model;
+using Telerik.Charting.Styles;
+using Telerik.Windows.Documents.Flow.FormatProviders.Txt;
 
 namespace ConsumerMaster
 {
@@ -66,7 +70,6 @@ namespace ConsumerMaster
             }
         }
 
-
         public List<String> GetList(string queryString)
         {
             List<String> cpcData = new List<String>();
@@ -94,7 +97,6 @@ namespace ConsumerMaster
                 return cpcData;
             };
         }
-
 
         public DataTable GetEmployeePersonnelDataTable(UploadedFile file)
         {
@@ -189,6 +191,7 @@ namespace ConsumerMaster
                 worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
             }
         }
+
         public DataTable GetTimeAndDistanceDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[20]
@@ -340,7 +343,62 @@ namespace ConsumerMaster
                 HttpContext.Current.Response.Write(renderedBytes);
                 HttpContext.Current.Response.End();
 
-                //HttpContext.Current.ApplicationInstance.CompleteRequest();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        public void DownloadPDFFile(RadFixedDocument document, string fileName)
+        {
+            try
+            {
+                PdfFormatProvider formatProvider = new PdfFormatProvider();
+                //formatProvider.ExportSettings.ImageQuality = ImageQuality.High;
+
+                byte[] renderedBytes;
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                     formatProvider.Export(document, ms);
+                    renderedBytes = ms.ToArray();
+                }
+
+                HttpContext.Current.Response.ClearHeaders();
+                HttpContext.Current.Response.ClearContent();
+                HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
+                HttpContext.Current.Response.ContentType = "text/csv";
+                HttpContext.Current.Response.AddHeader("Pragma", "public");
+                HttpContext.Current.Response.BinaryWrite(renderedBytes);
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.SuppressContent = true;
+                HttpContext.Current.Response.Write(renderedBytes);
+                HttpContext.Current.Response.End();
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        public void DownloadTXTFile(MemoryStream ms, string fileName)
+        {
+            try
+            {
+                byte[] renderedBytes = ms.ToArray();
+
+                HttpContext.Current.Response.ClearHeaders();
+                HttpContext.Current.Response.ClearContent();
+                HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
+                HttpContext.Current.Response.ContentType = "text/csv";
+                HttpContext.Current.Response.AddHeader("Pragma", "public");
+                HttpContext.Current.Response.BinaryWrite(renderedBytes);
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.SuppressContent = true;
+                HttpContext.Current.Response.Write(renderedBytes);
+                HttpContext.Current.Response.End();
             }
             catch (Exception ex)
             {

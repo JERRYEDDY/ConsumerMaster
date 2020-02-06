@@ -4,6 +4,7 @@ using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.IO;
+using Telerik.Windows.Documents.Fixed.Model;
 
 namespace ConsumerMaster
 {
@@ -13,45 +14,26 @@ namespace ConsumerMaster
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            RadAsyncUpload1.FileUploaded += new Telerik.Web.UI.FileUploadedEventHandler(RadAsyncUpload1_FileUploaded);
-            RadButton1.Click += new EventHandler(RadButton1_Click);
 
-            //if (!IsPostBack)
-            //{
-            //    RadButton1.Enabled = false;
-            //}
-            //else
-            //{
-            //    RadButton1.Enabled = true;
-            //}
-        }
-
-        public void RadAsyncUpload1_FileUploaded(object sender, FileUploadedEventArgs e)
-        {
-
-            byte[] buffer = new byte[e.File.ContentLength];
-            using (Stream str = e.File.InputStream)
-            {
-                str.Read(buffer, 0, buffer.Length);
- 
-                // more code
-            }
         }
 
         protected void RadButton1_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWC40HoursReport.csv";
+            string outFilename = "AWC40HoursReport.txt";
             try
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                    AWC40HoursReportExcelFile payrollExport = new AWC40HoursReportExcelFile();
-                    Workbook workbook = payrollExport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream);
+                    string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
+                    AWC40HoursReportExcelFile payrollReport = new AWC40HoursReportExcelFile();
                     Utility utility = new Utility();
-                    utility.DownloadCSVFile(workbook, outFilename);
-                }
+                    
+                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
+                    utility.DownloadTXTFile(output, outFilename);
 
-                int l = 1;
+                    //Workbook workbook = payrollReport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
+                    //utility.DownloadCSVFile(workbook, outFilename);
+                }
             }
             catch (Exception ex)
             {
@@ -59,20 +41,23 @@ namespace ConsumerMaster
 
             }
         }
+
         protected void RadButton2_Click(object sender, EventArgs e)
         {
-            string filename = "AWC29HoursReport.csv";
+            string outFilename = "AWC29HoursReport.txt";
             try
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                    AWC29HoursReportExcelFile payrollExport = new AWC29HoursReportExcelFile();
-                    Workbook workbook = payrollExport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream);
-                    Utility utility = new Utility();
-                    utility.DownloadCSVFile(workbook, filename);
-                }
+                    string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
+                    AWC29HoursReportExcelFile payrollReport = new AWC29HoursReportExcelFile();
 
-                int l = 1;
+                    Utility utility = new Utility();
+                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
+                    utility.DownloadTXTFile(output, outFilename);
+
+                    //utility.DownloadCSVFile(workbook, filename);
+                }
             }
             catch (Exception ex)
             {
@@ -80,20 +65,23 @@ namespace ConsumerMaster
 
             }
         }
+
         protected void RadButton3_Click(object sender, EventArgs e)
         {
-            string filename = "AWCOverlapShiftsReport.csv";
+            string outFilename = "AWCOverlapShiftsReport.txt";
             try
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                    AWCOverlapReportExcelFile payrollExport = new AWCOverlapReportExcelFile();
-                    Workbook workbook = payrollExport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream);
+                    string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
+                    AWCOverlapReportExcelFile payrollReport = new AWCOverlapReportExcelFile();
+                    //Workbook workbook = payrollReport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
                     Utility utility = new Utility();
-                    utility.DownloadCSVFile(workbook, filename);
-                }
 
-                int l = 1;
+                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
+                    utility.DownloadTXTFile(output, outFilename);
+                    //utility.DownloadCSVFile(workbook, filename);
+                }
             }
             catch (Exception ex)
             {

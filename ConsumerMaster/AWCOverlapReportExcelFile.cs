@@ -3,7 +3,6 @@ using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using Telerik.Web.UI;
-using Telerik.Windows.Documents.Spreadsheet.Formatting.FormatStrings;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -14,7 +13,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
 
-        public Workbook CreateWorkbook(Stream input)
+        public Workbook CreateWorkbook(Stream input, string inFilename)
         {
             Workbook workbook = new Workbook();
             WorksheetCollection worksheets = workbook.Worksheets;
@@ -75,30 +74,51 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        //string GetCellData(Worksheet worksheet, int i, int j)
-        //{
-        //    CellSelection selection = worksheet.Cells[i, j];
+        public MemoryStream CreateDocument(Stream input, string inFilename)
+        {
+            Utility util = new Utility();
+            DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
-        //    ICellValue value = selection.GetValue().Value;
-        //    CellValueFormat format = selection.GetFormat().Value;
-        //    CellValueFormatResult formatResult = format.GetFormatResult(value);
-        //    string result = formatResult.InfosText;
-        //    return result;
-        //}
+            using (var ms = new MemoryStream())
+            using (var streamWriter = new StreamWriter(ms))
+            {
+                streamWriter.WriteLine("40 hours per week limit – show anyone who worked over 40 hours");
+                streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                streamWriter.WriteLine("Filename:{0}", inFilename);
+                streamWriter.WriteLine(" ");
+                streamWriter.WriteLine("{0,-10} {1,-30} {2,-10} {3,-30} {4,-22} {5,-22} {6,-10}", "ClientID", "ClientName", "StaffID", "StaffName","Start","Finish","Duration");
 
-        //private void FormatWorksheetColumns(string[] columns, Worksheet worksheet)
-        //{
-        //    ColumnSelection columnSelection = worksheet.Columns[0, columns.Count()];
-        //    columnSelection.AutoFitWidth();
+                var groupedByClientId = dTable.AsEnumerable().GroupBy(row => row.Field<string>("ID"));
+                foreach (var clientGroup in groupedByClientId)
+                {
+                    var shifts = new List<ClientShifts>();
+                    foreach (DataRow row in clientGroup)
+                    {
+                        shifts.Add(new ClientShifts(row.Field<string>("ID"), row.Field<string>("Name"), row.Field<string>("Staff ID"), row.Field<string>("Staff Name"),
+                            row.Field<DateTime>("Start"), row.Field<DateTime>("Finish"), row.Field<int>("duration")));
+                    }
 
-        //    foreach (string column in columns)
-        //    {
-        //        int columnKey = Array.IndexOf(columns, column);
-        //        string columnName = column;
+                    var overlaps = (from t1 in shifts
+                                    from t2 in shifts
+                                    where !Equals(t1, t2) // Don’t match the same object.
+                                    where t1.Start < t2.Finish && t2.Start < t1.Finish   //check intersections use equal for matching times
+                                    orderby t1.Start
+                                    select t2).Distinct();
 
-        //        worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
-        //        worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-        //    }
-        //}
+                    foreach (var shift in overlaps)
+                    {
+                        streamWriter.WriteLine("{0,-10} {1,-30} {2,-10} {3,-30} {4,-22} {5,-22} {6,-10}", shift.ID, shift.Name, shift.StaffID, shift.StaffName, shift.Start, shift.Finish, shift.Duration);
+                    }
+                    if(overlaps.Count() > 1)
+                    {
+                        streamWriter.WriteLine(" ");
+                    }
+
+                }
+
+                streamWriter.Flush();
+                return ms;
+            }
+        }
     }
 }
