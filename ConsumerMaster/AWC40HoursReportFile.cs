@@ -4,18 +4,10 @@ using System.Data;
 using Telerik.Web.UI;
 using System.Linq;
 using System.IO;
-using Telerik.Windows.Documents.Fixed.Model;
-using Telerik.Windows.Documents.Fixed.Model.Editing;
-using System.Windows;
-using Telerik.Windows.Documents.Fixed.Model.Fonts;
-using Editing = Telerik.Windows.Documents.Fixed.Model.Editing;
-using System.Windows.Media;
-using Telerik.Windows.Documents.Fixed.Model.Editing.Tables;
-
 
 namespace ConsumerMaster
 {
-    public class AWC40HoursReportExcelFile
+    public class AWC40HoursReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;

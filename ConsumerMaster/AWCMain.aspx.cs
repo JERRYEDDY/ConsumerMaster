@@ -25,7 +25,7 @@ namespace ConsumerMaster
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
-                    AWC40HoursReportExcelFile payrollReport = new AWC40HoursReportExcelFile();
+                    AWC40HoursReportFile payrollReport = new AWC40HoursReportFile();
                     Utility utility = new Utility();
                     
                     MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
@@ -50,7 +50,7 @@ namespace ConsumerMaster
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
-                    AWC29HoursReportExcelFile payrollReport = new AWC29HoursReportExcelFile();
+                    AWC29HoursReportFile payrollReport = new AWC29HoursReportFile();
 
                     Utility utility = new Utility();
                     MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
@@ -74,7 +74,7 @@ namespace ConsumerMaster
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
-                    AWCOverlapReportExcelFile payrollReport = new AWCOverlapReportExcelFile();
+                    AWCOverlapReportFile payrollReport = new AWCOverlapReportFile();
                     //Workbook workbook = payrollReport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
                     Utility utility = new Utility();
 
@@ -89,5 +89,28 @@ namespace ConsumerMaster
 
             }
         }
+
+        protected void RadButton4_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCClientStaffAuthorizationReport.txt";
+            try
+            {
+                if (RadAsyncUpload2.UploadedFiles.Count == 1)
+                {
+                    string inFilename = RadAsyncUpload2.UploadedFiles[0].FileName;
+                    AWCClientStaffAuthorizationReportFile payrollReport = new AWCClientStaffAuthorizationReportFile();
+                    Utility utility = new Utility();
+
+                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload2.UploadedFiles[0].InputStream, inFilename);
+                    utility.DownloadTXTFile(output, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+
+            }
+        }
+
     }
 }

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace ConsumerMaster
 {
-    public class AWC29HoursReportExcelFile
+    public class AWC29HoursReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;

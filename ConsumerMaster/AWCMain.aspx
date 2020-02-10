@@ -31,7 +31,7 @@
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
                </td>
             </tr>
             <tr>
@@ -56,6 +56,55 @@
                 </td>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton3" runat="server" text="Process" OnClick="RadButton3_Click"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>Other Reports</h4>
+                </td>
+                <td>
+                    &nbsp
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Client Authorization Filename .xlsx (Monthly): 
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Client Authorization Excel file"></asp:CustomValidator>--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Client Staff and Authorization Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButton4_Click"/>
                 </td>
             </tr>
         </table>

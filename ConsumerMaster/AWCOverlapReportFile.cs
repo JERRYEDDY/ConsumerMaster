@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
-    public class AWCOverlapReportExcelFile
+    public class AWCOverlapReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
@@ -82,7 +82,7 @@ namespace ConsumerMaster
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))
             {
-                streamWriter.WriteLine("40 hours per week limit – show anyone who worked over 40 hours");
+                streamWriter.WriteLine("Overlapped shifts – show shifts that overlap for the same client");
                 streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 streamWriter.WriteLine("Filename:{0}", inFilename);
                 streamWriter.WriteLine(" ");
