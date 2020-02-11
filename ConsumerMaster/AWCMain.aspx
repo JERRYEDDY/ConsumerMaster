@@ -92,19 +92,28 @@
             </tr>
             <tr>
                 <td>
-                    Client Authorization Filename .xlsx (Monthly): 
+                    Client Staff Filename .xlsx (Monthly): 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadStaff" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
 <%--                    <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Client Authorization Excel file"></asp:CustomValidator>--%>
                </td>
             </tr>
             <tr>
                 <td>
-                    Client Staff and Authorization Report
+                    Client Authorization Filename .xlsx (Monthly): 
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButton4_Click"/>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadAuthorization" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Client Authorization Excel file"></asp:CustomValidator>--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Client Staff Authorization Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButton4_Click"/>
                 </td>
             </tr>
         </table>

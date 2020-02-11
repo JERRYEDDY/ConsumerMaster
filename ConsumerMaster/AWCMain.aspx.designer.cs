@@ -60,22 +60,31 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadButton RadButton3;
 
         /// <summary>
-        /// RadAsyncUpload2 control.
+        /// RadAsyncUploadStaff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload2;
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadStaff;
 
         /// <summary>
-        /// RadButton4 control.
+        /// RadAsyncUploadAuthorization control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButton4;
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadAuthorization;
+
+        /// <summary>
+        /// RadButton5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton RadButton5;
 
         /// <summary>
         /// itemsClientSide control.

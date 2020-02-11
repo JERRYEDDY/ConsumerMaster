@@ -335,6 +335,7 @@
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="AWCClientStaffAuthorizationReportFile.cs" />
+    <Compile Include="AWCClientStaffReportFile.cs" />
     <Compile Include="AWCOverlapReportFile.cs" />
     <Compile Include="AWC29HoursReportFile.cs" />
     <Compile Include="AWC40HoursReportFile.cs" />

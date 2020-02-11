@@ -1,10 +1,7 @@
 ﻿using System;
 using Telerik.Web.UI;
-using Telerik.Windows.Documents.Spreadsheet.Model;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
+using System.Data;
 using System.IO;
-using Telerik.Windows.Documents.Fixed.Model;
 
 namespace ConsumerMaster
 {
@@ -24,21 +21,17 @@ namespace ConsumerMaster
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                    string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
-                    AWC40HoursReportFile payrollReport = new AWC40HoursReportFile();
                     Utility utility = new Utility();
-                    
-                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
-                    utility.DownloadTXTFile(output, outFilename);
+                    AWC40HoursReportFile payrollReport = new AWC40HoursReportFile();
 
-                    //Workbook workbook = payrollReport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
-                    //utility.DownloadCSVFile(workbook, outFilename);
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    MemoryStream output = payrollReport.CreateDocument(uploadedFile);
+                    utility.DownloadTXTFile(output, outFilename);
                 }
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-
             }
         }
 
@@ -49,20 +42,17 @@ namespace ConsumerMaster
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                    string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
+                    Utility utility = new Utility();
                     AWC29HoursReportFile payrollReport = new AWC29HoursReportFile();
 
-                    Utility utility = new Utility();
-                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    MemoryStream output = payrollReport.CreateDocument(uploadedFile);
                     utility.DownloadTXTFile(output, outFilename);
-
-                    //utility.DownloadCSVFile(workbook, filename);
                 }
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-
             }
         }
 
@@ -73,20 +63,17 @@ namespace ConsumerMaster
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                    string inFilename = RadAsyncUpload1.UploadedFiles[0].FileName;
-                    AWCOverlapReportFile payrollReport = new AWCOverlapReportFile();
-                    //Workbook workbook = payrollReport.CreateWorkbook(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
                     Utility utility = new Utility();
+                    AWCOverlapReportFile payrollReport = new AWCOverlapReportFile();
 
-                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload1.UploadedFiles[0].InputStream, inFilename);
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    MemoryStream output = payrollReport.CreateDocument(uploadedFile);
                     utility.DownloadTXTFile(output, outFilename);
-                    //utility.DownloadCSVFile(workbook, filename);
                 }
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-
             }
         }
 
@@ -95,22 +82,22 @@ namespace ConsumerMaster
             string outFilename = "AWCClientStaffAuthorizationReport.txt";
             try
             {
-                if (RadAsyncUpload2.UploadedFiles.Count == 1)
+                if (RadAsyncUploadStaff.UploadedFiles.Count == 1)
                 {
-                    string inFilename = RadAsyncUpload2.UploadedFiles[0].FileName;
-                    AWCClientStaffAuthorizationReportFile payrollReport = new AWCClientStaffAuthorizationReportFile();
                     Utility utility = new Utility();
+                    AWCClientStaffAuthorizationReportFile otherReport = new AWCClientStaffAuthorizationReportFile();
 
-                    MemoryStream output = payrollReport.CreateDocument(RadAsyncUpload2.UploadedFiles[0].InputStream, inFilename);
+                    UploadedFile staffFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
+                    UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
+
+                    MemoryStream output = otherReport.CreateStaffAuthorizationDocument(staffFile, authorizationFile);
                     utility.DownloadTXTFile(output, outFilename);
                 }
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-
             }
         }
-
     }
 }
