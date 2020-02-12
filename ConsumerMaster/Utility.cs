@@ -347,13 +347,13 @@ namespace ConsumerMaster
         {
             SPColumn[] spc = new SPColumn[9]
             {
-                new SPColumn("Client ID", typeof(string)),
-                new SPColumn("Client Name", typeof(string)),
-                new SPColumn("From Date", typeof(string)),
-                new SPColumn("To Date", typeof(string)),
+                new SPColumn("ClientID", typeof(string)),
+                new SPColumn("ClientName", typeof(string)),
+                new SPColumn("FromDate", typeof(string)),
+                new SPColumn("ToDate", typeof(string)),
                 new SPColumn("Service", typeof(string)),
-                new SPColumn("Total Units", typeof(string)),
-                new SPColumn("Units Used", typeof(string)),
+                new SPColumn("TotalUnits", typeof(string)),
+                new SPColumn("UnitsUsed", typeof(string)),
                 new SPColumn("Balance", typeof(string)),
                 new SPColumn("Program", typeof(string))
             };
@@ -367,8 +367,8 @@ namespace ConsumerMaster
                 var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
                 for (int i = 0; i < spc.Count(); i++)
                 {
-                    CellSelection selection = InputWorksheet.Cells[0, i];
-                    var columnName = "Column" + (i + 1);
+                    //CellSelection selection = InputWorksheet.Cells[0, i];
+                    //var columnName = "Column" + (i + 1);
                     dataTable.Columns.Add(spc[i].name, spc[i].type);
                 }
 
@@ -389,22 +389,22 @@ namespace ConsumerMaster
                 }
 
                 DataTable combinedData = new DataTable();
-                combinedData.Columns.Add("Client Id", typeof(string));
-                combinedData.Columns.Add("Client Name", typeof(string));
-                combinedData.Columns.Add("Record Type", typeof(int));
-                combinedData.Columns.Add("Record Order", typeof(int));
-                combinedData.Columns.Add("Record Data", typeof(string));
+                combinedData.Columns.Add("ClientID", typeof(string));
+                combinedData.Columns.Add("ClientName", typeof(string));
+                combinedData.Columns.Add("RecordType", typeof(int));
+                combinedData.Columns.Add("RecordOrder", typeof(int));
+                combinedData.Columns.Add("RecordData", typeof(string));
 
-                var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("Client ID"));
+                var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("ClientID"));
                 foreach (var clientGroup in groupedByClientId)
                 {
                     int recType = 2; //Authorization
                     int rowNum = 0;
                     foreach (DataRow row in clientGroup)
                     {
-                        String recordData = String.Format("{0,-15} {1,-15} {2,-50} {3,-12} {4,-12} {5,-12}", row.Field<string>("From Date"),
-                            row.Field<string>("To Date"), row.Field<string>("Service"), row.Field<string>("Total Units"), row.Field<string>("Units Used"), row.Field<string>("Balance"));
-                        combinedData.Rows.Add(row.Field<string>("Client Id"), row.Field<string>("Client Name"), recType, rowNum, recordData);
+                        String recordData = String.Format("{0,-15} {1,-15} {2,-50} {3,-12} {4,-12} {5,-12}", row.Field<string>("FromDate"),
+                            row.Field<string>("ToDate"), row.Field<string>("Service"), row.Field<string>("TotalUnits"), row.Field<string>("UnitsUsed"), row.Field<string>("Balance"));
+                        combinedData.Rows.Add(row.Field<string>("ClientID"), row.Field<string>("ClientName"), recType, rowNum, recordData);
                         rowNum++;
                     }
                 }
@@ -422,11 +422,11 @@ namespace ConsumerMaster
         {
             SPColumn[] spc = new SPColumn[6]
             {
-                new SPColumn("Client ID", typeof(string)),
-                new SPColumn("Client Name", typeof(string)),
-                new SPColumn("Staff ID", typeof(string)),
-                new SPColumn("Staff Name", typeof(string)),
-                new SPColumn("Staff Role", typeof(string)),
+                new SPColumn("ClientID", typeof(string)),
+                new SPColumn("ClientName", typeof(string)),
+                new SPColumn("StaffID", typeof(string)),
+                new SPColumn("StaffName", typeof(string)),
+                new SPColumn("StaffRole", typeof(string)),
                 new SPColumn("IsSupervisor", typeof(string))
             };
 
@@ -439,8 +439,8 @@ namespace ConsumerMaster
                 var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
                 for (int i = 0; i < spc.Count(); i++)
                 {
-                    CellSelection selection = InputWorksheet.Cells[0, i];
-                    var columnName = "Column" + (i + 1);
+                    //CellSelection selection = InputWorksheet.Cells[0, i];
+                    //var columnName = "Column" + (i + 1);
                     dataTable.Columns.Add(spc[i].name, spc[i].type);
                 }
 
@@ -458,21 +458,21 @@ namespace ConsumerMaster
                 }
 
                 DataTable combinedData = new DataTable();
-                combinedData.Columns.Add("Client Id", typeof(string));
-                combinedData.Columns.Add("Client Name", typeof(string));
-                combinedData.Columns.Add("Record Type", typeof(int));
-                combinedData.Columns.Add("Record Order", typeof(int));
-                combinedData.Columns.Add("Record Data", typeof(string));
+                combinedData.Columns.Add("ClientID", typeof(string));
+                combinedData.Columns.Add("ClientName", typeof(string));
+                combinedData.Columns.Add("RecordType", typeof(int));
+                combinedData.Columns.Add("RecordOrder", typeof(int));
+                combinedData.Columns.Add("RecordData", typeof(string));
 
-                var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("Client ID"));
+                var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("ClientID"));
                 foreach (var clientGroup in groupedByClientId)
                 {
                     int recType = 1; //Staff
                     int rowNum = 0;
                     foreach (DataRow row in clientGroup)
                     {
-                        String recordData = String.Format("{0,-10} {1,-35} {2,-35}", row.Field<string>("Staff Id"), row.Field<string>("Staff Name"), row.Field<string>("Staff Role"));
-                        combinedData.Rows.Add(row.Field<string>("Client Id"), row.Field<string>("Client Name"), recType, rowNum, recordData);
+                        String recordData = String.Format("{0,-10} {1,-35} {2,-35}", row.Field<string>("StaffId"), row.Field<string>("StaffName"), row.Field<string>("StaffRole"));
+                        combinedData.Rows.Add(row.Field<string>("ClientID"), row.Field<string>("ClientName"), recType, rowNum, recordData);
                         rowNum++;
                     }
                 }

@@ -4,6 +4,7 @@ using System.Data;
 using Telerik.Web.UI;
 using System.Linq;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
@@ -66,11 +67,11 @@ namespace ConsumerMaster
         {
             SPColumn[] spc = new SPColumn[5]
             {
-                new SPColumn("Client ID", typeof(string)),
-                new SPColumn("Client Name", typeof(string)),
-                new SPColumn("Record Type", typeof(int)),
-                new SPColumn("Record Order", typeof(int)),
-                new SPColumn("Record Data", typeof(string))
+                new SPColumn("ClientID", typeof(string)),
+                new SPColumn("ClientName", typeof(string)),
+                new SPColumn("RecordType", typeof(int)),
+                new SPColumn("RecordOrder", typeof(int)),
+                new SPColumn("RecordData", typeof(string))
             };
 
             Utility util = new Utility();
@@ -91,35 +92,56 @@ namespace ConsumerMaster
             outTable = staffTable.Copy();
             outTable.Merge(authorizationTable);
 
-            var groupedByClientId = outTable.AsEnumerable().GroupBy(row => row.Field<string>("Client ID"));
-            foreach (var clientGroup in groupedByClientId)
-            {
-                int recType = 1; //Staff
-                int rowNum = 0;
-                foreach (DataRow row in clientGroup)
-                {
-                    String recordData = String.Format("{0,-10} {1,-35} {2,-35}", row.Field<string>("Staff Id"), row.Field<string>("Staff Name"), row.Field<string>("Staff Role"));
-                    combinedData.Rows.Add(row.Field<string>("Client Id"), row.Field<string>("Client Name"), recType, rowNum, recordData);
-                    rowNum++;
-                }
-            }
+            //DataTable sortedTable = outTable.AsEnumerable().OrderBy(r => r.Field<string>("ClientID")).ThenBy(r => r.Field<int>("RecordType")).ThenBy(r => r.Field<int>("RecordOrder")).CopyToDataTable();
+            
+            var groupedByClientId = outTable.AsEnumerable().GroupBy(r => r.Field<string>("ClientID"));
+
+
+            //DataTable dt_grouped_by = outTable.AsEnumerable()
+            //              .GroupBy(r => new
+            //              {
+            //                  ClientID = r.Field<string>("ClientID")
+            //              })
+            //              .Select(g => new
+            //              {
+            //                  Code = g.      .First().Field<string>("CODE"),
+            //                  SumQr = g.Sum(x => x.Field<int>("quantity_received"))
+            //                   SumDr = g.Sum(x => x.Field<int>("damage_received"))
+            //              })
+            //              .OrderBy(x => x.Code)
+            //              .CopyToDataTable();
 
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))
             {
-                //streamWriter.WriteLine("Client Staff Report");
-                //streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                //streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
-                //streamWriter.WriteLine(" ");
-
-                foreach (DataRow row in combinedData.Rows)
+                foreach (var clientGroup in groupedByClientId)
                 {
-                    streamWriter.WriteLine("{0,-10} {1,-35} {2,-3} {3,-3} {4,-80}", row.Field<string>("Client Id"), row.Field<string>("Client Name"), row.Field<int>("Record Type"), row.Field<int>("Record Order"),
-                        row.Field<string>("Record Data"));
+                    foreach (DataRow row in clientGroup)
+                    {
+                        streamWriter.WriteLine("{0,-10} {1,-35} {2,-3} {3,-3} {4,-80}", row.Field<string>("ClientId"), row.Field<string>("ClientName"), row.Field<int>("RecordType"), row.Field<int>("RecordOrder"),
+                            row.Field<string>("RecordData"));
+                    }
+                    streamWriter.WriteLine(" ");
                 }
                 streamWriter.Flush();
                 return ms;
             }
+
+            //using (var ms = new MemoryStream())
+            //using (var streamWriter = new StreamWriter(ms))
+            //{
+            //    //streamWriter.WriteLine("Client Staff Report");
+            //    //streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+            //    //streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
+            //    //streamWriter.WriteLine(" ");
+
+            //    foreach (DataRow row in combinedData.Rows)
+            //    {
+            //        streamWriter.WriteLine("{0,-10} {1,-35} {2,-3} {3,-3} {4,-80}", row.Field<string>("Client Id"), row.Field<string>("Client Name"), row.Field<int>("Record Type"), row.Field<int>("Record Order"),
+            //            row.Field<string>("Record Data"));
+            //    }
+
+            //}
         }
     }
 }
