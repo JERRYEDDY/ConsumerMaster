@@ -92,31 +92,17 @@ namespace ConsumerMaster
             outTable = staffTable.Copy();
             outTable.Merge(authorizationTable);
 
-            //DataTable sortedTable = outTable.AsEnumerable().OrderBy(r => r.Field<string>("ClientID")).ThenBy(r => r.Field<int>("RecordType")).ThenBy(r => r.Field<int>("RecordOrder")).CopyToDataTable();
-            
+         
             var groupedByClientId = outTable.AsEnumerable().GroupBy(r => r.Field<string>("ClientID"));
-
-
-            //DataTable dt_grouped_by = outTable.AsEnumerable()
-            //              .GroupBy(r => new
-            //              {
-            //                  ClientID = r.Field<string>("ClientID")
-            //              })
-            //              .Select(g => new
-            //              {
-            //                  Code = g.      .First().Field<string>("CODE"),
-            //                  SumQr = g.Sum(x => x.Field<int>("quantity_received"))
-            //                   SumDr = g.Sum(x => x.Field<int>("damage_received"))
-            //              })
-            //              .OrderBy(x => x.Code)
-            //              .CopyToDataTable();
 
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))
             {
                 foreach (var clientGroup in groupedByClientId)
                 {
-                    foreach (DataRow row in clientGroup)
+                    var sortedClient = clientGroup.OrderBy(r => r.Field<int>("RecordType")).ThenBy(r => r.Field<int>("RecordOrder"));
+
+                    foreach (DataRow row in sortedClient)
                     {
                         streamWriter.WriteLine("{0,-10} {1,-35} {2,-3} {3,-3} {4,-80}", row.Field<string>("ClientId"), row.Field<string>("ClientName"), row.Field<int>("RecordType"), row.Field<int>("RecordOrder"),
                             row.Field<string>("RecordData"));
