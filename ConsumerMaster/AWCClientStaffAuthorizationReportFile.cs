@@ -113,21 +113,7 @@ namespace ConsumerMaster
                 return ms;
             }
 
-            //using (var ms = new MemoryStream())
-            //using (var streamWriter = new StreamWriter(ms))
-            //{
-            //    //streamWriter.WriteLine("Client Staff Report");
-            //    //streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-            //    //streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
-            //    //streamWriter.WriteLine(" ");
 
-            //    foreach (DataRow row in combinedData.Rows)
-            //    {
-            //        streamWriter.WriteLine("{0,-10} {1,-35} {2,-3} {3,-3} {4,-80}", row.Field<string>("Client Id"), row.Field<string>("Client Name"), row.Field<int>("Record Type"), row.Field<int>("Record Order"),
-            //            row.Field<string>("Record Data"));
-            //    }
-
-            //}
         }
     }
 }

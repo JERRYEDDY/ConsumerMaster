@@ -141,25 +141,28 @@ namespace ConsumerMaster
 
             GenerateDocument genDoc = new GenerateDocument();
 
-            RadFlowDocument document = genDoc.CreateDocument();
+            //RadFlowDocument document = genDoc.CreateDocument();
 
-            RadFlowDocument mailMergedDocument = document.MailMerge(mailMergeDataSource);
+            //RadFlowDocument mailMergedDocument = document.MailMerge(mailMergeDataSource);
+
+            genDoc.GemBoxNestMailMerge();
 
 
-            byte[] renderedBytes = null;
-            IFormatProvider<RadFlowDocument> formatProvider = new DocxFormatProvider();
-            using (MemoryStream ms = new MemoryStream())
-            {
-                formatProvider.Export(mailMergedDocument, ms);
-                renderedBytes = ms.ToArray();
-            }
 
-            Response.ClearHeaders();
-            Response.ClearContent();
-            Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".docx");
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            Response.BinaryWrite(renderedBytes);
-            Response.End();
+            //byte[] renderedBytes = null;
+            //IFormatProvider<RadFlowDocument> formatProvider = new DocxFormatProvider();
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    formatProvider.Export(mailMergedDocument, ms);
+            //    renderedBytes = ms.ToArray();
+            //}
+
+            //Response.ClearHeaders();
+            //Response.ClearContent();
+            //Response.AppendHeader("content-disposition", "attachment; filename=ExportedFile" + ".docx");
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            //Response.BinaryWrite(renderedBytes);
+            //Response.End();
 
         }
 

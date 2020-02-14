@@ -343,6 +343,79 @@ namespace ConsumerMaster
         //    };
         //}
 
+        public DataTable GetClientAddressDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[9]
+            {
+                new SPColumn("ClientID", typeof(string)),
+                new SPColumn("ClientFirst", typeof(string)),
+                new SPColumn("ClientLast", typeof(string)),
+                new SPColumn("StreetAddress1", typeof(string)),
+                new SPColumn("StreetAddress2", typeof(string)),
+                new SPColumn("City", typeof(string)),
+                new SPColumn("State", typeof(string)),
+                new SPColumn("ZipCode", typeof(string)),
+                new SPColumn("EmailAddress", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[spc.Count()];
+                    values[0] = GetCellData(InputWorksheet, i, 0); //Client ID
+                    values[1] = GetCellData(InputWorksheet, i, 1); //Client First
+                    values[2] = GetCellData(InputWorksheet, i, 2); //Client Last
+                    values[3] = GetCellData(InputWorksheet, i, 3); //Street Address1
+                    values[4] = GetCellData(InputWorksheet, i, 4); //Street Address2
+                    values[5] = GetCellData(InputWorksheet, i, 5); //City
+                    values[6] = GetCellData(InputWorksheet, i, 6); //State
+                    values[7] = GetCellData(InputWorksheet, i, 7); //Zip Code
+                    values[8] = GetCellData(InputWorksheet, i, 8); //Email Address
+
+                    dataTable.Rows.Add(values);
+                }
+
+                DataTable combinedData = new DataTable();
+                combinedData.Columns.Add("ClientID", typeof(string));
+                combinedData.Columns.Add("ClientName", typeof(string));
+                combinedData.Columns.Add("RecordType", typeof(int));
+                combinedData.Columns.Add("RecordOrder", typeof(int));
+                combinedData.Columns.Add("RecordData", typeof(string));
+
+                var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("ClientID"));
+                foreach (var clientGroup in groupedByClientId)
+                {
+                    int recType = 2; //Authorization
+                    int rowNum = 0;
+                    foreach (DataRow row in clientGroup)
+                    {
+                        String recordData = String.Format("{0,-15} {1,-15} {2,-50} {3,-12} {4,-12} {5,-12}", row.Field<string>("FromDate"),
+                            row.Field<string>("ToDate"), row.Field<string>("Service"), row.Field<string>("TotalUnits"), row.Field<string>("UnitsUsed"), row.Field<string>("Balance"));
+                        combinedData.Rows.Add(row.Field<string>("ClientID"), row.Field<string>("ClientName"), recType, rowNum, recordData);
+                        rowNum++;
+                    }
+                }
+
+                return combinedData;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            };
+        }
+
         public DataTable GetClientAuthorizationsDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[9]
