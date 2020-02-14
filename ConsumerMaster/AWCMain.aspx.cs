@@ -1,10 +1,6 @@
 ﻿using System;
 using Telerik.Web.UI;
-using System.Data;
 using System.IO;
-using Telerik.Windows.Documents.Flow.Model;
-using Telerik.Windows.Documents.Common.FormatProviders;
-using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
 using System.Collections.Generic;
 
 namespace ConsumerMaster
@@ -91,10 +87,11 @@ namespace ConsumerMaster
                     Utility utility = new Utility();
                     AWCClientStaffAuthorizationReportFile otherReport = new AWCClientStaffAuthorizationReportFile();
 
+                    UploadedFile clientFile = RadAsyncClient.UploadedFiles[0];
                     UploadedFile staffFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
                     UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
 
-                    MemoryStream output = otherReport.CreateStaffAuthorizationDocument(staffFile, authorizationFile);
+                    MemoryStream output = otherReport.CreateStaffAuthorizationDocument(clientFile, staffFile, authorizationFile);
                     utility.DownloadTXTFile(output, outFilename);
                 }
             }

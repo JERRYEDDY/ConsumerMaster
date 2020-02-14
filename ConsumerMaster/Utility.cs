@@ -386,28 +386,29 @@ namespace ConsumerMaster
                     dataTable.Rows.Add(values);
                 }
 
-                DataTable combinedData = new DataTable();
-                combinedData.Columns.Add("ClientID", typeof(string));
-                combinedData.Columns.Add("ClientName", typeof(string));
-                combinedData.Columns.Add("RecordType", typeof(int));
-                combinedData.Columns.Add("RecordOrder", typeof(int));
-                combinedData.Columns.Add("RecordData", typeof(string));
+                return dataTable;
+                //DataTable combinedData = new DataTable();
+                //combinedData.Columns.Add("ClientID", typeof(string));
+                //combinedData.Columns.Add("ClientName", typeof(string));
+                //combinedData.Columns.Add("RecordType", typeof(int));
+                //combinedData.Columns.Add("RecordOrder", typeof(int));
+                //combinedData.Columns.Add("RecordData", typeof(string));
 
-                var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("ClientID"));
-                foreach (var clientGroup in groupedByClientId)
-                {
-                    int recType = 2; //Authorization
-                    int rowNum = 0;
-                    foreach (DataRow row in clientGroup)
-                    {
-                        String recordData = String.Format("{0,-15} {1,-15} {2,-50} {3,-12} {4,-12} {5,-12}", row.Field<string>("FromDate"),
-                            row.Field<string>("ToDate"), row.Field<string>("Service"), row.Field<string>("TotalUnits"), row.Field<string>("UnitsUsed"), row.Field<string>("Balance"));
-                        combinedData.Rows.Add(row.Field<string>("ClientID"), row.Field<string>("ClientName"), recType, rowNum, recordData);
-                        rowNum++;
-                    }
-                }
+                //var groupedByClientId = dataTable.AsEnumerable().GroupBy(row => row.Field<string>("ClientID"));
+                //foreach (var clientGroup in groupedByClientId)
+                //{
+                //    int recType = 2; //Authorization
+                //    int rowNum = 0;
+                //    foreach (DataRow row in clientGroup)
+                //    {
+                //        String recordData = String.Format("{0,-15} {1,-15} {2,-50} {3,-12} {4,-12} {5,-12}", row.Field<string>("FromDate"),
+                //            row.Field<string>("ToDate"), row.Field<string>("Service"), row.Field<string>("TotalUnits"), row.Field<string>("UnitsUsed"), row.Field<string>("Balance"));
+                //        combinedData.Rows.Add(row.Field<string>("ClientID"), row.Field<string>("ClientName"), recType, rowNum, recordData);
+                //        rowNum++;
+                //    }
+                //}
 
-                return combinedData;
+                //return combinedData;
             }
             catch (Exception ex)
             {

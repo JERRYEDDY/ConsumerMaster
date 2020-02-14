@@ -1,10 +1,8 @@
 ﻿using System;
-using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using Telerik.Web.UI;
 using System.Linq;
 using System.IO;
-using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
@@ -63,7 +61,7 @@ namespace ConsumerMaster
             }
         }
 
-        public MemoryStream CreateStaffAuthorizationDocument(UploadedFile staffFile, UploadedFile authorizationFile)
+        public MemoryStream CreateStaffAuthorizationDocument(UploadedFile clientFile, UploadedFile staffFile, UploadedFile authorizationFile)
         {
             SPColumn[] spc = new SPColumn[5]
             {
@@ -81,6 +79,9 @@ namespace ConsumerMaster
             {
                 combinedData.Columns.Add(spc[i].name, spc[i].type);
             }
+
+            Stream clientStream = clientFile.InputStream;
+            DataTable clientTable = util.GetClientAddressDataTable(clientStream);
 
             Stream staffStream = staffFile.InputStream;
             DataTable staffTable = util.GetClientStaffDataTable(staffStream);
@@ -112,8 +113,6 @@ namespace ConsumerMaster
                 streamWriter.Flush();
                 return ms;
             }
-
-
         }
     }
 }

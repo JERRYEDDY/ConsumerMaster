@@ -92,6 +92,15 @@
             </tr>
             <tr>
                 <td>
+                    Client Client Address Filename .xlsx (Monthly): 
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncClient" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Client Authorization Excel file"></asp:CustomValidator>--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
                     Client Staff Filename .xlsx (Monthly): 
                 </td>
                 <td>

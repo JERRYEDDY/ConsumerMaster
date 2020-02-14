@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Web;
-//using Telerik.Windows.Documents.Flow.Model;
-//using Telerik.Windows.Documents.Flow.Model.Editing;
-//using Telerik.Windows.Documents.Flow.Model.Styles;
-//using Telerik.Windows.Documents.Flow.Model.Shapes;
 using GemBox.Document;
 using System.Data;
 
