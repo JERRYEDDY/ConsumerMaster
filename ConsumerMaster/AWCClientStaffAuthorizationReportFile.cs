@@ -89,6 +89,21 @@ namespace ConsumerMaster
             Stream authorizationStream = authorizationFile.InputStream;
             DataTable authorizationTable = util.GetClientAuthorizationsDataTable(authorizationStream);
 
+            //string clientsRangeName = "Clients";
+            string staffRangeName = "Staff";
+            string authorizationsRangeName = "Authorizations";
+
+            DataSet clientStaffAuthorizations = new DataSet("ClientStaffAuthorizations");
+
+            clientStaffAuthorizations.Tables.Add(clientTable);
+            clientStaffAuthorizations.Tables.Add(staffTable);
+            clientStaffAuthorizations.Tables.Add(clientTable);
+
+            clientStaffAuthorizations.Relations.Add(membersRangeName, clientTable.Columns["Id"], members.Columns["ClientId"]);
+            data.Relations.Add(authorizationsRangeName, clients.Columns["Id"], authorizations.Columns["ClientId"]);
+
+
+
             DataTable outTable = new DataTable();
             outTable = staffTable.Copy();
             outTable.Merge(authorizationTable);

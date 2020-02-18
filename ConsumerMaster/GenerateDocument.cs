@@ -229,6 +229,34 @@ namespace ConsumerMaster
                     authorizations.Rows.Add(id, from, to, service, total, used, balance);
                 }
 
+
+                clients.Rows.Add(493, "Hoda","Kotb", "655 Jefferson Avenue", " ", "Pittsburgh", "Pennsylvania", "153170000", "hkotb@hotmail.com");
+
+                for (int itemIndex = 1; itemIndex <= 5; itemIndex++)
+                {
+                    string staffID = "6348";
+                    string staffName = "Jones, Alex";
+                    string staffRole = "Support Service Professional";
+
+                    members.Rows.Add(493, staffID, staffName, staffRole);
+                }
+
+                for (int authorizationIndex = 1; authorizationIndex <= 5; authorizationIndex++)
+                {
+                    string from = "07/01/2019";
+                    string to = "06/30/2020";
+                    string service = "Companion W/B (W1726)";
+                    string total = "6000";
+                    string used = "200";
+                    string balance = "5800";
+                    //string staffRole = "Respite 1:1 Enhanced 15 min W/B (W9863)";
+
+                    authorizations.Rows.Add(493, from, to, service, total, used, balance);
+                }
+
+
+
+
                 return data;
             }
             catch (Exception ex)
