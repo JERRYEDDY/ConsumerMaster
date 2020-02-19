@@ -11,7 +11,7 @@ namespace ConsumerMaster
     public class AWCOverlapReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private static readonly int IndexRowItemStart = 0;
+        //private static readonly int IndexRowItemStart = 0;
 
         public MemoryStream CreateDocument(UploadedFile uploadedFile)
         {

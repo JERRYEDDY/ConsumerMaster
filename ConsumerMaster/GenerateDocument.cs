@@ -162,7 +162,7 @@ namespace ConsumerMaster
             {
             // Create relational data.
                 var clients = new DataTable(clientsRangeName);
-                clients.Columns.Add("Id", typeof(int));
+                clients.Columns.Add("ClientID", typeof(int));
                 clients.Columns.Add("ClientFirst", typeof(string));
                 clients.Columns.Add("ClientLast", typeof(string));
                 clients.Columns.Add("StreetAddress1", typeof(string));
@@ -173,13 +173,13 @@ namespace ConsumerMaster
                 clients.Columns.Add("EmailAddress", typeof(string));
 
                 var members = new DataTable(membersRangeName);
-                members.Columns.Add("ClientId", typeof(int));
+                members.Columns.Add("ClientID", typeof(int));
                 members.Columns.Add("MemberID", typeof(string));
                 members.Columns.Add("MemberName", typeof(string));
                 members.Columns.Add("MemberRole", typeof(string));
 
                 var authorizations = new DataTable(authorizationsRangeName);
-                authorizations.Columns.Add("ClientId", typeof(int));
+                authorizations.Columns.Add("ClientID", typeof(int));
                 authorizations.Columns.Add("From", typeof(string));
                 authorizations.Columns.Add("To", typeof(string));
                 authorizations.Columns.Add("Service", typeof(string));
@@ -192,10 +192,10 @@ namespace ConsumerMaster
                 data.Tables.Add(clients);
                 data.Tables.Add(members);
                 data.Tables.Add(authorizations);
-                data.Relations.Add(membersRangeName, clients.Columns["Id"], members.Columns["ClientId"]);
-                data.Relations.Add(authorizationsRangeName, clients.Columns["Id"], authorizations.Columns["ClientId"]);
+                data.Relations.Add(membersRangeName, clients.Columns["ClientID"], members.Columns["ClientID"]);
+                data.Relations.Add(authorizationsRangeName, clients.Columns["ClientID"], authorizations.Columns["ClientID"]);
 
-                int id = 238;
+                int clientID = 238;
                 string clientFirst = "Thomas";
                 string clientLast = "Ali";
                 string streetAddress1 = "135 Fox Chase Drive";
@@ -205,15 +205,15 @@ namespace ConsumerMaster
                 string zipCode = "153170000";
                 string emailAddress = "tali@gmail.com";
 
-                clients.Rows.Add(id, clientFirst, clientLast, streetAddress1, streetAddress2, city, state, zipCode, emailAddress);
+                clients.Rows.Add(clientID, clientFirst, clientLast, streetAddress1, streetAddress2, city, state, zipCode, emailAddress);
 
                 for (int itemIndex = 1; itemIndex <= 5; itemIndex++)
                 {
-                    string staffID = "4386";
-                    string staffName = "Smith, John";
-                    string staffRole = "Support Service Professional";
+                    string memberID = "4386";
+                    string memberName = "Smith, John";
+                    string memberRole = "Support Service Professional";
 
-                    members.Rows.Add(id, staffID, staffName, staffRole);
+                    members.Rows.Add(clientID, memberID, memberName, memberRole);
                 }
 
                 for (int authorizationIndex = 1; authorizationIndex <= 5; authorizationIndex++)
@@ -226,19 +226,18 @@ namespace ConsumerMaster
                     string balance = "8000";
                     //string staffRole = "Respite 1:1 Enhanced 15 min W/B (W9863)";
 
-                    authorizations.Rows.Add(id, from, to, service, total, used, balance);
+                    authorizations.Rows.Add(clientID, from, to, service, total, used, balance);
                 }
-
 
                 clients.Rows.Add(493, "Hoda","Kotb", "655 Jefferson Avenue", " ", "Pittsburgh", "Pennsylvania", "153170000", "hkotb@hotmail.com");
 
                 for (int itemIndex = 1; itemIndex <= 5; itemIndex++)
                 {
-                    string staffID = "6348";
-                    string staffName = "Jones, Alex";
-                    string staffRole = "Support Service Professional";
+                    string memberID = "6348";
+                    string memberName = "Jones, Alex";
+                    string memberRole = "Support Service Professional";
 
-                    members.Rows.Add(493, staffID, staffName, staffRole);
+                    members.Rows.Add(493, memberID, memberName, memberRole);
                 }
 
                 for (int authorizationIndex = 1; authorizationIndex <= 5; authorizationIndex++)
@@ -249,13 +248,9 @@ namespace ConsumerMaster
                     string total = "6000";
                     string used = "200";
                     string balance = "5800";
-                    //string staffRole = "Respite 1:1 Enhanced 15 min W/B (W9863)";
 
                     authorizations.Rows.Add(493, from, to, service, total, used, balance);
                 }
-
-
-
 
                 return data;
             }
@@ -265,7 +260,7 @@ namespace ConsumerMaster
             }
         }
 
-        public void GemBoxNestMailMerge()
+        public void GemBoxNestMailMerge(DataSet data)
         {
             try
             {
@@ -273,11 +268,9 @@ namespace ConsumerMaster
                 ComponentInfo.SetLicense("FREE-LIMITED-KEY");
                 ComponentInfo.FreeLimitReached += (sender, e) => e.FreeLimitReachedAction = FreeLimitReachedAction.ContinueAsTrial;
 
-
-                var data = CreateClientStaffAuthorizationDataSet();
+                //var data = CreateClientStaffAuthorizationDataSet();
 
                 var document = DocumentModel.Load(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/MergeNestedRanges.docx"));
-
 
                 // Execute nested mail merge.
                 document.MailMerge.Execute(data, null);

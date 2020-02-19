@@ -92,7 +92,7 @@
             </tr>
             <tr>
                 <td>
-                    Client Client Address Filename .xlsx (Monthly): 
+                    Client Client Address Filename .xlsx: 
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncClient" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
@@ -101,7 +101,7 @@
             </tr>
             <tr>
                 <td>
-                    Client Staff Filename .xlsx (Monthly): 
+                    Client Staff Filename .xlsx: 
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadStaff" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
@@ -110,7 +110,7 @@
             </tr>
             <tr>
                 <td>
-                    Client Authorization Filename .xlsx (Monthly): 
+                    Client Authorization Filename .xlsx: 
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadAuthorization" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />

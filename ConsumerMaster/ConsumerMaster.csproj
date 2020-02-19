@@ -339,7 +339,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AWCClientStaffAuthorizationReportFile.cs" />
+    <Compile Include="AWCClientMemberAuthorizationReportFile.cs" />
     <Compile Include="AWCClientStaffReportFile.cs" />
     <Compile Include="AWCOverlapReportFile.cs" />
     <Compile Include="AWC29HoursReportFile.cs" />

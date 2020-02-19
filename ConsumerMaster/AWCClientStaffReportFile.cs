@@ -9,16 +9,16 @@ namespace ConsumerMaster
     public class AWCClientStaffReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private static readonly int IndexRowItemStart = 0;
+        //private static readonly int IndexRowItemStart = 0;
 
-        private static readonly double defaultLeftIndent = 50;
-        private static readonly double defaultLineHeight = 18;
+        //private static readonly double defaultLeftIndent = 50;
+        //private static readonly double defaultLineHeight = 18;
         
         public MemoryStream CreateDocument(UploadedFile uploadedFile)
         {
             Utility util = new Utility();
             Stream input = uploadedFile.InputStream;
-            DataTable dTable = util.GetClientStaffDataTable(input);
+            DataTable dTable = util.GetClientMemberDataTable(input);
 
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))
@@ -40,11 +40,11 @@ namespace ConsumerMaster
                             streamWriter.WriteLine("Client ID:{0,-10}", row.Field<string>("Client ID"));
                             streamWriter.WriteLine("Client Name:{0,-30}", row.Field<string>("Client Name"));
                             streamWriter.WriteLine(" ");
-                            streamWriter.WriteLine("Client's Staff");
-                            streamWriter.WriteLine("{0,-10} {1,-35} {2,-35}", "Staff ID", "Staff Name", "Staff Role");
+                            streamWriter.WriteLine("Client's Staff Members");
+                            streamWriter.WriteLine("{0,-10} {1,-35} {2,-35}", "Member ID", "Member Name", "Member Role");
                         }
 
-                        streamWriter.WriteLine("{0,-10} {1,-35} {2,-35}", row.Field<string>("Staff Id"), row.Field<string>("Staff Name"), row.Field<string>("Staff Role"));
+                        streamWriter.WriteLine("{0,-10} {1,-35} {2,-35}", row.Field<string>("MemberId"), row.Field<string>("MemberName"), row.Field<string>("MemberRole"));
 
                         first++;
                     }
@@ -56,7 +56,7 @@ namespace ConsumerMaster
             }
         }
 
-        public MemoryStream CreateStaffDocument(UploadedFile staffFile)
+        public MemoryStream CreateMemberDocument(UploadedFile staffFile)
         {
             SPColumn[] spc = new SPColumn[5]
             {
@@ -76,7 +76,7 @@ namespace ConsumerMaster
             }
 
             Stream staffInput = staffFile.InputStream;
-            DataTable dTable = util.GetClientStaffDataTable(staffInput);
+            DataTable dTable = util.GetClientMemberDataTable(staffInput);
 
             var groupedByClientId = dTable.AsEnumerable().GroupBy(row => row.Field<string>("Client ID"));
             foreach (var clientGroup in groupedByClientId)
@@ -85,7 +85,7 @@ namespace ConsumerMaster
                 int rowNum = 0;
                 foreach (DataRow row in clientGroup)
                 {
-                    String recordData = String.Format("{0,-10} {1,-35} {2,-35}", row.Field<string>("Staff Id"), row.Field<string>("Staff Name"), row.Field<string>("Staff Role"));
+                    String recordData = String.Format("{0,-10} {1,-35} {2,-35}", row.Field<string>("MemberId"), row.Field<string>("MemberName"), row.Field<string>("MemberRole"));
                     combinedData.Rows.Add(row.Field<string>("Client Id"), row.Field<string>("Client Name"), recType, rowNum, recordData);
                     rowNum++;
                 }

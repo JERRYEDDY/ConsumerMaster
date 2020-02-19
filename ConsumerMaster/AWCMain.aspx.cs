@@ -2,6 +2,8 @@
 using Telerik.Web.UI;
 using System.IO;
 using System.Collections.Generic;
+using System.Data;
+using GemBox.Document;
 
 namespace ConsumerMaster
 {
@@ -79,20 +81,22 @@ namespace ConsumerMaster
 
         protected void RadButton4_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCClientStaffAuthorizationReport.txt";
             try
             {
                 if (RadAsyncUploadStaff.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
-                    AWCClientStaffAuthorizationReportFile otherReport = new AWCClientStaffAuthorizationReportFile();
+                    AWCClientMemberAuthorizationReportFile otherReport = new AWCClientMemberAuthorizationReportFile();
 
-                    UploadedFile clientFile = RadAsyncClient.UploadedFiles[0];
-                    UploadedFile staffFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
+                    UploadedFile clientFile = RadAsyncClient.UploadedFiles[0]; //Other Reports
+                    UploadedFile memberFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
                     UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
 
-                    MemoryStream output = otherReport.CreateStaffAuthorizationDocument(clientFile, staffFile, authorizationFile);
-                    utility.DownloadTXTFile(output, outFilename);
+                    DataSet output = otherReport.CreateMemberAuthorizationDocument(clientFile, memberFile, authorizationFile);
+
+                    GenerateDocument genDoc = new GenerateDocument();
+
+                    genDoc.GemBoxNestMailMerge(output);
                 }
             }
             catch (Exception ex)
@@ -142,7 +146,7 @@ namespace ConsumerMaster
 
             //RadFlowDocument mailMergedDocument = document.MailMerge(mailMergeDataSource);
 
-            genDoc.GemBoxNestMailMerge();
+            //genDoc.GemBoxNestMailMerge();
 
 
 
