@@ -3,16 +3,13 @@ using System.Data;
 using Telerik.Web.UI;
 using System.Linq;
 using System.IO;
+using GemBox.Document;
 
 namespace ConsumerMaster
 {
     public class AWCClientMemberAuthorizationReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        //private static readonly int IndexRowItemStart = 0;
-
-        //private static readonly double defaultLeftIndent = 50;
-        //private static readonly double defaultLineHeight = 18;
         
         public MemoryStream CreateDocument(UploadedFile uploadedFile)
         {
@@ -61,35 +58,74 @@ namespace ConsumerMaster
             }
         }
 
-        public DataSet CreateMemberAuthorizationDocument(UploadedFile clientFile, UploadedFile memberFile, UploadedFile authorizationFile)
+        public MemoryStream CreateClientMemberAuthorizationDocument(UploadedFile clientFile, UploadedFile memberFile, UploadedFile authorizationFile)
         {
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+            ComponentInfo.FreeLimitReached += (sender, e) => e.FreeLimitReachedAction = FreeLimitReachedAction.ContinueAsTrial;
             Utility util = new Utility();
 
             string clientsRangeName = "Clients";
             string memberRangeName = "Members";
             string authorizationsRangeName = "Authorizations";
 
-            Stream clientStream = clientFile.InputStream;
-            DataTable clients = util.GetClientAddressDataTable(clientStream);
-            clients.TableName = clientsRangeName;
+            using(var ms = new MemoryStream())
+            {
+                Stream clientStream = clientFile.InputStream;
+                DataTable clients = util.GetClientAddressDataTable(clientStream);
+                clients.TableName = clientsRangeName;
 
-            Stream memberStream = memberFile.InputStream;
-            DataTable members = util.GetClientMemberDataTable(memberStream);
-            members.TableName = memberRangeName;
+                Stream memberStream = memberFile.InputStream;
+                DataTable members = util.GetClientMemberDataTable(memberStream);
+                members.TableName = memberRangeName;
 
-            Stream authorizationStream = authorizationFile.InputStream;
-            DataTable authorizations = util.GetClientAuthorizationsDataTable(authorizationStream);
-            authorizations.TableName = authorizationsRangeName;
+                Stream authorizationStream = authorizationFile.InputStream;
+                DataTable authorizations = util.GetClientAuthorizationsDataTable(authorizationStream);
+                authorizations.TableName = authorizationsRangeName;
 
-            DataSet clientStaffAuthorizations = new DataSet("ClientStaffAuthorizations");
-            clientStaffAuthorizations.Tables.Add(clients);
-            clientStaffAuthorizations.Tables.Add(members);
-            clientStaffAuthorizations.Tables.Add(authorizations);
 
-            clientStaffAuthorizations.Relations.Add(memberRangeName, clients.Columns["ClientID"], members.Columns["ClientID"], false);
-            clientStaffAuthorizations.Relations.Add(authorizationsRangeName, clients.Columns["ClientID"], authorizations.Columns["ClientID"], false);
 
-            return clientStaffAuthorizations;
+                var LeftJoin = from dt1row in clients.AsEnumerable()
+                               join dt2row in members.AsEnumerable() on dt1row.Field<string>("ClientID") equals dt2row.Field<string>("ClientID") into table3
+                               from t3row in table3.DefaultIfEmpty()
+                               select new
+                               {
+                                   CLientID = dt1row.Field<string>("ClientID"),
+                                   Matched = t3row != null ? "Yes" : "NO"
+                               };
+
+
+
+
+
+                //joining Client and Member DataTable   
+                var JoinResult = (from c in clients.AsEnumerable()
+                                  join m in members.AsEnumerable()
+                                  on c.Field<string>("ClientID") equals m.Field<string>("ClientID")
+                                  into temp
+                                  from m in temp.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      ClientCID = c.Field<string>("ClientID"),
+                                      MemberCID = m.Field<string>("ClientID")
+                                  }).ToList();
+
+
+
+
+                DataSet clientStaffAuthorizations = new DataSet("ClientStaffAuthorizations");
+                clientStaffAuthorizations.Tables.Add(clients);
+                clientStaffAuthorizations.Tables.Add(members);
+                clientStaffAuthorizations.Tables.Add(authorizations);
+
+                clientStaffAuthorizations.Relations.Add(memberRangeName, clients.Columns["ClientID"], members.Columns["ClientID"], false);
+                clientStaffAuthorizations.Relations.Add(authorizationsRangeName, clients.Columns["ClientID"], authorizations.Columns["ClientID"], false);
+
+                var document = DocumentModel.Load(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/MergeNestedRanges.docx")); //Mail Merge Template Document
+                document.MailMerge.Execute(clientStaffAuthorizations, null);    // Execute nested mail merge.
+                document.Save(ms, SaveOptions.DocxDefault);
+
+                return ms;
+            }
         }
     }
 }

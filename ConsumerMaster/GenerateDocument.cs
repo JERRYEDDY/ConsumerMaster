@@ -1,6 +1,7 @@
 ﻿using System;
 using GemBox.Document;
 using System.Data;
+using System.IO;
 
 namespace ConsumerMaster
 {
@@ -275,7 +276,14 @@ namespace ConsumerMaster
                 // Execute nested mail merge.
                 document.MailMerge.Execute(data, null);
 
-                document.Save(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/Merged Nested Ranges Output.docx"));
+                using (var ms = new MemoryStream())
+                {
+
+                }
+
+                //document.Save(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/Merged Nested Ranges Output.docx"));
+
+
             }
             catch (Exception ex)
             {

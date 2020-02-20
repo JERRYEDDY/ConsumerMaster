@@ -81,6 +81,7 @@ namespace ConsumerMaster
 
         protected void RadButton4_Click(object sender, EventArgs e)
         {
+            string outFilename = "ClientMemberAuthMailMerge.docx";
             try
             {
                 if (RadAsyncUploadStaff.UploadedFiles.Count == 1)
@@ -91,12 +92,8 @@ namespace ConsumerMaster
                     UploadedFile clientFile = RadAsyncClient.UploadedFiles[0]; //Other Reports
                     UploadedFile memberFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
                     UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
-
-                    DataSet output = otherReport.CreateMemberAuthorizationDocument(clientFile, memberFile, authorizationFile);
-
-                    GenerateDocument genDoc = new GenerateDocument();
-
-                    genDoc.GemBoxNestMailMerge(output);
+                    MemoryStream output = otherReport.CreateClientMemberAuthorizationDocument(clientFile, memberFile, authorizationFile);
+                    utility.DownloadDocxFile(output, outFilename);
                 }
             }
             catch (Exception ex)

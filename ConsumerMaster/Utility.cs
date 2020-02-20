@@ -235,10 +235,7 @@ namespace ConsumerMaster
 
                         dataTable.Rows.Add(values);
                     }
-                    else
-                    {
-                        int r = 8;
-                    }
+
                 }
 
                 return dataTable;
@@ -277,16 +274,15 @@ namespace ConsumerMaster
                     var values = new object[spc.Count()];
                     if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 0))) //Client ID
                     {
-                        values[0] = GetCellData(InputWorksheet, i, 0); //Client ID
-                        values[1] = GetCellData(InputWorksheet, i, 2); //Member ID
-                        values[2] = GetCellData(InputWorksheet, i, 3); //Member Name
-                        values[3] = GetCellData(InputWorksheet, i, 4); //Member Role
+                        values[0] = GetCellData(InputWorksheet, i, 0);  //ClientID
+                                                                        //ClientName     
+                        values[1] = GetCellData(InputWorksheet, i, 2);  //MemberID
+                        values[2] = GetCellData(InputWorksheet, i, 3);  //MemberName
+                        values[3] = GetCellData(InputWorksheet, i, 4);  //MemberRole
+                                                                        //IsSupervisor
+                                                                        //MemberStart
 
                         dataTable.Rows.Add(values);
-                    }
-                    else
-                    {
-                        int r = 8;
                     }
                 }
 
@@ -339,10 +335,6 @@ namespace ConsumerMaster
                         values[6] = GetCellData(InputWorksheet, i, 7); //Balance
 
                         dataTable.Rows.Add(values);
-                    }
-                    else
-                    {
-                        int r = 8;
                     }
                 }
 
@@ -432,24 +424,32 @@ namespace ConsumerMaster
 
                     dataTable.Rows.Add(values);
                 }
-
-                return dataTable;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
-                return dataTable;
             };
+
+            return dataTable;
         }
   
         string GetCellData(Worksheet worksheet, int i, int j)
         {
-            CellSelection selection = worksheet.Cells[i, j];
+            string result = null;
+            try
+            {
+                CellSelection selection = worksheet.Cells[i, j];
 
-            ICellValue value = selection.GetValue().Value;
-            CellValueFormat format = selection.GetFormat().Value;
-            CellValueFormatResult formatResult = format.GetFormatResult(value);
-            string result = formatResult.InfosText;
+                ICellValue value = selection.GetValue().Value;
+                CellValueFormat format = selection.GetFormat().Value;
+                CellValueFormatResult formatResult = format.GetFormatResult(value);
+                result = formatResult.InfosText;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
             return result;
         }
 
@@ -481,36 +481,31 @@ namespace ConsumerMaster
             }
         }
 
-        //public void DownloadDocxFile(MemoryStream, string fileName)
-        //{
-        //    try
-        //    {
-        //        DocxFormatProvider formatProvider = new DocxFormatProvider();
-        //        byte[] renderedBytes;
+        public void DownloadDocxFile(MemoryStream ms, string fileName)
+        {
+            try
+            {
+                DocxFormatProvider formatProvider = new DocxFormatProvider();
+                byte[] renderedBytes;
 
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-        //            formatProvider.Export(workbook, ms);
-        //            renderedBytes = ms.ToArray();
-        //        }
+                renderedBytes = ms.ToArray();
 
-        //        HttpContext.Current.Response.ClearHeaders();
-        //        HttpContext.Current.Response.ClearContent();
-        //        HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
-        //        HttpContext.Current.Response.ContentType = "text/csv";
-        //        HttpContext.Current.Response.AddHeader("Pragma", "public");
-        //        HttpContext.Current.Response.BinaryWrite(renderedBytes);
-        //        HttpContext.Current.Response.Flush();
-        //        HttpContext.Current.Response.SuppressContent = true;
-        //        HttpContext.Current.Response.Write(renderedBytes);
-        //        HttpContext.Current.Response.End();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex);
-        //    }
-        //}
+                HttpContext.Current.Response.ClearHeaders();
+                HttpContext.Current.Response.ClearContent();
+                HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + fileName);
+                HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                HttpContext.Current.Response.AddHeader("Pragma", "public");
+                HttpContext.Current.Response.BinaryWrite(renderedBytes);
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.SuppressContent = true;
+                HttpContext.Current.Response.Write(renderedBytes);
+                HttpContext.Current.Response.End();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
 
         public void DownloadCSVFile(Workbook workbook, string fileName)
         {
@@ -535,7 +530,6 @@ namespace ConsumerMaster
                 HttpContext.Current.Response.SuppressContent = true;
                 HttpContext.Current.Response.Write(renderedBytes);
                 HttpContext.Current.Response.End();
-
             }
             catch (Exception ex)
             {
@@ -568,7 +562,6 @@ namespace ConsumerMaster
                 HttpContext.Current.Response.SuppressContent = true;
                 HttpContext.Current.Response.Write(renderedBytes);
                 HttpContext.Current.Response.End();
-
             }
             catch (Exception ex)
             {
