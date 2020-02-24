@@ -125,14 +125,6 @@
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButton4_Click"/>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    Word Document
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="Download_Click"/>
-                </td>
-            </tr>
         </table>
         <asp:Literal ID="itemsClientSide" runat="server" />
     </div> 

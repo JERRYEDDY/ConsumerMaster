@@ -82,49 +82,19 @@ namespace ConsumerMaster
                 DataTable authorizations = util.GetClientAuthorizationsDataTable(authorizationStream);
                 authorizations.TableName = authorizationsRangeName;
 
-
-
-                //var LeftJoin = from dt1row in clients.AsEnumerable()
-                //               join dt2row in members.AsEnumerable() on dt1row.Field<string>("ClientID") equals dt2row.Field<string>("ClientID") into table3
-                //               from t3row in table3.DefaultIfEmpty()
-                //               select new
-                //               {
-                //                   CLientID = dt1row.Field<string>("ClientID"),
-                //                   Matched = t3row != null ? "Yes" : "NO"
-                //               };
-
-
-
-
-
-                ////joining Client and Member DataTable   
-                //var JoinResult = (from c in clients.AsEnumerable()
-                //                  join m in members.AsEnumerable()
-                //                  on c.Field<string>("ClientID") equals m.Field<string>("ClientID")
-                //                  into temp
-                //                  from m in temp.DefaultIfEmpty()
-                //                  select new
-                //                  {
-                //                      ClientCID = c.Field<string>("ClientID"),
-                //                      MemberCID = m.Field<string>("ClientID")
-                //                  }).ToList();
-
-
                 DataSet clientStaffAuthorizations = new DataSet("ClientStaffAuthorizations");
 
                 clients.PrimaryKey = new DataColumn[] { clients.Columns["ClientID"] };
                 clientStaffAuthorizations.Tables.Add(clients);
-
-                //members.PrimaryKey = new DataColumn[] { members.Columns["ClientID"] };
                 clientStaffAuthorizations.Tables.Add(members);
-
-                //authorizations.PrimaryKey = new DataColumn[] { authorizations.Columns["ClientID"] };
                 clientStaffAuthorizations.Tables.Add(authorizations);
 
-                clientStaffAuthorizations.Relations.Add(memberRangeName, clients.Columns["ClientID"], members.Columns["ClientID"], false);
-                clientStaffAuthorizations.Relations.Add(authorizationsRangeName, clients.Columns["ClientID"], authorizations.Columns["ClientID"], false);
+                clientStaffAuthorizations.Relations.Add(memberRangeName, clients.Columns["ClientID"], members.Columns["ClientID"], false);  //Could be no staff members for client
+                clientStaffAuthorizations.Relations.Add(authorizationsRangeName, clients.Columns["ClientID"], authorizations.Columns["ClientID"], false); //Could be no billing authorizations for client
 
                 var document = DocumentModel.Load(System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/MergeNestedRanges.docx")); //Mail Merge Template Document
+                document.MailMerge.RangeStartPrefix = "START:";
+                document.MailMerge.RangeEndPrefix = "END:";
                 document.MailMerge.Execute(clientStaffAuthorizations, null);    // Execute nested mail merge.
                 document.Save(ms, SaveOptions.DocxDefault);
 
