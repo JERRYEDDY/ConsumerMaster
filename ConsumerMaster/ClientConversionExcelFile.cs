@@ -432,8 +432,8 @@ namespace ConsumerMaster
             try
             {
 
-                string tamaraSchererID = "4681";
-                string monicaKingID = "5717";
+                //string tamaraSchererID = "4681";
+                //string monicaKingID = "5717";
 
                 string selectQuery =
                 $@"

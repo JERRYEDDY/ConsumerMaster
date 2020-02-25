@@ -8,7 +8,7 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         const int MaxTotalBytes = 1048576; // 1 MB
-        long totalBytes;
+        //long totalBytes;
 
         protected void Page_Load(object sender, EventArgs e)
         {

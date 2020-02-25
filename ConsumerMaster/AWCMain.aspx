@@ -84,7 +84,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4>Other Reports</h4>
+                    <h4> Unit Utilization Report</h4>
                 </td>
                 <td>
                     &nbsp
@@ -123,6 +123,48 @@
                 </td>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButton4_Click"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>Data Integrity Reports</h4>
+                </td>
+                <td>
+                    &nbsp
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td>
+                    Client Roster Filename .xlsx: 
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadClientRoster" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Client Data Integrity Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButton5_Click"/>
                 </td>
             </tr>
         </table>

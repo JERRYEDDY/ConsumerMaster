@@ -18,7 +18,6 @@ namespace ConsumerMaster
 
 
             DataTable staffTable = util.GetClientMemberDataTable(input);
-
             DataTable authorizationTable = util.GetClientAuthorizationsDataTable(input);
 
             using (var ms = new MemoryStream())

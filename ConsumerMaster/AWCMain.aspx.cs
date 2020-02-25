@@ -1,6 +1,7 @@
 ﻿using System;
 using Telerik.Web.UI;
 using System.IO;
+using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace ConsumerMaster
 {
@@ -91,6 +92,33 @@ namespace ConsumerMaster
                     UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
                     MemoryStream output = otherReport.CreateClientMemberAuthorizationDocument(clientFile, memberFile, authorizationFile);
                     utility.DownloadDocxFile(output, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        protected void RadButton5_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCClientDataIntegrityReport.xlsx";
+            try
+            {
+                if (RadAsyncUploadClientRoster.UploadedFiles.Count == 1)
+                {
+                    UploadedFile clientRosterFile = RadAsyncUploadClientRoster.UploadedFiles[0]; //Client Roster Report
+
+                    Utility utility = new Utility();
+                    AWCClientDataIntegrityReportFile report = new AWCClientDataIntegrityReportFile();
+                    Workbook workbook = report.CreateWorkbook(clientRosterFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
+
+
+                    //UploadedFile memberFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
+                    //UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
+
+
                 }
             }
             catch (Exception ex)

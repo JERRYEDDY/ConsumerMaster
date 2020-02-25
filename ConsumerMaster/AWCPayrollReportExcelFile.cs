@@ -35,7 +35,7 @@ namespace ConsumerMaster
 
                 //List<string> tppList = util.GetList("SELECT symbol FROM VendorTradingPartnerPrograms");
 
-                string spreadsheetFilename = "TimeDistance_20200105_20200111.xlsx";
+                //string spreadsheetFilename = "TimeDistance_20200105_20200111.xlsx";
                 DataTable dTable = util.GetTimeAndDistanceDataTable(input);
                 Create29HoursReportWorksheet(sheet2Worksheet, dTable);
 
