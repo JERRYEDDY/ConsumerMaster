@@ -435,23 +435,25 @@ namespace ConsumerMaster
 
         public DataTable GetClientRosterDataTable(Stream input)
         {
-            SPColumn[] spc = new SPColumn[15]
+            SPColumn[] spc = new SPColumn[17]
             {
+                new SPColumn("id_no", typeof(string)),
                 new SPColumn("name", typeof(string)),
                 new SPColumn("gender", typeof(string)),
                 new SPColumn("dob", typeof(string)),
+                new SPColumn("current_location", typeof(string)),
+                new SPColumn("current_phone_day", typeof(string)),
+                new SPColumn("intake_date",typeof(string)),
+                new SPColumn("managing_office", typeof(string)),
                 new SPColumn("program_name", typeof(string)),
                 new SPColumn("unit", typeof(string)),
+                new SPColumn("program_modifier", typeof(string)),
                 new SPColumn("worker_name", typeof(string)),
                 new SPColumn("worker_role", typeof(string)),
                 new SPColumn("is_primary_worker", typeof(string)),
-                new SPColumn("current_location", typeof(string)),
-                new SPColumn("current_phone_day", typeof(string)),
-                new SPColumn("managing_office", typeof(string)),
                 new SPColumn("medicaid_number", typeof(string)),
                 new SPColumn("medicaid_payer", typeof(string)),
-                new SPColumn("medicaid_plan_name", typeof(string)),
-                new SPColumn("program_modifier", typeof(string))
+                new SPColumn("medicaid_plan_name", typeof(string))
             };
 
             DataTable dataTable = new DataTable();
@@ -471,21 +473,23 @@ namespace ConsumerMaster
                     var values = new object[spc.Count()];
                     if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 2))) //id_no
                     {
-                        values[0] = GetCellData(InputWorksheet, i, 1); //name
-                        values[1] = GetCellData(InputWorksheet, i, 3); //gender
-                        values[2] = GetCellData(InputWorksheet, i, 4); //dob
-                        values[3] = GetCellData(InputWorksheet, i, 6); //program_name
-                        values[4] = GetCellData(InputWorksheet, i, 14); //unit
-                        values[5] = GetCellData(InputWorksheet, i, 20); //worker_name
-                        values[6] = GetCellData(InputWorksheet, i, 21); //worker_role
-                        values[7] = GetCellData(InputWorksheet, i, 24); //is_primary_worker
-                        values[8] = GetCellData(InputWorksheet, i, 37); //current_location
-                        values[9] = GetCellData(InputWorksheet, i, 38); //current_phone_day
-                        values[10] = GetCellData(InputWorksheet, i, 67); //managing_office
-                        values[11] = GetCellData(InputWorksheet, i, 76); //medicaid_number
-                        values[12] = GetCellData(InputWorksheet, i, 77); //medicaid_payer
-                        values[13] = GetCellData(InputWorksheet, i, 78); //medicaid_plan_name
-                        values[14] = GetCellData(InputWorksheet, i, 91); //program_modifier
+                        values[0] = GetCellData(InputWorksheet, i, 2); //id_no
+                        values[1] = GetCellData(InputWorksheet, i, 1); //name
+                        values[2] = GetCellData(InputWorksheet, i, 3); //gender
+                        values[3] = GetCellData(InputWorksheet, i, 4); //dob
+                        values[4] = GetCellData(InputWorksheet, i, 37); //current_location
+                        values[5] = GetCellData(InputWorksheet, i, 38); //current_phone_day
+                        values[6] = GetCellData(InputWorksheet, i, 27); //intake_date
+                        values[7] = GetCellData(InputWorksheet, i, 67); //managing_office
+                        values[8] = GetCellData(InputWorksheet, i, 6); //program_name
+                        values[9] = GetCellData(InputWorksheet, i, 14); //unit
+                        values[10] = GetCellData(InputWorksheet, i, 91); //program_modifier
+                        values[11] = GetCellData(InputWorksheet, i, 20); //worker_name
+                        values[12] = GetCellData(InputWorksheet, i, 21); //worker_role
+                        values[13] = GetCellData(InputWorksheet, i, 24); //is_primary_worker
+                        values[14] = GetCellData(InputWorksheet, i, 76); //medicaid_number
+                        values[15] = GetCellData(InputWorksheet, i, 77); //medicaid_payer
+                        values[16] = GetCellData(InputWorksheet, i, 78); //medicaid_plan_name
 
                         dataTable.Rows.Add(values);
                     }
