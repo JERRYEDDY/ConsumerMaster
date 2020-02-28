@@ -14,11 +14,31 @@ namespace ConsumerMaster
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 1;
 
-        string[] columns = {"name", "gender", "dob", "current_location", "current_phone_day", "intake_date", "managing_office",
-                "program_name", "unit", "program_modifier", "worker_name", "worker_role", "is_primary_worker", "medicaid_number", "medicaid_payer", "medicaid_plan_name"};
+        //string[] columns = {"name", "gender", "dob", "current_location", "current_phone_day", "intake_date", "managing_office",
+        //        "program_name", "unit", "program_modifier", "worker_name", "worker_role", "is_primary_worker", "medicaid_number", "medicaid_payer", "medicaid_plan_name"};
 
         public Workbook CreateWorkbook(UploadedFile clientRosterFile)
         {
+            DIColumn[] dIColumns = new DIColumn[16]
+            {
+                new DIColumn("name", null, null),
+                new DIColumn("gender",null, null),
+                new DIColumn("dob", null, null),
+                new DIColumn("current_location", null, null),
+                new DIColumn("current_phone_day", null, null),
+                new DIColumn("intake_date", null, null),
+                new DIColumn("managing_office", null, "Washington"),
+                new DIColumn("program_name", null, "Agency With Choice"),
+                new DIColumn("unit", null, "Room 1"),
+                new DIColumn("program_modifier", null, null),
+                new DIColumn("worker_name", null, null),
+                new DIColumn("worker_role", null, "AWC VP/Regional Manager/Support Staff"),
+                new DIColumn("is_primary_worker", null, "Yes"),
+                new DIColumn("medicaid_number", null, null),
+                new DIColumn("medicaid_payer", null, "Medicaid"),
+                new DIColumn("medicaid_plan_name", null, "PA Medical Assistance Waiver")
+            };
+
             Workbook workbook = new Workbook();
 
             try
@@ -34,78 +54,126 @@ namespace ConsumerMaster
                 DataTable clientRosterDataTable = util. GetClientRosterDataTable(clientRosterInput);
 
                 //int totalConsumers = crrDataTable.Rows.Count;
-                PrepareSheet1Worksheet(sheet1Worksheet, columns);
+                PrepareSheet1Worksheet(sheet1Worksheet, dIColumns);
+
+                CellIndex A1Cell = new CellIndex(0, 0);
+                CellIndex D1Cell = new CellIndex(0, 3);
+                sheet1Worksheet.Cells[A1Cell, D1Cell].Merge();
+                sheet1Worksheet.Cells[0, 0].SetValue("AWC Client Data Integrity Report");
+                sheet1Worksheet.Cells[0, 0].SetIsBold(true);
+                sheet1Worksheet.Cells[0, 0].SetFontSize(20);
+
+                sheet1Worksheet.Cells[1, 0].SetValue("Date:" + DateTime.Now.ToString("MM/dd/yyyy"));
 
                 PatternFill greenSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromArgb(255, 46, 204, 113), Colors.Transparent);
                 PatternFill redSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 0, 0), Colors.Transparent);
                 PatternFill whiteSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 255, 255), Colors.Transparent);
 
-                int currentRow = IndexRowItemStart + 1;
+                int currentRow = IndexRowItemStart + 3;
                 foreach (DataRow dr in clientRosterDataTable.Rows)
                 {
                     int columnNumber = 0;
+                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr[dIColumns[columnNumber].name].ToString());  //Column A name
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetValue(dr[columns[1]].ToString());  //Column A
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["gender"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["gender"].ToString());    //Column C - gender  
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    CellSelection cellSelection = FormattedColumn(sheet1Worksheet, currentRow, columnNumber, dr[dIColumns[columnNumber].name].ToString(), dIColumns[columnNumber].expected);
+                    //CellSelection cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    //string columnValue = dr[dIColumns[columnNumber].name].ToString();   
+                    //cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    //cellSelection.SetValue(columnValue);     //Column B gender
+                    //cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["dob"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["dob"].ToString());  //Column D - dob  
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    string columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);    //Column C - dob   
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["current_location"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["current_location"].ToString());           //Column E - current_location (address)
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);    //Column D - current_location  
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["current_phone_day"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["current_phone_day"].ToString());     //Column F - current_phone_day
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue); //Column E - current_phone_day
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["intake_date"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["intake_date"].ToString());           //Column G - intake_date  
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);    //Column F - intake_date  
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["managing_office"].ToString(), "Washington") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["managing_office"].ToString());           //Column H - managing_office
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);  //Column G - managing_office
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["program_name"].ToString(), "Agency With Choice") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["program_name"].ToString());           //Column I - program_name  
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);  //Column H - program_name 
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["unit"].ToString(), "Room 1") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["unit"].ToString());           //Column J - unit
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);    //Column I - unit  
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["program_modifier"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["program_modifier"].ToString());          //Column K - program_modifier
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);    //Column J - program_modifier  
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["worker_name"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["worker_name"].ToString());           //Column L - worker_name
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue); //Column K - worker_name
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["worker_role"].ToString(), "AWC VP/Regional Manager/Support Staff") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["worker_role"].ToString());           //Column M - worker_role
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue); //Column L - worker_role
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["is_primary_worker"].ToString(), "Yes") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["is_primary_worker"].ToString());             //Column N - is_primary_worker
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);    //Column M - is_primary_worker 
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["medicaid_number"].ToString(), null) ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["medicaid_number"].ToString());        //Column O - medicaid_number
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue);   //Column N - medicaid_number
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["medicaid_payer"].ToString(), "Medicaid") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["medicaid_payer"].ToString());        //Column P - medicaid_payer
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue); //Column O - medicaid_payer
+                    columnNumber++;
 
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetFill(IsInvalid(dr["medicaid_plan_name"].ToString(), "PA Medical Assistance Waiver") ? redSolidFill : whiteSolidFill);
-                    sheet1Worksheet.Cells[currentRow, columnNumber].SetValue(dr["medicaid_plan_name"].ToString());       //Column Q - medicaid_plan_name
-                    sheet1Worksheet.Cells[currentRow, columnNumber++].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    cellSelection = sheet1Worksheet.Cells[currentRow, columnNumber];
+                    columnValue = dr[dIColumns[columnNumber].name].ToString();
+                    cellSelection.SetFill(IsInvalid(columnValue, dIColumns[columnNumber].expected) ? redSolidFill : whiteSolidFill);
+                    cellSelection.SetValue(columnValue); //Column P - medicaid_plan_name
+                    columnNumber++;
 
                     currentRow++;
                 }
@@ -124,35 +192,69 @@ namespace ConsumerMaster
 
         private bool IsInvalid(string value, string expected)
         {
-            if(string.IsNullOrEmpty(value) || value == "null" || value == "N/A")
+            try
             {
-                return true;
+                if(string.IsNullOrEmpty(value) || value == "null" || value == "N/A")
+                {
+                    return true;
+                }
+                else if(expected != null && value != expected)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else if(expected != null && value != expected)
+            catch (Exception ex)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                Logger.Error(ex);
+                return false
             }
         }
 
-        private void PrepareSheet1Worksheet(Worksheet worksheet, string[] columns)
+
+        public CellSelection FormattedColumn(Worksheet worksheet, int row, int col, string value, string expected)
+        {
+            CellSelection cellSelection = null;
+            try
+            {
+                PatternFill redSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 0, 0), Colors.Transparent);
+                PatternFill whiteSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 255, 255), Colors.Transparent);
+
+                cellSelection = worksheet.Cells[row, col];
+                worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+                worksheet.Cells[row, col].SetValue(value);      
+                worksheet.Cells[row, col].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+            return cellSelection;
+        }
+
+        private void PrepareSheet1Worksheet(Worksheet worksheet, DIColumn[] columns)
         {
             try
             {
-                //string[] columnsList = {"name", "gender", "dob", "current_location", "current_phone_day", "intake_date", "managing_office",
-                //"program_name", "unit", "program_modifier", "worker_name", "worker_role", "is_primary_worker", "medicaid_number", "medicaid_payer", "medicaid_plan_name"};
+                PatternFill yellowSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 216, 0), Colors.Transparent);
 
-                foreach (string column in columns)
+                foreach (DIColumn column in columns)
                 {
                     int columnKey = Array.IndexOf(columns, column);
-                    string columnName = column;
 
-                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
-                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Center);
-                    worksheet.Cells[IndexRowItemStart, columnKey].SetIsBold(true);
+                    int row = IndexRowItemStart + 1;
+                    worksheet.Cells[row, columnKey].SetValue(column.expected);
+                    worksheet.Cells[row, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    worksheet.Cells[row, columnKey].SetIsBold(true);
+
+                    row++;
+                    worksheet.Cells[row, columnKey].SetFill(yellowSolidFill);
+                    worksheet.Cells[row, columnKey].SetValue(column.name.ToUpper());
+                    worksheet.Cells[row, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Center);
+                    worksheet.Cells[row, columnKey].SetIsBold(true);
                 }
             }
             catch (Exception ex)
