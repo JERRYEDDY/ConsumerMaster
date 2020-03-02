@@ -360,6 +360,7 @@
     <Compile Include="ContentGenerator.cs" />
     <Compile Include="CShifts.cs" />
     <Compile Include="DIColumn.cs" />
+    <Compile Include="ListExtensions.cs" />
     <Compile Include="NSStaffImportMain.aspx.cs">
       <DependentUpon>NSStaffImportMain.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -161,6 +161,24 @@
             </tr>
             <tr>
                 <td>
+                    Client Authorization List Filename .xlsx: 
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncClientAuthorizationList" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Client Staff List Filename .xlsx: 
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncClientStaffList" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
                     Client Data Integrity Report
                 </td>
                 <td>

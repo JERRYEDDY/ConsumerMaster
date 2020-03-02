@@ -108,10 +108,12 @@ namespace ConsumerMaster
                 if (RadAsyncUploadClientRoster.UploadedFiles.Count == 1)
                 {
                     UploadedFile clientRosterFile = RadAsyncUploadClientRoster.UploadedFiles[0]; //Client Roster Report
+                    UploadedFile clientAuthorizationListFile = RadAsyncClientAuthorizationList.UploadedFiles[0]; //Client Authorization List
+                    UploadedFile clientStaffListFile = RadAsyncClientStaffList.UploadedFiles[0]; //Client Staff List
 
                     Utility utility = new Utility();
                     AWCClientDataIntegrityReportFile report = new AWCClientDataIntegrityReportFile();
-                    Workbook workbook = report.CreateWorkbook(clientRosterFile);
+                    Workbook workbook = report.CreateWorkbook(clientRosterFile, clientAuthorizationListFile, clientStaffListFile);
                     utility.DownloadExcelFile(workbook, outFilename);
 
 

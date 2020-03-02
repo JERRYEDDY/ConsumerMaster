@@ -16,6 +16,7 @@ using System.Linq;
 using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
+using System.Collections;
 
 namespace ConsumerMaster
 {
@@ -503,6 +504,138 @@ namespace ConsumerMaster
                 return dataTable;
             };
         }
+
+        public DataTable GetClientAuthorizationListDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[9]
+            {
+                new SPColumn("AClientID", typeof(string)),
+                new SPColumn("AClientName", typeof(string)),
+                new SPColumn("From", typeof(string)),
+                new SPColumn("To", typeof(string)),
+                new SPColumn("Service", typeof(string)),
+                new SPColumn("Total", typeof(string)),
+                new SPColumn("Used",typeof(string)),
+                new SPColumn("Balance", typeof(string)),
+                new SPColumn("Program", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[spc.Count()];
+
+                    if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 0))) //AClientID
+                    {
+                        values[0] = GetCellData(InputWorksheet, i, 0); //AClientID
+                        values[1] = GetCellData(InputWorksheet, i, 1); //AClientName
+                        values[2] = GetCellData(InputWorksheet, i, 2); //From
+                        values[3] = GetCellData(InputWorksheet, i, 3); //To
+                        values[4] = GetCellData(InputWorksheet, i, 4); //Service
+                        values[5] = GetCellData(InputWorksheet, i, 5); //Total
+                        values[6] = GetCellData(InputWorksheet, i, 6); //Used
+                        values[7] = GetCellData(InputWorksheet, i, 7); //Balance
+                        values[8] = GetCellData(InputWorksheet, i, 8); //Program
+
+                        dataTable.Rows.Add(values);
+                    }
+                }
+
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            };
+        }
+
+        public DataTable GetClientStaffListDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[7]
+            {
+                new SPColumn("SClientID", typeof(string)),
+                new SPColumn("SClientName", typeof(string)),
+                new SPColumn("MemberID", typeof(string)),
+                new SPColumn("MemberName", typeof(string)),
+                new SPColumn("MemberRole", typeof(string)),
+                new SPColumn("IsSupervisor", typeof(string)),
+                new SPColumn("MemberStart",typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[spc.Count()];
+
+                    if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 0))) //SClientID
+                    {
+                        values[0] = GetCellData(InputWorksheet, i, 0); //SClientID
+                        values[1] = GetCellData(InputWorksheet, i, 1); //SClientName
+                        values[2] = GetCellData(InputWorksheet, i, 2); //MemberID
+                        values[3] = GetCellData(InputWorksheet, i, 3); //MemberName
+                        values[4] = GetCellData(InputWorksheet, i, 4); //MemberRole
+                        values[5] = GetCellData(InputWorksheet, i, 5); //IsSupervisor
+                        values[6] = GetCellData(InputWorksheet, i, 6); //MemberStart
+
+                        dataTable.Rows.Add(values);
+                    }
+                }
+
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            };
+        }
+
+        public DataTable RemoveDuplicateRows(DataTable dTable, string colName)
+        {
+            Hashtable hTable = new Hashtable();
+            ArrayList duplicateList = new ArrayList();
+
+            //Add list of all the unique item value to hashtable, which stores combination of key, value pair.
+            //And add duplicate item value in arraylist.
+            foreach (DataRow drow in dTable.Rows)
+            {
+                if (hTable.Contains(drow[colName]))
+                    duplicateList.Add(drow);
+                else
+                    hTable.Add(drow[colName], string.Empty);
+            }
+
+            //Removing a list of duplicate items from datatable.
+            foreach (DataRow dRow in duplicateList)
+                dTable.Rows.Remove(dRow);
+
+            //Datatable which contains unique records will be return as output.
+            return dTable;
+        }
+
 
         string GetCellData(Worksheet worksheet, int i, int j)
         {

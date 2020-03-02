@@ -7,15 +7,17 @@ namespace ConsumerMaster
 {
     public class DIColumn
     {
-        public string name;
-        public string value;
-        public string expected;
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public DIColumn(string n, string v, string e)
+        public string name;
+        public string expected;
+        public bool isCentered;
+
+        public DIColumn(string n, string e, bool c)
         {
             name = n;
-            value = v;
             expected = e;
+            isCentered = c;
         }
     }
 }

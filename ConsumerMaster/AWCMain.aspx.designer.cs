@@ -105,6 +105,24 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadClientRoster;
 
         /// <summary>
+        /// RadAsyncClientAuthorizationList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncClientAuthorizationList;
+
+        /// <summary>
+        /// RadAsyncClientStaffList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncClientStaffList;
+
+        /// <summary>
         /// RadButton5 control.
         /// </summary>
         /// <remarks>
