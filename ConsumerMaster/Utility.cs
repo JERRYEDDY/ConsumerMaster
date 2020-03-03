@@ -613,6 +613,61 @@ namespace ConsumerMaster
             };
         }
 
+        public DataTable ClientAuthorizationGroupBy(string sGroupByColumn, string sAggregateColumn, DataTable dSourceTable)
+        {
+            DataView dv = new DataView(dSourceTable);
+
+            //getting distinct values for group column
+            DataTable dtGroup = dv.ToTable(true, new string[] { sGroupByColumn });
+
+            //adding column for the row count
+            dtGroup.Columns.Add("BACount", typeof(int));
+            //dtGroup.Columns.Add("SSPCount", typeof(int));
+
+            //looping thru distinct values for the group, counting
+            foreach (DataRow dr in dtGroup.Rows)
+            {
+                string expression = String.Format("Count({0})", sAggregateColumn);
+                string filter = String.Format("{0} = '{1}'", sGroupByColumn, dr[sGroupByColumn]);
+                //string meFilter = filter + "'Managing Employer'";
+                //string sspFilter = filter + "'AWC Support Service Professional'";
+
+                dr["BACount"] = dSourceTable.Compute(expression, filter);
+                //dr["MECount"] = dSourceTable.Compute(expression, meFilter);
+                //dr["SSPCount"] = dSourceTable.Compute(expression, sspFilter);
+            }
+
+            //returning grouped/counted result
+            return dtGroup;
+        }
+
+        public DataTable ClientStaffGroupBy(string sGroupByColumn, string sAggregateColumn, DataTable dSourceTable)
+        {
+            DataView dv = new DataView(dSourceTable);
+
+            //getting distinct values for group column
+            DataTable dtGroup = dv.ToTable(true, new string[] { sGroupByColumn });
+
+            //adding column for the row count
+            dtGroup.Columns.Add("MECount", typeof(int));
+            dtGroup.Columns.Add("SSPCount", typeof(int));
+
+            //looping thru distinct values for the group, counting
+            foreach (DataRow dr in dtGroup.Rows)
+            {
+                string expression = String.Format("Count({0})",sAggregateColumn);
+                string filter = String.Format("{0} = '{1}' AND {2} = ", sGroupByColumn, dr[sGroupByColumn], sAggregateColumn);
+                string meFilter = filter + "'Managing Employer'";
+                string sspFilter = filter + "'AWC Support Service Professional'";
+
+                dr["MECount"] = dSourceTable.Compute(expression, meFilter);
+                dr["SSPCount"] = dSourceTable.Compute(expression, sspFilter);
+             }
+
+            //returning grouped/counted result
+            return dtGroup;
+        }
+
         public DataTable RemoveDuplicateRows(DataTable dTable, string colName)
         {
             Hashtable hTable = new Hashtable();

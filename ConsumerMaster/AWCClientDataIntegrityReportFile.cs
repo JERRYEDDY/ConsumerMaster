@@ -19,7 +19,7 @@ namespace ConsumerMaster
 
         public Workbook CreateWorkbook(UploadedFile clientRosterFile, UploadedFile clientAuthorizationListFile, UploadedFile clientStaffListFile)
         {
-            DIColumn[] dIColumns = new DIColumn[16]
+            DIColumn[] dIColumns = new DIColumn[19]
             {
                 new DIColumn("name", null, false),
                 new DIColumn("gender", null, true),
@@ -36,7 +36,10 @@ namespace ConsumerMaster
                 new DIColumn("is_primary_worker", "Yes", true),
                 new DIColumn("medicaid_number", null, false),
                 new DIColumn("medicaid_payer", "Medicaid", false),
-                new DIColumn("medicaid_plan_name", "PA Medical Assistance Waiver", false)
+                new DIColumn("medicaid_plan_name", "PA Medical Assistance Waiver", false),
+                new DIColumn("ba_count", null, false),
+                new DIColumn("me_count", null, false),
+                new DIColumn("ssp_count", null, false)
             };
 
             Workbook workbook = new Workbook();
@@ -55,11 +58,13 @@ namespace ConsumerMaster
 
                 Stream clientAuthorizationListInput = clientAuthorizationListFile.InputStream;
                 DataTable clientAuthorizationListDataTable = util.GetClientAuthorizationListDataTable(clientAuthorizationListInput);
-                DataTable clientAuthorizationDataTable = util.RemoveDuplicateRows(clientAuthorizationListDataTable, "AClientID");
+                DataTable clientAuthorizationDataTable = util.ClientAuthorizationGroupBy("AClientID", "Service", clientAuthorizationListDataTable);
+                //DataTable clientAuthorizationDataTable = util.RemoveDuplicateRows(clientAuthorizationListDataTable, "AClientID");
 
                 Stream clientStaffListFileInput = clientStaffListFile.InputStream;
                 DataTable clientStaffListDataTable = util.GetClientStaffListDataTable(clientStaffListFileInput);
-                DataTable clientStaffDataTable = util.RemoveDuplicateRows(clientStaffListDataTable, "SClientID");
+                DataTable clientStaffDataTable = util.ClientStaffGroupBy("SClientID", "MemberRole", clientStaffListDataTable);
+
 
                 //int clientRows = clientAuthorizationListDataTable.Rows.Count;
                 //int noDupRows = noDuplicates.Rows.Count;
@@ -74,31 +79,32 @@ namespace ConsumerMaster
                                       Name = c.Field<string>("name"),
                                       Gender = c.Field<string>("gender"),
                                       DOB = c.Field<string>("dob"),
-                                      //CurrentLocation = c.Field<string>("current_location"),
-                                      //CurrentPhoneDay = c.Field<string>("current_phone_day"),
-                                      //IntakeDate = c.Field<string>("intake_date"),
-                                      //ManagingOffice = c.Field<string>("managing_office"),
-                                      //ProgramName = c.Field<string>("program_name"),
-                                      //Unit = c.Field<string>("unit"),
-                                      //ProgramModifier = c.Field<string>("program_modifier"),
-                                      //WorkerName = c.Field<string>("worker_name"),
-                                      //WorkerRole = c.Field<string>("worker_role"),
-                                      //IsPrimaryWorker = c.Field<string>("is_primary_worker"),
-                                      //MedicaidNumber = c.Field<string>("medicaid_number"),
-                                      //MedicaidPayer = c.Field<string>("medicaid_payer"),
-                                      //MedicaidPlanName = c.Field<string>("medicaid_plan_name"),
+                                      CurrentLocation = c.Field<string>("current_location"),
+                                      CurrentPhoneDay = c.Field<string>("current_phone_day"),
+                                      IntakeDate = c.Field<string>("intake_date"),
+                                      ManagingOffice = c.Field<string>("managing_office"),
+                                      ProgramName = c.Field<string>("program_name"),
+                                      Unit = c.Field<string>("unit"),
+                                      ProgramModifier = c.Field<string>("program_modifier"),
+                                      WorkerName = c.Field<string>("worker_name"),
+                                      WorkerRole = c.Field<string>("worker_role"),
+                                      IsPrimaryWorker = c.Field<string>("is_primary_worker"),
+                                      MedicaidNumber = c.Field<string>("medicaid_number"),
+                                      MedicaidPayer = c.Field<string>("medicaid_payer"),
+                                      MedicaidPlanName = c.Field<string>("medicaid_plan_name"),
                                       //AuthClientID = leftJoin == null ? "0" : leftJoin.Field<string>("AClientID"),
                                       //ClientName = leftJoin.Field<string>("ClientName"),
                                       //From = leftJoin.Field<string>("From"),
                                       //To = leftJoin.Field<string>("To"),
-                                      Service = leftJoin == null ? "No Service" : leftJoin.Field<string>("Service"),
+                                      BACount = a.Field<int>("BACount"),
                                       //,
                                       //Total = leftJoin.Field<string>("Total"),
                                       //Used = leftJoin.Field<string>("Used"),
                                       //Balance = leftJoin.Field<string>("Balance"),
                                       //Program = leftJoin.Field<string>("Program")
                                       //StaffClientID = leftJoin == null ? "0" : leftJoin.Field<string>("SClientID"),
-                                      MemberID = leftJoin == null ? "NoMember" : leftJoin.Field<string>("MemberID")
+                                      MECount = leftJoin.Field<int>("MECount"),
+                                      SSPCount = leftJoin.Field<int>("SSPCount")
                                   }).ToList();
 
                 DataTable joinResult = JoinResult.ToDataTable();
@@ -167,7 +173,31 @@ namespace ConsumerMaster
 
             return returnValue;
         }
+        private bool IsInvalidCount(string value, string expected)
+        {
+            bool returnValue = false;
+            try
+            {
+                if (string.IsNullOrEmpty(value) || value == "null" || value == "N/A")
+                {
+                    returnValue = true;
+                }
+                else if (expected != null && value != expected)
+                {
+                    returnValue = true;
+                }
+                else
+                {
+                    returnValue = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
 
+            return returnValue;
+        }
 
         public CellSelection FormattedColumn(Worksheet worksheet, int row, int col, string value, string expected, bool isCentered)
         {
@@ -178,7 +208,21 @@ namespace ConsumerMaster
                 PatternFill whiteSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 255, 255), Colors.Transparent);
 
                 cellSelection = worksheet.Cells[row, col];
-                worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+
+                if (Enumerable.Range(16, 18).Contains(col))
+                {
+                    if(col == 16)
+                        worksheet.Cells[row, col].SetFill(value == 0 ? redSolidFill : whiteSolidFill);
+                    else if (col == 17)
+                        worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+                    else
+                        worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+                }
+                else
+                {
+                    worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+                }
+
                 worksheet.Cells[row, col].SetValue(value);  
                 
                 if(isCentered)
