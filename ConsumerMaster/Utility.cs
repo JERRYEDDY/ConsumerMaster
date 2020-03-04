@@ -621,20 +621,15 @@ namespace ConsumerMaster
             DataTable dtGroup = dv.ToTable(true, new string[] { sGroupByColumn });
 
             //adding column for the row count
-            dtGroup.Columns.Add("BACount", typeof(int));
-            //dtGroup.Columns.Add("SSPCount", typeof(int));
+            dtGroup.Columns.Add("ba_count", typeof(string));
 
             //looping thru distinct values for the group, counting
             foreach (DataRow dr in dtGroup.Rows)
             {
                 string expression = String.Format("Count({0})", sAggregateColumn);
                 string filter = String.Format("{0} = '{1}'", sGroupByColumn, dr[sGroupByColumn]);
-                //string meFilter = filter + "'Managing Employer'";
-                //string sspFilter = filter + "'AWC Support Service Professional'";
 
-                dr["BACount"] = dSourceTable.Compute(expression, filter);
-                //dr["MECount"] = dSourceTable.Compute(expression, meFilter);
-                //dr["SSPCount"] = dSourceTable.Compute(expression, sspFilter);
+                dr["ba_count"] = dSourceTable.Compute(expression, filter);
             }
 
             //returning grouped/counted result
@@ -649,8 +644,8 @@ namespace ConsumerMaster
             DataTable dtGroup = dv.ToTable(true, new string[] { sGroupByColumn });
 
             //adding column for the row count
-            dtGroup.Columns.Add("MECount", typeof(int));
-            dtGroup.Columns.Add("SSPCount", typeof(int));
+            dtGroup.Columns.Add("me_count", typeof(string));
+            dtGroup.Columns.Add("ssp_count", typeof(string));
 
             //looping thru distinct values for the group, counting
             foreach (DataRow dr in dtGroup.Rows)
@@ -660,8 +655,8 @@ namespace ConsumerMaster
                 string meFilter = filter + "'Managing Employer'";
                 string sspFilter = filter + "'AWC Support Service Professional'";
 
-                dr["MECount"] = dSourceTable.Compute(expression, meFilter);
-                dr["SSPCount"] = dSourceTable.Compute(expression, sspFilter);
+                dr["me_count"] = dSourceTable.Compute(expression, meFilter);
+                dr["ssp_count"] = dSourceTable.Compute(expression, sspFilter);
              }
 
             //returning grouped/counted result
@@ -690,7 +685,6 @@ namespace ConsumerMaster
             //Datatable which contains unique records will be return as output.
             return dTable;
         }
-
 
         string GetCellData(Worksheet worksheet, int i, int j)
         {

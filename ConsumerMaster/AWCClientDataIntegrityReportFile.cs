@@ -7,11 +7,16 @@ using GemBox.Document;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Windows.Media;
 using Telerik.Windows.Documents.Spreadsheet.Model.Printing;
-using System.ComponentModel;
-using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
+    enum CompareMethod
+    {
+        Expected = 0,
+        EqualToZero = 1,
+        NotEqualToOne = 2
+    }
+
     public class AWCClientDataIntegrityReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -21,25 +26,25 @@ namespace ConsumerMaster
         {
             DIColumn[] dIColumns = new DIColumn[19]
             {
-                new DIColumn("name", null, false),
-                new DIColumn("gender", null, true),
-                new DIColumn("dob", null, false),
-                new DIColumn("current_location", null, false),
-                new DIColumn("current_phone_day", null, false),
-                new DIColumn("intake_date", null, false),
-                new DIColumn("managing_office", "Washington", false),
-                new DIColumn("program_name", "Agency With Choice", false),
-                new DIColumn("unit", "Room 1", false),
-                new DIColumn("program_modifier", null, false),
-                new DIColumn("worker_name", null, false),
-                new DIColumn("worker_role", "AWC VP/Regional Manager/Support Staff", false),
-                new DIColumn("is_primary_worker", "Yes", true),
-                new DIColumn("medicaid_number", null, false),
-                new DIColumn("medicaid_payer", "Medicaid", false),
-                new DIColumn("medicaid_plan_name", "PA Medical Assistance Waiver", false),
-                new DIColumn("ba_count", null, false),
-                new DIColumn("me_count", null, false),
-                new DIColumn("ssp_count", null, false)
+                new DIColumn("name", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("gender", null, true, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("dob", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("current_location", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("current_phone_day", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("intake_date", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("managing_office", "Washington", false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("program_name", "Agency With Choice", false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("unit", "Room 1", false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("program_modifier", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("worker_name", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("worker_role", "AWC VP/Regional Manager/Support Staff", false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("is_primary_worker", "Yes", true, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("medicaid_number", null, false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("medicaid_payer", "Medicaid", false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("medicaid_plan_name", "PA Medical Assistance Waiver", false, typeof(string), (int)CompareMethod.Expected),
+                new DIColumn("ba_count", null, true, typeof(int), (int)CompareMethod.EqualToZero),
+                new DIColumn("me_count", null, true, typeof(int), (int)CompareMethod.NotEqualToOne),
+                new DIColumn("ssp_count", null, true, typeof(int), (int)CompareMethod.EqualToZero)
             };
 
             Workbook workbook = new Workbook();
@@ -59,15 +64,10 @@ namespace ConsumerMaster
                 Stream clientAuthorizationListInput = clientAuthorizationListFile.InputStream;
                 DataTable clientAuthorizationListDataTable = util.GetClientAuthorizationListDataTable(clientAuthorizationListInput);
                 DataTable clientAuthorizationDataTable = util.ClientAuthorizationGroupBy("AClientID", "Service", clientAuthorizationListDataTable);
-                //DataTable clientAuthorizationDataTable = util.RemoveDuplicateRows(clientAuthorizationListDataTable, "AClientID");
 
                 Stream clientStaffListFileInput = clientStaffListFile.InputStream;
                 DataTable clientStaffListDataTable = util.GetClientStaffListDataTable(clientStaffListFileInput);
                 DataTable clientStaffDataTable = util.ClientStaffGroupBy("SClientID", "MemberRole", clientStaffListDataTable);
-
-
-                //int clientRows = clientAuthorizationListDataTable.Rows.Count;
-                //int noDupRows = noDuplicates.Rows.Count;
 
                 var JoinResult = (from c in clientRosterDataTable.AsEnumerable()
                                   join a in clientAuthorizationDataTable.AsEnumerable() on c.Field<string>("id_no") equals a.Field<string>("AClientID")
@@ -75,41 +75,30 @@ namespace ConsumerMaster
                                   from leftJoin in tempJoin.DefaultIfEmpty()
                                   select new
                                   {
-                                      IDNo = c.Field<string>("id_no"),
-                                      Name = c.Field<string>("name"),
-                                      Gender = c.Field<string>("gender"),
-                                      DOB = c.Field<string>("dob"),
-                                      CurrentLocation = c.Field<string>("current_location"),
-                                      CurrentPhoneDay = c.Field<string>("current_phone_day"),
-                                      IntakeDate = c.Field<string>("intake_date"),
-                                      ManagingOffice = c.Field<string>("managing_office"),
-                                      ProgramName = c.Field<string>("program_name"),
-                                      Unit = c.Field<string>("unit"),
-                                      ProgramModifier = c.Field<string>("program_modifier"),
-                                      WorkerName = c.Field<string>("worker_name"),
-                                      WorkerRole = c.Field<string>("worker_role"),
-                                      IsPrimaryWorker = c.Field<string>("is_primary_worker"),
-                                      MedicaidNumber = c.Field<string>("medicaid_number"),
-                                      MedicaidPayer = c.Field<string>("medicaid_payer"),
-                                      MedicaidPlanName = c.Field<string>("medicaid_plan_name"),
-                                      //AuthClientID = leftJoin == null ? "0" : leftJoin.Field<string>("AClientID"),
-                                      //ClientName = leftJoin.Field<string>("ClientName"),
-                                      //From = leftJoin.Field<string>("From"),
-                                      //To = leftJoin.Field<string>("To"),
-                                      BACount = a.Field<int>("BACount"),
-                                      //,
-                                      //Total = leftJoin.Field<string>("Total"),
-                                      //Used = leftJoin.Field<string>("Used"),
-                                      //Balance = leftJoin.Field<string>("Balance"),
-                                      //Program = leftJoin.Field<string>("Program")
-                                      //StaffClientID = leftJoin == null ? "0" : leftJoin.Field<string>("SClientID"),
-                                      MECount = leftJoin.Field<int>("MECount"),
-                                      SSPCount = leftJoin.Field<int>("SSPCount")
+                                      id_no = c.Field<string>("id_no"),
+                                      name = c.Field<string>("name"),
+                                      gender = c.Field<string>("gender"),
+                                      dob = c.Field<string>("dob"),
+                                      current_location = c.Field<string>("current_location"),
+                                      current_phone_day = c.Field<string>("current_phone_day"),
+                                      intake_date = c.Field<string>("intake_date"),
+                                      managing_office = c.Field<string>("managing_office"),
+                                      program_name = c.Field<string>("program_name"),
+                                      unit = c.Field<string>("unit"),
+                                      program_modifier = c.Field<string>("program_modifier"),
+                                      worker_name = c.Field<string>("worker_name"),
+                                      worker_role = c.Field<string>("worker_role"),
+                                      is_primary_worker = c.Field<string>("is_primary_worker"),
+                                      medicaid_number = c.Field<string>("medicaid_number"),
+                                      medicaid_payer = c.Field<string>("medicaid_payer"),
+                                      medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
+                                      ba_count = a.Field<string>("ba_count"),
+                                      me_count = leftJoin.Field<string>("me_count"),
+                                      ssp_count = leftJoin.Field<string>("ssp_count")
                                   }).ToList();
 
                 DataTable joinResult = JoinResult.ToDataTable();
 
-                //int totalConsumers = crrDataTable.Rows.Count;
                 PrepareSheet1Worksheet(sheet1Worksheet, dIColumns);
 
                 CellIndex A1Cell = new CellIndex(0, 0);
@@ -126,11 +115,12 @@ namespace ConsumerMaster
                 PatternFill whiteSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 255, 255), Colors.Transparent);
 
                 int currentRow = IndexRowItemStart + 3;
-                foreach (DataRow dr in clientRosterDataTable.Rows)
+                //foreach (DataRow dr in clientRosterDataTable.Rows)
+                foreach (DataRow dr in joinResult.Rows)
                 {
                     for (int columnNumber = 0; columnNumber < dIColumns.Count(); columnNumber++)
                     {
-                        CellSelection cellSelection = FormattedColumn(sheet1Worksheet, currentRow, columnNumber, dr[dIColumns[columnNumber].name].ToString(), dIColumns[columnNumber].expected, dIColumns[columnNumber].isCentered);
+                        CellSelection cellSelection = FormattedColumn(sheet1Worksheet, currentRow, columnNumber, dr[dIColumns[columnNumber].name].ToString(), dIColumns[columnNumber]);
                     }
 
                     currentRow++;
@@ -148,7 +138,7 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private bool IsInvalid(string value, string expected)
+        private bool IsExpected(string value, string expected)
         {
             bool returnValue = false;
             try
@@ -173,33 +163,8 @@ namespace ConsumerMaster
 
             return returnValue;
         }
-        private bool IsInvalidCount(string value, string expected)
-        {
-            bool returnValue = false;
-            try
-            {
-                if (string.IsNullOrEmpty(value) || value == "null" || value == "N/A")
-                {
-                    returnValue = true;
-                }
-                else if (expected != null && value != expected)
-                {
-                    returnValue = true;
-                }
-                else
-                {
-                    returnValue = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
 
-            return returnValue;
-        }
-
-        public CellSelection FormattedColumn(Worksheet worksheet, int row, int col, string value, string expected, bool isCentered)
+        public CellSelection FormattedColumn(Worksheet worksheet, int row, int col, string value, DIColumn diColumn)
         {
             CellSelection cellSelection = null;
             try
@@ -209,23 +174,25 @@ namespace ConsumerMaster
 
                 cellSelection = worksheet.Cells[row, col];
 
-                if (Enumerable.Range(16, 18).Contains(col))
+                if (diColumn.type == typeof(string))
                 {
-                    if(col == 16)
-                        worksheet.Cells[row, col].SetFill(value == 0 ? redSolidFill : whiteSolidFill);
-                    else if (col == 17)
-                        worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
-                    else
-                        worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+                    worksheet.Cells[row, col].SetFill(IsExpected(value, diColumn.expected) ? redSolidFill : whiteSolidFill);
                 }
-                else
+                else if (diColumn.type == typeof(int))
                 {
-                    worksheet.Cells[row, col].SetFill(IsInvalid(value, expected) ? redSolidFill : whiteSolidFill);
+                    if (diColumn.method == (int)CompareMethod.EqualToZero)
+                    {
+                        worksheet.Cells[row, col].SetFill(Convert.ToInt32(value) == 0 ? redSolidFill : whiteSolidFill);
+                    }
+                    else if (diColumn.method == (int)CompareMethod.NotEqualToOne)
+                    {
+                        worksheet.Cells[row, col].SetFill(Convert.ToInt32(value) != 1 ? redSolidFill : whiteSolidFill);
+                    }
                 }
 
                 worksheet.Cells[row, col].SetValue(value);  
                 
-                if(isCentered)
+                if(diColumn.isCentered)
                     worksheet.Cells[row, col].SetHorizontalAlignment(RadHorizontalAlignment.Center);
             }
             catch (Exception ex)
