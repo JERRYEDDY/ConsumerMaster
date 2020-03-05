@@ -10,14 +10,14 @@ using Telerik.Windows.Documents.Spreadsheet.Model.Printing;
 
 namespace ConsumerMaster
 {
-    enum CompareMethod
-    {
-        Expected = 0,
-        EqualToZero = 1,
-        NotEqualToOne = 2
-    }
+    //enum CompareMethod
+    //{
+    //    Expected = 0,
+    //    EqualToZero = 1,
+    //    NotEqualToOne = 2
+    //}
 
-    public class AWCClientDataIntegrityReportFile
+    public class AWCSSPDataIntegrityReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 1;
@@ -60,22 +60,18 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream clientRosterInput = clientRosterFile.InputStream;
                 DataTable clientRosterDataTable = util.GetClientRosterDataTable(clientRosterInput);
-                int crCount = clientRosterDataTable.Rows.Count;
 
                 Stream clientAuthorizationListInput = clientAuthorizationListFile.InputStream;
                 DataTable clientAuthorizationListDataTable = util.GetClientAuthorizationListDataTable(clientAuthorizationListInput);
                 DataTable clientAuthorizationDataTable = util.ClientAuthorizationGroupBy("AClientID", "Service", clientAuthorizationListDataTable);
-                int caCount = clientAuthorizationDataTable.Rows.Count;
 
                 Stream clientStaffListFileInput = clientStaffListFile.InputStream;
                 DataTable clientStaffListDataTable = util.GetClientStaffListDataTable(clientStaffListFileInput);
                 DataTable clientStaffDataTable = util.ClientStaffGroupBy("SClientID", "MemberRole", clientStaffListDataTable);
-                int csCount = clientStaffDataTable.Rows.Count;
 
-                var JoinResult1 = (from c in clientRosterDataTable.AsEnumerable()
+                var JoinResult = (from c in clientRosterDataTable.AsEnumerable()
                                   join a in clientAuthorizationDataTable.AsEnumerable() on c.Field<string>("id_no") equals a.Field<string>("AClientID")
-                                  //join s in clientStaffDataTable.AsEnumerable() on a.Field<string>("AClientID") equals s.Field<string>("SClientID") 
-                                  into tempJoin
+                                  join s in clientStaffDataTable.AsEnumerable() on c.Field<string>("id_no") equals s.Field<string>("SClientID") into tempJoin
                                   from leftJoin in tempJoin.DefaultIfEmpty()
                                   select new
                                   {
@@ -96,45 +92,12 @@ namespace ConsumerMaster
                                       medicaid_number = c.Field<string>("medicaid_number"),
                                       medicaid_payer = c.Field<string>("medicaid_payer"),
                                       medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
-                                      ba_count = leftJoin == null ? String.Empty : leftJoin.Field<string>("ba_count")
-                                      //,
-                                      //me_count = leftJoin == null ? null : leftJoin.Field<string>("me_count"),
-                                      //ssp_count = leftJoin == null ? null : leftJoin.Field<string>("ssp_count")
+                                      ba_count = leftJoin == null ? null : leftJoin.Field<string>("ba_count"),
+                                      me_count = leftJoin == null ? null : leftJoin.Field<string>("me_count"),
+                                      ssp_count = leftJoin == null ? null : leftJoin.Field<string>("ssp_count")
                                   }).ToList();
 
-                DataTable joinResult1 = JoinResult1.ToDataTable();
-
-                var JoinResult2 = (from c in joinResult1.AsEnumerable()
-                                  //join a in clientAuthorizationDataTable.AsEnumerable() on c.Field<string>("id_no") equals a.Field<string>("AClientID")
-                                  join s in clientStaffDataTable.AsEnumerable() on c.Field<string>("id_no") equals s.Field<string>("SClientID")
-                                  into tempJoin
-                                  from leftJoin in tempJoin.DefaultIfEmpty()
-                                  select new
-                                  {
-                                      id_no = c.Field<string>("id_no"),
-                                      name = c.Field<string>("name"),
-                                      gender = c.Field<string>("gender"),
-                                      dob = c.Field<string>("dob"),
-                                      current_location = c.Field<string>("current_location"),
-                                      current_phone_day = c.Field<string>("current_phone_day"),
-                                      intake_date = c.Field<string>("intake_date"),
-                                      managing_office = c.Field<string>("managing_office"),
-                                      program_name = c.Field<string>("program_name"),
-                                      unit = c.Field<string>("unit"),
-                                      program_modifier = c.Field<string>("program_modifier"),
-                                      worker_name = c.Field<string>("worker_name"),
-                                      worker_role = c.Field<string>("worker_role"),
-                                      is_primary_worker = c.Field<string>("is_primary_worker"),
-                                      medicaid_number = c.Field<string>("medicaid_number"),
-                                      medicaid_payer = c.Field<string>("medicaid_payer"),
-                                      medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
-                                      ba_count = c.Field<string>("ba_count"),
-                                      me_count = leftJoin == null ? String.Empty : leftJoin.Field<string>("me_count"),
-                                      ssp_count = leftJoin == null ? String.Empty : leftJoin.Field<string>("ssp_count")
-                                  }).ToList();
-
-                DataTable joinResult2 = JoinResult2.ToDataTable();
-
+                DataTable joinResult = JoinResult.ToDataTable();
 
                 PrepareSheet1Worksheet(sheet1Worksheet, dIColumns);
 
@@ -153,7 +116,7 @@ namespace ConsumerMaster
 
                 int currentRow = IndexRowItemStart + 3;
                 //foreach (DataRow dr in clientRosterDataTable.Rows)
-                foreach (DataRow dr in joinResult2.Rows)
+                foreach (DataRow dr in joinResult.Rows)
                 {
                     for (int columnNumber = 0; columnNumber < dIColumns.Count(); columnNumber++)
                     {
@@ -201,29 +164,6 @@ namespace ConsumerMaster
             return returnValue;
         }
 
-        private bool IsEqualTo(string value, int match)
-        {
-            bool returnValue = false;
-            try
-            {
-                if (string.IsNullOrEmpty(value) || value == null || value == "null" || value == "N/A" || Convert.ToInt32(value) == match)
-                {
-                    returnValue = true;
-                }
-                else
-                {
-                    returnValue = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-
-            return returnValue;
-        }
-
-
         public CellSelection FormattedColumn(Worksheet worksheet, int row, int col, string value, DIColumn diColumn)
         {
             CellSelection cellSelection = null;
@@ -242,11 +182,11 @@ namespace ConsumerMaster
                 {
                     if (diColumn.method == (int)CompareMethod.EqualToZero)
                     {
-                        worksheet.Cells[row, col].SetFill(IsEqualTo(value, 0) ? redSolidFill : whiteSolidFill);
+                        worksheet.Cells[row, col].SetFill(Convert.ToInt32(value) == 0 ? redSolidFill : whiteSolidFill);
                     }
                     else if (diColumn.method == (int)CompareMethod.NotEqualToOne)
                     {
-                        worksheet.Cells[row, col].SetFill(!IsEqualTo(value, 1) ? redSolidFill : whiteSolidFill);
+                        worksheet.Cells[row, col].SetFill(Convert.ToInt32(value) != 1 ? redSolidFill : whiteSolidFill);
                     }
                 }
 
