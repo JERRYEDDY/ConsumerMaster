@@ -538,7 +538,7 @@ namespace ConsumerMaster
 
                     if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 0))) //AClientID
                     {
-                        values[0] = GetCellData(InputWorksheet, i, 0); //AClientID
+                        values[0] = GetCellData(InputWorksheet, i, 0).TrimStart('0'); //AClientID - remove leading zeros
                         values[1] = GetCellData(InputWorksheet, i, 1); //AClientName
                         values[2] = GetCellData(InputWorksheet, i, 2); //From
                         values[3] = GetCellData(InputWorksheet, i, 3); //To
@@ -592,7 +592,7 @@ namespace ConsumerMaster
 
                     if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 0))) //SClientID
                     {
-                        values[0] = GetCellData(InputWorksheet, i, 0); //SClientID
+                        values[0] = GetCellData(InputWorksheet, i, 0).TrimStart('0'); //SClientID  - Remove leading zeros
                         values[1] = GetCellData(InputWorksheet, i, 1); //SClientName
                         values[2] = GetCellData(InputWorksheet, i, 2); //MemberID
                         values[3] = GetCellData(InputWorksheet, i, 3); //MemberName

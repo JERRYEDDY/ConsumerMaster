@@ -74,7 +74,6 @@ namespace ConsumerMaster
 
                 var JoinResult1 = (from c in clientRosterDataTable.AsEnumerable()
                                   join a in clientAuthorizationDataTable.AsEnumerable() on c.Field<string>("id_no") equals a.Field<string>("AClientID")
-                                  //join s in clientStaffDataTable.AsEnumerable() on a.Field<string>("AClientID") equals s.Field<string>("SClientID") 
                                   into tempJoin
                                   from leftJoin in tempJoin.DefaultIfEmpty()
                                   select new
@@ -96,16 +95,11 @@ namespace ConsumerMaster
                                       medicaid_number = c.Field<string>("medicaid_number"),
                                       medicaid_payer = c.Field<string>("medicaid_payer"),
                                       medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
-                                      ba_count = leftJoin == null ? String.Empty : leftJoin.Field<string>("ba_count")
-                                      //,
-                                      //me_count = leftJoin == null ? null : leftJoin.Field<string>("me_count"),
-                                      //ssp_count = leftJoin == null ? null : leftJoin.Field<string>("ssp_count")
+                                      ba_count = leftJoin == null ? "0" : leftJoin.Field<string>("ba_count")
                                   }).ToList();
-
                 DataTable joinResult1 = JoinResult1.ToDataTable();
 
                 var JoinResult2 = (from c in joinResult1.AsEnumerable()
-                                  //join a in clientAuthorizationDataTable.AsEnumerable() on c.Field<string>("id_no") equals a.Field<string>("AClientID")
                                   join s in clientStaffDataTable.AsEnumerable() on c.Field<string>("id_no") equals s.Field<string>("SClientID")
                                   into tempJoin
                                   from leftJoin in tempJoin.DefaultIfEmpty()
@@ -129,15 +123,12 @@ namespace ConsumerMaster
                                       medicaid_payer = c.Field<string>("medicaid_payer"),
                                       medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
                                       ba_count = c.Field<string>("ba_count"),
-                                      me_count = leftJoin == null ? String.Empty : leftJoin.Field<string>("me_count"),
-                                      ssp_count = leftJoin == null ? String.Empty : leftJoin.Field<string>("ssp_count")
+                                      me_count = leftJoin == null ? "0" : leftJoin.Field<string>("me_count"),
+                                      ssp_count = leftJoin == null ? "0" : leftJoin.Field<string>("ssp_count")
                                   }).ToList();
-
                 DataTable joinResult2 = JoinResult2.ToDataTable();
 
-
                 PrepareSheet1Worksheet(sheet1Worksheet, dIColumns);
-
                 CellIndex A1Cell = new CellIndex(0, 0);
                 CellIndex D1Cell = new CellIndex(0, 3);
                 sheet1Worksheet.Cells[A1Cell, D1Cell].Merge();
@@ -152,7 +143,7 @@ namespace ConsumerMaster
                 PatternFill whiteSolidFill = new PatternFill(PatternType.Solid, System.Windows.Media.Color.FromRgb(255, 255, 255), Colors.Transparent);
 
                 int currentRow = IndexRowItemStart + 3;
-                //foreach (DataRow dr in clientRosterDataTable.Rows)
+
                 foreach (DataRow dr in joinResult2.Rows)
                 {
                     for (int columnNumber = 0; columnNumber < dIColumns.Count(); columnNumber++)
@@ -222,7 +213,6 @@ namespace ConsumerMaster
 
             return returnValue;
         }
-
 
         public CellSelection FormattedColumn(Worksheet worksheet, int row, int col, string value, DIColumn diColumn)
         {
