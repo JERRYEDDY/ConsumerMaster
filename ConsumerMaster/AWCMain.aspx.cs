@@ -128,5 +128,10 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
+
+        protected void RadButton6_Click(object sender, EventArgs e)
+        {
+            RadButton7.Enabled = false;
+        }
     }
 }
