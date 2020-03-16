@@ -16,7 +16,7 @@ namespace ConsumerMaster
 
         protected void RadButton1_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWC40HoursReport.txt";
+            string outFilename = $"AWC40HoursReport.txt";
             try
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
@@ -25,7 +25,11 @@ namespace ConsumerMaster
                     AWC40HoursReportFile payrollReport = new AWC40HoursReportFile();
 
                     UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+
                     MemoryStream output = payrollReport.CreateDocument(uploadedFile);
+
+                    //string fileDate = uploadedFile.FileName.Between("_", ".");
+
                     utility.DownloadTXTFile(output, outFilename);
                 }
             }
@@ -133,5 +137,6 @@ namespace ConsumerMaster
         {
             RadButton7.Enabled = false;
         }
+
     }
 }

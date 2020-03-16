@@ -392,6 +392,7 @@
     <Compile Include="Payroll40HoursReportFormat.cs" />
     <Compile Include="SPColumn.cs" />
     <Compile Include="AWCPayrollReportExcelFile.cs" />
+    <Compile Include="SubstringExtensions.cs" />
     <Compile Include="VendorServiceExportExcelFile.cs" />
     <Compile Include="VendorMain.aspx.cs">
       <DependentUpon>VendorMain.aspx</DependentUpon>
