@@ -1,12 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-<script>
-    function validateUpload(sender, args) {
-        var upload = $find("<%=RadAsyncUpload1.ClientID%>");
-        args.IsValid = upload.getUploadedFiles().length != 0;
-    }
-</script>
+<%@ Register Assembly="Microsoft.ReportViewer.WebForms" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
 
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="demo-container no-bg">
         <p>
             <asp:Label runat="server" ID="Label4" />
@@ -24,6 +20,7 @@
                 <td>
                     &nbsp
                 </td>
+                
             </tr>
             <tr>
                 <td>
@@ -200,6 +197,17 @@
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton7" runat="server" text="Button 7"/>
                 </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp
+                </td>
+                <td>
+                    &nbsp
+                </td>
+            </tr>
+            <tr>
+<%--                <rsweb:ReportViewer ID="ReportViewer1" runat="server"></rsweb:ReportViewer>--%>
             </tr>
         </table>
         <asp:Literal ID="itemsClientSide" runat="server" />

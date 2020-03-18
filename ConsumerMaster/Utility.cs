@@ -70,6 +70,29 @@ namespace ConsumerMaster
             }
         }
 
+        public DataTable GetDataTable3(string queryString)
+        {
+            DataTable dataTable = new DataTable();
+            try
+            {
+                using (SqlConnection sqlConnect = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnStringDb3"].ConnectionString))
+                {
+                    sqlConnect.Open();
+                    using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+                    {
+
+                        sqlDataAdapter.Fill(dataTable);
+                        return dataTable;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            }
+        }
+
         public List<String> GetList(string queryString)
         {
             List<String> cpcData = new List<String>();
@@ -236,7 +259,6 @@ namespace ConsumerMaster
 
                         dataTable.Rows.Add(values);
                     }
-
                 }
 
                 return dataTable;
