@@ -52,7 +52,7 @@ namespace ConsumerMaster
             {             
                 this.ReportViewer1.Reset();
                 this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://ITLT21T/ReportServer");
-                this.ReportViewer1.ServerReport.ReportPath = "/NetSmart/ClientIntegrity";
+                this.ReportViewer1.ServerReport.ReportPath = "/NetSmart/ClientIntegrity.rdlc";
                 //ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", getDataTable());
                 //this.ReportViewer1.LocalReport.DataSources.Clear();
                 //this.ReportViewer1.LocalReport.DataSources.Add(rds);
