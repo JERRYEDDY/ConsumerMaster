@@ -57,11 +57,24 @@
             </tr>
             <tr>
                 <td>
+                    SSRS 2016 Report Viewer
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RVButton" runat="server" text="Process" OnClick="RVButton_Click"/>
+               </td>
+            </tr>
+            <tr>
+                <td>
                     &nbsp;
                 </td>
                 <td>
                     &nbsp;
                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <rsweb:ReportViewer ID="ReportViewer1" runat="server" Width="1000px" Height="700px" ProcessingMode="Remote"></rsweb:ReportViewer>
+                </td>
             </tr>
             <tr>
                 <td>

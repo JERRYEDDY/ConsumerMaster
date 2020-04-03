@@ -49,10 +49,11 @@ namespace ConsumerMaster
         private void runReportViewer()
         {
             try
-            {             
-                this.ReportViewer1.Reset();
-                this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://ITLT21T/ReportServer");
-                this.ReportViewer1.ServerReport.ReportPath = "/NetSmart/ClientIntegrity.rdlc";
+            {
+                //this.ReportViewer1.Reset();
+                //this.ReportViewer1.ProcessingMode = ProcessingMode.Remote;
+                this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://itlt21t:80/ReportServer_SQL2016");
+                this.ReportViewer1.ServerReport.ReportPath = "/AWC/ClientDataIntegrity";
                 //ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", getDataTable());
                 //this.ReportViewer1.LocalReport.DataSources.Clear();
                 //this.ReportViewer1.LocalReport.DataSources.Add(rds);
