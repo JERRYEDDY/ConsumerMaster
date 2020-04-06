@@ -138,65 +138,65 @@ namespace ConsumerMaster
             RadButton7.Enabled = false;
         }
 
-        protected void RVButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+        //protected void RVButton_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
 
-                Utility util = new Utility();
-                Stream input = uploadedFile.InputStream;
-                DataTable dTable = util.GetTimeAndDistanceDataTable(input);
+        //        Utility util = new Utility();
+        //        Stream input = uploadedFile.InputStream;
+        //        DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
-                var query = from row in dTable.AsEnumerable()
-                            group row by new
-                            {
-                                StaffID = row.Field<string>("Staff ID"),
-                                StaffName = row.Field<string>("Staff Name")
-                            }
-                into TD
-                            where TD.Sum(v => v.Field<int>("Duration") / 60.00) > 40.00
-                            orderby TD.Sum(v => v.Field<int>("Duration") / 60.00)
-                            select new
-                            {
-                                ID = TD.Key.StaffID,
-                                Name = TD.Key.StaffName,
-                                Hours = TD.Sum(v => v.Field<int>("Duration") / 60.00)
-                            };
+        //        var query = from row in dTable.AsEnumerable()
+        //                    group row by new
+        //                    {
+        //                        StaffID = row.Field<string>("Staff ID"),
+        //                        StaffName = row.Field<string>("Staff Name")
+        //                    }
+        //        into TD
+        //                    where TD.Sum(v => v.Field<int>("Duration") / 60.00) > 40.00
+        //                    orderby TD.Sum(v => v.Field<int>("Duration") / 60.00)
+        //                    select new
+        //                    {
+        //                        ID = TD.Key.StaffID,
+        //                        Name = TD.Key.StaffName,
+        //                        Hours = TD.Sum(v => v.Field<int>("Duration") / 60.00)
+        //                    };
 
-                DataTable rptDataTable = new DataTable();
-                rptDataTable.Columns.Add("ID", typeof(string));
-                rptDataTable.Columns.Add("Name", typeof(string));
-                rptDataTable.Columns.Add("Hours", typeof(double));
+        //        DataTable rptDataTable = new DataTable();
+        //        rptDataTable.Columns.Add("ID", typeof(string));
+        //        rptDataTable.Columns.Add("Name", typeof(string));
+        //        rptDataTable.Columns.Add("Hours", typeof(double));
 
-                foreach (var element in query)
-                {
-                    rptDataTable.Rows.Add(element.ID,element.Name, element.Hours);
-                }
+        //        foreach (var element in query)
+        //        {
+        //            rptDataTable.Rows.Add(element.ID,element.Name, element.Hours);
+        //        }
 
-                string selectQuery =
-                $@"
-                    SELECT rpt.ID, rpt.Name, rpt.Hours
-                    FROM 40HoursReport rpt
-                 ";
+        //        string selectQuery =
+        //        $@"
+        //            SELECT rpt.ID, rpt.Name, rpt.Hours
+        //            FROM 40HoursReport rpt
+        //         ";
 
-                DataTable sqlDataTable = util.GetDataTable3(selectQuery);
+        //        DataTable sqlDataTable = util.GetDataTable3(selectQuery);
 
 
-                //this.ReportViewer1.Reset();
-                //this.ReportViewer1.ProcessingMode = ProcessingMode.Remote;
-                this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://itlt21t:80/ReportServer_SQL2016");
-                this.ReportViewer1.ServerReport.ReportPath = "/AWC/40 Hours Report";
-                ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", rptDataTable);
-                this.ReportViewer1.LocalReport.DataSources.Clear();
-                this.ReportViewer1.LocalReport.DataSources.Add(rds);
-                //this.ReportViewer1.DataBind();
-                this.ReportViewer1.ServerReport.Refresh();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
+        //        //this.ReportViewer1.Reset();
+        //        //this.ReportViewer1.ProcessingMode = ProcessingMode.Remote;
+        //        this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://itlt21t:80/ReportServer_SQL2016");
+        //        this.ReportViewer1.ServerReport.ReportPath = "/AWC/40 Hours Report";
+        //        ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", rptDataTable);
+        //        this.ReportViewer1.LocalReport.DataSources.Clear();
+        //        this.ReportViewer1.LocalReport.DataSources.Add(rds);
+        //        //this.ReportViewer1.DataBind();
+        //        this.ReportViewer1.ServerReport.Refresh();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
     }
 }
