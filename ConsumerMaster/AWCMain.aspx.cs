@@ -2,9 +2,6 @@
 using Telerik.Web.UI;
 using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.Model;
-using System.Data;
-using System.Linq;
-using Microsoft.Reporting.WebForms;
 
 namespace ConsumerMaster
 {
@@ -185,7 +182,7 @@ namespace ConsumerMaster
 
         //        //this.ReportViewer1.Reset();
         //        //this.ReportViewer1.ProcessingMode = ProcessingMode.Remote;
-        //        this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://itlt21t:80/ReportServer_SQL2016");
+        //        this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://itlt21t:80/ReportServer");
         //        this.ReportViewer1.ServerReport.ReportPath = "/AWC/40 Hours Report";
         //        ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", rptDataTable);
         //        this.ReportViewer1.LocalReport.DataSources.Clear();
