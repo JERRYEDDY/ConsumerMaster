@@ -377,6 +377,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AWCTravelTimeReportFile.cs" />
     <Compile Include="AWCSSPDataIntegrityReportFile.cs" />
     <Compile Include="AWCClientDataIntegrityReportFile.cs" />
     <Compile Include="AWCClientMemberAuthorizationReportFile.cs" />
@@ -393,6 +394,8 @@
     </Compile>
     <Compile Include="ClientServiceAuthorizationsFormat.cs" />
     <Compile Include="ClientAuthorizationsFormat.cs" />
+    <Compile Include="ListToDataTable.cs" />
+    <Compile Include="StaffShifts.cs" />
     <Compile Include="ClientShifts.cs" />
     <Compile Include="ClientStaffAssignmentsFormat.cs" />
     <Compile Include="ClientEnrollmentFormat.cs" />

@@ -135,6 +135,28 @@ namespace ConsumerMaster
             RadButton7.Enabled = false;
         }
 
+        protected void RadButtonTravel_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCTravelTimeReport.txt";
+            try
+            {
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+                    AWCTravelTimeReportFile payrollReport = new AWCTravelTimeReportFile();
+
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    MemoryStream output = payrollReport.CreateDocument(uploadedFile);
+                    utility.DownloadTXTFile(output, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+
         //protected void RVButton_Click(object sender, EventArgs e)
         //{
         //    try
