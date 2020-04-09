@@ -67,20 +67,54 @@ namespace ConsumerMaster
 
                         if (shiftGroup.Rows.Count > 1 && idCounts.Count > 1)
                         {
-                            streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++Count: {0,10}+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++", shiftGroup.Rows.Count);
-                            streamWriter.WriteLine("DISTINCT COUNT: {0,-10}", idCounts.Count);
+                            //streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++Count: {0,10}+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++", shiftGroup.Rows.Count);
+                            //streamWriter.WriteLine("DISTINCT COUNT: {0,-10}", idCounts.Count);
                             foreach (DataRow row in shiftGroup.Rows)
                             {
                                 //    string name = shift.ClientName.Replace("\t", "");
                                 streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
 
 
-                                if (shiftGroup.Rows.IndexOf(row) < (shiftGroup.Rows.Count - 1))
+                                //if (shiftGroup.Rows.IndexOf(row) < (shiftGroup.Rows.Count - 1))
+                                //{
+                                //    streamWriter.WriteLine("{0,5} {1,22}", shiftGroup.Rows.IndexOf(row), row["Finish"].ToString());
+                                //}
+                            }
+
+
+                            streamWriter.WriteLine(" ");
+                            List<ShiftItem> finishList = new List<ShiftItem>();
+                            List<ShiftItem> startList = new List<ShiftItem>();
+                            int rowCount = shiftGroup.Rows.Count;
+
+                            for (int i = 0; i < (rowCount - 1); i++)
+                            {
+                                DataRow fRow = shiftGroup.Rows[i];
+                                finishList.Add(new ShiftItem() {StaffID = (string)fRow["StaffID"],
+                                                                StaffName = (string)fRow["StaffName"],
+                                                                DateTimeInfo = (DateTime)fRow["Finish"]});
+                            }
+
+                            for (int i = 1; i < rowCount; i++)
+                            {
+                                DataRow sRow = shiftGroup.Rows[i]; 
+                                startList.Add(new ShiftItem() { DateTimeInfo = (DateTime)sRow["Start"] });
+                            }
+
+                            if(finishList.Count == startList.Count)
+                            {
+                                for (int i = 0; i < finishList.Count; i++)
                                 {
-                                    streamWriter.WriteLine("{0,5} {1,22}", shiftGroup.Rows.IndexOf(row), row["Finish"].ToString());
+                                    //string FormatString = "TRAVELTIME: {0,-22} {1,-22}";
+                                    //streamWriter.WriteLine(FormatString.PadLeft(95,' '), finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString());
+                                    TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
+
+                                    streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
+
                                 }
                             }
-                            streamWriter.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                            streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                         }
                     }
 
@@ -122,15 +156,11 @@ namespace ConsumerMaster
         }
 
 
-        public class TravelTimeClass
+        public class ShiftItem
         {
             public string StaffID { get; set; }
             public string StaffName { get; set; }
-            public string ClientID { get; set; }
-            public string ClientName { get; set; }
-            public DateTime Start { get; set; }
-            public DateTime Finish { get; set; }
-            public int Duration { get; set; }
+            public DateTime DateTimeInfo { get; set; }
         };
 
     }
