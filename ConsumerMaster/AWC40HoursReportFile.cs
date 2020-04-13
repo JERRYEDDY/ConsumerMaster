@@ -9,10 +9,6 @@ namespace ConsumerMaster
     public class AWC40HoursReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        //private static readonly int IndexRowItemStart = 0;
-
-        //private static readonly double defaultLeftIndent = 50;
-        //private static readonly double defaultLineHeight = 18;
 
         public MemoryStream CreateDocument(UploadedFile uploadedFile)
         {
