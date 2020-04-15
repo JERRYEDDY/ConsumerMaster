@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace ConsumerMaster
 {
-    public class AWCTravelTimeReportFile
+    public class AWCTravelTimeReportFile2
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -22,7 +22,7 @@ namespace ConsumerMaster
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))
             {
-                streamWriter.WriteLine("Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift. ");
+                streamWriter.WriteLine("TRAVEL TIME2 – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift. ");
                 streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
                 streamWriter.WriteLine(" ");

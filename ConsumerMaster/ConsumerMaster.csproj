@@ -377,6 +377,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AWCTravelTimeReportFile2.cs" />
     <Compile Include="AWCTravelTimeReportFile.cs" />
     <Compile Include="AWCSSPDataIntegrityReportFile.cs" />
     <Compile Include="AWCClientDataIntegrityReportFile.cs" />

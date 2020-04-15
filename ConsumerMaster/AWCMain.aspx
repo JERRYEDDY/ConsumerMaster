@@ -63,6 +63,14 @@
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    TRAVEL TIME REPORT2
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel2" runat="server" text="Process" OnClick="RadButtonTravel_Click2"/>
+                </td>
+            </tr>
 <%--            <tr>
                 <td>
                     SSRS 2016 Report Viewer
