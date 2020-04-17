@@ -13,7 +13,7 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public MemoryStream CreateDocument(UploadedFile uploadedFile)
+        public MemoryStream CreateDocument(UploadedFile uploadedFile, bool shiftFilter)
         {
             Utility util = new Utility();
             Stream input = uploadedFile.InputStream;
@@ -35,24 +35,25 @@ namespace ConsumerMaster
                                      StaffName = staffRow.Field<string>("Staff Name")
                                  };
 
-                DataTable reportResultSet = GetReportRsultSet();
+                DataTable reportResultSet = BuildReportRsultSet();
 
                 foreach (var staff in staffGroup)
                 {
-                    DataTable shiftsDataTable = GetTravelTimeDataTable(); 
+                    DataTable shiftsDataTable = BuildTravelTimeDataTable(); 
                     foreach (DataRow shiftRow in staff)
                     {
                         shiftsDataTable.Rows.Add(shiftRow.Field<string>("Staff ID"), shiftRow.Field<string>("Staff Name"), shiftRow.Field<string>("ID"), shiftRow.Field<string>("Name"), shiftRow.Field<DateTime>("Start"), shiftRow.Field<DateTime>("Finish"), shiftRow.Field<int>("Duration"));
                     }
 
                     var shiftDateGroup = from shiftDateRow in shiftsDataTable.AsEnumerable() //Group by Start Date
+                                         orderby shiftDateRow.Field<DateTime>("Start")
                                          group shiftDateRow by new
                                          {
                                              StartDate = shiftDateRow.Field<DateTime>("Start").Date
                                          };
                     foreach (var shiftDate in shiftDateGroup)
                     {
-                        DataTable shiftGroup = GetTravelTimeDataTable();
+                        DataTable shiftGroup = BuildTravelTimeDataTable();
                         foreach (DataRow sRow in shiftDate)
                         {
                             shiftGroup.Rows.Add(sRow.Field<string>("StaffID"), sRow.Field<string>("StaffName"), sRow.Field<string>("ClientID"), sRow.Field<string>("ClientName"), sRow.Field<DateTime>("Start"), sRow.Field<DateTime>("Finish"), sRow.Field<int>("Duration"));
@@ -67,7 +68,7 @@ namespace ConsumerMaster
                                     })
                                     .ToList();
 
-                        if (shiftGroup.Rows.Count > 1 && idCounts.Count > 1)
+                        if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
                         {
                             foreach (DataRow row in shiftGroup.Rows)
                             {
@@ -115,6 +116,25 @@ namespace ConsumerMaster
                 return ms;
             }
         }
+
+        public bool FilterByShiftCount(int shiftCount, int clientCount, bool shiftFilter)
+        {
+            if (shiftFilter)
+            {
+                if (shiftCount > 1)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                if (shiftCount > 1 && clientCount > 1)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         public static DataTable ToDataTable<T>(IList<T> data)
         {
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
@@ -131,7 +151,7 @@ namespace ConsumerMaster
             return table;
         }
 
-        public DataTable GetTravelTimeDataTable()
+        public DataTable BuildTravelTimeDataTable()
         {
             DataTable travelTimeDT = new DataTable();
             travelTimeDT.Columns.Add("StaffID", typeof(string));
@@ -145,7 +165,7 @@ namespace ConsumerMaster
             return travelTimeDT;
         }
 
-        public DataTable GetReportRsultSet()
+        public DataTable BuildReportRsultSet()
         {
             DataTable reportResultSet = new DataTable();
             reportResultSet.Columns.Add("StaffID", typeof(string));

@@ -6,6 +6,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.ComponentModel;
+using System.Windows.Navigation;
 
 namespace ConsumerMaster
 {
@@ -58,17 +59,17 @@ namespace ConsumerMaster
                             shiftGroup.Rows.Add(sRow.Field<string>("StaffID"), sRow.Field<string>("StaffName"), sRow.Field<string>("ClientID"), sRow.Field<string>("ClientName"), sRow.Field<DateTime>("Start"), sRow.Field<DateTime>("Finish"), sRow.Field<int>("Duration"));
                         }
 
-                        //var idCounts = shiftGroup.AsEnumerable()        //Group by Client for Client Count
-                        //            .GroupBy(row => row.Field<string>("ClientID"))
-                        //            .Select(g => new
-                        //            {
-                        //                EventID = g.Key,
-                        //                Count = g.Count()
-                        //            })
-                        //            .ToList();
+                        var idCounts = shiftGroup.AsEnumerable()        //Group by Client for Client Count
+                                    .GroupBy(row => row.Field<string>("ClientID"))
+                                    .Select(g => new
+                                    {
+                                        EventID = g.Key,
+                                        Count = g.Count()
+                                    })
+                                    .ToList();
                         //if (shiftGroup.Rows.Count > 1 && idCounts.Count > 1)
 
-                        if (shiftGroup.Rows.Count > 1)
+                        if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, true))
                         {
                             foreach (DataRow row in shiftGroup.Rows)
                             {
@@ -116,6 +117,25 @@ namespace ConsumerMaster
                 return ms;
             }
         }
+
+        public bool FilterByShiftCount(int shiftCount, int clientCount, bool shiftFilter)
+        {
+            if(shiftFilter)
+            {   
+                if(shiftCount > 1)
+                    return true;
+                else
+                    return false;
+            }
+            else 
+            {
+                if (shiftCount > 1 && clientCount > 1)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
         public static DataTable ToDataTable<T>(IList<T> data)
         {
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));

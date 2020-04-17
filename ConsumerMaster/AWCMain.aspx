@@ -59,16 +59,16 @@
                 <td>
                     Travel Time Report
                 </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
-                </td>
             </tr>
             <tr>
                 <td>
-                    TRAVEL TIME REPORT2
+                    &nbsp;&nbsp;&nbsp;Shift Only: 
+                    <asp:CheckBox RenderMode="Lightweight" id="ShiftCheckBox" runat="server"></asp:CheckBox>
+<%--                    &nbsp;&nbsp;&nbsp;Max Duration: 
+                    <telerik:RadNumericTextBox RenderMode="Lightweight" id="MaxDurationTextBox" runat="server" InputType="Number" MinValue="0" MaxValue="999999" NumberFormat-DecimalDigits="0" NumberFormat-GroupSeparator='' MaxLength="5"></telerik:RadNumericTextBox>--%>
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel2" runat="server" text="Process" OnClick="RadButtonTravel_Click2"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
                 </td>
             </tr>
 <%--            <tr>
