@@ -73,7 +73,7 @@
             </tr>
 <%--            <tr>
                 <td>
-                    SSRS 2016 Report Viewer
+                    SSRS Report Viewer
                 </td>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RVButton" runat="server" text="Process" OnClick="RVButton_Click"/>

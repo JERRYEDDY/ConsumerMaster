@@ -17,6 +17,7 @@ namespace ConsumerMaster
             // Code that runs on application startup
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
         }
 
         //void Application_Error(object sender, EventArgs e)

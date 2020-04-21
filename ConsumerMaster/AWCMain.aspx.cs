@@ -2,6 +2,11 @@
 using Telerik.Web.UI;
 using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.Model;
+using System.Data;
+using System.Linq;
+using Microsoft.Reporting.WebForms;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace ConsumerMaster
 {
@@ -163,42 +168,48 @@ namespace ConsumerMaster
         //{
         //    try
         //    {
-        //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+        //        //UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
 
         //        Utility util = new Utility();
-        //        Stream input = uploadedFile.InputStream;
-        //        DataTable dTable = util.GetTimeAndDistanceDataTable(input);
+        //        //Stream input = uploadedFile.InputStream;
+        //        //DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
-        //        var query = from row in dTable.AsEnumerable()
-        //                    group row by new
-        //                    {
-        //                        StaffID = row.Field<string>("Staff ID"),
-        //                        StaffName = row.Field<string>("Staff Name")
-        //                    }
-        //        into TD
-        //                    where TD.Sum(v => v.Field<int>("Duration") / 60.00) > 40.00
-        //                    orderby TD.Sum(v => v.Field<int>("Duration") / 60.00)
-        //                    select new
-        //                    {
-        //                        ID = TD.Key.StaffID,
-        //                        Name = TD.Key.StaffName,
-        //                        Hours = TD.Sum(v => v.Field<int>("Duration") / 60.00)
-        //                    };
+        //        //var query = from row in dTable.AsEnumerable()
+        //        //            group row by new
+        //        //            {
+        //        //                StaffID = row.Field<string>("Staff ID"),
+        //        //                StaffName = row.Field<string>("Staff Name")
+        //        //            }
+        //        //into TD
+        //        //            where TD.Sum(v => v.Field<int>("Duration") / 60.00) > 40.00
+        //        //            orderby TD.Sum(v => v.Field<int>("Duration") / 60.00)
+        //        //            select new
+        //        //            {
+        //        //                ID = TD.Key.StaffID,
+        //        //                Name = TD.Key.StaffName,
+        //        //                Hours = TD.Sum(v => v.Field<int>("Duration") / 60.00)
+        //        //            };
 
-        //        DataTable rptDataTable = new DataTable();
-        //        rptDataTable.Columns.Add("ID", typeof(string));
-        //        rptDataTable.Columns.Add("Name", typeof(string));
-        //        rptDataTable.Columns.Add("Hours", typeof(double));
+        //        //DataTable rptDataTable = new DataTable();
+        //        //rptDataTable.Columns.Add("ID", typeof(string));
+        //        //rptDataTable.Columns.Add("Name", typeof(string));
+        //        //rptDataTable.Columns.Add("Hours", typeof(double));
 
-        //        foreach (var element in query)
-        //        {
-        //            rptDataTable.Rows.Add(element.ID,element.Name, element.Hours);
-        //        }
+        //        //foreach (var element in query)
+        //        //{
+        //        //    rptDataTable.Rows.Add(element.ID, element.Name, element.Hours);
+        //        //}
 
         //        string selectQuery =
         //        $@"
-        //            SELECT rpt.ID, rpt.Name, rpt.Hours
-        //            FROM 40HoursReport rpt
+        //            SELECT cr.id_no,cr.name,cr.gender,cr.dob,cr.current_location,cr.current_phone_day,
+        //                cr.intake_date,cr.managing_office,cr.program_name,cr.unit,cr.program_modifier,cr.worker_name,
+        //                cr.worker_role,cr.is_primary_worker,cr.medicaid_number,cr.medicaid_payer,cr.medicaid_plan_name,
+        //                ca.ba_count,cs.me_count,cs.ssp_count
+        //            FROM ClientRoster AS cr
+        //            LEFT JOIN ClientAuthorizations AS ca ON cr.id_no = ca.AClientID
+        //            LEFT JOIN ClientStaff AS cs ON cr.id_no = cs.SClientID
+        //            ORDER BY cr.gender
         //         ";
 
         //        DataTable sqlDataTable = util.GetDataTable3(selectQuery);
@@ -207,17 +218,44 @@ namespace ConsumerMaster
         //        //this.ReportViewer1.Reset();
         //        //this.ReportViewer1.ProcessingMode = ProcessingMode.Remote;
         //        this.ReportViewer1.ServerReport.ReportServerUrl = new Uri("http://itlt21t:80/ReportServer");
-        //        this.ReportViewer1.ServerReport.ReportPath = "/AWC/40 Hours Report";
-        //        ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", rptDataTable);
+        //        this.ReportViewer1.ServerReport.ReportPath = "/AWC/ClientDataIntegrity";
+        //        ReportDataSource rds = new ReportDataSource("dsNewDataSet_Table", sqlDataTable);
         //        this.ReportViewer1.LocalReport.DataSources.Clear();
         //        this.ReportViewer1.LocalReport.DataSources.Add(rds);
-        //        //this.ReportViewer1.DataBind();
+        //        this.ReportViewer1.DataBind();
+
         //        this.ReportViewer1.ServerReport.Refresh();
+
         //    }
         //    catch (Exception ex)
         //    {
         //        Logger.Error(ex);
         //    }
         //}
+
+        public DataTable GetDataTable(string queryString)
+        {
+            DataTable dataTable = new DataTable();
+            string connectionString = "Data Source=ITSQLX1\\ITDBVRTX1;Initial Catalog=NetsmartReports;Integrated Security=true;";
+
+            try
+            {
+                using (SqlConnection sqlConnect = new SqlConnection(connectionString))
+                {
+                    sqlConnect.Open();
+                    using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(queryString, sqlConnect))
+                    {
+
+                        sqlDataAdapter.Fill(dataTable);
+                        return dataTable;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                return dataTable;
+            }
+        }
     }
 }

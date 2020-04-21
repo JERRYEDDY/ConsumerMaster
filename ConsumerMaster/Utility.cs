@@ -135,7 +135,7 @@ namespace ConsumerMaster
                     //var dataTable = new DataTable();
                     bool createColumns = true;
 
-                    using (var csv = new CsvReader(reader))
+                    using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
                     {
                         csv.Configuration.HasHeaderRecord = false;
 
@@ -183,7 +183,7 @@ namespace ConsumerMaster
             try
             {
                 using (var reader = new StreamReader(file.InputStream))
-                using (var csv = new CsvReader(reader))
+                using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
                 {
                     // Do any configuration to `CsvReader` before creating CsvDataReader.
                     using (var dr = new CsvDataReader(csv))
