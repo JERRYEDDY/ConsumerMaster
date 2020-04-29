@@ -135,10 +135,6 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButton6_Click(object sender, EventArgs e)
-        {
-            RadButton7.Enabled = false;
-        }
 
         protected void RadButtonTravel_Click(object sender, EventArgs e)
         {

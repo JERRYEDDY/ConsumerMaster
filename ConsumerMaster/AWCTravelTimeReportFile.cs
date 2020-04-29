@@ -72,7 +72,9 @@ namespace ConsumerMaster
                         {
                             foreach (DataRow row in shiftGroup.Rows)
                             {
-                                streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
+                                //streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
+                                streamWriter.WriteLine("{0,-10}, {1,-22}, {2,-10}, {3,-22}, {4,-22}, {5,-22}, {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
+
                                 reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
 
                             }
@@ -101,13 +103,15 @@ namespace ConsumerMaster
                                 for (int i = 0; i < finishList.Count; i++)
                                 {
                                     TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
-                                    streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
+//                                    streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
+                                    streamWriter.WriteLine("{0,-10}, {1,-22}, {2,-10}, {3,-22}, {4,-22}, {5,-22}, {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
+
                                     reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes);
 
                                 }
                             }
 
-                            streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            //streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                         }
                     }
                 }

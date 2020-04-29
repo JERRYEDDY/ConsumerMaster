@@ -45,9 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdomdClientNetCore, Version=15.3.1.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unofficial.Microsoft.AnalysisServices.AdomdClientNetCore.15.3.1.2\lib\netstandard2.0\AdomdClientNetCore.dll</HintPath>
-    </Reference>
     <Reference Include="AjaxControlToolkit, Version=19.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <HintPath>..\packages\AjaxControlToolkit.19.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
     </Reference>
@@ -105,9 +102,6 @@
     </Reference>
     <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unofficial.Microsoft.AnalysisServices.AdomdClient.13.0.4001\lib\net40\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -273,7 +267,6 @@
     <Content Include="Images\PWLogo.png" />
     <Content Include="Images\VendorLogo.png" />
     <Content Include="CompositeProcedureCodes.aspx" />
-    <Content Include="ReportViewer.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -499,6 +492,8 @@
     </Compile>
     <Compile Include="ClientServiceAuthorizationsFormat.cs" />
     <Compile Include="ClientAuthorizationsFormat.cs" />
+    <Compile Include="AWCTravelTimeReportExcelFile.cs" />
+    <Compile Include="AWCTravelTimeReportFormat.cs" />
     <Compile Include="ListToDataTable.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="StaffShifts.cs" />
@@ -537,13 +532,6 @@
     <Compile Include="ClientInformationFormat.cs" />
     <Compile Include="ClientConversionExcelFile.cs" />
     <Compile Include="Payroll40HoursReportFormat.cs" />
-    <Compile Include="ReportViewer.aspx.cs">
-      <DependentUpon>ReportViewer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ReportViewer.aspx.designer.cs">
-      <DependentUpon>ReportViewer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="SPColumn.cs" />
     <Compile Include="AWCPayrollReportExcelFile.cs" />
     <Compile Include="SubstringExtensions.cs" />
@@ -726,7 +714,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Reports\Report5.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

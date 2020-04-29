@@ -1,6 +1,4 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
-<%@ Register Assembly="Microsoft.ReportViewer.WebForms" Namespace="Microsoft.Reporting.WebForms" TagPrefix="rsweb" %>
-
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="demo-container no-bg">
@@ -64,21 +62,11 @@
                 <td>
                     &nbsp;&nbsp;&nbsp;Shift Only: 
                     <asp:CheckBox RenderMode="Lightweight" id="ShiftCheckBox" runat="server"></asp:CheckBox>
-<%--                    &nbsp;&nbsp;&nbsp;Max Duration: 
-                    <telerik:RadNumericTextBox RenderMode="Lightweight" id="MaxDurationTextBox" runat="server" InputType="Number" MinValue="0" MaxValue="999999" NumberFormat-DecimalDigits="0" NumberFormat-GroupSeparator='' MaxLength="5"></telerik:RadNumericTextBox>--%>
                 </td>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
                 </td>
             </tr>
-<%--            <tr>
-                <td>
-                    SSRS Report Viewer
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RVButton" runat="server" text="Process" OnClick="RVButton_Click"/>
-               </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -87,19 +75,6 @@
                     &nbsp;
                </td>
             </tr>
-<%--            <tr>
-                <td colspan="2">
-                    <rsweb:ReportViewer ID="ReportViewer1" runat="server" Width="1000px" Height="700px" ProcessingMode="Remote"></rsweb:ReportViewer>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    &nbsp;
-               </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -213,30 +188,11 @@
             </tr>
             <tr>
                 <td>
-                    Button 6
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton6" runat="server" text="Disable Button 7" OnClick="RadButton6_Click"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Button 7
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton7" runat="server" text="Button 7"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
                     &nbsp
                 </td>
                 <td>
                     &nbsp
                 </td>
-            </tr>
-            <tr>
-<%--                <rsweb:ReportViewer ID="ReportViewer1" runat="server"></rsweb:ReportViewer>--%>
             </tr>
         </table>
         <asp:Literal ID="itemsClientSide" runat="server" />
