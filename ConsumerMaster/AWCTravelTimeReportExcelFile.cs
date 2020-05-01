@@ -11,7 +11,6 @@ namespace ConsumerMaster
     public class AWCTravelTimeReportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private static readonly int IndexRowItemStart = 0;
 
         public Workbook CreateWorkbook(UploadedFile uploadedFile, bool shiftFilter)
         {
@@ -19,19 +18,13 @@ namespace ConsumerMaster
 
             try
             {
-                workbook.Sheets.Add(SheetType.Worksheet);
-                Worksheet worksheet = workbook.ActiveWorksheet;
-
                 Utility util = new Utility();
                 AWCTravelTimeReportFormat reportFormat = new AWCTravelTimeReportFormat();
+
                 Stream input = uploadedFile.InputStream;
                 DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
                 int totalRecords = dTable.Rows.Count;
-                PrepareWorksheet(worksheet);
-
-                int currentRow = IndexRowItemStart + 1;
-
 
                 var staffGroup = from staffRow in dTable.AsEnumerable()  //Group by StaffID,StaffNamd
                                  group staffRow by new
@@ -40,7 +33,7 @@ namespace ConsumerMaster
                                      StaffName = staffRow.Field<string>("Staff Name")
                                  };
 
-                DataTable reportResultSet = BuildReportRsultSet();
+                DataTable reportResultSet = BuildReportResultSet();
 
                 foreach (var staff in staffGroup)
                 {
@@ -77,24 +70,9 @@ namespace ConsumerMaster
                         {
                             foreach (DataRow row in shiftGroup.Rows)
                             {
-                                //streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
-
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("StaffID")].SetValue(row["StaffID"].ToString());
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("StaffName")].SetValue(row["StaffName"].ToString());
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("ClientID")].SetValue(row["ClientID"].ToString());
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("ClientName")].SetValue(row["ClientName"].ToString());
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("Start")].SetValue(row["Start"].ToString());
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("Finish")].SetValue(row["Finish"].ToString());
-                                worksheet.Cells[currentRow, reportFormat.GetIndex("Duration")].SetValue(row["Duration"].ToString());
-
-                                currentRow++;
-
-
                                 reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
-
                             }
 
-                            //streamWriter.WriteLine(" ");
                             List<ShiftItem> finishList = new List<ShiftItem>();
                             List<ShiftItem> startList = new List<ShiftItem>();
                             int rowCount = shiftGroup.Rows.Count;
@@ -121,53 +99,27 @@ namespace ConsumerMaster
                                 for (int i = 0; i < finishList.Count; i++)
                                 {
                                     TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
-                                    //                                    streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
-                                    //streamWriter.WriteLine("{0,-10}, {1,-22}, {2,-10}, {3,-22}, {4,-22}, {5,-22}, {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
-
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("StaffID")].SetValue(finishList[i].StaffID.ToString());
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("StaffName")].SetValue(finishList[i].StaffName.ToString());
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("ClientID")].SetValue("TRAVEL");
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("ClientName")].SetValue("TIME");
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("Start")].SetValue(finishList[i].DateTimeInfo.ToString());
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("Finish")].SetValue(startList[i].DateTimeInfo.ToString());
-                                    worksheet.Cells[currentRow, reportFormat.GetIndex("Duration")].SetValue(span.TotalMinutes.ToString());
-
-                                    currentRow++;
-
                                     reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes);
-
                                 }
                             }
-
-                            //streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                         }
                     }
                 }
 
+                List<string> reportTitle = new List<string>();
+                reportTitle.Add("Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift. ");
+                reportTitle.Add(String.Format("Date/time: {0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
+                reportTitle.Add(String.Format("Filename: {0}", uploadedFile.FileName));
+                reportTitle.Add(" ");
 
-                //int currentRow = IndexRowItemStart + 1;
-                //foreach (DataRow dr in dTable.Rows)
-                //{
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("StaffID")].SetValue(dr["consumer_internal_number"].ToString());
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("StaffName")].SetValue(dr["trading_partner_string"].ToString());
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("ClientID")].SetValue(dr["consumer_first"].ToString());
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("ClientName")].SetValue(dr["consumer_last"].ToString());
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("Start")].SetValue(dr["date_of_birth"].ToString());
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("Finish")].SetValue(dr["address_line_1"].ToString());
-                //    worksheet.Cells[currentRow, reportFormat.GetIndex("Duration")].SetValue(dr["gender"].ToString());
-
-                //    currentRow++;
-                //}
-
-                //for (int i = 0; i < dTable.Columns.Count; i++)
-                //{
-                //    worksheet.Columns[i].AutoFitWidth();
-                //}
+                workbook = util.LoadWorkbook(reportResultSet, reportTitle);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
+
+
             return workbook;
         }
 
@@ -193,7 +145,7 @@ namespace ConsumerMaster
                                      StaffName = staffRow.Field<string>("Staff Name")
                                  };
 
-                DataTable reportResultSet = BuildReportRsultSet();
+                DataTable reportResultSet = BuildReportResultSet();
 
                 foreach (var staff in staffGroup)
                 {
@@ -314,7 +266,7 @@ namespace ConsumerMaster
             return travelTimeDT;
         }
 
-        public DataTable BuildReportRsultSet()
+        public DataTable BuildReportResultSet()
         {
             DataTable reportResultSet = new DataTable();
             reportResultSet.Columns.Add("StaffID", typeof(string));
@@ -334,29 +286,5 @@ namespace ConsumerMaster
             public string StaffName { get; set; }
             public DateTime DateTimeInfo { get; set; }
         };
-
-
-
-        private void PrepareWorksheet(Worksheet worksheet)
-        {
-            try
-            {
-                ConsumerExportFormat cef = new ConsumerExportFormat();
-                string[] columnsList = cef.ColumnStrings;
-
-                foreach (string column in columnsList)
-                {
-                    int columnKey = Array.IndexOf(columnsList, column);
-                    string columnName = column;
-
-                    worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
-                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
     }
 }

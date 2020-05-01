@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <td>
-                    Time & Distance Filename .xlsx (Weekly): 
+                    Time & Distance Filename .xlsx: 
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
@@ -69,7 +69,7 @@
             </tr>
             <tr>
                 <td>
-                    &nbsp;
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel2" runat="server" text="Excel" OnClick="RadButtonTravel_Click2"/>
                 </td>
                 <td>
                     &nbsp;

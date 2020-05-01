@@ -490,6 +490,7 @@
     <Compile Include="AWCReports.aspx.designer.cs">
       <DependentUpon>AWCReports.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ExcelReportFormat.cs" />
     <Compile Include="ClientServiceAuthorizationsFormat.cs" />
     <Compile Include="ClientAuthorizationsFormat.cs" />
     <Compile Include="AWCTravelTimeReportExcelFile.cs" />
