@@ -30,12 +30,15 @@ namespace ConsumerMaster
                     AWC40HoursReportFile payrollReport = new AWC40HoursReportFile();
 
                     UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    AWC40HoursReportFile report = new AWC40HoursReportFile();
+                    Workbook workbook = report.CreateWorkbook(uploadedFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
 
-                    MemoryStream output = payrollReport.CreateDocument(uploadedFile);
+                    //MemoryStream output = payrollReport.CreateDocument(uploadedFile);
 
                     //string fileDate = uploadedFile.FileName.Between("_", ".");
 
-                    utility.DownloadTXTFile(output, outFilename);
+                    //utility.DownloadTXTFile(output, outFilename);
                 }
             }
             catch (Exception ex)

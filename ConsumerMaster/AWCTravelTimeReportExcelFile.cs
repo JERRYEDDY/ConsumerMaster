@@ -19,8 +19,6 @@ namespace ConsumerMaster
             try
             {
                 Utility util = new Utility();
-                AWCTravelTimeReportFormat reportFormat = new AWCTravelTimeReportFormat();
-
                 Stream input = uploadedFile.InputStream;
                 DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
@@ -106,19 +104,17 @@ namespace ConsumerMaster
                     }
                 }
 
-                List<string> reportTitle = new List<string>();
-                reportTitle.Add("Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift. ");
-                reportTitle.Add(String.Format("Date/time: {0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
-                reportTitle.Add(String.Format("Filename: {0}", uploadedFile.FileName));
-                reportTitle.Add(" ");
-
-                workbook = util.LoadWorkbook(reportResultSet, reportTitle);
+                ExcelReportFormat reportFormat = new ExcelReportFormat();
+                reportFormat.Header1 = "Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift.";
+                reportFormat.Header2 = String.Format("Date/time: {0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                reportFormat.Header3 = String.Format("Filename: {0}", uploadedFile.FileName);
+                reportFormat.Header4 = " ";
+                workbook = reportFormat.LoadWorkbook(reportResultSet);
             }
             catch (Exception ex)
             {
                 Logger.Error(ex);
             }
-
 
             return workbook;
         }

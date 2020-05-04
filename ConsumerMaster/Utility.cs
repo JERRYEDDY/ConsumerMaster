@@ -730,47 +730,6 @@ namespace ConsumerMaster
             return result;
         }
 
-        public Workbook LoadWorkbook(DataTable dTable, List<string> reportTitle)
-        {
-            Workbook workbook = new Workbook();
-            workbook.Sheets.Add(SheetType.Worksheet);
-            Worksheet worksheet = workbook.ActiveWorksheet;
-
-            int RowItemStart = 0;
-            int currentRow = RowItemStart;
-
-            foreach (string titleRow in reportTitle)
-            {
-                worksheet.Cells[currentRow, 0].SetValue(titleRow);
-                currentRow++;
-            }
-
-            foreach (DataColumn column in dTable.Columns)
-            {
-                int columnKey = column.Ordinal;
-                worksheet.Cells[currentRow, columnKey].SetValue(column.ColumnName);
-                worksheet.Cells[currentRow, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
-            }
-            currentRow++;
-
-            foreach (DataRow dtRow in dTable.Rows)
-            {
-                foreach (DataColumn dtColumn in dTable.Columns)
-                {
-                    int columnKey = dtColumn.Ordinal;
-                    worksheet.Cells[currentRow, columnKey].SetValue(dtRow[columnKey].ToString());
-                }
-                currentRow++;
-            }
-
-            //for (int i = 0; i < dTable.Columns.Count; i++)
-            //{
-            //    worksheet.Columns[i].AutoFitWidth();
-            //}
-
-            return workbook;
-        }
-
         public void DownloadExcelFile(Workbook workbook, string fileName)
         {
             try
