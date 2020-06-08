@@ -11,7 +11,7 @@ namespace ConsumerMaster
 {
 
 
-    public partial class SiteMaster
+    public partial class SiteOLDMaster
     {
 
         /// <summary>

@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConsumerMaster {
-    
-    
-    public partial class Reports {
-        
+namespace ConsumerMaster
+{
+
+
+    public partial class Reports
+    {
+
         /// <summary>
         /// RadSkinManager1 control.
         /// </summary>
@@ -20,16 +22,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadSkinManager RadSkinManager1;
-        
-        /// <summary>
-        /// RadFormDecorator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadFormDecorator RadFormDecorator1;
-        
+
         /// <summary>
         /// RadAjaxManager1 control.
         /// </summary>
@@ -38,7 +31,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadAjaxManager RadAjaxManager1;
-        
+
         /// <summary>
         /// RadPanelBar1 control.
         /// </summary>
@@ -47,7 +40,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadPanelBar RadPanelBar1;
-        
+
         /// <summary>
         /// ATFPartnerList control.
         /// </summary>
@@ -56,7 +49,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadDropDownList ATFPartnerList;
-        
+
         /// <summary>
         /// RequiredFieldValidator1 control.
         /// </summary>
@@ -65,7 +58,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-        
+
         /// <summary>
         /// StartDatePicker control.
         /// </summary>
@@ -74,7 +67,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadDatePicker StartDatePicker;
-        
+
         /// <summary>
         /// RequiredFieldValidator2 control.
         /// </summary>
@@ -83,7 +76,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-        
+
         /// <summary>
         /// EndDatePicker control.
         /// </summary>
@@ -92,7 +85,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadDatePicker EndDatePicker;
-        
+
         /// <summary>
         /// RequiredFieldValidator3 control.
         /// </summary>
@@ -101,7 +94,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-        
+
         /// <summary>
         /// CompareValidator1 control.
         /// </summary>
@@ -110,7 +103,7 @@ namespace ConsumerMaster {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
-        
+
         /// <summary>
         /// RadButton6 control.
         /// </summary>

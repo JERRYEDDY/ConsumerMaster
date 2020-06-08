@@ -3,11 +3,13 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+<link href="Styles/Flexbox.css" rel="stylesheet" />
  <style>
 .content {
     display: grid;
     grid-template-columns:repeat(5, 1fr);
 }
+body { padding-top: 70px; }
 </style>   
 <h4>Home</h4>
 <div class="content">

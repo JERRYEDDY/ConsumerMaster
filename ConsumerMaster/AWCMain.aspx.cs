@@ -257,7 +257,7 @@ namespace ConsumerMaster
 //    }
 //}
 
-public DataTable GetDataTable(string queryString)
+        public DataTable GetDataTable(string queryString)
         {
             DataTable dataTable = new DataTable();
             string connectionString = "Data Source=ITSQLX1\\ITDBVRTX1;Initial Catalog=NetsmartReports;Integrated Security=true;";

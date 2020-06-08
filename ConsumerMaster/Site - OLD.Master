@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="ConsumerMaster.SiteMaster" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site - OLD.Master.cs" Inherits="ConsumerMaster.SiteOLDMaster" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -33,63 +33,24 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="Default.aspx">
-                    <img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/>
-                    ConsumerMaster
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="Default">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Programs
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="AWCMain">Agency With Choice</a>
-                                <a class="dropdown-item" href="ATFMain">Adult Training Facility</a>
-                                <a class="dropdown-item" href="EIMain">Early Intervention</a>
-                                <a class="dropdown-item" href="ResidentialMain">Residential</a>
-                                <a class="dropdown-item" href="VendorMain">Vendor</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Consumers">Consumers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="RenderingProviders">Rendering Providers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ReferringProviders">Referring Providers</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Reports
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="Reports">Reports</a>
-                                <a class="dropdown-item" href="ClientConversionMain">Client Conversion</a>
-                                <a class="dropdown-item" href="NSStaffImportMain">Staff Import</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-<%--        <div class="navbar navbar-dark navbar-fixed-top bg-dark">
+        <div class="navbar navbar-dark navbar-fixed-top bg-dark">
             <div class="container">
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a class="navbar-brand" runat="server" href="~/Default.aspx">ConsumerMaster</a>
+<%--                <div class="navbar-header">
+                    <div class="navbar-header pull-left">
+                        <a class="navbar-brand" href="Default.aspx"><img src="Images/PathwaysLogo.png" style="height:35px; width: 141px"/></a>
+                    </div>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand" runat="server" href="~/Default.aspx">ConsumerMaster</a>
+                </div>--%>
+
+
+
                 <div class="navbar-collapse collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav mr-auto">
                         <li class="nav-item"><a runat="server" href="~/Default">Home</a></li>
@@ -119,7 +80,7 @@
                     </ul>
                 </div>
             </div>
-        </div>--%>
+        </div>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
             <hr />

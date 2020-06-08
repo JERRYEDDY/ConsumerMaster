@@ -3,14 +3,17 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
-    <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />
-    <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-    </telerik:RadAjaxManager>
+<link href="Styles/Flexbox.css" rel="stylesheet" />
+<style type="text/css">
+    body { padding-top: 70px; }
+</style>
+<telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
+<%--<telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />--%>
+<telerik:RadAjaxManager ID="RadAjaxManager1" runat="server"></telerik:RadAjaxManager>
     <h4>Reports</h4>
     <div class="demo-container no-bg">
-    <div id="grid">
-    </div>
+<%--    <div id="grid">
+    </div>--%>
     <div>
         <br/>
         <telerik:RadPanelBar ID="RadPanelBar1" runat="server"></telerik:RadPanelBar>

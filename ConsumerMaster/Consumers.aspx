@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <link href="Styles/Flexbox.css" rel="stylesheet" />
+<%--    <link href="Styles/Flexbox.css" rel="stylesheet" />--%>
     <style type="text/css">
         .textBoxLabel {
             display: block !important;
@@ -13,8 +13,9 @@
             text-align: center;
             background: #1abc9c;
         }
+        body { padding-top: 70px; }
     </style>
-    <script type="text/javascript" language="javascript"> 
+    <script type="text/javascript" > 
         function RowClick(sender, eventArgs)  
         {  
             var tableView = eventArgs.get_tableView();   
@@ -34,11 +35,9 @@
             </telerik:AjaxSetting>
         </AjaxSettings>
     </telerik:RadAjaxManager>
-    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"></telerik:RadAjaxLoadingPanel>
-    <telerik:RadFormDecorator RenderMode="Lightweight" ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone" />
+    <h4>Consumers</h4>
     <div class="demo-container no-bg">
-        <h5><strong>CONSUMERS:</strong></h5>
-        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="15"  AutoGenerateColumns="False" 
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1" runat="server" AllowPaging="true" PageSize="15"  AutoGenerateColumns="False" Width="1200px"
                          OnNeedDataSource="RadGrid1_NeedDataSource" OnInsertCommand="RadGrid1_InsertCommand" OnUpdateCommand="RadGrid1_UpdateCommand" OnDeleteCommand="RadGrid1_DeleteCommand"                        
                          AllowFilteringByColumn="true" AllowSorting="true">
             <MasterTableView CommandItemDisplay="Top" Name="Consumers" DataKeyNames="consumer_internal_number" EditMode="EditForms">

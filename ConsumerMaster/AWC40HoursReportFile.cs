@@ -15,7 +15,6 @@ namespace ConsumerMaster
         {
             Workbook workbook = new Workbook();
 
-
             try
             {
                 Utility util = new Utility();
@@ -38,7 +37,7 @@ namespace ConsumerMaster
                                 Hours = TD.Sum(v => v.Field<int>("Duration") / 60.00)
                             };
 
-                                DataTable reportResultSet = BuildReportResultSet();
+                DataTable reportResultSet = BuildReportResultSet();
                 foreach (var staff in query)
                 {
                     string name = staff.Name.Replace("\t", "");

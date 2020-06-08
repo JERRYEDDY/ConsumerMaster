@@ -255,6 +255,7 @@
   <ItemGroup>
     <Content Include="ATFMain.aspx" />
     <Content Include="AWCReports.aspx" />
+    <Content Include="ClientConversionMain.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -262,7 +263,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="NSStaffImportMain.aspx" />
-    <Content Include="ClientConversionMain.aspx" />
     <Content Include="Images\BlankLogo.png" />
     <Content Include="Images\PWLogo.png" />
     <Content Include="Images\VendorLogo.png" />
@@ -490,12 +490,26 @@
     <Compile Include="AWCReports.aspx.designer.cs">
       <DependentUpon>AWCReports.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ClientConversionMain.aspx.cs">
+      <DependentUpon>ClientConversionMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientConversionMain.aspx.designer.cs">
+      <DependentUpon>ClientConversionMain.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ExcelReportFormat.cs" />
     <Compile Include="ClientServiceAuthorizationsFormat.cs" />
     <Compile Include="ClientAuthorizationsFormat.cs" />
     <Compile Include="AWCTravelTimeReportExcelFile.cs" />
     <Compile Include="AWCTravelTimeReportFormat.cs" />
     <Compile Include="ListToDataTable.cs" />
+    <Compile Include="Site - OLD.Master.cs">
+      <DependentUpon>Site - OLD.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site - OLD.Master.designer.cs">
+      <DependentUpon>Site - OLD.Master</DependentUpon>
+    </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="StaffShifts.cs" />
     <Compile Include="ClientShifts.cs" />
@@ -513,13 +527,6 @@
       <DependentUpon>NSStaffImportMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="NSStaffImportExcelFile.cs" />
-    <Compile Include="ClientConversionMain.aspx.cs">
-      <DependentUpon>ClientConversionMain.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ClientConversionMain.aspx.designer.cs">
-      <DependentUpon>ClientConversionMain.aspx</DependentUpon>
-    </Compile>
     <Compile Include="ClientBenefitsFormat.cs" />
     <Compile Include="NSStaffImportFormat.cs" />
     <Compile Include="ClientDiagnosisFormat.cs" />
@@ -694,6 +701,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Site - OLD.Master" />
     <None Include="Web.Azure.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
