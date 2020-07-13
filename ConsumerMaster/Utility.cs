@@ -17,8 +17,6 @@ using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
 using System.Collections;
-using System.Reflection;
-using Microsoft.Ajax.Utilities;
 
 namespace ConsumerMaster
 {
@@ -374,30 +372,6 @@ namespace ConsumerMaster
 
         public DataTable GetTimeAndDistanceDataTable(Stream input)
         {
-            SPColumn[] spc = new SPColumn[20]
-            {
-                new SPColumn("Staff ID", typeof(string)),
-                new SPColumn("Secondary Staff ID", typeof(string)),
-                new SPColumn("Staff Name", typeof(string) ),
-                new SPColumn("Activity ID", typeof(string)),
-                new SPColumn("Activity Type", typeof(string)),
-                new SPColumn("ID", typeof(string)),
-                new SPColumn("Secondary ID", typeof(string)),
-                new SPColumn("Name", typeof(string)),
-                new SPColumn("Start", typeof(DateTime)),
-                new SPColumn("Finish", typeof(DateTime)),
-                new SPColumn("Duration", typeof(Int32)),
-                new SPColumn("Travel Time", typeof(string)),
-                new SPColumn("TSrc", typeof(string)),
-                new SPColumn("Distance", typeof(string)),
-                new SPColumn("DSrc", typeof(string)),
-                new SPColumn("Phone", typeof(string)),
-                new SPColumn("Service", typeof(string)),
-                new SPColumn("On-call", typeof(string)),
-                new SPColumn("Location", typeof(string)),
-                new SPColumn("Discipline", typeof(string))
-            };
-
             DataTable dataTable = new DataTable();
             try
             {
@@ -405,6 +379,17 @@ namespace ConsumerMaster
                 Workbook InputWorkbook = formatProvider.Import(input);
 
                 var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                SPColumn[] spc = null;
+                if (GetCellData(InputWorksheet, 0, 20) == "Service") //Service
+                {
+                    spc = GetSPColumns20();
+                }
+                else
+                {
+                    spc = GetSPColumns22(); //Billing Code and Payroll Code
+                }
+
                 for (int i = 0; i < spc.Count(); i++)
                 {
                     CellSelection selection = InputWorksheet.Cells[0, i];
@@ -442,10 +427,23 @@ namespace ConsumerMaster
                     values[13] = GetCellData(InputWorksheet, i, 17); //Distance
                     values[14] = GetCellData(InputWorksheet, i, 18); //DSrc
                     values[15] = GetCellData(InputWorksheet, i, 19); //Phone
-                    values[16] = GetCellData(InputWorksheet, i, 20); //Service
-                    values[17] = GetCellData(InputWorksheet, i, 21); //On-call
-                    values[18] = GetCellData(InputWorksheet, i, 22); //Location
-                    values[19] = GetCellData(InputWorksheet, i, 23); //Discipline"
+
+                    if(spc.Count() == 20)
+                    {
+                        values[16] = GetCellData(InputWorksheet, i, 20); //Service
+                        values[17] = GetCellData(InputWorksheet, i, 21); //On-call
+                        values[18] = GetCellData(InputWorksheet, i, 22); //Location
+                        values[19] = GetCellData(InputWorksheet, i, 23); //Discipline
+                    }
+                    else
+                    {
+                        values[16] = GetCellData(InputWorksheet, i, 20); //Billing Code
+                        values[17] = GetCellData(InputWorksheet, i, 21); //Payroll Code
+                        values[18] = GetCellData(InputWorksheet, i, 22); //Service
+                        values[19] = GetCellData(InputWorksheet, i, 23); //On-call
+                        values[20] = GetCellData(InputWorksheet, i, 24); //Location
+                        values[21] = GetCellData(InputWorksheet, i, 25); //Discipline
+                    }
 
                     dataTable.Rows.Add(values);
                 }
@@ -456,6 +454,66 @@ namespace ConsumerMaster
             };
 
             return dataTable;
+        }
+
+        SPColumn[] GetSPColumns20()
+        {
+            SPColumn[] spc = new SPColumn[20]
+            {
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Secondary Staff ID", typeof(string)),
+                new SPColumn("Staff Name", typeof(string) ),
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Secondary ID", typeof(string)),
+                new SPColumn("Name", typeof(string)),
+                new SPColumn("Start", typeof(DateTime)),
+                new SPColumn("Finish", typeof(DateTime)),
+                new SPColumn("Duration", typeof(Int32)),
+                new SPColumn("Travel Time", typeof(string)),
+                new SPColumn("TSrc", typeof(string)),
+                new SPColumn("Distance", typeof(string)),
+                new SPColumn("DSrc", typeof(string)),
+                new SPColumn("Phone", typeof(string)),
+                new SPColumn("Service", typeof(string)),
+                new SPColumn("On-call", typeof(string)),
+                new SPColumn("Location", typeof(string)),
+                new SPColumn("Discipline", typeof(string))
+            };
+
+            return spc;
+        }
+
+        SPColumn[] GetSPColumns22()
+        {
+            SPColumn[] spc = new SPColumn[22]
+            {
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Secondary Staff ID", typeof(string)),
+                new SPColumn("Staff Name", typeof(string) ),
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Secondary ID", typeof(string)),
+                new SPColumn("Name", typeof(string)),
+                new SPColumn("Start", typeof(DateTime)),
+                new SPColumn("Finish", typeof(DateTime)),
+                new SPColumn("Duration", typeof(Int32)),
+                new SPColumn("Travel Time", typeof(string)),
+                new SPColumn("TSrc", typeof(string)),
+                new SPColumn("Distance", typeof(string)),
+                new SPColumn("DSrc", typeof(string)),
+                new SPColumn("Phone", typeof(string)),
+                new SPColumn("Billing Code", typeof(string)), //Billing Code
+                new SPColumn("Payroll Code", typeof(string)), //Payroll Code
+                new SPColumn("Service", typeof(string)),
+                new SPColumn("On-call", typeof(string)),
+                new SPColumn("Location", typeof(string)),
+                new SPColumn("Discipline", typeof(string))
+            };
+
+            return spc;
         }
 
         public DataTable GetClientRosterDataTable(Stream input)

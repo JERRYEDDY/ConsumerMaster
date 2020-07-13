@@ -10,7 +10,6 @@ namespace ConsumerMaster
     public class AWCOverlapReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        //private static readonly int IndexRowItemStart = 0;
 
         public MemoryStream CreateDocument(UploadedFile uploadedFile)
         {
@@ -25,7 +24,6 @@ namespace ConsumerMaster
                 streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
                 streamWriter.WriteLine(" ");
-                //streamWriter.WriteLine("{0,-10} {1,-30} {2,-10} {3,-30} {4,-22} {5,-22} {6,-10}", "ClientID", "ClientName", "StaffID", "StaffName","Start","Finish","Duration");
                 streamWriter.WriteLine("{0,-22} {1,-22} {2,-22} {3,-22} {4,-10}", "ClientName", "StaffName", "Start", "Finish", "Duration");
 
                 var groupedByClientId = dTable.AsEnumerable().GroupBy(row => row.Field<string>("ID"));
@@ -47,9 +45,7 @@ namespace ConsumerMaster
 
                     foreach (var shift in overlaps)
                     {
-                        //streamWriter.WriteLine("{0,-10} {1,-30} {2,-10} {3,-30} {4,-22} {5,-22} {6,-10}", shift.ID, shift.Name, shift.StaffID, shift.StaffName, shift.Start, shift.Finish, shift.Duration);
                         streamWriter.WriteLine("{0,-22} {1,-22} {2,-22} {3,-22} {4,-10}", shift.Name, shift.StaffName, shift.Start, shift.Finish, shift.Duration);
-
                     }
                     if (overlaps.Count() > 1)
                     {

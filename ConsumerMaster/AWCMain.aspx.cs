@@ -3,10 +3,7 @@ using Telerik.Web.UI;
 using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
-using System.Linq;
-using Microsoft.Reporting.WebForms;
 using System.Data.SqlClient;
-using System.Configuration;
 
 namespace ConsumerMaster
 {
@@ -89,6 +86,27 @@ namespace ConsumerMaster
             }
         }
 
+        protected void RadButtonMismatchServices_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCMismatchServicesReport.txt";
+            try
+            {
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+                    AWCMismatchedServicesReportFile mismatchedServicesReport = new AWCMismatchedServicesReportFile();
+
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    MemoryStream output = mismatchedServicesReport.CreateDocument(uploadedFile);
+                    utility.DownloadTXTFile(output, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
         protected void RadButton4_Click(object sender, EventArgs e)
         {
             string outFilename = "ClientMemberAuthMailMerge.docx";
@@ -142,49 +160,49 @@ namespace ConsumerMaster
         protected void RadButtonTravel_Click(object sender, EventArgs e)
         {
             string outFilename = "AWCTravelTimeReport.txt";
-            try
-            {
-                if (RadAsyncUpload1.UploadedFiles.Count == 1)
-                {
+            //try
+            //{
+            //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
+            //    {
 
-                    bool shiftFilter = ShiftCheckBox.Checked;
+            //        bool shiftFilter = ShiftCheckBox.Checked;
 
-                    Utility utility = new Utility();
-                    AWCTravelTimeReportFile payrollReport = new AWCTravelTimeReportFile();
+            //        Utility utility = new Utility();
+            //        AWCTravelTimeReportFile payrollReport = new AWCTravelTimeReportFile();
 
-                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-                    MemoryStream output = payrollReport.CreateDocument(uploadedFile, shiftFilter);
-                    utility.DownloadTXTFile(output, outFilename);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
+            //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+            //        MemoryStream output = payrollReport.CreateDocument(uploadedFile, shiftFilter);
+            //        utility.DownloadTXTFile(output, outFilename);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error(ex);
+            //}
         }
 
         protected void RadButtonTravel_Click2(object sender, EventArgs e)
         {
 
             string outFilename = "AWCTravelTimeReport.xlsx";
-            try
-            {
-                if (RadAsyncUpload1.UploadedFiles.Count == 1)
-                {
-                    bool shiftFilter = ShiftCheckBox.Checked;
+            //try
+            //{
+            //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
+            //    {
+            //        bool shiftFilter = ShiftCheckBox.Checked;
 
-                    Utility utility = new Utility();
-                    AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
-                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-                    Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
+            //        Utility utility = new Utility();
+            //        AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
+            //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+            //        Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
 
-                    utility.DownloadExcelFile(workbook, outFilename);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
+            //        utility.DownloadExcelFile(workbook, outFilename);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error(ex);
+            //}
 
         }
 

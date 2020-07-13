@@ -60,31 +60,13 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadButton RadButton3;
 
         /// <summary>
-        /// ShiftCheckBox control.
+        /// RadButtonMismatchServices control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox ShiftCheckBox;
-
-        /// <summary>
-        /// RadButtonTravel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButtonTravel;
-
-        /// <summary>
-        /// RadButtonTravel2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButtonTravel2;
+        protected global::Telerik.Web.UI.RadButton RadButtonMismatchServices;
 
         /// <summary>
         /// RadAsyncClient control.

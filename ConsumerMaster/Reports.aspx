@@ -10,7 +10,7 @@
 <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" />
 <%--<telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecorationZoneID="demo" DecoratedControls="All" EnableRoundedCorners="false" />--%>
 <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server"></telerik:RadAjaxManager>
-    <h4>Reports</h4>
+    <h5>Reports</h5>
     <div class="demo-container no-bg">
 <%--    <div id="grid">
     </div>--%>
