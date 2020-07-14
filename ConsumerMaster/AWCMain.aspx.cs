@@ -94,10 +94,10 @@ namespace ConsumerMaster
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
-                    AWCMismatchedServicesReportFile mismatchedServicesReport = new AWCMismatchedServicesReportFile();
+                    AWCMismatchedServicesReportFile MismatchedServicesReport = new AWCMismatchedServicesReportFile();
 
                     UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-                    MemoryStream output = mismatchedServicesReport.CreateDocument(uploadedFile);
+                    MemoryStream output = MismatchedServicesReport.CreateDocument(uploadedFile);
                     utility.DownloadTXTFile(output, outFilename);
                 }
             }
@@ -132,23 +132,20 @@ namespace ConsumerMaster
 
         protected void RadButton5_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCClientDataIntegrityReport.xlsx";
+            string outFilename = "AWCServiceNoteAuditReport.xlsx";
             try
             {
-                if (RadAsyncUploadClientRoster.UploadedFiles.Count == 1)
+                if (RadAsyncUploadClosedActivities.UploadedFiles.Count == 1)
                 {
-                    UploadedFile clientRosterFile = RadAsyncUploadClientRoster.UploadedFiles[0]; //Client Roster Report
-                    UploadedFile clientAuthorizationListFile = RadAsyncClientAuthorizationList.UploadedFiles[0]; //Client Authorization List
-                    UploadedFile clientStaffListFile = RadAsyncClientStaffList.UploadedFiles[0]; //Client Staff List
+                    UploadedFile closedActivitiesFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Closed Activities Report
+                    UploadedFile auditLogFile = RadAsyncUploadAuditLog.UploadedFiles[0]; //Client Authorization List
+                    //UploadedFile clientStaffListFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Client Staff List
 
                     Utility utility = new Utility();
-                    AWCClientDataIntegrityReportFile report = new AWCClientDataIntegrityReportFile();
-                    Workbook workbook = report.CreateWorkbook(clientRosterFile, clientAuthorizationListFile, clientStaffListFile);
-                    utility.DownloadExcelFile(workbook, outFilename);
-
-                    //UploadedFile memberFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
-                    //UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
-                }
+                    AWCServiceNoteAuditReportFile report = new AWCServiceNoteAuditReportFile();
+                    MemoryStream output = report.CreateDocument(closedActivitiesFile, auditLogFile);
+                    utility.DownloadTXTFile(output, outFilename);
+                 }
             }
             catch (Exception ex)
             {

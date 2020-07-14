@@ -479,7 +479,7 @@
     <Compile Include="AWCServices.cs" />
     <Compile Include="AWCTravelTimeReportFile.cs" />
     <Compile Include="AWCSSPDataIntegrityReportFile.cs" />
-    <Compile Include="AWCClientDataIntegrityReportFile.cs" />
+    <Compile Include="AWCServiceNoteAuditReportFile.cs" />
     <Compile Include="AWCClientMemberAuthorizationReportFile.cs" />
     <Compile Include="AWCClientStaffReportFile.cs" />
     <Compile Include="AWCOverlapReportFile.cs" />

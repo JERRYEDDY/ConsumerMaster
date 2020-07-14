@@ -147,7 +147,7 @@
             </tr>
             <tr>
                 <td>
-                    <h5>Data Integrity Reports</h5>
+                    <h5>Service Note Audit Reports</h5>
                 </td>
                 <td>
                     &nbsp
@@ -156,34 +156,23 @@
             <tr>
             <tr>
                 <td>
-                    Client Roster Filename .xlsx: 
+                    Closed Activities Filename .xlsx: 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadClientRoster" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadClosedActivities" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
                </td>
             </tr>
             <tr>
                 <td>
-                    Client Authorization List Filename .xlsx: 
+                    Audit Log Filename .xlsx: 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncClientAuthorizationList" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadAuditLog" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
                </td>
             </tr>
             <tr>
                 <td>
-                    Client Staff List Filename .xlsx: 
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncClientStaffList" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Client Data Integrity Report
+                    Service Note Audit Report
                 </td>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButton5_Click"/>

@@ -516,6 +516,147 @@ namespace ConsumerMaster
             return spc;
         }
 
+        public DataTable GetAuditLogDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[9]
+            {
+                new SPColumn("Date", typeof(DateTime)),
+                new SPColumn("Who", typeof(string)),
+                new SPColumn("IP Address", typeof(string)),
+                new SPColumn("Subject", typeof(string)),
+                new SPColumn("Action", typeof(string)),
+                new SPColumn("Comment", typeof(string)),
+                new SPColumn("Location", typeof(string)),
+                new SPColumn("Discipline", typeof(string)),
+                new SPColumn("Program", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    CellSelection selection = InputWorksheet.Cells[0, i];
+                    var columnName = "Column" + (i + 1);
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[spc.Count()];
+                    string dateStr = GetCellData(InputWorksheet, i, 0); 
+                    DateTime tDate = Convert.ToDateTime(dateStr);
+                    values[0] = tDate; //Date
+
+                    values[1] = GetCellData(InputWorksheet, i, 1); //Who
+                    values[2] = GetCellData(InputWorksheet, i, 2); //IP Address
+                    values[3] = GetCellData(InputWorksheet, i, 3); //Subject
+                    values[4] = GetCellData(InputWorksheet, i, 4); //Action
+                    values[5] = GetCellData(InputWorksheet, i, 5); //Comment
+                    values[6] = GetCellData(InputWorksheet, i, 6); //Location
+                    values[7] = GetCellData(InputWorksheet, i, 7); //Discipline
+                    values[8] = GetCellData(InputWorksheet, i, 8); //Program
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
+        public DataTable GetClosedActivitiesDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[19]
+            {
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("Activity Source", typeof(string)),
+                new SPColumn("Activity Name", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Executed By", typeof(string)),
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Executed By Type", typeof(string)),
+                new SPColumn("Start Time", typeof(string)),
+                new SPColumn("Stop Time", typeof(string)),
+                new SPColumn("Duration", typeof(string)),
+                new SPColumn("Status", typeof(string)),
+                new SPColumn("Travel To Activity Exported Time", typeof(string)),
+                new SPColumn("Travel To Activity Exported Distance", typeof(string)),
+                new SPColumn("Travel During Activity Exported Time", typeof(string)),
+                new SPColumn("Travel During Activity Exported Distance", typeof(string)),
+                new SPColumn("Travel Info", typeof(string)),
+                new SPColumn("Alerts", typeof(string)),
+                new SPColumn("Location", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    CellSelection selection = InputWorksheet.Cells[0, i];
+                    var columnName = "Column" + (i + 1);
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[spc.Count()];
+
+                    values[0] = GetCellData(InputWorksheet, i, 0); //Activity ID
+                    values[1] = GetCellData(InputWorksheet, i, 1); //Activity Type
+                    values[2] = GetCellData(InputWorksheet, i, 2); //Activity Source
+                    values[3] = GetCellData(InputWorksheet, i, 3); //Activity Name
+                    values[4] = GetCellData(InputWorksheet, i, 4); //ID
+                    values[5] = GetCellData(InputWorksheet, i, 5); //Executed By
+                    values[6] = GetCellData(InputWorksheet, i, 6); //Staff ID
+                    values[7] = GetCellData(InputWorksheet, i, 7); //Executed By Type
+
+                    values[8] = GetCellData(InputWorksheet, i, 8); //Start Time
+                    //string dateStr1 = GetCellData(InputWorksheet, i, 8);
+                    //DateTime tDate1 = Convert.ToDateTime(dateStr1);
+                    //values[8] = tDate1; //Start Time
+
+                    values[9] = GetCellData(InputWorksheet, i, 9); //Stop Time
+                    //string dateStr2 = GetCellData(InputWorksheet, i, 9);
+                    //DateTime tDate2 = Convert.ToDateTime(dateStr2);
+                    //values[9] = tDate2; //Stop Time
+
+                    values[10] = GetCellData(InputWorksheet, i, 10); //Duration
+                    values[11] = GetCellData(InputWorksheet, i, 11); //Status
+                    values[12] = GetCellData(InputWorksheet, i, 12); //Travel To Activity Exported Time
+                    values[13] = GetCellData(InputWorksheet, i, 13); //Travel To Activity Exported Distance
+                    values[14] = GetCellData(InputWorksheet, i, 14); //Travel During Activity Exported Time
+                    values[15] = GetCellData(InputWorksheet, i, 15); //Travel During Activity Exported Distance
+                    values[16] = GetCellData(InputWorksheet, i, 16); //Travel Info
+                    values[17] = GetCellData(InputWorksheet, i, 17); //Alerts
+                    values[18] = GetCellData(InputWorksheet, i, 18); //Location
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
         public DataTable GetClientRosterDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[17]
