@@ -17,6 +17,7 @@ using Telerik.Windows.Documents.Fixed.FormatProviders.Pdf;
 using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace ConsumerMaster
 {
@@ -518,7 +519,7 @@ namespace ConsumerMaster
 
         public DataTable GetAuditLogDataTable(Stream input)
         {
-            SPColumn[] spc = new SPColumn[9]
+            SPColumn[] spc = new SPColumn[11]
             {
                 new SPColumn("Date", typeof(DateTime)),
                 new SPColumn("Who", typeof(string)),
@@ -528,7 +529,9 @@ namespace ConsumerMaster
                 new SPColumn("Comment", typeof(string)),
                 new SPColumn("Location", typeof(string)),
                 new SPColumn("Discipline", typeof(string)),
-                new SPColumn("Program", typeof(string))
+                new SPColumn("Program", typeof(string)),
+                new SPColumn("Start Time", typeof(DateTime)),
+                new SPColumn("Stop Time", typeof(DateTime))
             };
 
             DataTable dataTable = new DataTable();
@@ -548,6 +551,9 @@ namespace ConsumerMaster
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
+                    if (GetCellData(InputWorksheet, i, 4) != "Added a Note to the Activity") //Action
+                        continue;
+
                     var values = new object[spc.Count()];
                     string dateStr = GetCellData(InputWorksheet, i, 0); 
                     DateTime tDate = Convert.ToDateTime(dateStr);
@@ -555,12 +561,33 @@ namespace ConsumerMaster
 
                     values[1] = GetCellData(InputWorksheet, i, 1); //Who
                     values[2] = GetCellData(InputWorksheet, i, 2); //IP Address
-                    values[3] = GetCellData(InputWorksheet, i, 3); //Subject
+
+                    string subjectString = GetCellData(InputWorksheet, i, 3); //Subject
+                    values[3] = subjectString;
+
                     values[4] = GetCellData(InputWorksheet, i, 4); //Action
                     values[5] = GetCellData(InputWorksheet, i, 5); //Comment
                     values[6] = GetCellData(InputWorksheet, i, 6); //Location
                     values[7] = GetCellData(InputWorksheet, i, 7); //Discipline
                     values[8] = GetCellData(InputWorksheet, i, 8); //Program
+
+                    string[] testString = new string[] 
+                    {
+                        "Activity 45 - Unscheduled Client Visit - Aller, Nancy (239, 239) - Jul 1, 2020 1:19 PM - 1:32 PM",
+                        "Activity 42 - Unscheduled Client Visit - Aller, Nancy (239, 239) - Jun 26, 2020 11:28 AM - Jul 1, 2020 8:05 AM"
+                    };
+
+                    string[] subString1 = testString[0].Split('-');
+                    string[] subString2 = testString[1].Split('-');
+
+
+                    string clientID = ParseClientID(subString1[2]);
+
+                    Regex rx = new Regex(@"\((.*)\,");
+                    string clientID2 = rx.Match(subString1[2]).Groups[1].Value;
+
+                    DateTime[] startStopTime1 = Parse2StartStopTime(subString1[3], subString1[4]);
+                    DateTime[] startStopTime2 = Parse2StartStopTime(subString2[3], subString2[4]);
 
                     dataTable.Rows.Add(values);
                 }
@@ -571,6 +598,48 @@ namespace ConsumerMaster
             };
 
             return dataTable;
+        }
+
+        string ParseClientID(string clientString)
+        {
+            string idString = clientString.Split('(', ')')[1];
+
+            string[] clientIDString = idString.Split(',');
+
+            return clientIDString[0];
+        }
+
+
+        DateTime[] Parse2StartStopTime(string startString, string stopString)
+        {
+            DateTime[] startStopTime = new DateTime[2];
+
+            try
+            {
+                if (!DateTime.TryParse(startString, out startStopTime[0]))
+                    Logger.Error("Unable to parse '{0}'.", startString);
+
+                string stopDateTimeString = null;
+                if (stopString.Contains(','))
+                {
+                    stopDateTimeString = stopString;
+                }
+                else
+                {
+                    DateTime dateString = startStopTime[0].Date;
+                    stopDateTimeString = dateString.ToString("MM/dd/yyyy ") + stopString;
+                }
+
+                if (!DateTime.TryParse(stopDateTimeString, out startStopTime[1]))
+                    Logger.Error("Unable to parse '{0}'.", startString);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
+            return startStopTime;
         }
 
         public DataTable GetClosedActivitiesDataTable(Stream input)
@@ -585,8 +654,8 @@ namespace ConsumerMaster
                 new SPColumn("Executed By", typeof(string)),
                 new SPColumn("Staff ID", typeof(string)),
                 new SPColumn("Executed By Type", typeof(string)),
-                new SPColumn("Start Time", typeof(string)),
-                new SPColumn("Stop Time", typeof(string)),
+                new SPColumn("Start Time", typeof(DateTime)),
+                new SPColumn("Stop Time", typeof(DateTime)),
                 new SPColumn("Duration", typeof(string)),
                 new SPColumn("Status", typeof(string)),
                 new SPColumn("Travel To Activity Exported Time", typeof(string)),
@@ -615,6 +684,9 @@ namespace ConsumerMaster
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
+                    if (GetCellData(InputWorksheet, i, 11) != "Finished") //Status
+                        continue;
+
                     var values = new object[spc.Count()];
 
                     values[0] = GetCellData(InputWorksheet, i, 0); //Activity ID
@@ -626,15 +698,13 @@ namespace ConsumerMaster
                     values[6] = GetCellData(InputWorksheet, i, 6); //Staff ID
                     values[7] = GetCellData(InputWorksheet, i, 7); //Executed By Type
 
-                    values[8] = GetCellData(InputWorksheet, i, 8); //Start Time
-                    //string dateStr1 = GetCellData(InputWorksheet, i, 8);
-                    //DateTime tDate1 = Convert.ToDateTime(dateStr1);
-                    //values[8] = tDate1; //Start Time
+                    string dateStr1 = GetCellData(InputWorksheet, i, 8);
+                    DateTime tDate1 = Convert.ToDateTime(dateStr1);
+                    values[8] = tDate1; //Start Time
 
-                    values[9] = GetCellData(InputWorksheet, i, 9); //Stop Time
-                    //string dateStr2 = GetCellData(InputWorksheet, i, 9);
-                    //DateTime tDate2 = Convert.ToDateTime(dateStr2);
-                    //values[9] = tDate2; //Stop Time
+                    string dateStr2 = GetCellData(InputWorksheet, i, 9);
+                    DateTime tDate2 = Convert.ToDateTime(dateStr2);
+                    values[9] = tDate2; //Stop Time
 
                     values[10] = GetCellData(InputWorksheet, i, 10); //Duration
                     values[11] = GetCellData(InputWorksheet, i, 11); //Status

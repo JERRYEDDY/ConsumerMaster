@@ -1,22 +1,10 @@
 ﻿using System;
 using System.Data;
 using Telerik.Web.UI;
-using System.Linq;
 using System.IO;
-using GemBox.Document;
-using Telerik.Windows.Documents.Spreadsheet.Model;
-using System.Windows.Media;
-using Telerik.Windows.Documents.Spreadsheet.Model.Printing;
 
 namespace ConsumerMaster
 {
-    enum CompareMethod
-    {
-        Expected = 0,
-        EqualToZero = 1,
-        NotEqualToOne = 2
-    }
-
     public class AWCServiceNoteAuditReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();

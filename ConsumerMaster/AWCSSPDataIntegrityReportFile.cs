@@ -10,12 +10,12 @@ using Telerik.Windows.Documents.Spreadsheet.Model.Printing;
 
 namespace ConsumerMaster
 {
-    //enum CompareMethod
-    //{
-    //    Expected = 0,
-    //    EqualToZero = 1,
-    //    NotEqualToOne = 2
-    //}
+    enum CompareMethod
+    {
+        Expected = 0,
+        EqualToZero = 1,
+        NotEqualToOne = 2
+    }
 
     public class AWCSSPDataIntegrityReportFile
     {
