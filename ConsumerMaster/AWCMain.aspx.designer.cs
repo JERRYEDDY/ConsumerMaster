@@ -69,42 +69,6 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadButton RadButtonMismatchServices;
 
         /// <summary>
-        /// RadAsyncClient control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncClient;
-
-        /// <summary>
-        /// RadAsyncUploadStaff control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadStaff;
-
-        /// <summary>
-        /// RadAsyncUploadAuthorization control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadAuthorization;
-
-        /// <summary>
-        /// RadButton4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButton4;
-
-        /// <summary>
         /// RadAsyncUploadClosedActivities control.
         /// </summary>
         /// <remarks>

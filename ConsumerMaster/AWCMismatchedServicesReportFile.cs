@@ -60,25 +60,19 @@ namespace ConsumerMaster
                 streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
                 streamWriter.WriteLine(" ");
-                streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} {3,-52} {4,-52} {5,-42}", "ClientName", "StaffName", "Start", "Billing Code", "Payroll Code","Match Status");
+                streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} {3,-52} {4,-52} {5,-32}", "ClientName", "StaffName", "Start", "Billing Code", "Payroll Code","Match Status");
 
                 foreach (DataRow row in dTable.Rows)
                 {
                     int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == row["Billing Code"].ToString());
                     int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == row["Payroll Code"].ToString());
+                    bool isMatched = billingCodeIndex == payrollCodeIndex ? true : false;
 
-                    string matchStatus;
-                    if (billingCodeIndex != payrollCodeIndex)
-                        matchStatus = "MISMATCHED";
-                    else
-                        matchStatus = "MATCHED";
-
-
-                    if (row["Activity Type"].ToString().Contains("UPV"))
+                    if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)
                     {
-                        streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} {3,-6} {4,-42} {5,-6} {6,-42} {7,-22}", row["Name"].ToString(),
-                            row["Staff Name"].ToString(), row["Start"].ToString(), billingCodeIndex, row["Billing Code"].ToString(), 
-                            payrollCodeIndex, row["Payroll Code"].ToString(), matchStatus);
+                        streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} [{3,-2}]{4,-47} [{5,-2}]{6,-47}", row["Name"].ToString(),
+                            row["Staff Name"].ToString(), row["Start"].ToString(), billingCodeIndex.ToString("D2"), row["Billing Code"].ToString(), 
+                            payrollCodeIndex.ToString("D2"), row["Payroll Code"].ToString());
                     }
                 }
 

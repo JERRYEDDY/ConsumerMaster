@@ -107,28 +107,28 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButton4_Click(object sender, EventArgs e)
-        {
-            string outFilename = "ClientMemberAuthMailMerge.docx";
-            try
-            {
-                if (RadAsyncUploadStaff.UploadedFiles.Count == 1)
-                {
-                    Utility utility = new Utility();
-                    AWCClientMemberAuthorizationReportFile otherReport = new AWCClientMemberAuthorizationReportFile();
+        //protected void RadButton4_Click(object sender, EventArgs e)
+        //{
+        //    string outFilename = "ClientMemberAuthMailMerge.docx";
+        //    try
+        //    {
+        //        if (RadAsyncUploadStaff.UploadedFiles.Count == 1)
+        //        {
+        //            Utility utility = new Utility();
+        //            AWCClientMemberAuthorizationReportFile otherReport = new AWCClientMemberAuthorizationReportFile();
 
-                    UploadedFile clientFile = RadAsyncClient.UploadedFiles[0]; //Other Reports
-                    UploadedFile memberFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
-                    UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
-                    MemoryStream output = otherReport.CreateClientMemberAuthorizationDocument(clientFile, memberFile, authorizationFile);
-                    utility.DownloadDocxFile(output, outFilename);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
+        //            UploadedFile clientFile = RadAsyncClient.UploadedFiles[0]; //Other Reports
+        //            UploadedFile memberFile = RadAsyncUploadStaff.UploadedFiles[0]; //Other Reports
+        //            UploadedFile authorizationFile = RadAsyncUploadAuthorization.UploadedFiles[0]; //Other Reports
+        //            MemoryStream output = otherReport.CreateClientMemberAuthorizationDocument(clientFile, memberFile, authorizationFile);
+        //            utility.DownloadDocxFile(output, outFilename);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
 
         protected void RadButton5_Click(object sender, EventArgs e)
         {
