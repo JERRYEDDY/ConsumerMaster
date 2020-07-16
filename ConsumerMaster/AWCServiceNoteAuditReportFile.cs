@@ -19,24 +19,25 @@ namespace ConsumerMaster
             DataTable closedActivitiesTable = util.GetClosedActivitiesDataTable(closedActivitiesInput);
             DataTable auditLogTable = util.GetAuditLogDataTable(auditLogInput);
 
-
-
-            var JoinResult = (from ClosedActivities in closedActivitiesTable.AsEnumerable()
-                           join AuditLog in auditLogTable.AsEnumerable()
-                           on ClosedActivities.Field<string>("Activity ID") equals AuditLog.Field<string>("Activity ID") into tempJoin
+            var JoinResult = (from ca in closedActivitiesTable.AsEnumerable()
+                           join al in auditLogTable.AsEnumerable()
+                           on ca.Field<string>("Activity ID") equals al.Field<string>("Activity ID") into tempJoin
                            from leftJoin in tempJoin.DefaultIfEmpty()
-                           select new 
+                           orderby ca.Field<string>("Activity ID")
+                              select new 
                            { 
-                               CA_ActivityID = ClosedActivities.Field<string>("Activity ID"),
-                               AL_ActivityID = leftJoin.Field<string>("Activity ID"),
-                               CA_ActivityName = ClosedActivities.Field<string>("Activity Name"),
-                               AL_Subject = leftJoin.Field<string>("Subject"),
-                               CA_StartTime = ClosedActivities.Field<DateTime>("Start Time"),
-                               CA_StopTime = ClosedActivities.Field<DateTime>("Stop Time"),
-                               AL_StartTime = leftJoin.Field<DateTime>("Start Time"),
-                               AL_StopTime = leftJoin.Field<DateTime>("Stop Time"),
-                               AL_Action = leftJoin.Field<string>("Action"),
-                               AL_Comment = leftJoin.Field<string>("Comment")
+                               ActivityID = ca.Field<string>("Activity ID"),
+                               ActivityType = ca.Field<string>("Activity Type"),
+                               ActivitySource = ca.Field<string>("Activity Source"),
+                               ClientName = ca.Field<string>("Activity Name"),
+                               StartTime = ca.Field<DateTime>("Start Time"),
+                               StopTime = ca.Field<DateTime>("Stop Time"),
+                               //AL_ActivityID = leftJoin == null ? null : leftJoin.Field<string>("Activity ID"),
+                               //AL_Subject = leftJoin == null ? null : leftJoin.Field<string>("Subject"),
+                               //AL_StartTime = leftJoin == null ? (DateTime?)null : leftJoin.Field<DateTime>("Start Time"),
+                               //AL_StopTime = leftJoin == null ? (DateTime?)null : leftJoin.Field<DateTime>("Stop Time"),
+                               Action = leftJoin == null ? null : leftJoin.Field<string>("Action"),
+                               Comment = leftJoin == null ? null : leftJoin.Field<string>("Comment")
                            }).ToList();
 
             DataTable joinResult = JoinResult.ToDataTable();

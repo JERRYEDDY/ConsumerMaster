@@ -60,7 +60,7 @@ namespace ConsumerMaster
                 streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
                 streamWriter.WriteLine(" ");
-                streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} {3,-52} {4,-52} {5,-32}", "ClientName", "StaffName", "Start", "Billing Code", "Payroll Code","Match Status");
+                streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} {3,-52} {4,-52}", "ClientName", "StaffName", "Start", "Billing Code", "Payroll Code");
 
                 foreach (DataRow row in dTable.Rows)
                 {
