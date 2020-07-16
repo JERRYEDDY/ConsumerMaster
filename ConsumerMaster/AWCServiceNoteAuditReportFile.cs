@@ -2,6 +2,7 @@
 using System.Data;
 using Telerik.Web.UI;
 using System.IO;
+using System.Linq;
 
 namespace ConsumerMaster
 {
@@ -17,6 +18,33 @@ namespace ConsumerMaster
 
             DataTable closedActivitiesTable = util.GetClosedActivitiesDataTable(closedActivitiesInput);
             DataTable auditLogTable = util.GetAuditLogDataTable(auditLogInput);
+
+
+
+            var JoinResult = (from ClosedActivities in closedActivitiesTable.AsEnumerable()
+                           join AuditLog in auditLogTable.AsEnumerable()
+                           on ClosedActivities.Field<string>("Activity ID") equals AuditLog.Field<string>("Activity ID") into tempJoin
+                           from leftJoin in tempJoin.DefaultIfEmpty()
+                           select new 
+                           { 
+                               CA_ActivityID = ClosedActivities.Field<string>("Activity ID"),
+                               AL_ActivityID = leftJoin.Field<string>("Activity ID"),
+                               CA_ActivityName = ClosedActivities.Field<string>("Activity Name"),
+                               AL_Subject = leftJoin.Field<string>("Subject"),
+                               CA_StartTime = ClosedActivities.Field<DateTime>("Start Time"),
+                               CA_StopTime = ClosedActivities.Field<DateTime>("Stop Time"),
+                               AL_StartTime = leftJoin.Field<DateTime>("Start Time"),
+                               AL_StopTime = leftJoin.Field<DateTime>("Stop Time"),
+                               AL_Action = leftJoin.Field<string>("Action"),
+                               AL_Comment = leftJoin.Field<string>("Comment")
+                           }).ToList();
+
+            DataTable joinResult = JoinResult.ToDataTable();
+
+            // or select new { FirstColumn= DataFileInfos.FirstColumn, ... }.ToList();
+
+
+
 
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))
