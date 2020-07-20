@@ -97,8 +97,12 @@ namespace ConsumerMaster
                     AWCMismatchedServicesReportFile MismatchedServicesReport = new AWCMismatchedServicesReportFile();
 
                     UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-                    MemoryStream output = MismatchedServicesReport.CreateDocument(uploadedFile);
-                    utility.DownloadTXTFile(output, outFilename);
+
+                    //MemoryStream output = MismatchedServicesReport.CreateDocument(uploadedFile);
+                    //utility.DownloadTXTFile(output, outFilename);
+
+                    Workbook workbook = MismatchedServicesReport.CreateWorkbook(uploadedFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
                 }
             }
             catch (Exception ex)
