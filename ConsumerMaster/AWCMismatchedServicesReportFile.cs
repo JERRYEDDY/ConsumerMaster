@@ -13,7 +13,9 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
-        //private static readonly int IndexColumnName = 0;
+        
+        string[] columnsName = new string[9] { "Activity ID", "Name", "Staff Name", "Start", "Finish", "BIndex", "Billing Code", "PIndex", "Payroll Code" };
+        Type[] columnsType = new Type[9] { typeof(String), typeof(String), typeof(String), typeof(DateTime), typeof(DateTime), typeof(int), typeof(String), typeof(int), typeof(String) };
 
         string[] billingCodeArray = new string[13]
         {
@@ -74,15 +76,6 @@ namespace ConsumerMaster
 
                     bool isMatched = IsMatched(billingCodeIndex, payrollCodeIndex);
 
-                    //int testBilling = 12;
-                    //int testPayroll = 12;
-
-                    //for (int i = 0; i < 4; i++)
-                    //{
-                    //    int testP = testPayroll + i;
-                    //    bool testMatched = IsMatched(testBilling, testP);
-                    //}
-
                     if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)  //Unscheduled Patient Visit and Mismatched Services
                     {
                         streamWriter.WriteLine("{0,-20} {1,-20} {2,-22} [{3,-2}]{4,-47} [{5,-2}]{6,-47}", row["Name"].ToString(),
@@ -99,7 +92,7 @@ namespace ConsumerMaster
         bool IsMatched(int billingCodeIndex, int payrollCodeIndex)
         {
             bool isMatched;
-            if (billingCodeIndex < 12)  //Billing Code Services from 0 to 11
+            if (billingCodeIndex < 12)  //Billing Code from 0 to 11
                 isMatched = billingCodeIndex == payrollCodeIndex ? true : false;
             else
             {
@@ -123,36 +116,37 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream input = uploadedFile.InputStream;
                 DataTable dTable = util.GetTimeAndDistanceDataTable(input);
+                DataTable mmTable = FindMisMatches(dTable);
+                //DataView mmView = new DataView(mmTable);
+                //mmView.Sort = "Name ASC";
+                //DataTable mmSorted = mmView.ToTable();
 
-                string[] columnsList = new string[5] {"Name", "Staff Name", "Start", "Billing Code", "Payroll Code"};
-                int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, columnsList, uploadedFile);
+                int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, columnsName, uploadedFile);
 
                 int currentRow = IndexRowItemStart + rowCount;
-                foreach (DataRow row in dTable.Rows)
+                foreach (DataRow row in mmTable.Rows)
                 {
-                    int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == row["Billing Code"].ToString());
-                    int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == row["Payroll Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 0].SetValue(row["Activity ID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 1].SetValue(row["Name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Staff Name"].ToString());
 
-                    bool isMatched = IsMatched(billingCodeIndex, payrollCodeIndex);
+                    CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                    sheet1Worksheet.Cells[currentRow, 3].SetFormat(dateCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, 3].SetValue(row["Start"].ToString());
 
-                    if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)  //Unscheduled Patient Visit and Mismatched Services
-                    {
-                        sheet1Worksheet.Cells[currentRow, 0].SetValue(row["Name"].ToString());
-                        sheet1Worksheet.Cells[currentRow, 1].SetValue(row["Staff Name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 4].SetFormat(dateCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, 4].SetValue(row["Finish"].ToString());
 
-                        CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
-                        sheet1Worksheet.Cells[currentRow, 2].SetFormat(dateCellValueFormat);
-                        sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Start"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 5].SetValue(row["BIndex"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 6].SetValue(row["Billing Code"].ToString());
 
-                        sheet1Worksheet.Cells[currentRow, 3].SetValue(row["Billing Code"].ToString());
-                        sheet1Worksheet.Cells[currentRow, 4].SetValue(row["Payroll Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 7].SetValue(row["PIndex"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 8].SetValue(row["Payroll Code"].ToString());
 
-                        currentRow++;
-                    }
-
+                    currentRow++;
                 }
 
-                for (int i = 0; i < dTable.Columns.Count; i++)
+                for (int i = 1; i < mmTable.Columns.Count; i++)  //Start at 1 instead of 0
                 {
                     sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
@@ -162,6 +156,55 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
             return workbook;
+        }
+
+        public DataTable FindMisMatches(DataTable inputTable)
+        {
+            DataTable outputTable = new DataTable();
+
+            try
+            {
+                for(int i=0; i<columnsName.Length; i++)
+                    outputTable.Columns.Add(columnsName[i], columnsType[i]);
+
+                foreach (DataRow row in inputTable.Rows)
+                {
+                    var values = new object[9];
+
+                    int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == row["Billing Code"].ToString());
+                    int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == row["Payroll Code"].ToString());
+
+                    bool isMatched = IsMatched(billingCodeIndex, payrollCodeIndex);
+
+                    if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)  //Unscheduled Patient Visit and Mismatched Billing and Payroll codes
+                    {
+                        if (billingCodeIndex == -1)
+                            continue;
+
+                        values[0] = row["Activity ID"].ToString();
+                        values[1] = row["Name"].ToString();
+                        values[2] = row["Staff Name"].ToString();
+                        values[3] = row["Start"]; //DateTime
+                        values[4] = row["Finish"]; //DateTime
+                        values[5] = billingCodeIndex;  //int
+                        values[6] = row["Billing Code"].ToString();
+                        values[7] = payrollCodeIndex; //int
+                        values[8] = row["Payroll Code"].ToString();
+
+                        outputTable.Rows.Add(values);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
+            DataView mmView = new DataView(outputTable);
+            mmView.Sort = "Name ASC";
+            DataTable mmSorted = mmView.ToTable();
+
+            return mmSorted;
         }
 
         private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnsList, UploadedFile uploadedFile)

@@ -23,10 +23,8 @@ namespace ConsumerMaster
             { "W9798:U4", "Respite 24 HR W/O"}
         };
 
-
         public void BuildAggregatorArray()
         {
-
             for (int i = 0; i < codeNameArray.GetLength(0); i++)
             {
                 for (int j = 0; j < codeNameArray.GetLength(1); j++)
@@ -38,9 +36,6 @@ namespace ConsumerMaster
                     Console.WriteLine(s);
                 }
             }
-
-
-
         }
     }
 }

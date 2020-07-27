@@ -616,7 +616,6 @@ namespace ConsumerMaster
             return clientIDString[0];
         }
 
-
         DateTime[] Parse2StartStopTime(string startString, string stopString)
         {
             DateTime[] startStopTime = new DateTime[2];
