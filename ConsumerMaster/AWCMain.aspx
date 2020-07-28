@@ -60,13 +60,28 @@
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonMismatchServices" runat="server" text="Process" OnClick="RadButtonMismatchServices_Click"/>
                 </td>
+                <td>
+                </td>
             </tr>
             <tr>
                 <td>
                     &nbsp;
                 </td>
+            </tr>
+            <tr>
                 <td>
-                    &nbsp;
+                    Billing Authorizations Filename .xlsx:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Billing Authorization Exception Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonBAException_Click"/>
                </td>
             </tr>
             <tr>

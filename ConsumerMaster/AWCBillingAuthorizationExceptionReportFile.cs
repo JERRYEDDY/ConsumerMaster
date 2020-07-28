@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace ConsumerMaster
 {
-    public class AWCMismatchedServicesReportFile
+    public class AWCBillingAuthorizationExceptionReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
@@ -102,7 +102,8 @@ namespace ConsumerMaster
             }
             return isMatched;
         }
-        public Workbook CreateWorkbook(UploadedFile uploadedFile)
+
+        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile)
         {
             Workbook workbook = new Workbook();
 
@@ -113,14 +114,37 @@ namespace ConsumerMaster
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
 
                 Utility util = new Utility();
-                Stream input = uploadedFile.InputStream;
-                DataTable dTable = util.GetTimeAndDistanceDataTable(input);
-                DataTable mmTable = FindMisMatches(dTable);
+                Stream inputTD = uploadedTDFile.InputStream;
+                Stream inputBA = uploadedBAFile.InputStream;
+
+                DataTable dTDTable = util.GetTDDataTable(inputTD);
+                DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
+
+
+                foreach (DataRow tdRow in dTDTable.Rows)
+                {
+
+                    string clientID = tdRow["ID"].ToString();
+                    string payrollCode = tdRow["Payroll Code"].ToString();
+
+
+                    var query = from myRow in dBATable.AsEnumerable()
+                                  where myRow.Field<string>("id_no") == clientID && 
+                                        myRow.Field<string>("service_name") == payrollCode
+                                  select myRow;
+
+                    foreach (var array in query)
+                    {
+  
+                    }
+                }
+
+                DataTable mmTable = FindMisMatches(dTDTable);
                 //DataView mmView = new DataView(mmTable);
                 //mmView.Sort = "Name ASC";
                 //DataTable mmSorted = mmView.ToTable();
 
-                int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, columnsName, uploadedFile);
+                int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, columnsName, uploadedTDFile);
 
                 int currentRow = IndexRowItemStart + rowCount;
                 foreach (DataRow row in mmTable.Rows)
