@@ -121,25 +121,18 @@ namespace ConsumerMaster
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
 
-                foreach (DataRow tdRow in dTDTable.Rows)
-                {
-
-                    string clientID = tdRow["ID"].ToString();
-                    string payrollCode = tdRow["Payroll Code"].ToString();
+                //foreach (DataRow tdRow in dTDTable.Rows)
+                //{
 
 
-                    var query = from myRow in dBATable.AsEnumerable()
-                                  where myRow.Field<string>("id_no") == clientID && 
-                                        myRow.Field<string>("service_name") == payrollCode
-                                  select myRow;
 
-                    foreach (var array in query)
-                    {
+                //    foreach (var array in query)
+                //    {
   
-                    }
-                }
+                //    }
+                //}
 
-                DataTable mmTable = FindMisMatches(dTDTable);
+                DataTable mmTable = FindMatches(dTDTable, dBATable);
                 //DataView mmView = new DataView(mmTable);
                 //mmView.Sort = "Name ASC";
                 //DataTable mmSorted = mmView.ToTable();
@@ -181,7 +174,7 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        public DataTable FindMisMatches(DataTable inputTable)
+        public DataTable FindMatches(DataTable dTDTable, DataTable dBATable)
         {
             DataTable outputTable = new DataTable();
 
@@ -190,32 +183,52 @@ namespace ConsumerMaster
                 for(int i=0; i<columnsName.Length; i++)
                     outputTable.Columns.Add(columnsName[i], columnsType[i]);
 
-                foreach (DataRow row in inputTable.Rows)
+                foreach (DataRow tdRow in dTDTable.Rows)
                 {
-                    var values = new object[9];
 
-                    int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == row["Billing Code"].ToString());
-                    int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == row["Payroll Code"].ToString());
+                    string clientID = tdRow["ID"].ToString();
+                    string payrollCode = tdRow["Payroll Code"].ToString();
 
-                    bool isMatched = IsMatched(billingCodeIndex, payrollCodeIndex);
 
-                    if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)  //Unscheduled Patient Visit and Mismatched Billing and Payroll codes
+                    var query = from myRow in dBATable.AsEnumerable()
+                                where myRow.Field<string>("id_no") == clientID &&
+                                      myRow.Field<string>("service_name") == payrollCode
+                                select myRow;
+
+                    foreach (var array in query)
                     {
-                        if (billingCodeIndex == -1)
-                            continue;
-
-                        values[0] = row["Activity ID"].ToString();
-                        values[1] = row["Name"].ToString();
-                        values[2] = row["Staff Name"].ToString();
-                        values[3] = row["Start"]; //DateTime
-                        values[4] = row["Finish"]; //DateTime
-                        values[5] = billingCodeIndex;  //int
-                        values[6] = row["Billing Code"].ToString();
-                        values[7] = payrollCodeIndex; //int
-                        values[8] = row["Payroll Code"].ToString();
-
-                        outputTable.Rows.Add(values);
+                        
                     }
+
+                    String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+
+
+                    DataRow[] results = dBATable.Select(condition);
+
+                    //var values = new object[9];
+
+                    //int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == row["Billing Code"].ToString());
+                    //int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == row["Payroll Code"].ToString());
+
+                    //bool isMatched = IsMatched(billingCodeIndex, payrollCodeIndex);
+
+                    //if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)  //Unscheduled Patient Visit and Mismatched Billing and Payroll codes
+                    //{
+                    //    if (billingCodeIndex == -1)
+                    //        continue;
+
+                    //    values[0] = row["Activity ID"].ToString();
+                    //    values[1] = row["Name"].ToString();
+                    //    values[2] = row["Staff Name"].ToString();
+                    //    values[3] = row["Start"]; //DateTime
+                    //    values[4] = row["Finish"]; //DateTime
+                    //    values[5] = billingCodeIndex;  //int
+                    //    values[6] = row["Billing Code"].ToString();
+                    //    values[7] = payrollCodeIndex; //int
+                    //    values[8] = row["Payroll Code"].ToString();
+
+                    //    outputTable.Rows.Add(values);
+                    //}
                 }
             }
             catch (Exception ex)
