@@ -117,36 +117,71 @@ namespace ConsumerMaster
                 Stream inputTD = uploadedTDFile.InputStream;
                 Stream inputBA = uploadedBAFile.InputStream;
 
+                //new SPColumn("Staff ID", typeof(string)),
+                //new SPColumn("Secondary Staff ID", typeof(string)),
+                //new SPColumn("Staff Name", typeof(string)),
+                //new SPColumn("Activity ID", typeof(string)),
+                //new SPColumn("Activity Type", typeof(string)),
+                //new SPColumn("ID", typeof(string)),
+                //new SPColumn("Secondary ID", typeof(string)),
+                //new SPColumn("Name", typeof(string)),
+                //new SPColumn("Start", typeof(DateTime)),
+                //new SPColumn("Finish", typeof(DateTime)),
+                //new SPColumn("Duration", typeof(Int32)),
+                //new SPColumn("Travel Time", typeof(string)),
+                //new SPColumn("TSrc", typeof(string)),
+                //new SPColumn("Distance", typeof(string)),
+                //new SPColumn("DSrc", typeof(string)),
+                //new SPColumn("Phone", typeof(string)),
+                //new SPColumn("Billing Code", typeof(string)), //Billing Code
+                //new SPColumn("Payroll Code", typeof(string)), //Payroll Code
+                //new SPColumn("Service", typeof(string)),
+                //new SPColumn("On-call", typeof(string)),
+                //new SPColumn("Location", typeof(string)),
+                //new SPColumn("Discipline", typeof(string))
+
                 DataTable dTDTable = util.GetTDDataTable(inputTD);
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
-
-                //foreach (DataRow tdRow in dTDTable.Rows)
-                //{
-
-
-
-                //    foreach (var array in query)
-                //    {
-  
-                //    }
-                //}
-
-                DataTable mmTable = FindMatches(dTDTable, dBATable);
-                //DataView mmView = new DataView(mmTable);
-                //mmView.Sort = "Name ASC";
-                //DataTable mmSorted = mmView.ToTable();
+                DataTable noMatchesTable = FindMatches(dTDTable, dBATable);
 
                 int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, columnsName, uploadedTDFile);
 
                 int currentRow = IndexRowItemStart + rowCount;
-                foreach (DataRow row in mmTable.Rows)
+                foreach (DataRow row in noMatchesTable.Rows)
                 {
-                    sheet1Worksheet.Cells[currentRow, 0].SetValue(row["Activity ID"].ToString());
-                    sheet1Worksheet.Cells[currentRow, 1].SetValue(row["Name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 0].SetValue(row["Staff ID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 1].SetValue(row["Secondary Staff ID"].ToString());
                     sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Staff Name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Activity ID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Activity Type"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["ID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Secondary ID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Name"].ToString());
 
                     CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                    sheet1Worksheet.Cells[currentRow, 3].SetFormat(dateCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Start"].ToString());
+
+                    sheet1Worksheet.Cells[currentRow, 3].SetFormat(dateCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Finish"].ToString());
+
+
+
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Duration"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Travel Time"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["TSrc"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Distance"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["DSrc"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Phone"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Billing Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Payroll Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Service"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["On-call"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Location"].ToString());
+                    sheet1Worksheet.Cells[currentRow, 2].SetValue(row["Discipline"].ToString());
+
+                    //CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
                     sheet1Worksheet.Cells[currentRow, 3].SetFormat(dateCellValueFormat);
                     sheet1Worksheet.Cells[currentRow, 3].SetValue(row["Start"].ToString());
 
@@ -162,7 +197,7 @@ namespace ConsumerMaster
                     currentRow++;
                 }
 
-                for (int i = 1; i < mmTable.Columns.Count; i++)  //Start at 1 instead of 0
+                for (int i = 1; i < noMatchesTable.Columns.Count; i++)  //Start at 1 instead of 0
                 {
                     sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
@@ -176,59 +211,23 @@ namespace ConsumerMaster
 
         public DataTable FindMatches(DataTable dTDTable, DataTable dBATable)
         {
-            DataTable outputTable = new DataTable();
+            DataTable noMatchesTable = dTDTable.Clone();
 
             try
             {
-                for(int i=0; i<columnsName.Length; i++)
-                    outputTable.Columns.Add(columnsName[i], columnsType[i]);
-
                 foreach (DataRow tdRow in dTDTable.Rows)
                 {
-
                     string clientID = tdRow["ID"].ToString();
                     string payrollCode = tdRow["Payroll Code"].ToString();
 
-
-                    var query = from myRow in dBATable.AsEnumerable()
-                                where myRow.Field<string>("id_no") == clientID &&
-                                      myRow.Field<string>("service_name") == payrollCode
-                                select myRow;
-
-                    foreach (var array in query)
-                    {
-                        
-                    }
-
                     String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
-
-
                     DataRow[] results = dBATable.Select(condition);
+                    int matchesCount = results.Count();
 
-                    //var values = new object[9];
-
-                    //int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == row["Billing Code"].ToString());
-                    //int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == row["Payroll Code"].ToString());
-
-                    //bool isMatched = IsMatched(billingCodeIndex, payrollCodeIndex);
-
-                    //if (row["Activity Type"].ToString().Contains("UPV") && !isMatched)  //Unscheduled Patient Visit and Mismatched Billing and Payroll codes
-                    //{
-                    //    if (billingCodeIndex == -1)
-                    //        continue;
-
-                    //    values[0] = row["Activity ID"].ToString();
-                    //    values[1] = row["Name"].ToString();
-                    //    values[2] = row["Staff Name"].ToString();
-                    //    values[3] = row["Start"]; //DateTime
-                    //    values[4] = row["Finish"]; //DateTime
-                    //    values[5] = billingCodeIndex;  //int
-                    //    values[6] = row["Billing Code"].ToString();
-                    //    values[7] = payrollCodeIndex; //int
-                    //    values[8] = row["Payroll Code"].ToString();
-
-                    //    outputTable.Rows.Add(values);
-                    //}
+                    if(matchesCount == 0)
+                    {
+                        noMatchesTable.ImportRow(tdRow);
+                    }
                 }
             }
             catch (Exception ex)
@@ -236,11 +235,7 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
 
-            DataView mmView = new DataView(outputTable);
-            mmView.Sort = "Name ASC";
-            DataTable mmSorted = mmView.ToTable();
-
-            return mmSorted;
+            return noMatchesTable;
         }
 
         private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnsList, UploadedFile uploadedFile)
