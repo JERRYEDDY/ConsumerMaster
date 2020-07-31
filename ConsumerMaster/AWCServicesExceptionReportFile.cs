@@ -5,15 +5,14 @@ using Telerik.Web.UI;
 using System.Linq;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Windows.Media;
+using System.Text;
 
 namespace ConsumerMaster
 {
-    public class AWCBillingAuthorizationExceptionReportFile
+    public class AWCServicesExceptionReportFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
-
-        string[] columnsName = new string[13] { "Staff ID", "Staff Name", "Activity ID", "Activity Type", "ID", "Name", "Start", "Finish", "Duration", "Billing Code", "Payroll Code", "Service", "Discipline" };
 
         string[] billingCodeArray = new string[13]
         {
@@ -69,12 +68,12 @@ namespace ConsumerMaster
                 DataTable dTDTable = util.GetTDDataTable(inputTD);
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
-                DataTable noMatchesTable = FindMatches(dTDTable, dBATable);
+                DataTable exceptionsTable = FindAllExceptions(dTDTable, dBATable);
+                string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
-                int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, columnsName, uploadedTDFile);
-
+                int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName);
                 int currentRow = IndexRowItemStart + rowCount;
-                foreach (DataRow row in noMatchesTable.Rows)
+                foreach (DataRow row in exceptionsTable.Rows)
                 {
                     int column = 0;
 
@@ -95,13 +94,12 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Billing Code"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Payroll Code"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Discipline"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
 
                     currentRow++;
                 }
 
-                for (int i = 1; i < noMatchesTable.Columns.Count; i++)  //Start at 1 instead of 0
+                for (int i = 1; i < exceptionsTable.Columns.Count; i++)  //Start at 1 instead of 0
                 {
                     sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
@@ -113,25 +111,30 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        public DataTable FindMatches(DataTable dTDTable, DataTable dBATable)
+        public DataTable BuildExceptionsDataTable()
         {
-            DataTable noMatchesTable = dTDTable.Clone();
+            SPColumn[] spc = new SPColumn[12]
+            {
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Staff Name", typeof(string) ),
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Name", typeof(string)),
+                new SPColumn("Start", typeof(DateTime)),
+                new SPColumn("Finish", typeof(DateTime)),
+                new SPColumn("Duration", typeof(Int32)),
+                new SPColumn("Billing Code", typeof(string)), //Billing Code
+                new SPColumn("Payroll Code", typeof(string)), //Payroll Code
+                new SPColumn("Exception", typeof(string))
+            };
 
+            DataTable dataTable = new DataTable();
             try
             {
-                foreach (DataRow tdRow in dTDTable.Rows)
+                for (int i = 0; i < spc.Count(); i++)
                 {
-                    string clientID = tdRow["ID"].ToString();
-                    string payrollCode = tdRow["Payroll Code"].ToString();
-
-                    String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
-                    DataRow[] results = dBATable.Select(condition);
-                    int matchesCount = results.Count();
-
-                    if(matchesCount == 0)
-                    {
-                        noMatchesTable.ImportRow(tdRow);
-                    }
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
                 }
             }
             catch (Exception ex)
@@ -139,10 +142,83 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
 
-            return noMatchesTable;
+            return dataTable;
         }
 
-        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnsList, UploadedFile uploadedFile)
+        public DataTable FindAllExceptions(DataTable dTDTable, DataTable dBATable)
+        {
+            DataTable exceptionsTable = BuildExceptionsDataTable();
+
+            try
+            {
+                foreach (DataRow tdRow in dTDTable.Rows)
+                {
+                    string clientID = tdRow["ID"].ToString();
+                    string payrollCode = tdRow["Payroll Code"].ToString();
+                    string billingCode = tdRow["Billing Code"].ToString();
+
+                    int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == billingCode);
+                    int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == payrollCode);
+
+                    StringBuilder exceptionsString = new StringBuilder();
+                    bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
+                    if (servicesMismatched)
+                        exceptionsString.Append("Payroll/Billing Code Mismatched; ");
+
+                    String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+                    DataRow[] results = dBATable.Select(condition);
+
+                    int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
+                    if (noBillingAuthorizationCount == 0)
+                        exceptionsString.Append("NO Billing Authorization;");
+
+                    if (noBillingAuthorizationCount == 0 || servicesMismatched)
+                    {
+                        int vIndex = 0;
+                        var values = new object[exceptionsTable.Columns.Count];
+
+                        values[vIndex++] = tdRow["Staff ID"].ToString();
+                        values[vIndex++] = tdRow["Staff Name"].ToString();
+                        values[vIndex++] = tdRow["Activity ID"].ToString();
+                        values[vIndex++] = tdRow["Activity Type"].ToString();
+                        values[vIndex++] = tdRow["ID"].ToString();
+                        values[vIndex++] = tdRow["Name"].ToString();
+                        values[vIndex++] = tdRow["Start"];
+                        values[vIndex++] = tdRow["Finish"];
+                        values[vIndex++] = tdRow["Duration"];
+                        values[vIndex++] = string.Format("[{0}] {1}", billingCodeIndex.ToString(), tdRow["Billing Code"].ToString());
+                        values[vIndex++] = string.Format("[{0}] {1}", payrollCodeIndex.ToString(), tdRow["Payroll Code"].ToString());
+                        values[vIndex++] = exceptionsString;  //Exception
+
+                        exceptionsTable.Rows.Add(values);
+                    }
+            }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
+            return exceptionsTable;
+        }
+
+        bool IsServicesMisMatched(int payrollCodeIndex, int billingCodeIndex) 
+        {
+            bool isMisMatched;
+
+            if (billingCodeIndex < 12)  //Billing Code from 0 to 11
+                isMisMatched = payrollCodeIndex != billingCodeIndex ? true : false;
+            else
+            {
+                if (billingCodeIndex == 12 && Enumerable.Range(12, 15).Contains(payrollCodeIndex))
+                    isMisMatched = false;
+                else
+                    isMisMatched = false;
+            }
+            return isMisMatched;
+        }
+
+        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames, string uploadedTDFileName, string uploadedBAFilename)
         {
             int rowCount = 0;
             try
@@ -150,14 +226,14 @@ namespace ConsumerMaster
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
                 worksheet.Cells[rowCount, 0].SetIsBold(true);
-                worksheet.Cells[rowCount++, 0].SetValue("Billing Authorization Exception Report – show transactions that do not have a corresponding billing authorization service available");
+                worksheet.Cells[rowCount++, 0].SetValue("AWC Services Exception Report – Payroll/Billing Code Mismatched and NO Billing Authorization");
                 worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
-                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}", uploadedFile.FileName));
+                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}; {1}", uploadedTDFileName, uploadedBAFilename));
                 rowCount++;
 
-                foreach (string column in columnsList)
+                foreach (string column in columnNames)
                 {
-                    int columnKey = Array.IndexOf(columnsList, column);
+                    int columnKey = Array.IndexOf(columnNames, column);
                     string columnName = column;
 
                     CellIndex cellIndex = new CellIndex(rowCount, columnKey);

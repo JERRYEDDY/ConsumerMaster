@@ -176,7 +176,26 @@ namespace ConsumerMaster
 
         public DataTable GetEmployeePersonnelDataTable2(UploadedFile file)
         {
-            String[] columns = new string[19] { "P_ACTIVE", "P_EMPNO ", "P_FNAME ", "P_LNAME ", "P_MI ", "P_BIRTH", "P_SSN", "P_SEX ", "P_EMPEMAIL", "P_JOBCODE ", "P_JOBTITLE ", "P_RACE ", "P_LASTHIRE", "P_HCITY", "P_HSTATE", "P_HZIP", "P_HSTREET1", "P_HSTREET2", "P_HCOUNTY" };
+            String[] columns = new string[19] { "P_ACTIVE", 
+                                                "P_EMPNO ", 
+                                                "P_FNAME ", 
+                                                "P_LNAME ", 
+                                                "P_MI ", 
+                                                "P_BIRTH", 
+                                                "P_SSN", 
+                                                "P_SEX ", 
+                                                "P_EMPEMAIL", 
+                                                "P_JOBCODE ", 
+                                                "P_JOBTITLE ", 
+                                                "P_RACE ", 
+                                                "P_LASTHIRE", 
+                                                "P_HCITY", 
+                                                "P_HSTATE", 
+                                                "P_HZIP", 
+                                                "P_HSTREET1", 
+                                                "P_HSTREET2", 
+                                                "P_HCOUNTY" };
+
             DataTable dataTable = new DataTable();
 
             try
@@ -371,194 +390,36 @@ namespace ConsumerMaster
             };
         }
 
-        public DataTable GetTimeAndDistanceDataTable(Stream input)
-        {
-            DataTable dataTable = new DataTable();
-            try
-            {
-                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
-                Workbook InputWorkbook = formatProvider.Import(input);
+        //SPColumn[] GetSPColumns20()
+        //{
+        //    SPColumn[] spc = new SPColumn[20]
+        //    {
+        //        new SPColumn("Staff ID", typeof(string)),
+        //        new SPColumn("Secondary Staff ID", typeof(string)),
+        //        new SPColumn("Staff Name", typeof(string) ),
+        //        new SPColumn("Activity ID", typeof(string)),
+        //        new SPColumn("Activity Type", typeof(string)),
+        //        new SPColumn("ID", typeof(string)),
+        //        new SPColumn("Secondary ID", typeof(string)),
+        //        new SPColumn("Name", typeof(string)),
+        //        new SPColumn("Start", typeof(DateTime)),
+        //        new SPColumn("Finish", typeof(DateTime)),
+        //        new SPColumn("Duration", typeof(Int32)),
+        //        new SPColumn("Travel Time", typeof(string)),
+        //        new SPColumn("TSrc", typeof(string)),
+        //        new SPColumn("Distance", typeof(string)),
+        //        new SPColumn("DSrc", typeof(string)),
+        //        new SPColumn("Phone", typeof(string)),
+        //        new SPColumn("Service", typeof(string)),
+        //        new SPColumn("On-call", typeof(string)),
+        //        new SPColumn("Location", typeof(string)),
+        //        new SPColumn("Discipline", typeof(string))
+        //    };
 
-                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+        //    return spc;
+        //}
 
-                SPColumn[] spc = null;
-                if (GetCellData(InputWorksheet, 0, 20) == "Service") //Service
-                {
-                    spc = GetSPColumns20();
-                }
-                else
-                {
-                    spc = GetSPColumns22(); //Billing Code and Payroll Code
-                }
-
-                for (int i = 0; i < spc.Count(); i++)
-                {
-                    CellSelection selection = InputWorksheet.Cells[0, i];
-                    var columnName = "Column" + (i + 1);
-                    dataTable.Columns.Add(spc[i].name, spc[i].type);
-                }
-
-                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
-                {
-                    var values = new object[spc.Count()];
-                    values[0] = GetCellData(InputWorksheet, i, 0); //Staff ID
-                    values[1] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
-                    values[2] = GetCellData(InputWorksheet, i, 2); //Activity ID
-                    values[3] = GetCellData(InputWorksheet, i, 3); //Secondary Staff ID
-                    values[4] = GetCellData(InputWorksheet, i, 4); //Activity Type
-                    values[5] = GetCellData(InputWorksheet, i, 5); //ID
-                    values[6] = GetCellData(InputWorksheet, i, 6); //Secondary ID"
-
-                    string name = GetCellData(InputWorksheet, i, 7);
-                    values[7] = name.Replace("\"", ""); //Name
-
-                    string combinedStart = GetCellData(InputWorksheet, i, 8) + " " + GetCellData(InputWorksheet, i, 9);
-                    DateTime startDate = Convert.ToDateTime(combinedStart);
-                    values[8] = startDate; //Start
-
-                    string combinedFinish = GetCellData(InputWorksheet, i, 11) + " " + GetCellData(InputWorksheet, i, 12);
-                    DateTime finishDate = Convert.ToDateTime(combinedFinish);
-                    values[9] = finishDate; //Finish
-
-                    string durationStr = GetCellData(InputWorksheet, i, 14);
-                    values[10] = int.Parse(durationStr, System.Globalization.NumberStyles.AllowThousands);  //Duration
-
-                    values[11] = GetCellData(InputWorksheet, i, 15); //Travel Time
-                    values[12] = GetCellData(InputWorksheet, i, 16); //TSrc
-                    values[13] = GetCellData(InputWorksheet, i, 17); //Distance
-                    values[14] = GetCellData(InputWorksheet, i, 18); //DSrc
-                    values[15] = GetCellData(InputWorksheet, i, 19); //Phone
-
-                    if(spc.Count() == 20)
-                    {
-                        values[16] = GetCellData(InputWorksheet, i, 20); //Service
-                        values[17] = GetCellData(InputWorksheet, i, 21); //On-call
-                        values[18] = GetCellData(InputWorksheet, i, 22); //Location
-                        values[19] = GetCellData(InputWorksheet, i, 23); //Discipline
-                    }
-                    else
-                    {
-                        values[16] = GetCellData(InputWorksheet, i, 20); //Billing Code
-                        values[17] = GetCellData(InputWorksheet, i, 21); //Payroll Code
-                        values[18] = GetCellData(InputWorksheet, i, 22); //Service
-                        values[19] = GetCellData(InputWorksheet, i, 23); //On-call
-                        values[20] = GetCellData(InputWorksheet, i, 24); //Location
-                        values[21] = GetCellData(InputWorksheet, i, 25); //Discipline
-                    }
-
-                    dataTable.Rows.Add(values);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            };
-
-            return dataTable;
-        }
-
-        public DataTable GetTDDataTable(Stream input)
-        {
-            DataTable dataTable = new DataTable();
-            try
-            {
-                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
-                Workbook InputWorkbook = formatProvider.Import(input);
-
-                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
-
-                SPColumn[] spc = GetSPColumns22(); //Billing Code and Payroll Code
-
-                for (int i = 0; i < spc.Count(); i++)
-                {
-                    CellSelection selection = InputWorksheet.Cells[0, i];
-                    var columnName = "Column" + (i + 1);
-                    dataTable.Columns.Add(spc[i].name, spc[i].type);
-                }
-
-                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
-                {
-                    if (string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 20)) && //Billing Code
-                        string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 21))) //Payroll Code
-                        continue;
-
-                    var values = new object[spc.Count()];
-                    values[0] = GetCellData(InputWorksheet, i, 0); //Staff ID
-                    values[1] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
-                    values[2] = GetCellData(InputWorksheet, i, 2); //Activity ID
-                    values[3] = GetCellData(InputWorksheet, i, 3); //Secondary Staff ID
-                    values[4] = GetCellData(InputWorksheet, i, 4); //Activity Type
-                    values[5] = GetCellData(InputWorksheet, i, 5); //ID
-                    values[6] = GetCellData(InputWorksheet, i, 6); //Secondary ID"
-
-                    string name = GetCellData(InputWorksheet, i, 7);
-                    values[7] = name.Replace("\"", ""); //Name
-
-                    string combinedStart = GetCellData(InputWorksheet, i, 8) + " " + GetCellData(InputWorksheet, i, 9);
-                    DateTime startDate = Convert.ToDateTime(combinedStart);
-                    values[8] = startDate; //Start
-
-                    string combinedFinish = GetCellData(InputWorksheet, i, 11) + " " + GetCellData(InputWorksheet, i, 12);
-                    DateTime finishDate = Convert.ToDateTime(combinedFinish);
-                    values[9] = finishDate; //Finish
-
-                    string durationStr = GetCellData(InputWorksheet, i, 14);
-                    values[10] = int.Parse(durationStr, System.Globalization.NumberStyles.AllowThousands);  //Duration
-
-                    values[11] = GetCellData(InputWorksheet, i, 15); //Travel Time
-                    values[12] = GetCellData(InputWorksheet, i, 16); //TSrc
-                    values[13] = GetCellData(InputWorksheet, i, 17); //Distance
-                    values[14] = GetCellData(InputWorksheet, i, 18); //DSrc
-                    values[15] = GetCellData(InputWorksheet, i, 19); //Phone
-
-                    values[16] = GetCellData(InputWorksheet, i, 20); //Billing Code
-                    values[17] = GetCellData(InputWorksheet, i, 21); //Payroll Code
-                    values[18] = GetCellData(InputWorksheet, i, 22); //Service
-                    values[19] = GetCellData(InputWorksheet, i, 23); //On-call
-                    values[20] = GetCellData(InputWorksheet, i, 24); //Location
-                    values[21] = GetCellData(InputWorksheet, i, 25); //Discipline
-
-                    dataTable.Rows.Add(values);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            };
-
-            return dataTable;
-        }
-
-        SPColumn[] GetSPColumns20()
-        {
-            SPColumn[] spc = new SPColumn[20]
-            {
-                new SPColumn("Staff ID", typeof(string)),
-                new SPColumn("Secondary Staff ID", typeof(string)),
-                new SPColumn("Staff Name", typeof(string) ),
-                new SPColumn("Activity ID", typeof(string)),
-                new SPColumn("Activity Type", typeof(string)),
-                new SPColumn("ID", typeof(string)),
-                new SPColumn("Secondary ID", typeof(string)),
-                new SPColumn("Name", typeof(string)),
-                new SPColumn("Start", typeof(DateTime)),
-                new SPColumn("Finish", typeof(DateTime)),
-                new SPColumn("Duration", typeof(Int32)),
-                new SPColumn("Travel Time", typeof(string)),
-                new SPColumn("TSrc", typeof(string)),
-                new SPColumn("Distance", typeof(string)),
-                new SPColumn("DSrc", typeof(string)),
-                new SPColumn("Phone", typeof(string)),
-                new SPColumn("Service", typeof(string)),
-                new SPColumn("On-call", typeof(string)),
-                new SPColumn("Location", typeof(string)),
-                new SPColumn("Discipline", typeof(string))
-            };
-
-            return spc;
-        }
-
-        SPColumn[] GetSPColumns22()
+        SPColumn[] GetSPColumns()
         {
             SPColumn[] spc = new SPColumn[22]
             {
@@ -588,6 +449,151 @@ namespace ConsumerMaster
 
             return spc;
         }
+
+        public DataTable GetTimeAndDistanceDataTable(Stream input)
+        {
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                SPColumn[] spc = GetSPColumns();
+
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    CellSelection selection = InputWorksheet.Cells[0, i];
+                    var columnName = "Column" + (i + 1);
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    int vIndex = 0;
+
+                    var values = new object[spc.Count()];
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 0); //Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 2); //Activity ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 3); //Secondary Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 4); //Activity Type
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 5); //ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 6); //Secondary ID"
+
+                    string name = GetCellData(InputWorksheet, i, 7);
+                    values[vIndex++] = name.Replace("\"", ""); //Name
+
+                    string combinedStart = GetCellData(InputWorksheet, i, 8) + " " + GetCellData(InputWorksheet, i, 9);
+                    DateTime startDate = Convert.ToDateTime(combinedStart);
+                    values[vIndex++] = startDate; //Start
+
+                    string combinedFinish = GetCellData(InputWorksheet, i, 11) + " " + GetCellData(InputWorksheet, i, 12);
+                    DateTime finishDate = Convert.ToDateTime(combinedFinish);
+                    values[vIndex++] = finishDate; //Finish
+
+                    string durationStr = GetCellData(InputWorksheet, i, 14);
+                    values[vIndex++] = int.Parse(durationStr, System.Globalization.NumberStyles.AllowThousands);  //Duration
+
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 15); //Travel Time
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 16); //TSrc
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 17); //Distance
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 18); //DSrc
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 19); //Phone
+
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 20); //Billing Code
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 21); //Payroll Code
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 22); //Service
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 23); //On-call
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 24); //Location
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 25); //Discipline
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
+        public DataTable GetTDDataTable(Stream input)
+        {
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                SPColumn[] spc = GetSPColumns(); //Billing Code and Payroll Code
+
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    CellSelection selection = InputWorksheet.Cells[0, i];
+                    var columnName = "Column" + (i + 1);
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    int vIndex = 0;
+
+                    if (string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 20)) && //Billing Code
+                        string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 21))) //Payroll Code
+                        continue;
+
+                    var values = new object[spc.Count()];
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 0); //Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 2); //Activity ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 3); //Secondary Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 4); //Activity Type
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 5); //ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 6); //Secondary ID"
+
+                    string name = GetCellData(InputWorksheet, i, 7);
+                    values[vIndex++] = name.Replace("\"", ""); //Name
+
+                    string combinedStart = GetCellData(InputWorksheet, i, 8) + " " + GetCellData(InputWorksheet, i, 9);
+                    DateTime startDate = Convert.ToDateTime(combinedStart);
+                    values[vIndex++] = startDate; //Start
+
+                    string combinedFinish = GetCellData(InputWorksheet, i, 11) + " " + GetCellData(InputWorksheet, i, 12);
+                    DateTime finishDate = Convert.ToDateTime(combinedFinish);
+                    values[vIndex++] = finishDate; //Finish
+
+                    string durationStr = GetCellData(InputWorksheet, i, 14);
+                    values[vIndex++] = int.Parse(durationStr, System.Globalization.NumberStyles.AllowThousands);  //Duration
+
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 15); //Travel Time
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 16); //TSrc
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 17); //Distance
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 18); //DSrc
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 19); //Phone
+
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 20); //Billing Code
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 21); //Payroll Code
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 22); //Service
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 23); //On-call
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 24); //Location
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 25); //Discipline
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
 
         public DataTable GetAuditLogDataTable(Stream input)
         {

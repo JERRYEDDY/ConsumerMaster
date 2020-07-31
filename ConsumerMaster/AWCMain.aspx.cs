@@ -86,42 +86,21 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButtonMismatchServices_Click(object sender, EventArgs e)
+
+        protected void RadButtonServicesException_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCMismatchServicesReport.txt";
-            try
-            {
-                if (RadAsyncUpload1.UploadedFiles.Count == 1)
-                {
-                    Utility utility = new Utility();
-                    AWCMismatchedServicesReportFile MismatchedServicesReport = new AWCMismatchedServicesReportFile();
-
-                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-
-                    Workbook workbook = MismatchedServicesReport.CreateWorkbook(uploadedFile);
-                    utility.DownloadExcelFile(workbook, outFilename);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        protected void RadButtonBAException_Click(object sender, EventArgs e)
-        {
-            string outFilename = "AWCBAExceptionReport.txt";
+            string outFilename = "AWCServicesExceptionReport.txt";
             try
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
-                    AWCBillingAuthorizationExceptionReportFile BAExceptionReport = new AWCBillingAuthorizationExceptionReportFile();
+                    AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
 
                     UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
                     UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //Billing Authorization File
 
-                    Workbook workbook = BAExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
+                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }

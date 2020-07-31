@@ -55,16 +55,6 @@
             </tr>
             <tr>
                 <td>
-                    Mismatched Services Report
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonMismatchServices" runat="server" text="Process" OnClick="RadButtonMismatchServices_Click"/>
-                </td>
-                <td>
-                </td>
-            </tr>
-            <tr>
-                <td>
                     &nbsp;
                 </td>
             </tr>
@@ -78,19 +68,26 @@
             </tr>
             <tr>
                 <td>
-                    Billing Authorization Exception Report
+                    Service Exception Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonBAException_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonServicesException_Click"/>
                </td>
             </tr>
             <tr>
                 <td>
                     &nbsp;
                 </td>
+            </tr>
+            <tr style="border-bottom:1px solid black">
+                <td colspan="100%">
+                </td>
+            </tr>
+            <tr> ... </tr>
+            <tr>
                 <td>
                     &nbsp;
-               </td>
+                </td>
             </tr>
             <tr>
                 <td>
