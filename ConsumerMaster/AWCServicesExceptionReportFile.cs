@@ -16,39 +16,59 @@ namespace ConsumerMaster
 
         string[] billingCodeArray = new string[13]
         {
-                "ODP / W1726 / Companion W/B",
-                "ODP / W1726:U4 / Companion W/O",
-                "ODP/ W7061 / H&C 1:1 Degreed Staff",
-                "ODP / W7060 / H&C 1:1 W/B",
-                "ODP / W7060:U4 / H&C 1:1 W/O",
-                "ODP / W7069 / H&C 2:1 Enhanced W/B",
-                "ODP / W7068 / H&C 2:1 W/B",
-                "ODP / W9863 / Respite 1:1 Enhanced 15 min W/B",
-                "ODP / W9862 / Respite 15 min W/B",
-                "ODP / W9862:U4 / Respite 15 min W/O",
-                "ODP / W9798 / Respite 24HR W/B",
-                "ODP / W9798:U4/ Respite 24 HR W/O",
-                "Supported Employment (All)"
+            "ODP / W1726 / Companion W/B",
+            "ODP / W1726:U4 / Companion W/O",
+            "ODP/ W7061 / H&C 1:1 Degreed Staff",
+            "ODP / W7060 / H&C 1:1 W/B",
+            "ODP / W7060:U4 / H&C 1:1 W/O",
+            "ODP / W7069 / H&C 2:1 Enhanced W/B",
+            "ODP / W7068 / H&C 2:1 W/B",
+            "ODP / W9863 / Respite 1:1 Enhanced 15 min W/B",
+            "ODP / W9862 / Respite 15 min W/B",
+            "ODP / W9862:U4 / Respite 15 min W/O",
+            "ODP / W9798 / Respite 24HR W/B",
+            "ODP / W9798:U4/ Respite 24 HR W/O",
+            "Supported Employment (All)"
         };
 
         string[] payrollCodeArray = new string[16]
         {
-                "Companion W/B (W1726)",
-                "Companion W/O (W1726:U4)",
-                "H&C 1:1 Degreed Staff (W7061)",
-                "H&C 1:1 W/B (W7060)",
-                "H&C 1:1 W/O (W7060:U4)",
-                "H&C 2:1 Enhanced W/B (W7069)",
-                "H&C 2:1 W/B (W7068)",
-                "Respite 1:1 Enhanced 15 min W/B (W9863)",
-                "Respite 15 min W/B (W9862)",
-                "Respite 15 min W/O (W9862:U4)",
-                "Respite 24HR W/B (W9798)",
-                "Respite 24 HR W/O (W9798:U4)",
-                "SE Career Assessment W/B (W7235)",
-                "SE Job Coach W/B (W9794)",
-                "SE Job Coach W/O (W9794:U4)",
-                "SE Job Find W/B (H2023)"
+            "Companion W/B (W1726)",
+            "Companion W/O (W1726:U4)",
+            "H&C 1:1 Degreed Staff (W7061)",
+            "H&C 1:1 W/B (W7060)",
+            "H&C 1:1 W/O (W7060:U4)",
+            "H&C 2:1 Enhanced W/B (W7069)",
+            "H&C 2:1 W/B (W7068)",
+            "Respite 1:1 Enhanced 15 min W/B (W9863)",
+            "Respite 15 min W/B (W9862)",
+            "Respite 15 min W/O (W9862:U4)",
+            "Respite 24HR W/B (W9798)",
+            "Respite 24 HR W/O (W9798:U4)",
+            "SE Career Assessment W/B (W7235)",
+            "SE Job Coach W/B (W9794)",
+            "SE Job Coach W/O (W9794:U4)",
+            "SE Job Find W/B (H2023)"
+        };
+
+        string[] serviceCodeArray = new string[16]
+        {
+            "(W1726): Companion W/B",
+            "(W1726:U4): Companion W/O",
+            "(W7061): H&C 1:1 Degreed Staff",
+            "(W7060): H&C 1:1 W/B",
+            "(W7060:U4): H&C 1:1 W/O",
+            "(W7069): H&C 2:1 Enhanced W/B",
+            "(W7068): H&C 2:1 W/B",
+            "(W9863):Respite 1:1 Enhanced 15 min W/B",
+            "(W9862):Respite 15 min W/B",
+            "(W9862:U4):Respite 15 min W/O",
+            "(W9798):Respite 24HR W/B",
+            "(W9798:U4):Respite 24 HR W/O",
+            "(W7235):SE Career Assessment W/B",
+            "(W9794): SE Job Coach W/B",
+            "(W9794:U4):SE Job Coach W/O",
+            "(H2023):SE Job Find W/B"
         };
 
         public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile)
@@ -65,10 +85,13 @@ namespace ConsumerMaster
                 Stream inputTD = uploadedTDFile.InputStream;
                 Stream inputBA = uploadedBAFile.InputStream;
 
-                DataTable dTDTable = util.GetTDDataTable(inputTD);
+                DataTable tempTable = util.GetUPVTDDataTable(inputTD);
+                tempTable.DefaultView.Sort = "Name, Start";
+                DataTable dUPVTDTable = tempTable.DefaultView.ToTable();  //Sort by Client Name and Start DateTime
+
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
-                DataTable exceptionsTable = FindAllExceptions(dTDTable, dBATable);
+                DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
                 int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName);
@@ -77,12 +100,9 @@ namespace ConsumerMaster
                 {
                     int column = 0;
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Staff ID"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Staff Name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Activity ID"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Activity Type"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ID"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Name"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Activity ID"].ToString());
 
                     CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
                     sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
@@ -94,6 +114,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Billing Code"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Payroll Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
 
                     currentRow++;
@@ -113,19 +134,17 @@ namespace ConsumerMaster
 
         public DataTable BuildExceptionsDataTable()
         {
-            SPColumn[] spc = new SPColumn[12]
+            SPColumn[] spc = new SPColumn[10]
             {
-                new SPColumn("Staff ID", typeof(string)),
-                new SPColumn("Staff Name", typeof(string) ),
-                new SPColumn("Activity ID", typeof(string)),
-                new SPColumn("Activity Type", typeof(string)),
                 new SPColumn("ID", typeof(string)),
                 new SPColumn("Name", typeof(string)),
+                new SPColumn("Activity ID", typeof(string)),
                 new SPColumn("Start", typeof(DateTime)),
                 new SPColumn("Finish", typeof(DateTime)),
                 new SPColumn("Duration", typeof(Int32)),
                 new SPColumn("Billing Code", typeof(string)), //Billing Code
                 new SPColumn("Payroll Code", typeof(string)), //Payroll Code
+                new SPColumn("Service", typeof(string)), //Service
                 new SPColumn("Exception", typeof(string))
             };
 
@@ -156,43 +175,69 @@ namespace ConsumerMaster
                     string clientID = tdRow["ID"].ToString();
                     string payrollCode = tdRow["Payroll Code"].ToString();
                     string billingCode = tdRow["Billing Code"].ToString();
+                    string serviceCode = tdRow["Service"].ToString();
 
                     int billingCodeIndex = Array.FindIndex(billingCodeArray, m => m == billingCode);
                     int payrollCodeIndex = Array.FindIndex(payrollCodeArray, m => m == payrollCode);
+                    int serviceCodeIndex = Array.FindIndex(serviceCodeArray, m => m == serviceCode);
 
                     StringBuilder exceptionsString = new StringBuilder();
-                    bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
-                    if (servicesMismatched)
-                        exceptionsString.Append("Payroll/Billing Code Mismatched; ");
 
-                    String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
-                    DataRow[] results = dBATable.Select(condition);
 
-                    int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
-                    if (noBillingAuthorizationCount == 0)
-                        exceptionsString.Append("NO Billing Authorization;");
+                    
 
-                    if (noBillingAuthorizationCount == 0 || servicesMismatched)
+                    if(serviceCodeIndex == -1)
                     {
-                        int vIndex = 0;
+                        string pCode = payrollCodeArray[serviceCodeIndex].ToString();
+                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
+                        DataRow[] results = dBATable.Select(condition);
+                        int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
+                        if (noBillingAuthorizationCount == 0)
+                            exceptionsString.Append("NO BILLING Authorization;");
+                    }
+                    else
+                    {
+
+
+
+                    }
+
+
+
+
+
+
+
+                    //bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
+                    //if (servicesMismatched)
+                    //    exceptionsString.Append("Payroll/Billing Code Mismatched; ");
+
+                    //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+                    //DataRow[] results = dBATable.Select(condition);
+
+                    //int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
+                    //if (noBillingAuthorizationCount == 0)
+                    //    exceptionsString.Append("NO Billing Authorization;");
+
+                    //if (noBillingAuthorizationCount == 0 || servicesMismatched)
+                    //{
+                    int vIndex = 0;
                         var values = new object[exceptionsTable.Columns.Count];
 
-                        values[vIndex++] = tdRow["Staff ID"].ToString();
-                        values[vIndex++] = tdRow["Staff Name"].ToString();
-                        values[vIndex++] = tdRow["Activity ID"].ToString();
-                        values[vIndex++] = tdRow["Activity Type"].ToString();
                         values[vIndex++] = tdRow["ID"].ToString();
                         values[vIndex++] = tdRow["Name"].ToString();
+                        values[vIndex++] = tdRow["Activity ID"].ToString();
                         values[vIndex++] = tdRow["Start"];
                         values[vIndex++] = tdRow["Finish"];
                         values[vIndex++] = tdRow["Duration"];
-                        values[vIndex++] = string.Format("[{0}] {1}", billingCodeIndex.ToString(), tdRow["Billing Code"].ToString());
-                        values[vIndex++] = string.Format("[{0}] {1}", payrollCodeIndex.ToString(), tdRow["Payroll Code"].ToString());
+                        values[vIndex++] = billingCodeIndex != -1 ? string.Format("[{0}]{1}", billingCodeIndex.ToString(), tdRow["Billing Code"].ToString()) : "";
+                        values[vIndex++] = payrollCodeIndex != -1 ? string.Format("[{0}]{1}", payrollCodeIndex.ToString(), tdRow["Payroll Code"].ToString()) : "";
+                        values[vIndex++] = serviceCodeIndex != -1 ? string.Format("[{0}]{1}", serviceCodeIndex.ToString(), tdRow["Service"].ToString()) : "";
                         values[vIndex++] = exceptionsString;  //Exception
 
                         exceptionsTable.Rows.Add(values);
-                    }
-            }
+                    //}
+                }
             }
             catch (Exception ex)
             {

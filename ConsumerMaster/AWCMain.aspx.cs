@@ -86,7 +86,6 @@ namespace ConsumerMaster
             }
         }
 
-
         protected void RadButtonServicesException_Click(object sender, EventArgs e)
         {
             string outFilename = "AWCServicesExceptionReport.txt";
@@ -134,7 +133,7 @@ namespace ConsumerMaster
 
         protected void RadButtonTravel_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCTravelTimeReport.txt";
+            //string outFilename = "AWCTravelTimeReport.txt";
             //try
             //{
             //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
@@ -159,7 +158,7 @@ namespace ConsumerMaster
         protected void RadButtonTravel_Click2(object sender, EventArgs e)
         {
 
-            string outFilename = "AWCTravelTimeReport.xlsx";
+            //string outFilename = "AWCTravelTimeReport.xlsx";
             //try
             //{
             //    if (RadAsyncUpload1.UploadedFiles.Count == 1)

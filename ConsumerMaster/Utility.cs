@@ -520,7 +520,7 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-        public DataTable GetTDDataTable(Stream input)
+        public DataTable GetUPVTDDataTable(Stream input)
         {
             DataTable dataTable = new DataTable();
             try
@@ -543,9 +543,22 @@ namespace ConsumerMaster
                 {
                     int vIndex = 0;
 
-                    if (string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 20)) && //Billing Code
-                        string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 21))) //Payroll Code
+                    string activityType = GetCellData(InputWorksheet, i, 4);  //Activity Type
+                    string billingCode = GetCellData(InputWorksheet, i, 20);  //Billing Code
+                    string payrollCode = GetCellData(InputWorksheet, i, 21);  //Payroll Code
+                    string service = GetCellData(InputWorksheet, i, 22);      //Service
+
+                    bool isUPV = GetCellData(InputWorksheet, i, 4).Contains("UPV");
+                    bool noBillingCode = string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 20));  //Billing Code
+                    bool noPayrollCode = string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 21));  //Payroll Code
+                    bool noService = string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 22));   //Service
+
+                    if (!isUPV)
                         continue;
+
+                    if (noBillingCode && noPayrollCode && noService)
+                        continue;
+
 
                     var values = new object[spc.Count()];
                     values[vIndex++] = GetCellData(InputWorksheet, i, 0); //Staff ID
