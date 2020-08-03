@@ -71,7 +71,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile)
+        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile, UploadedFile uploadedALFile)
         {
             Workbook workbook = new Workbook();
 
@@ -84,12 +84,19 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream inputTD = uploadedTDFile.InputStream;
                 Stream inputBA = uploadedBAFile.InputStream;
+                Stream inputAL = uploadedALFile.InputStream;
 
                 DataTable tempTable = util.GetUPVTDDataTable(inputTD);
                 tempTable.DefaultView.Sort = "Name, Start";
                 DataTable dUPVTDTable = tempTable.DefaultView.ToTable();  //Sort by Client Name and Start DateTime
 
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
+
+                DataTable tmpALTable = util.GetAuditLogDataTable(inputAL);
+                tmpALTable.DefaultView.Sort = "Action";
+                DataTable dALTable = tmpALTable.DefaultView.ToTable();
+
+
 
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
@@ -183,9 +190,6 @@ namespace ConsumerMaster
 
                     StringBuilder exceptionsString = new StringBuilder();
 
-
-                    
-
                     if(serviceCodeIndex == -1)
                     {
                         string pCode = payrollCodeArray[serviceCodeIndex].ToString();
@@ -201,12 +205,6 @@ namespace ConsumerMaster
 
 
                     }
-
-
-
-
-
-
 
                     //bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
                     //if (servicesMismatched)

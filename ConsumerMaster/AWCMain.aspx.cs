@@ -98,8 +98,9 @@ namespace ConsumerMaster
 
                     UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
                     UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //Billing Authorization File
+                    UploadedFile uploadedALFile = RadAsyncUpload3.UploadedFiles[0]; //Audit Log File
 
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
+                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile, uploadedALFile);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }

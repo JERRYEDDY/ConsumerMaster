@@ -607,10 +607,9 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-
         public DataTable GetAuditLogDataTable(Stream input)
         {
-            SPColumn[] spc = new SPColumn[13]
+            SPColumn[] spc = new SPColumn[9]
             {
                 new SPColumn("Date", typeof(DateTime)),
                 new SPColumn("Who", typeof(string)),
@@ -620,11 +619,11 @@ namespace ConsumerMaster
                 new SPColumn("Comment", typeof(string)),
                 new SPColumn("Location", typeof(string)),
                 new SPColumn("Discipline", typeof(string)),
-                new SPColumn("Program", typeof(string)),
-                new SPColumn("Activity ID", typeof(string)),
-                new SPColumn("ID", typeof(string)),
-                new SPColumn("Start Time", typeof(DateTime)),
-                new SPColumn("Stop Time", typeof(DateTime))
+                new SPColumn("Program", typeof(string))
+                //new SPColumn("Activity ID", typeof(string)),
+                //new SPColumn("ID", typeof(string)),
+                //new SPColumn("Start Time", typeof(DateTime)),
+                //new SPColumn("Stop Time", typeof(DateTime))
             };
 
             DataTable dataTable = new DataTable();
@@ -644,8 +643,8 @@ namespace ConsumerMaster
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
-                    if (GetCellData(InputWorksheet, i, 4) != "Added a Note to the Activity") //Action
-                        continue;
+                    //if (GetCellData(InputWorksheet, i, 4) != "Added a Note to the Activity") //Action
+                    //    continue;
 
                     var values = new object[spc.Count()];
                     string dateStr = GetCellData(InputWorksheet, i, 0); 
@@ -673,19 +672,19 @@ namespace ConsumerMaster
                     //string[] subString2 = testString[1].Split('-');
                     //string clientID = ParseClientID(subString1[2]);
 
-                    string[] subjectSub = subjectString.Split('-');
+                    //string[] subjectSub = subjectString.Split('-');
 
-                    Regex rg = new Regex(@"\ (.*)\ ");
-                    string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
-                    values[9] = activityID;
+                    //Regex rg = new Regex(@"\ (.*)\ ");
+                    //string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
+                    //values[9] = activityID;
 
-                    Regex rx = new Regex(@"\((.*)\,");
-                    string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
-                    values[10] = clientID;
+                    //Regex rx = new Regex(@"\((.*)\,");
+                    //string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
+                    //values[10] = clientID;
 
-                    DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
-                    values[11] = startStopTime[0];
-                    values[12] = startStopTime[1];
+                    //DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
+                    //values[11] = startStopTime[0];
+                    //values[12] = startStopTime[1];
 
                     dataTable.Rows.Add(values);
                 }

@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <td>
-                    Time & Distance Filename .xlsx: 
+                    CellTrak Time & Distance Filename .xlsx: 
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
@@ -60,7 +60,15 @@
             </tr>
             <tr>
                 <td>
-                    Billing Authorizations Filename .xlsx:
+                    CellTrak Audit Log Filename .xlsx:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    CellTrak Billing Authorizations Filename .xlsx:
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
