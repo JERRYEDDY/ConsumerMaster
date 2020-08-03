@@ -643,8 +643,9 @@ namespace ConsumerMaster
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
-                    //if (GetCellData(InputWorksheet, i, 4) != "Added a Note to the Activity") //Action
-                    //    continue;
+                    string action = GetCellData(InputWorksheet, i, 4);
+                    if (!action.StartsWith("Updated")) //Action
+                        continue;
 
                     var values = new object[spc.Count()];
                     string dateStr = GetCellData(InputWorksheet, i, 0); 
