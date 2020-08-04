@@ -563,8 +563,8 @@ namespace ConsumerMaster
                     var values = new object[spc.Count()];
                     values[vIndex++] = GetCellData(InputWorksheet, i, 0); //Staff ID
                     values[vIndex++] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
-                    values[vIndex++] = GetCellData(InputWorksheet, i, 2); //Activity ID
-                    values[vIndex++] = GetCellData(InputWorksheet, i, 3); //Secondary Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 2); //Staff Name
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 3); //Activity ID
                     values[vIndex++] = GetCellData(InputWorksheet, i, 4); //Activity Type
                     values[vIndex++] = GetCellData(InputWorksheet, i, 5); //ID
                     values[vIndex++] = GetCellData(InputWorksheet, i, 6); //Secondary ID"
@@ -607,28 +607,16 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-
-        //table.Columns.Add("ActivityID", typeof(string));
-        //table.Columns.Add("ID", typeof(string));
-        //table.Columns.Add("Date", typeof(DateTime));
-        //table.Columns.Add("Who", typeof(string));
-        //table.Columns.Add("StartTime", typeof(DateTime));
-        //table.Columns.Add("StopTime", typeof(DateTime));
-        //table.Columns.Add("Action", typeof(string));
-        //table.Columns.Add("Comment", typeof(string));
-
-
-
         public DataTable GetAuditLogDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[8]
             {
-                new SPColumn("ActivityID", typeof(string)),
+                new SPColumn("Activity ID", typeof(string)),
                 new SPColumn("ID", typeof(string)),
                 new SPColumn("Date", typeof(DateTime)),
                 new SPColumn("Who", typeof(string)),
-                new SPColumn("StartTime", typeof(DateTime)),
-                new SPColumn("StopTime", typeof(DateTime)),
+                new SPColumn("Start Time", typeof(DateTime)),
+                new SPColumn("Stop Time", typeof(DateTime)),
                 new SPColumn("Action", typeof(string)),
                 new SPColumn("Comment", typeof(string)),
             };
@@ -660,7 +648,7 @@ namespace ConsumerMaster
 
                     Regex rg = new Regex(@"\ (.*)\ ");
                     string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
-                    values[0] = activityID;   //ActivityID
+                    values[0] = activityID;   //Activity ID
 
                     Regex rx = new Regex(@"\((.*)\,");
                     string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
@@ -673,8 +661,8 @@ namespace ConsumerMaster
                     values[3] = GetCellData(InputWorksheet, i, 1); //Who
 
                     DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
-                    values[4] = startStopTime[0];  //StartTime
-                    values[5] = startStopTime[1];  //StopTime
+                    values[4] = startStopTime[0];  //Start Time
+                    values[5] = startStopTime[1];  //Stop Time
 
                     values[6] = GetCellData(InputWorksheet, i, 4); //Action
                     values[7] = GetCellData(InputWorksheet, i, 5); //Comment

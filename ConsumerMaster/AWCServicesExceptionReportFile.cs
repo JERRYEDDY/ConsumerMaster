@@ -92,34 +92,48 @@ namespace ConsumerMaster
 
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
+                DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
 
                 DataTable tmpALTable = util.GetAuditLogDataTable(inputAL);
-
-                var result = tmpALTable.AsEnumerable().GroupBy(x => new { ActivityID = x["ActivityID"], ID = x["ID"] })
+                var result = tmpALTable.AsEnumerable().GroupBy(x => new { ActivityID = x["Activity ID"], ID = x["ID"] })
                     .Select(item => new
                     {
                         ActivityID = (string)item.Key.ActivityID,
                         ID = (string)item.Key.ID,
-                        Action = string.Join(";", item.Select(c => c["Action"]))
+                        Action = string.Join(" ; ", item.Select(c => c["Action"]))
                     }).ToList();
+                DataTable mergedAuditLogDataTable = result.ToDataTable();
+
+                var JoinResult = (from e in mergedAuditLogDataTable.AsEnumerable()
+                                  join m in mergedAuditLogDataTable.AsEnumerable() 
+                                  on e.Field<string>("Activity ID") equals m.Field<string>("Activity ID") into tempJoin
+                                  from leftJoin in tempJoin.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      //id_no = c.Field<string>("id_no"),
+                                      //name = c.Field<string>("name"),
+                                      //gender = c.Field<string>("gender"),
+                                      //dob = c.Field<string>("dob"),
+                                      //current_location = c.Field<string>("current_location"),
+                                      //current_phone_day = c.Field<string>("current_phone_day"),
+                                      //intake_date = c.Field<string>("intake_date"),
+                                      //managing_office = c.Field<string>("managing_office"),
+                                      //program_name = c.Field<string>("program_name"),
+                                      //unit = c.Field<string>("unit"),
+                                      //program_modifier = c.Field<string>("program_modifier"),
+                                      //worker_name = c.Field<string>("worker_name"),
+                                      //worker_role = c.Field<string>("worker_role"),
+                                      //is_primary_worker = c.Field<string>("is_primary_worker"),
+                                      //medicaid_number = c.Field<string>("medicaid_number"),
+                                      //medicaid_payer = c.Field<string>("medicaid_payer"),
+                                      //medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
+                                      //ba_count = leftJoin == null ? null : leftJoin.Field<string>("ba_count"),
+                                      //me_count = leftJoin == null ? null : leftJoin.Field<string>("me_count"),
+                                      //ssp_count = leftJoin == null ? null : leftJoin.Field<string>("ssp_count")
+                                  }).ToList();
 
 
-                DataTable mergedAuditLogTable = result.ToDataTable();
 
-                int auditLogCount = result.Count();
-
-                foreach (var item in result)
-                {
-
-
-                }
-
-
-
-                tmpALTable.DefaultView.Sort = "Action";
-                DataTable dALTable = tmpALTable.DefaultView.ToTable();
-
-                DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
                 int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName);
@@ -211,25 +225,25 @@ namespace ConsumerMaster
 
                     StringBuilder exceptionsString = new StringBuilder();
 
-                    if(serviceCodeIndex == -1)
-                    {
-                        string pCode = payrollCodeArray[serviceCodeIndex].ToString();
-                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
-                        DataRow[] results = dBATable.Select(condition);
-                        int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
-                        if (noBillingAuthorizationCount == 0)
-                            exceptionsString.Append("NO BILLING Authorization;");
-                    }
-                    else
-                    {
+                    //if(serviceCodeIndex == -1)
+                    //{
+                    //    string pCode = payrollCodeArray[serviceCodeIndex].ToString();
+                    //    String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
+                    //    DataRow[] results = dBATable.Select(condition);
+                    //    int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
+                    //    if (noBillingAuthorizationCount == 0)
+                    //        exceptionsString.Append("NO BILLING Authorization;");
+                    //}
+                    //else
+                    //{
 
 
 
-                    }
+                    //}
 
-                    //bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
-                    //if (servicesMismatched)
-                    //    exceptionsString.Append("Payroll/Billing Code Mismatched; ");
+                    bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
+                    if (servicesMismatched)
+                        exceptionsString.Append("Payroll/Billing Code Mismatched; ");
 
                     //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
                     //DataRow[] results = dBATable.Select(condition);
@@ -237,10 +251,11 @@ namespace ConsumerMaster
                     //int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
                     //if (noBillingAuthorizationCount == 0)
                     //    exceptionsString.Append("NO Billing Authorization;");
-
                     //if (noBillingAuthorizationCount == 0 || servicesMismatched)
-                    //{
-                    int vIndex = 0;
+
+                    if (servicesMismatched)
+                    {
+                        int vIndex = 0;
                         var values = new object[exceptionsTable.Columns.Count];
 
                         values[vIndex++] = tdRow["ID"].ToString();
@@ -255,7 +270,7 @@ namespace ConsumerMaster
                         values[vIndex++] = exceptionsString;  //Exception
 
                         exceptionsTable.Rows.Add(values);
-                    //}
+                    }
                 }
             }
             catch (Exception ex)
