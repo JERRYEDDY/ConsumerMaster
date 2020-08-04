@@ -92,11 +92,32 @@ namespace ConsumerMaster
 
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
+
                 DataTable tmpALTable = util.GetAuditLogDataTable(inputAL);
+
+                var result = tmpALTable.AsEnumerable().GroupBy(x => new { ActivityID = x["ActivityID"], ID = x["ID"] })
+                    .Select(item => new
+                    {
+                        ActivityID = (string)item.Key.ActivityID,
+                        ID = (string)item.Key.ID,
+                        Action = string.Join(";", item.Select(c => c["Action"]))
+                    }).ToList();
+
+
+                DataTable mergedAuditLogTable = result.ToDataTable();
+
+                int auditLogCount = result.Count();
+
+                foreach (var item in result)
+                {
+
+
+                }
+
+
+
                 tmpALTable.DefaultView.Sort = "Action";
                 DataTable dALTable = tmpALTable.DefaultView.ToTable();
-
-
 
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();

@@ -607,23 +607,30 @@ namespace ConsumerMaster
             return dataTable;
         }
 
+
+        //table.Columns.Add("ActivityID", typeof(string));
+        //table.Columns.Add("ID", typeof(string));
+        //table.Columns.Add("Date", typeof(DateTime));
+        //table.Columns.Add("Who", typeof(string));
+        //table.Columns.Add("StartTime", typeof(DateTime));
+        //table.Columns.Add("StopTime", typeof(DateTime));
+        //table.Columns.Add("Action", typeof(string));
+        //table.Columns.Add("Comment", typeof(string));
+
+
+
         public DataTable GetAuditLogDataTable(Stream input)
         {
-            SPColumn[] spc = new SPColumn[9]
+            SPColumn[] spc = new SPColumn[8]
             {
+                new SPColumn("ActivityID", typeof(string)),
+                new SPColumn("ID", typeof(string)),
                 new SPColumn("Date", typeof(DateTime)),
                 new SPColumn("Who", typeof(string)),
-                new SPColumn("IP Address", typeof(string)),
-                new SPColumn("Subject", typeof(string)),
+                new SPColumn("StartTime", typeof(DateTime)),
+                new SPColumn("StopTime", typeof(DateTime)),
                 new SPColumn("Action", typeof(string)),
                 new SPColumn("Comment", typeof(string)),
-                new SPColumn("Location", typeof(string)),
-                new SPColumn("Discipline", typeof(string)),
-                new SPColumn("Program", typeof(string))
-                //new SPColumn("Activity ID", typeof(string)),
-                //new SPColumn("ID", typeof(string)),
-                //new SPColumn("Start Time", typeof(DateTime)),
-                //new SPColumn("Stop Time", typeof(DateTime))
             };
 
             DataTable dataTable = new DataTable();
@@ -644,48 +651,33 @@ namespace ConsumerMaster
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
                     string action = GetCellData(InputWorksheet, i, 4);
-                    if (!action.StartsWith("Updated")) //Action
+                    if (!action.StartsWith("Updated  Billing") && !action.StartsWith("Updated  Payroll")) //Action
                         continue;
 
                     var values = new object[spc.Count()];
+                    string subjectString = GetCellData(InputWorksheet, i, 3); //Subject
+                    string[] subjectSub = subjectString.Split('-');
+
+                    Regex rg = new Regex(@"\ (.*)\ ");
+                    string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
+                    values[0] = activityID;   //ActivityID
+
+                    Regex rx = new Regex(@"\((.*)\,");
+                    string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
+                    values[1] = clientID;    //ID
+
                     string dateStr = GetCellData(InputWorksheet, i, 0); 
                     DateTime tDate = Convert.ToDateTime(dateStr);
-                    values[0] = tDate; //Date
+                    values[2] = tDate; //Date
 
-                    values[1] = GetCellData(InputWorksheet, i, 1); //Who
-                    values[2] = GetCellData(InputWorksheet, i, 2); //IP Address
+                    values[3] = GetCellData(InputWorksheet, i, 1); //Who
 
-                    string subjectString = GetCellData(InputWorksheet, i, 3); //Subject
-                    values[3] = subjectString;
+                    DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
+                    values[4] = startStopTime[0];  //StartTime
+                    values[5] = startStopTime[1];  //StopTime
 
-                    values[4] = GetCellData(InputWorksheet, i, 4); //Action
-                    values[5] = GetCellData(InputWorksheet, i, 5); //Comment
-                    values[6] = GetCellData(InputWorksheet, i, 6); //Location
-                    values[7] = GetCellData(InputWorksheet, i, 7); //Discipline
-                    values[8] = GetCellData(InputWorksheet, i, 8); //Program
-
-                    //string[] testString = new string[] 
-                    //{
-                    //    "Activity 45 - Unscheduled Client Visit - Aller, Nancy (239, 239) - Jul 1, 2020 1:19 PM - 1:32 PM",
-                    //    "Activity 42 - Unscheduled Client Visit - Aller, Nancy (239, 239) - Jun 26, 2020 11:28 AM - Jul 1, 2020 8:05 AM"
-                    //};
-                    //string[] subString1 = testString[0].Split('-');
-                    //string[] subString2 = testString[1].Split('-');
-                    //string clientID = ParseClientID(subString1[2]);
-
-                    //string[] subjectSub = subjectString.Split('-');
-
-                    //Regex rg = new Regex(@"\ (.*)\ ");
-                    //string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
-                    //values[9] = activityID;
-
-                    //Regex rx = new Regex(@"\((.*)\,");
-                    //string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
-                    //values[10] = clientID;
-
-                    //DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
-                    //values[11] = startStopTime[0];
-                    //values[12] = startStopTime[1];
+                    values[6] = GetCellData(InputWorksheet, i, 4); //Action
+                    values[7] = GetCellData(InputWorksheet, i, 5); //Comment
 
                     dataTable.Rows.Add(values);
                 }
