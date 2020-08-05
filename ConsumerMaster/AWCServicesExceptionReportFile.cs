@@ -104,35 +104,28 @@ namespace ConsumerMaster
                     }).ToList();
                 DataTable mergedAuditLogDataTable = result.ToDataTable();
 
-                var JoinResult = (from e in mergedAuditLogDataTable.AsEnumerable()
+                var JoinResult = (from e in exceptionsTable.AsEnumerable()
                                   join m in mergedAuditLogDataTable.AsEnumerable() 
-                                  on e.Field<string>("Activity ID") equals m.Field<string>("Activity ID") into tempJoin
+                                  on e.Field<string>("Activity ID") equals m.Field<string>("ActivityID") into tempJoin
                                   from leftJoin in tempJoin.DefaultIfEmpty()
                                   select new
                                   {
-                                      //id_no = c.Field<string>("id_no"),
-                                      //name = c.Field<string>("name"),
-                                      //gender = c.Field<string>("gender"),
-                                      //dob = c.Field<string>("dob"),
-                                      //current_location = c.Field<string>("current_location"),
-                                      //current_phone_day = c.Field<string>("current_phone_day"),
-                                      //intake_date = c.Field<string>("intake_date"),
-                                      //managing_office = c.Field<string>("managing_office"),
-                                      //program_name = c.Field<string>("program_name"),
-                                      //unit = c.Field<string>("unit"),
-                                      //program_modifier = c.Field<string>("program_modifier"),
-                                      //worker_name = c.Field<string>("worker_name"),
-                                      //worker_role = c.Field<string>("worker_role"),
-                                      //is_primary_worker = c.Field<string>("is_primary_worker"),
-                                      //medicaid_number = c.Field<string>("medicaid_number"),
-                                      //medicaid_payer = c.Field<string>("medicaid_payer"),
-                                      //medicaid_plan_name = c.Field<string>("medicaid_plan_name"),
-                                      //ba_count = leftJoin == null ? null : leftJoin.Field<string>("ba_count"),
-                                      //me_count = leftJoin == null ? null : leftJoin.Field<string>("me_count"),
-                                      //ssp_count = leftJoin == null ? null : leftJoin.Field<string>("ssp_count")
+                                      EID = e.Field<string>("ID"),
+                                      MID = leftJoin == null ? null : leftJoin.Field<string>("ID"),
+                                      Name = e.Field<string>("Name"),
+                                      EActivityID = e.Field<string>("Activity ID"),
+                                      MActivityID = leftJoin == null ? null : leftJoin.Field<string>("ActivityID"),
+                                      Start = e.Field<DateTime>("Start"),
+                                      Finish = e.Field<DateTime>("Finish"),
+                                      Duration = e.Field<Int32>("Duration"),
+                                      BillingCode = e.Field<string>("Billing Code"),
+                                      PayrollCode = e.Field<string>("Payroll Code"),
+                                      Service = e.Field<string>("Service"),
+                                      Exception = e.Field<string>("Exception"),
+                                      Action = leftJoin == null ? null : leftJoin.Field<string>("Action")
                                   }).ToList();
 
-
+                DataTable outputDataTable = JoinResult.ToDataTable();
 
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
@@ -225,35 +218,31 @@ namespace ConsumerMaster
 
                     StringBuilder exceptionsString = new StringBuilder();
 
-                    //if(serviceCodeIndex == -1)
-                    //{
-                    //    string pCode = payrollCodeArray[serviceCodeIndex].ToString();
-                    //    String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
-                    //    DataRow[] results = dBATable.Select(condition);
-                    //    int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
-                    //    if (noBillingAuthorizationCount == 0)
-                    //        exceptionsString.Append("NO BILLING Authorization;");
-                    //}
-                    //else
-                    //{
-
-
-
-                    //}
-
                     bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
                     if (servicesMismatched)
                         exceptionsString.Append("Payroll/Billing Code Mismatched; ");
 
-                    //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
-                    //DataRow[] results = dBATable.Select(condition);
 
-                    //int noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
-                    //if (noBillingAuthorizationCount == 0)
-                    //    exceptionsString.Append("NO Billing Authorization;");
-                    //if (noBillingAuthorizationCount == 0 || servicesMismatched)
+                    int noBillingAuthorizationCount = 0;
 
-                    if (servicesMismatched)
+                    if(serviceCodeIndex == -1)
+                    {
+                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+                        DataRow[] results = dBATable.Select(condition);
+                        noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
+                    }
+                    else
+                    {
+                        string pCode = payrollCodeArray[serviceCodeIndex].ToString();
+                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
+                        DataRow[] results = dBATable.Select(condition);
+                        noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
+                    }
+
+                    if (noBillingAuthorizationCount == 0)
+                        exceptionsString.Append("NO Billing Authorization;");
+
+                    if (noBillingAuthorizationCount == 0 || servicesMismatched)
                     {
                         int vIndex = 0;
                         var values = new object[exceptionsTable.Columns.Count];

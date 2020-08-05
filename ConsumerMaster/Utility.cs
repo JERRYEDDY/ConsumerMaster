@@ -559,7 +559,6 @@ namespace ConsumerMaster
                     if (noBillingCode && noPayrollCode && noService)
                         continue;
 
-
                     var values = new object[spc.Count()];
                     values[vIndex++] = GetCellData(InputWorksheet, i, 0); //Staff ID
                     values[vIndex++] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
@@ -609,7 +608,7 @@ namespace ConsumerMaster
 
         public DataTable GetAuditLogDataTable(Stream input)
         {
-            SPColumn[] spc = new SPColumn[8]
+            SPColumn[] spc = new SPColumn[10]
             {
                 new SPColumn("Activity ID", typeof(string)),
                 new SPColumn("ID", typeof(string)),
@@ -618,6 +617,8 @@ namespace ConsumerMaster
                 new SPColumn("Start Time", typeof(DateTime)),
                 new SPColumn("Stop Time", typeof(DateTime)),
                 new SPColumn("Action", typeof(string)),
+                new SPColumn("To", typeof(string)),
+                new SPColumn("From", typeof(string)),
                 new SPColumn("Comment", typeof(string)),
             };
 
@@ -663,6 +664,19 @@ namespace ConsumerMaster
                     DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
                     values[4] = startStopTime[0];  //Start Time
                     values[5] = startStopTime[1];  //Stop Time
+
+                    string payrollAction = "Updated  Payroll Code from  H&C 1:1 Degreed Staff (W7061) to  H&C 1:1 W/B (W7060)";
+                    string billingAction = "Updated  Billing Code from  ODP/ W7061 / H&C 1:1 Degreed Staff to  ODP / W7060 / H&C 1:1 W/B";
+
+
+                    Regex from = new Regex("from(.*)to");
+                    var result1 = from.Match(payrollAction);
+                    var output1 = result1.Groups[1].ToString();
+
+                    Regex to = new Regex("to(.*)$");
+                    var result2 = to.Match(payrollAction);
+                    var output2 = result2.Groups[1].ToString();
+
 
                     values[6] = GetCellData(InputWorksheet, i, 4); //Action
                     values[7] = GetCellData(InputWorksheet, i, 5); //Comment
