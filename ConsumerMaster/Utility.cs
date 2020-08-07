@@ -606,91 +606,91 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-        public DataTable GetAuditLogDataTable(Stream input)
-        {
-            SPColumn[] spc = new SPColumn[10]
-            {
-                new SPColumn("Activity ID", typeof(string)),
-                new SPColumn("ID", typeof(string)),
-                new SPColumn("Date", typeof(DateTime)),
-                new SPColumn("Who", typeof(string)),
-                new SPColumn("Start Time", typeof(DateTime)),
-                new SPColumn("Stop Time", typeof(DateTime)),
-                new SPColumn("Action", typeof(string)),
-                new SPColumn("To", typeof(string)),
-                new SPColumn("From", typeof(string)),
-                new SPColumn("Comment", typeof(string)),
-            };
+        //public DataTable GetAuditLogDataTable(Stream input)
+        //{
+        //    SPColumn[] spc = new SPColumn[10]
+        //    {
+        //        new SPColumn("Activity ID", typeof(string)),
+        //        new SPColumn("ID", typeof(string)),
+        //        new SPColumn("Date", typeof(DateTime)),
+        //        new SPColumn("Who", typeof(string)),
+        //        new SPColumn("Start Time", typeof(DateTime)),
+        //        new SPColumn("Stop Time", typeof(DateTime)),
+        //        new SPColumn("Action", typeof(string)),
+        //        new SPColumn("To", typeof(string)),
+        //        new SPColumn("From", typeof(string)),
+        //        new SPColumn("Comment", typeof(string)),
+        //    };
 
-            DataTable dataTable = new DataTable();
-            try
-            {
-                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
-                Workbook InputWorkbook = formatProvider.Import(input);
+        //    DataTable dataTable = new DataTable();
+        //    try
+        //    {
+        //        XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+        //        Workbook InputWorkbook = formatProvider.Import(input);
 
-                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+        //        var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
 
-                for (int i = 0; i < spc.Count(); i++)
-                {
-                    CellSelection selection = InputWorksheet.Cells[0, i];
-                    var columnName = "Column" + (i + 1);
-                    dataTable.Columns.Add(spc[i].name, spc[i].type);
-                }
+        //        for (int i = 0; i < spc.Count(); i++)
+        //        {
+        //            CellSelection selection = InputWorksheet.Cells[0, i];
+        //            var columnName = "Column" + (i + 1);
+        //            dataTable.Columns.Add(spc[i].name, spc[i].type);
+        //        }
 
-                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
-                {
-                    string action = GetCellData(InputWorksheet, i, 4);
-                    if (!action.StartsWith("Updated  Billing") && !action.StartsWith("Updated  Payroll")) //Action
-                        continue;
+        //        for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+        //        {
+        //            string action = GetCellData(InputWorksheet, i, 4);
+        //            if (!action.StartsWith("Updated  Billing") && !action.StartsWith("Updated  Payroll")) //Action
+        //                continue;
 
-                    var values = new object[spc.Count()];
-                    string subjectString = GetCellData(InputWorksheet, i, 3); //Subject
-                    string[] subjectSub = subjectString.Split('-');
+        //            var values = new object[spc.Count()];
+        //            string subjectString = GetCellData(InputWorksheet, i, 3); //Subject
+        //            string[] subjectSub = subjectString.Split('-');
 
-                    Regex rg = new Regex(@"\ (.*)\ ");
-                    string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
-                    values[0] = activityID;   //Activity ID
+        //            Regex rg = new Regex(@"\ (.*)\ ");
+        //            string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
+        //            values[0] = activityID;   //Activity ID
 
-                    Regex rx = new Regex(@"\((.*)\,");
-                    string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
-                    values[1] = clientID;    //ID
+        //            Regex rx = new Regex(@"\((.*)\,");
+        //            string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
+        //            values[1] = clientID;    //ID
 
-                    string dateStr = GetCellData(InputWorksheet, i, 0); 
-                    DateTime tDate = Convert.ToDateTime(dateStr);
-                    values[2] = tDate; //Date
+        //            string dateStr = GetCellData(InputWorksheet, i, 0); 
+        //            DateTime tDate = Convert.ToDateTime(dateStr);
+        //            values[2] = tDate; //Date
 
-                    values[3] = GetCellData(InputWorksheet, i, 1); //Who
+        //            values[3] = GetCellData(InputWorksheet, i, 1); //Who
 
-                    DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
-                    values[4] = startStopTime[0];  //Start Time
-                    values[5] = startStopTime[1];  //Stop Time
+        //            DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
+        //            values[4] = startStopTime[0];  //Start Time
+        //            values[5] = startStopTime[1];  //Stop Time
 
-                    string payrollAction = "Updated  Payroll Code from  H&C 1:1 Degreed Staff (W7061) to  H&C 1:1 W/B (W7060)";
-                    string billingAction = "Updated  Billing Code from  ODP/ W7061 / H&C 1:1 Degreed Staff to  ODP / W7060 / H&C 1:1 W/B";
-
-
-                    Regex from = new Regex("from(.*)to");
-                    var result1 = from.Match(payrollAction);
-                    var output1 = result1.Groups[1].ToString();
-
-                    Regex to = new Regex("to(.*)$");
-                    var result2 = to.Match(payrollAction);
-                    var output2 = result2.Groups[1].ToString();
+        //            string payrollAction = "Updated  Payroll Code from  H&C 1:1 Degreed Staff (W7061) to  H&C 1:1 W/B (W7060)";
+        //            string billingAction = "Updated  Billing Code from  ODP/ W7061 / H&C 1:1 Degreed Staff to  ODP / W7060 / H&C 1:1 W/B";
 
 
-                    values[6] = GetCellData(InputWorksheet, i, 4); //Action
-                    values[7] = GetCellData(InputWorksheet, i, 5); //Comment
+        //            Regex from = new Regex("from(.*)to");
+        //            var result1 = from.Match(payrollAction);
+        //            var output1 = result1.Groups[1].ToString();
 
-                    dataTable.Rows.Add(values);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            };
+        //            Regex to = new Regex("to(.*)$");
+        //            var result2 = to.Match(payrollAction);
+        //            var output2 = result2.Groups[1].ToString();
 
-            return dataTable;
-        }
+
+        //            values[6] = GetCellData(InputWorksheet, i, 4); //Action
+        //            values[7] = GetCellData(InputWorksheet, i, 5); //Comment
+
+        //            dataTable.Rows.Add(values);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    };
+
+        //    return dataTable;
+        //}
 
         public DataTable GetBillingAuthorizationDataTable(Stream input)
         {

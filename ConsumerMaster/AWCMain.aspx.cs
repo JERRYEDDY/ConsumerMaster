@@ -88,7 +88,7 @@ namespace ConsumerMaster
 
         protected void RadButtonServicesException_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCServicesExceptionReport.txt";
+            string outFilename = "AWCServicesExceptionReport.xlsx";
             try
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
@@ -98,9 +98,8 @@ namespace ConsumerMaster
 
                     UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
                     UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //Billing Authorization File
-                    UploadedFile uploadedALFile = RadAsyncUpload3.UploadedFiles[0]; //Audit Log File
 
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile, uploadedALFile);
+                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }

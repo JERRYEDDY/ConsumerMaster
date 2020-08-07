@@ -71,7 +71,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile, UploadedFile uploadedALFile)
+        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile)
         {
             Workbook workbook = new Workbook();
 
@@ -84,7 +84,6 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream inputTD = uploadedTDFile.InputStream;
                 Stream inputBA = uploadedBAFile.InputStream;
-                Stream inputAL = uploadedALFile.InputStream;
 
                 DataTable tempTable = util.GetUPVTDDataTable(inputTD);
                 tempTable.DefaultView.Sort = "Name, Start";
@@ -93,40 +92,6 @@ namespace ConsumerMaster
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
-
-                DataTable tmpALTable = util.GetAuditLogDataTable(inputAL);
-                var result = tmpALTable.AsEnumerable().GroupBy(x => new { ActivityID = x["Activity ID"], ID = x["ID"] })
-                    .Select(item => new
-                    {
-                        ActivityID = (string)item.Key.ActivityID,
-                        ID = (string)item.Key.ID,
-                        Action = string.Join(" ; ", item.Select(c => c["Action"]))
-                    }).ToList();
-                DataTable mergedAuditLogDataTable = result.ToDataTable();
-
-                var JoinResult = (from e in exceptionsTable.AsEnumerable()
-                                  join m in mergedAuditLogDataTable.AsEnumerable() 
-                                  on e.Field<string>("Activity ID") equals m.Field<string>("ActivityID") into tempJoin
-                                  from leftJoin in tempJoin.DefaultIfEmpty()
-                                  select new
-                                  {
-                                      EID = e.Field<string>("ID"),
-                                      MID = leftJoin == null ? null : leftJoin.Field<string>("ID"),
-                                      Name = e.Field<string>("Name"),
-                                      EActivityID = e.Field<string>("Activity ID"),
-                                      MActivityID = leftJoin == null ? null : leftJoin.Field<string>("ActivityID"),
-                                      Start = e.Field<DateTime>("Start"),
-                                      Finish = e.Field<DateTime>("Finish"),
-                                      Duration = e.Field<Int32>("Duration"),
-                                      BillingCode = e.Field<string>("Billing Code"),
-                                      PayrollCode = e.Field<string>("Payroll Code"),
-                                      Service = e.Field<string>("Service"),
-                                      Exception = e.Field<string>("Exception"),
-                                      Action = leftJoin == null ? null : leftJoin.Field<string>("Action")
-                                  }).ToList();
-
-                DataTable outputDataTable = JoinResult.ToDataTable();
-
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
                 int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName);
@@ -224,7 +189,6 @@ namespace ConsumerMaster
 
 
                     int noBillingAuthorizationCount = 0;
-
                     if(serviceCodeIndex == -1)
                     {
                         String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
@@ -238,7 +202,6 @@ namespace ConsumerMaster
                         DataRow[] results = dBATable.Select(condition);
                         noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
                     }
-
                     if (noBillingAuthorizationCount == 0)
                         exceptionsString.Append("NO Billing Authorization;");
 
@@ -322,5 +285,39 @@ namespace ConsumerMaster
 
             return rowCount;
         }
+
+
+        //DataTable tmpALTable = util.GetAuditLogDataTable(inputAL);
+        //var result = tmpALTable.AsEnumerable().GroupBy(x => new { ActivityID = x["Activity ID"], ID = x["ID"] })
+        //    .Select(item => new
+        //    {
+        //        ActivityID = (string)item.Key.ActivityID,
+        //        ID = (string)item.Key.ID,
+        //        Action = string.Join(" ; ", item.Select(c => c["Action"]))
+        //    }).ToList();
+        //DataTable mergedAuditLogDataTable = result.ToDataTable();
+
+        //var JoinResult = (from e in exceptionsTable.AsEnumerable()
+        //                  join m in mergedAuditLogDataTable.AsEnumerable() 
+        //                  on e.Field<string>("Activity ID") equals m.Field<string>("ActivityID") into tempJoin
+        //                  from leftJoin in tempJoin.DefaultIfEmpty()
+        //                  select new
+        //                  {
+        //                      EID = e.Field<string>("ID"),
+        //                      MID = leftJoin == null ? null : leftJoin.Field<string>("ID"),
+        //                      Name = e.Field<string>("Name"),
+        //                      EActivityID = e.Field<string>("Activity ID"),
+        //                      MActivityID = leftJoin == null ? null : leftJoin.Field<string>("ActivityID"),
+        //                      Start = e.Field<DateTime>("Start"),
+        //                      Finish = e.Field<DateTime>("Finish"),
+        //                      Duration = e.Field<Int32>("Duration"),
+        //                      BillingCode = e.Field<string>("Billing Code"),
+        //                      PayrollCode = e.Field<string>("Payroll Code"),
+        //                      Service = e.Field<string>("Service"),
+        //                      Exception = e.Field<string>("Exception"),
+        //                      Action = leftJoin == null ? null : leftJoin.Field<string>("Action")
+        //                  }).ToList();
+
+        //DataTable outputDataTable = JoinResult.ToDataTable();
     }
 }
