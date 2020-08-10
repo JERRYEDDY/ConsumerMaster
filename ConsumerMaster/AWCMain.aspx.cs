@@ -30,12 +30,6 @@ namespace ConsumerMaster
                     AWC40HoursReportFile report = new AWC40HoursReportFile();
                     Workbook workbook = report.CreateWorkbook(uploadedFile);
                     utility.DownloadExcelFile(workbook, outFilename);
-
-                    //MemoryStream output = payrollReport.CreateDocument(uploadedFile);
-
-                    //string fileDate = uploadedFile.FileName.Between("_", ".");
-
-                    //utility.DownloadTXTFile(output, outFilename);
                 }
             }
             catch (Exception ex)
@@ -157,27 +151,25 @@ namespace ConsumerMaster
 
         protected void RadButtonTravel_Click2(object sender, EventArgs e)
         {
+            string outFilename = "AWCTravelTimeReport.xlsx";
+            try
+            {
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                   bool shiftFilter = ShiftCheckBox.Checked;
 
-            //string outFilename = "AWCTravelTimeReport.xlsx";
-            //try
-            //{
-            //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
-            //    {
-            //        bool shiftFilter = ShiftCheckBox.Checked;
+                    Utility utility = new Utility();
+                    AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
 
-            //        Utility utility = new Utility();
-            //        AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
-            //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-            //        Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
-
-            //        utility.DownloadExcelFile(workbook, outFilename);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.Error(ex);
-            //}
-
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
         }
 
         public DataTable GetDataTable(string queryString)

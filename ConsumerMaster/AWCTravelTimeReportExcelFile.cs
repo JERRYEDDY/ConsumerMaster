@@ -66,10 +66,10 @@ namespace ConsumerMaster
 
                         if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
                         {
-                            foreach (DataRow row in shiftGroup.Rows)
-                            {
-                                reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
-                            }
+                            //foreach (DataRow row in shiftGroup.Rows)
+                            //{
+                            //    reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
+                            //}
 
                             List<ShiftItem> finishList = new List<ShiftItem>();
                             List<ShiftItem> startList = new List<ShiftItem>();

@@ -116,6 +116,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Payroll Code"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Billing Auth"].ToString());
 
                     currentRow++;
                 }
@@ -134,7 +135,7 @@ namespace ConsumerMaster
 
         public DataTable BuildExceptionsDataTable()
         {
-            SPColumn[] spc = new SPColumn[10]
+            SPColumn[] spc = new SPColumn[11]
             {
                 new SPColumn("ID", typeof(string)),
                 new SPColumn("Name", typeof(string)),
@@ -145,7 +146,8 @@ namespace ConsumerMaster
                 new SPColumn("Billing Code", typeof(string)), //Billing Code
                 new SPColumn("Payroll Code", typeof(string)), //Payroll Code
                 new SPColumn("Service", typeof(string)), //Service
-                new SPColumn("Exception", typeof(string))
+                new SPColumn("Exception", typeof(string)),
+                new SPColumn("Billing Auth", typeof(string))
             };
 
             DataTable dataTable = new DataTable();
@@ -182,10 +184,9 @@ namespace ConsumerMaster
                     int serviceCodeIndex = Array.FindIndex(serviceCodeArray, m => m == serviceCode);
 
                     StringBuilder exceptionsString = new StringBuilder();
-
                     bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
                     if (servicesMismatched)
-                        exceptionsString.Append("Payroll/Billing Code Mismatched; ");
+                        exceptionsString.Append("P/BCode Mismatched; ");
 
 
                     int noBillingAuthorizationCount = 0;
@@ -203,7 +204,7 @@ namespace ConsumerMaster
                         noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
                     }
                     if (noBillingAuthorizationCount == 0)
-                        exceptionsString.Append("NO Billing Authorization;");
+                        exceptionsString.Append("NO BillAuth;");
 
                     if (noBillingAuthorizationCount == 0 || servicesMismatched)
                     {
@@ -220,6 +221,17 @@ namespace ConsumerMaster
                         values[vIndex++] = payrollCodeIndex != -1 ? string.Format("[{0}]{1}", payrollCodeIndex.ToString(), tdRow["Payroll Code"].ToString()) : "";
                         values[vIndex++] = serviceCodeIndex != -1 ? string.Format("[{0}]{1}", serviceCodeIndex.ToString(), tdRow["Service"].ToString()) : "";
                         values[vIndex++] = exceptionsString;  //Exception
+
+                        String selection = String.Format("id_no = '" + clientID + "'");
+                        DataRow[] baResults = dBATable.Select(selection);
+
+                        var ba = new StringBuilder();
+                        foreach (DataRow row in baResults)
+                        {
+                            ba.Append(row["service_name"].ToString());
+                            ba.Append(";");
+                        }
+                        values[vIndex++] = ba;
 
                         exceptionsTable.Rows.Add(values);
                     }
