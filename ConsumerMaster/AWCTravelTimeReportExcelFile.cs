@@ -101,43 +101,67 @@ namespace ConsumerMaster
                     }
                 }
 
+
+                var sspGroup = from sspDateRow in reportResultSet.AsEnumerable() //Group by Start Date
+                               orderby sspDateRow.Field<string>("StaffID")
+                               group sspDateRow by new
+                               {
+                                   StaffID = sspDateRow.Field<string>("StaffID")/*,*/
+                                   //StaffName = sspDateRow.Field<string>("StaffName"),
+                                   //Start = sspDateRow.Field<DateTime>("Start"),
+                                   //Finish = sspDateRow.Field<DateTime>("Finish"),
+                                   //Duration = sspDateRow.Field<int>("Duration"),
+                                   //Rounded = sspDateRow.Field<double>("Rounded")
+                               };
+
                 WorksheetCollection worksheets = workbook.Worksheets;
                 worksheets.Add();
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
                 int currentRow = 0;
 
-                foreach (DataRow row in reportResultSet.Rows)
+                foreach (var bySSP in sspGroup)
                 {
-                    int column = 0;
+                    double sspHours = 0;
+                    foreach (DataRow row in bySSP)
+                    {
+                        int column = 0;
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientID"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientName"].ToString());
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
 
-                    CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
+                        CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                        sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
+                        sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
 
-                    CellValueFormat decimalFormat = new CellValueFormat("0.00");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Rounded"].ToString());
+
+
+                        sspHours =  sspHours  + Convert.ToDouble(row["Rounded"].ToString());
+
+                        CellValueFormat decimalFormat = new CellValueFormat("0.00");
+                        sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Rounded"].ToString());
+
+                        currentRow++;
+                    }
+
+                    int col = 0;
+
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(sspHours);
 
                     currentRow++;
-                }
 
-                    //ExcelReportFormat reportFormat = new ExcelReportFormat();
-                    //reportFormat.Header1 = "Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift.";
-                    //reportFormat.Header2 = String.Format("Date/time: {0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                    //reportFormat.Header3 = String.Format("Filename: {0}", uploadedFile.FileName);
-                    //reportFormat.Header4 = " ";
-                    //workbook = reportFormat.LoadWorkbook(reportResultSet);
                 }
+            }
             catch (Exception ex)
             {
                 Logger.Error(ex);
