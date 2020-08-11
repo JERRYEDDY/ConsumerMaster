@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace ConsumerMaster
 {
-    public partial class AWCMain : System.Web.UI.Page
+    public partial class TravelTimeMain : System.Web.UI.Page
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -80,89 +80,20 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButtonServicesException_Click(object sender, EventArgs e)
-        {
-            string outFilename = "AWCServicesExceptionReport.xlsx";
-            try
-            {
-                if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
-                {
-                    Utility utility = new Utility();
-                    AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
-
-                    UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
-                    UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //Billing Authorization File
-
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
-                    utility.DownloadExcelFile(workbook, outFilename);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        protected void RadButton5_Click(object sender, EventArgs e)
-        {
-            string outFilename = "AWCServiceNoteAuditReport.xlsx";
-            try
-            {
-                if (RadAsyncUploadClosedActivities.UploadedFiles.Count == 1)
-                {
-                    UploadedFile closedActivitiesFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Closed Activities Report
-                    UploadedFile auditLogFile = RadAsyncUploadAuditLog.UploadedFiles[0]; //Client Authorization List
- 
-                    Utility utility = new Utility();
-                    AWCServiceNoteAuditReportFile report = new AWCServiceNoteAuditReportFile();
-                    MemoryStream output = report.CreateDocument(closedActivitiesFile, auditLogFile);
-                    utility.DownloadTXTFile(output, outFilename);
-                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
-
-        protected void RadButtonTravel_Click(object sender, EventArgs e)
-        {
-            //string outFilename = "AWCTravelTimeReport.txt";
-            //try
-            //{
-            //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
-            //    {
-
-            //        bool shiftFilter = ShiftCheckBox.Checked;
-
-            //        Utility utility = new Utility();
-            //        AWCTravelTimeReportFile payrollReport = new AWCTravelTimeReportFile();
-
-            //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-            //        MemoryStream output = payrollReport.CreateDocument(uploadedFile, shiftFilter);
-            //        utility.DownloadTXTFile(output, outFilename);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.Error(ex);
-            //}
-        }
-
-        //protected void RadButtonTravel_Click2(object sender, EventArgs e)
+        //protected void RadButtonServicesException_Click(object sender, EventArgs e)
         //{
-        //    string outFilename = "AWCTravelTimeReport.xlsx";
+        //    string outFilename = "AWCServicesExceptionReport.xlsx";
         //    try
         //    {
-        //        if (RadAsyncUpload1.UploadedFiles.Count == 1)
+        //        if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
         //        {
-        //           bool shiftFilter = ShiftCheckBox.Checked;
-
         //            Utility utility = new Utility();
-        //            AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
-        //            UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-        //            Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
+        //            AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
 
+        //            UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
+        //            UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //Billing Authorization File
+
+        //            Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
         //            utility.DownloadExcelFile(workbook, outFilename);
         //        }
         //    }
@@ -171,6 +102,75 @@ namespace ConsumerMaster
         //        Logger.Error(ex);
         //    }
         //}
+
+        //protected void RadButton5_Click(object sender, EventArgs e)
+        //{
+        //    string outFilename = "AWCServiceNoteAuditReport.xlsx";
+        //    try
+        //    {
+        //        if (RadAsyncUploadClosedActivities.UploadedFiles.Count == 1)
+        //        {
+        //            UploadedFile closedActivitiesFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Closed Activities Report
+        //            UploadedFile auditLogFile = RadAsyncUploadAuditLog.UploadedFiles[0]; //Client Authorization List
+ 
+        //            Utility utility = new Utility();
+        //            AWCServiceNoteAuditReportFile report = new AWCServiceNoteAuditReportFile();
+        //            MemoryStream output = report.CreateDocument(closedActivitiesFile, auditLogFile);
+        //            utility.DownloadTXTFile(output, outFilename);
+        //         }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
+
+        //protected void RadButtonTravel_Click(object sender, EventArgs e)
+        //{
+        //    //string outFilename = "AWCTravelTimeReport.txt";
+        //    //try
+        //    //{
+        //    //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
+        //    //    {
+
+        //    //        bool shiftFilter = ShiftCheckBox.Checked;
+
+        //    //        Utility utility = new Utility();
+        //    //        AWCTravelTimeReportFile payrollReport = new AWCTravelTimeReportFile();
+
+        //    //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+        //    //        MemoryStream output = payrollReport.CreateDocument(uploadedFile, shiftFilter);
+        //    //        utility.DownloadTXTFile(output, outFilename);
+        //    //    }
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Logger.Error(ex);
+        //    //}
+        //}
+
+        protected void RadButtonTravel_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCTravelTimeReport.xlsx";
+            try
+            {
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                   bool shiftFilter = ShiftCheckBox.Checked;
+
+                    Utility utility = new Utility();
+                    AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
+
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
 
         public DataTable GetDataTable(string queryString)
         {

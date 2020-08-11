@@ -66,11 +66,6 @@ namespace ConsumerMaster
 
                         if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
                         {
-                            //foreach (DataRow row in shiftGroup.Rows)
-                            //{
-                            //    reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
-                            //}
-
                             List<ShiftItem> finishList = new List<ShiftItem>();
                             List<ShiftItem> startList = new List<ShiftItem>();
                             int rowCount = shiftGroup.Rows.Count;
@@ -97,20 +92,52 @@ namespace ConsumerMaster
                                 for (int i = 0; i < finishList.Count; i++)
                                 {
                                     TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
-                                    reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes);
+                                    int rounded_minutes = Round((int)span.TotalMinutes);
+                                    double rounded_hours = rounded_minutes / 60.00;
+                                    reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes, rounded_hours);
                                 }
                             }
                         }
                     }
                 }
 
-                ExcelReportFormat reportFormat = new ExcelReportFormat();
-                reportFormat.Header1 = "Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift.";
-                reportFormat.Header2 = String.Format("Date/time: {0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                reportFormat.Header3 = String.Format("Filename: {0}", uploadedFile.FileName);
-                reportFormat.Header4 = " ";
-                workbook = reportFormat.LoadWorkbook(reportResultSet);
-            }
+                WorksheetCollection worksheets = workbook.Worksheets;
+                worksheets.Add();
+                Worksheet sheet1Worksheet = worksheets["Sheet1"];
+                int currentRow = 0;
+
+                foreach (DataRow row in reportResultSet.Rows)
+                {
+                    int column = 0;
+
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientName"].ToString());
+
+                    CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
+
+                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
+
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
+
+                    CellValueFormat decimalFormat = new CellValueFormat("0.00");
+                    sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Rounded"].ToString());
+
+                    currentRow++;
+                }
+
+                    //ExcelReportFormat reportFormat = new ExcelReportFormat();
+                    //reportFormat.Header1 = "Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift.";
+                    //reportFormat.Header2 = String.Format("Date/time: {0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                    //reportFormat.Header3 = String.Format("Filename: {0}", uploadedFile.FileName);
+                    //reportFormat.Header4 = " ";
+                    //workbook = reportFormat.LoadWorkbook(reportResultSet);
+                }
             catch (Exception ex)
             {
                 Logger.Error(ex);
@@ -118,116 +145,13 @@ namespace ConsumerMaster
 
             return workbook;
         }
-
-        public MemoryStream CreateDocument(UploadedFile uploadedFile, bool shiftFilter)
+        int Round(int total_minutes)
         {
-            Utility util = new Utility();
-            Stream input = uploadedFile.InputStream;
-            DataTable dTable = util.GetTimeAndDistanceDataTable(input);
+            int remainder = total_minutes % 15;
+            
+            int rounded_minutes = remainder > 7 ? total_minutes + (15 - remainder) : total_minutes - remainder;
 
-            using (var ms = new MemoryStream())
-            using (var streamWriter = new StreamWriter(ms))
-            {
-                streamWriter.WriteLine("Travel Time – identify any staff that have worked for more than one individual in a day and the time between ending a shift and starting the next shift. ");
-                streamWriter.WriteLine("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                streamWriter.WriteLine("Filename:{0}", uploadedFile.FileName);
-                streamWriter.WriteLine(" ");
-                streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", "StaffID", "StaffName", "ClientID", "ClientName", "Start", "Finish", "Duration");
-
-                var staffGroup = from staffRow in dTable.AsEnumerable()  //Group by StaffID,StaffNamd
-                                 group staffRow by new
-                                 {
-                                     StaffID = staffRow.Field<string>("Staff ID"),
-                                     StaffName = staffRow.Field<string>("Staff Name")
-                                 };
-
-                DataTable reportResultSet = BuildReportResultSet();
-
-                foreach (var staff in staffGroup)
-                {
-                    DataTable shiftsDataTable = BuildTravelTimeDataTable();
-                    foreach (DataRow shiftRow in staff)
-                    {
-                        shiftsDataTable.Rows.Add(shiftRow.Field<string>("Staff ID"), shiftRow.Field<string>("Staff Name"), shiftRow.Field<string>("ID"), shiftRow.Field<string>("Name"), shiftRow.Field<DateTime>("Start"), shiftRow.Field<DateTime>("Finish"), shiftRow.Field<int>("Duration"));
-                    }
-
-                    var shiftDateGroup = from shiftDateRow in shiftsDataTable.AsEnumerable() //Group by Start Date
-                                         orderby shiftDateRow.Field<DateTime>("Start")
-                                         group shiftDateRow by new
-                                         {
-                                             StartDate = shiftDateRow.Field<DateTime>("Start").Date
-                                         };
-                    foreach (var shiftDate in shiftDateGroup)
-                    {
-                        DataTable shiftGroup = BuildTravelTimeDataTable();
-                        foreach (DataRow sRow in shiftDate)
-                        {
-                            shiftGroup.Rows.Add(sRow.Field<string>("StaffID"), sRow.Field<string>("StaffName"), sRow.Field<string>("ClientID"), sRow.Field<string>("ClientName"), sRow.Field<DateTime>("Start"), sRow.Field<DateTime>("Finish"), sRow.Field<int>("Duration"));
-                        }
-
-                        var idCounts = shiftGroup.AsEnumerable()        //Group by Client for Client Count
-                                    .GroupBy(row => row.Field<string>("ClientID"))
-                                    .Select(g => new
-                                    {
-                                        EventID = g.Key,
-                                        Count = g.Count()
-                                    })
-                                    .ToList();
-
-                        if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
-                        {
-                            foreach (DataRow row in shiftGroup.Rows)
-                            {
-                                //streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
-                                streamWriter.WriteLine("{0,-10}, {1,-22}, {2,-10}, {3,-22}, {4,-22}, {5,-22}, {6,-10}", row["StaffID"].ToString(), row["StaffName"].ToString(), row["ClientID"].ToString(), row["ClientName"].ToString(), row["Start"].ToString(), row["Finish"].ToString(), row["Duration"].ToString());
-
-                                reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
-
-                            }
-
-                            streamWriter.WriteLine(" ");
-                            List<ShiftItem> finishList = new List<ShiftItem>();
-                            List<ShiftItem> startList = new List<ShiftItem>();
-                            int rowCount = shiftGroup.Rows.Count;
-
-                            for (int i = 0; i < (rowCount - 1); i++)
-                            {
-                                DataRow fRow = shiftGroup.Rows[i];
-                                finishList.Add(new ShiftItem()
-                                {
-                                    StaffID = (string)fRow["StaffID"],
-                                    StaffName = (string)fRow["StaffName"],
-                                    DateTimeInfo = (DateTime)fRow["Finish"]
-                                });
-                            }
-
-                            for (int i = 1; i < rowCount; i++)
-                            {
-                                DataRow sRow = shiftGroup.Rows[i];
-                                startList.Add(new ShiftItem() { DateTimeInfo = (DateTime)sRow["Start"] });
-                            }
-
-                            if (finishList.Count == startList.Count)
-                            {
-                                for (int i = 0; i < finishList.Count; i++)
-                                {
-                                    TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
-                                    //streamWriter.WriteLine("{0,-10} {1,-22} {2,-10} {3,-22} {4,-22} {5,-22} {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
-                                    streamWriter.WriteLine("{0,-10}, {1,-22}, {2,-10}, {3,-22}, {4,-22}, {5,-22}, {6,-10}", finishList[i].StaffID.ToString(), finishList[i].StaffName.ToString(), "TRAVEL ", "TIME ", finishList[i].DateTimeInfo.ToString(), startList[i].DateTimeInfo.ToString(), span.TotalMinutes.ToString());
-
-                                    reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes);
-
-                                }
-                            }
-
-                            //streamWriter.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                        }
-                    }
-                }
-
-                streamWriter.Flush();
-                return ms;
-            }
+            return rounded_minutes;
         }
 
         public bool FilterByShiftCount(int shiftCount, int clientCount, bool shiftFilter)
@@ -271,7 +195,8 @@ namespace ConsumerMaster
             reportResultSet.Columns.Add("ClientName", typeof(string));
             reportResultSet.Columns.Add("Start", typeof(DateTime));
             reportResultSet.Columns.Add("Finish", typeof(DateTime));
-            reportResultSet.Columns.Add("Duration", typeof(int));
+            reportResultSet.Columns.Add("Duration", typeof(int)); 
+            reportResultSet.Columns.Add("Rounded", typeof(double));
 
             return reportResultSet;
         }
