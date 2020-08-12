@@ -8,7 +8,9 @@
         <table>
             <tr>
                 <td>
-                    <img src="Images/AWCLogo.png" width="231" height="54" />
+<%--                    <asp:Image ID="AWCLogo" runat="server" ImageUrl="~/Images/AWCLogo.png" Width="231" Height="54" />--%>
+<%--                    <img src="/Images/AWCLogo.png" width="231" height="54" />--%>
+                    <img alt="logo" src="<%= Page.ResolveUrl("~/Images/AWCLogo.png")%>" />
                 </td>
             </tr>
             <tr>

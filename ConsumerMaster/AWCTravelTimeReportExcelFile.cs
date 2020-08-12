@@ -6,11 +6,15 @@ using System.IO;
 using Telerik.Web.UI;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Media;
+using System.Text;
+
 namespace ConsumerMaster
 {
     public class AWCTravelTimeReportExcelFile
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly int IndexRowItemStart = 0;
 
         public Workbook CreateWorkbook(UploadedFile uploadedFile, bool shiftFilter)
         {
@@ -101,23 +105,31 @@ namespace ConsumerMaster
                     }
                 }
 
-
                 var sspGroup = from sspDateRow in reportResultSet.AsEnumerable() //Group by Start Date
                                orderby sspDateRow.Field<string>("StaffID")
                                group sspDateRow by new
                                {
                                    StaffID = sspDateRow.Field<string>("StaffID")/*,*/
-                                   //StaffName = sspDateRow.Field<string>("StaffName"),
-                                   //Start = sspDateRow.Field<DateTime>("Start"),
-                                   //Finish = sspDateRow.Field<DateTime>("Finish"),
-                                   //Duration = sspDateRow.Field<int>("Duration"),
-                                   //Rounded = sspDateRow.Field<double>("Rounded")
                                };
+
+
+                string[] columnNames =
+                {
+                    "StaffID",
+                    "StaffName",
+                    "Start",
+                    "Finish",
+                    "Duration",
+                    "Rounded"
+                };
 
                 WorksheetCollection worksheets = workbook.Worksheets;
                 worksheets.Add();
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
-                int currentRow = 0;
+
+                int rowCnt = Sheet1WorksheetHeader(sheet1Worksheet, columnNames);
+                int currentRow = IndexRowItemStart + rowCnt;
+                //int currentRow = 0;
 
                 foreach (var bySSP in sspGroup)
                 {
@@ -138,9 +150,7 @@ namespace ConsumerMaster
 
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
 
-
-
-                        sspHours =  sspHours  + Convert.ToDouble(row["Rounded"].ToString());
+                        sspHours += Convert.ToDouble(row["Rounded"].ToString());
 
                         CellValueFormat decimalFormat = new CellValueFormat("0.00");
                         sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
@@ -156,10 +166,18 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
                     sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
                     sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+
+                    CellValueFormat decFormat = new CellValueFormat("0.00");
+                    sheet1Worksheet.Cells[currentRow, col].SetFormat(decFormat);
                     sheet1Worksheet.Cells[currentRow, col++].SetValue(sspHours);
 
                     currentRow++;
 
+                }
+
+                for (int i = 1; i < columnNames.Count(); i++)  //Start at 1 instead of 0
+                {
+                    sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
             }
             catch (Exception ex)
@@ -231,5 +249,42 @@ namespace ConsumerMaster
             public string StaffName { get; set; }
             public DateTime DateTimeInfo { get; set; }
         };
+
+        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames)
+        {
+            int rowCount = 0;
+            try
+            {
+                //PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
+
+                //worksheet.Cells[rowCount, 0].SetIsBold(true);
+                //worksheet.Cells[rowCount++, 0].SetValue("AWC Services Exception Report – Payroll/Billing Code Mismatched and NO Billing Authorization");
+                //worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
+                //worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}; {1}", uploadedTDFileName, uploadedBAFilename));
+                //rowCount++;
+
+                foreach (string column in columnNames)
+                {
+                    int columnKey = Array.IndexOf(columnNames, column);
+                    string columnName = column;
+
+                    CellIndex cellIndex = new CellIndex(rowCount, columnKey);
+                    CellSelection cellSelection = worksheet.Cells[cellIndex];
+                    cellSelection.SetIsBold(true);
+                    cellSelection.SetUnderline(UnderlineType.Single);
+                    cellSelection.SetHorizontalAlignment(RadHorizontalAlignment.Center);
+
+                    worksheet.Cells[rowCount, columnKey].SetValue(columnName);
+                }
+
+                rowCount++;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+
+            return rowCount;
+        }
     }
 }
