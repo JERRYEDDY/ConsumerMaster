@@ -36,7 +36,6 @@ namespace ConsumerMaster
                                  };
 
                 DataTable reportResultSet = BuildReportResultSet();
-
                 foreach (var staff in staffGroup)
                 {
                     DataTable shiftsDataTable = BuildTravelTimeDataTable();
@@ -68,8 +67,8 @@ namespace ConsumerMaster
                                     })
                                     .ToList();
 
-                        if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
-                        {
+                        //if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
+                        //{
                             List<ShiftItem> finishList = new List<ShiftItem>();
                             List<ShiftItem> startList = new List<ShiftItem>();
                             int rowCount = shiftGroup.Rows.Count;
@@ -101,7 +100,7 @@ namespace ConsumerMaster
                                     reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes, rounded_hours);
                                 }
                             }
-                        }
+                        //}
                     }
                 }
 
@@ -120,7 +119,8 @@ namespace ConsumerMaster
                     "Start",
                     "Finish",
                     "Duration",
-                    "Rounded"
+                    "Rounded",
+                    "Eligibiliy"
                 };
 
                 WorksheetCollection worksheets = workbook.Worksheets;
@@ -129,13 +129,19 @@ namespace ConsumerMaster
 
                 int rowCnt = Sheet1WorksheetHeader(sheet1Worksheet, columnNames);
                 int currentRow = IndexRowItemStart + rowCnt;
-                //int currentRow = 0;
 
                 foreach (var bySSP in sspGroup)
                 {
                     double sspHours = 0;
                     foreach (DataRow row in bySSP)
                     {
+                        string elibibilityStatus;
+                        int duration = Convert.ToInt32(row["Duration"].ToString());
+                        if (duration > 7 && duration < 61) //Eligibility
+                            elibibilityStatus = "ELIGIBLE";
+                        else
+                            elibibilityStatus = "INELIGIBLE";
+
                         int column = 0;
 
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
@@ -156,23 +162,24 @@ namespace ConsumerMaster
                         sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Rounded"].ToString());
 
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(elibibilityStatus);
+
                         currentRow++;
                     }
 
                     int col = 0;
 
-                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
-                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
-                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
-                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
-                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" ");
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" "); //StaffID
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" "); //StaffName
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" "); //Start
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" "); //Finish
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(" "); //Duration
 
                     CellValueFormat decFormat = new CellValueFormat("0.00");
                     sheet1Worksheet.Cells[currentRow, col].SetFormat(decFormat);
-                    sheet1Worksheet.Cells[currentRow, col++].SetValue(sspHours);
+                    sheet1Worksheet.Cells[currentRow, col++].SetValue(sspHours); //Rounded
 
                     currentRow++;
-
                 }
 
                 for (int i = 1; i < columnNames.Count(); i++)  //Start at 1 instead of 0

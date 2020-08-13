@@ -156,7 +156,8 @@ namespace ConsumerMaster
             {
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
-                   bool shiftFilter = ShiftCheckBox.Checked;
+                    //bool shiftFilter = ShiftCheckBox.Checked;
+                    bool shiftFilter = true;
 
                     Utility utility = new Utility();
                     AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();

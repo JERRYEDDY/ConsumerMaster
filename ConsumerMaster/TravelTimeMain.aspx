@@ -37,9 +37,9 @@
                 </td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;
+<%--                <td>&nbsp;&nbsp;
                     <asp:CheckBox RenderMode="Lightweight" ID="ShiftCheckBox" runat="server" Text="&nbsp;Filter by Shift" />
-                </td>
+                </td>--%>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
                 </td>
