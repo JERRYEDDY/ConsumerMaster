@@ -153,7 +153,7 @@ namespace ConsumerMaster
                             continue;
                         }
 
-                        int column = 0;
+                        int  column = 0;
 
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
