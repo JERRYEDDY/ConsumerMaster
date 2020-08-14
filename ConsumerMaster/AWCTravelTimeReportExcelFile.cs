@@ -28,7 +28,7 @@ namespace ConsumerMaster
 
                 int totalRecords = dTable.Rows.Count;
 
-                var staffGroup = from staffRow in dTable.AsEnumerable()  //Group by StaffID,StaffNamd
+                var staffGroup = from staffRow in dTable.AsEnumerable()  //Group by StaffID,StaffName
                                  group staffRow by new
                                  {
                                      StaffID = staffRow.Field<string>("Staff ID"),
@@ -67,8 +67,14 @@ namespace ConsumerMaster
                                     })
                                     .ToList();
 
-                        //if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, shiftFilter))
-                        //{
+                        if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, true))
+                        {
+
+                            //foreach (DataRow row in shiftGroup.Rows)
+                            //{
+                            //    reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
+                            //}
+
                             List<ShiftItem> finishList = new List<ShiftItem>();
                             List<ShiftItem> startList = new List<ShiftItem>();
                             int rowCount = shiftGroup.Rows.Count;
@@ -100,12 +106,12 @@ namespace ConsumerMaster
                                     reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes, rounded_hours);
                                 }
                             }
-                        //}
+                        }
                     }
                 }
 
                 var sspGroup = from sspDateRow in reportResultSet.AsEnumerable() //Group by Start Date
-                               orderby sspDateRow.Field<string>("StaffID")
+                               orderby sspDateRow.Field<string>("StaffName")
                                group sspDateRow by new
                                {
                                    StaffID = sspDateRow.Field<string>("StaffID")/*,*/
@@ -135,12 +141,17 @@ namespace ConsumerMaster
                     double sspHours = 0;
                     foreach (DataRow row in bySSP)
                     {
-                        string elibibilityStatus;
+                        string eligibilityStatus;
                         int duration = Convert.ToInt32(row["Duration"].ToString());
-                        if (duration > 7 && duration < 61) //Eligibility
-                            elibibilityStatus = "ELIGIBLE";
+                        if (Between(duration, 7, 61, false)) 
+                        {
+                            eligibilityStatus = "ELIGIBILE";
+                        }
                         else
-                            elibibilityStatus = "INELIGIBLE";
+                        {
+                            eligibilityStatus = "INELIGIBILE";
+                            continue;
+                        }
 
                         int column = 0;
 
@@ -156,16 +167,19 @@ namespace ConsumerMaster
 
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
 
-                        sspHours = sspHours + Convert.ToDouble(row["Rounded"].ToString());
+                        sspHours += Convert.ToDouble(row["Rounded"].ToString());
 
                         CellValueFormat decimalFormat = new CellValueFormat("0.00");
                         sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Rounded"].ToString());
 
-                        sheet1Worksheet.Cells[currentRow, column++].SetValue(elibibilityStatus);
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(eligibilityStatus);
 
                         currentRow++;
                     }
+
+                    if (sspHours == 0) //No Subtotal Hours
+                        continue;
 
                     int col = 0;
 
@@ -201,6 +215,11 @@ namespace ConsumerMaster
             int rounded_minutes = remainder > 7 ? total_minutes + (15 - remainder) : total_minutes - remainder;
 
             return rounded_minutes;
+        }
+
+        public bool Between(int num, int lower, int upper, bool inclusive = false)
+        {
+            return inclusive ? lower <= num && num <= upper : lower < num && num < upper;
         }
 
         public bool FilterByShiftCount(int shiftCount, int clientCount, bool shiftFilter)
