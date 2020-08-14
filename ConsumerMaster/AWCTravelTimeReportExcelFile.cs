@@ -156,7 +156,7 @@ namespace ConsumerMaster
 
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
 
-                        sspHours += Convert.ToDouble(row["Rounded"].ToString());
+                        sspHours = sspHours + Convert.ToDouble(row["Rounded"].ToString());
 
                         CellValueFormat decimalFormat = new CellValueFormat("0.00");
                         sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
