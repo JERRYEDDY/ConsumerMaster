@@ -125,8 +125,7 @@ namespace ConsumerMaster
                     "Start",
                     "Finish",
                     "Duration",
-                    "Rounded",
-                    "Eligibiliy"
+                    "Rounded"
                 };
 
                 WorksheetCollection worksheets = workbook.Worksheets;
@@ -141,17 +140,9 @@ namespace ConsumerMaster
                     double sspHours = 0;
                     foreach (DataRow row in bySSP)
                     {
-                        string eligibilityStatus;
                         int duration = Convert.ToInt32(row["Duration"].ToString());
-                        if (Between(duration, 7, 61, false)) 
-                        {
-                            eligibilityStatus = "ELIGIBILE";
-                        }
-                        else
-                        {
-                            eligibilityStatus = "INELIGIBILE";
+                        if (!Between(duration, 7, 61, false)) 
                             continue;
-                        }
 
                         int  column = 0;
 
@@ -172,8 +163,6 @@ namespace ConsumerMaster
                         CellValueFormat decimalFormat = new CellValueFormat("0.00");
                         sheet1Worksheet.Cells[currentRow, column].SetFormat(decimalFormat);
                         sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Rounded"].ToString());
-
-                        sheet1Worksheet.Cells[currentRow, column++].SetValue(eligibilityStatus);
 
                         currentRow++;
                     }
