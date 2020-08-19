@@ -67,44 +67,35 @@ namespace ConsumerMaster
                                     })
                                     .ToList();
 
-                        if (FilterByShiftCount(shiftGroup.Rows.Count, idCounts.Count, true))
+                        List<ShiftItem> finishList = new List<ShiftItem>();
+                        List<ShiftItem> startList = new List<ShiftItem>();
+                        int rowCount = shiftGroup.Rows.Count;
+
+                        for (int i = 0; i < (rowCount - 1); i++)
                         {
-
-                            //foreach (DataRow row in shiftGroup.Rows)
-                            //{
-                            //    reportResultSet.Rows.Add(row["StaffID"], row["StaffName"], row["ClientID"], row["ClientName"], row["Start"], row["Finish"], row["Duration"]);
-                            //}
-
-                            List<ShiftItem> finishList = new List<ShiftItem>();
-                            List<ShiftItem> startList = new List<ShiftItem>();
-                            int rowCount = shiftGroup.Rows.Count;
-
-                            for (int i = 0; i < (rowCount - 1); i++)
+                            DataRow fRow = shiftGroup.Rows[i];
+                            finishList.Add(new ShiftItem()
                             {
-                                DataRow fRow = shiftGroup.Rows[i];
-                                finishList.Add(new ShiftItem()
-                                {
-                                    StaffID = (string)fRow["StaffID"],
-                                    StaffName = (string)fRow["StaffName"],
-                                    DateTimeInfo = (DateTime)fRow["Finish"]
-                                });
-                            }
+                                StaffID = (string)fRow["StaffID"],
+                                StaffName = (string)fRow["StaffName"],
+                                DateTimeInfo = (DateTime)fRow["Finish"]
+                            });
+                        }
 
-                            for (int i = 1; i < rowCount; i++)
-                            {
-                                DataRow sRow = shiftGroup.Rows[i];
-                                startList.Add(new ShiftItem() { DateTimeInfo = (DateTime)sRow["Start"] });
-                            }
+                        for (int i = 1; i < rowCount; i++)
+                        {
+                            DataRow sRow = shiftGroup.Rows[i];
+                            startList.Add(new ShiftItem() { DateTimeInfo = (DateTime)sRow["Start"] });
+                        }
 
-                            if (finishList.Count == startList.Count)
+                        if (finishList.Count == startList.Count)
+                        {
+                            for (int i = 0; i < finishList.Count; i++)
                             {
-                                for (int i = 0; i < finishList.Count; i++)
-                                {
-                                    TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
-                                    int rounded_minutes = Round((int)span.TotalMinutes);
-                                    double rounded_hours = rounded_minutes / 60.00;
-                                    reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes, rounded_hours);
-                                }
+                                TimeSpan span = startList[i].DateTimeInfo - finishList[i].DateTimeInfo;
+                                int rounded_minutes = Round((int)span.TotalMinutes);
+                                double rounded_hours = rounded_minutes / 60.00;
+                                reportResultSet.Rows.Add(finishList[i].StaffID, finishList[i].StaffName, "TRAVEL ", "TIME ", finishList[i].DateTimeInfo, startList[i].DateTimeInfo, span.TotalMinutes, rounded_hours);
                             }
                         }
                     }
@@ -179,6 +170,9 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, col++].SetValue(" "); //Duration
 
                     CellValueFormat decFormat = new CellValueFormat("0.00");
+                    CellBorders borders = new CellBorders();
+                    borders.Top = new CellBorder(CellBorderStyle.Thin, new ThemableColor(Colors.Black));
+                    sheet1Worksheet.Cells[currentRow, col].SetBorders(borders);
                     sheet1Worksheet.Cells[currentRow, col].SetFormat(decFormat);
                     sheet1Worksheet.Cells[currentRow, col++].SetValue(sspHours); //Rounded
 
@@ -197,6 +191,7 @@ namespace ConsumerMaster
 
             return workbook;
         }
+
         int Round(int total_minutes)
         {
             int remainder = total_minutes % 15;
