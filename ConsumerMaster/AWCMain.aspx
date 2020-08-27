@@ -70,6 +70,14 @@
             </tr>
             <tr>
                 <td>
+                    HCSIS Billing Authorizations Filename .xlsx:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+               </td>
+            </tr>
+            <tr>
+                <td>
                     Service Exception Report
                 </td>
                 <td>

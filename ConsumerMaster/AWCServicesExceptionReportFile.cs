@@ -71,7 +71,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile)
+        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile, UploadedFile uploadedHBAFile)
         {
             Workbook workbook = new Workbook();
 
@@ -84,12 +84,15 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream inputTD = uploadedTDFile.InputStream;
                 Stream inputBA = uploadedBAFile.InputStream;
+                Stream inputHBA = uploadedHBAFile.InputStream;
 
                 DataTable tempTable = util.GetUPVTDDataTable(inputTD);
                 tempTable.DefaultView.Sort = "Name, Start";
                 DataTable dUPVTDTable = tempTable.DefaultView.ToTable();  //Sort by Client Name and Start DateTime
 
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
+
+                DataTable dHBATable = util.GetHCSISDataTable(inputHBA);
 
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();

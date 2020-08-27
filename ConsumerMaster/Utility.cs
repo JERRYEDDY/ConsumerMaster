@@ -778,13 +778,14 @@ namespace ConsumerMaster
                 dataTable.Columns.Add(spc[32].name, spc[32].type); //rate_description
                 dataTable.Columns.Add(spc[23].name, spc[23].type); //detail_balance
                 dataTable.Columns.Add(spc[3].name, spc[3].type); //is_expired
+                dataTable.Columns.Add(spc[9].name, spc[9].type); //medicaid_number
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
                     //if (GetCellData(InputWorksheet, i, 4) != "Added a Note to the Activity") //Action
                     //    continue;
 
-                    var values = new object[8];
+                    var values = new object[9];
                     //values[0] = GetCellData(InputWorksheet, i, 0); //authorizations_id
                     //values[1] = GetCellData(InputWorksheet, i, 1); //authorization_details_id
                     //values[2] = GetCellData(InputWorksheet, i, 2); //authorization_type
@@ -793,7 +794,7 @@ namespace ConsumerMaster
                     //values[5] = GetCellData(InputWorksheet, i, 5); //authorization_number
                     //values[6] = GetCellData(InputWorksheet, i, 6); //people_id
                     values[0] = GetCellData(InputWorksheet, i, 7); //id_no
-                    //values[8] = GetCellData(InputWorksheet, i, 8); //medicaid_number
+                    values[8] = GetCellData(InputWorksheet, i, 8); //medicaid_number
                     //values[9] = GetCellData(InputWorksheet, i, 9); //policy_num
                     //values[10] = GetCellData(InputWorksheet, i, 10); //from_date
                     //values[11] = GetCellData(InputWorksheet, i, 11); //to_date
@@ -860,6 +861,102 @@ namespace ConsumerMaster
 
             return dataTable;
         }
+
+        public DataTable GetHCSISDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[]
+            {
+                new SPColumn("Program_Office",typeof(string)),
+                new SPColumn("County_Joinder",typeof(string)),
+                new SPColumn("Fiscal_Year",typeof(string)),
+                new SPColumn("Waiver_Program",typeof(string)),
+                new SPColumn("Individual_Name",typeof(string)),
+                new SPColumn("Recipient_ID",typeof(string)),
+                new SPColumn("SC_Entity_Name",typeof(string)),
+                new SPColumn("SC_Name",typeof(string)),
+                new SPColumn("Provider_Name",typeof(string)),
+                new SPColumn("MPI",typeof(string)),
+                new SPColumn("Service_Location",typeof(string)),
+                new SPColumn("Service_Name",typeof(string)),
+                new SPColumn("ProcedureCode_Modifier",typeof(string)),
+                new SPColumn("Service_Status",typeof(string)),
+                new SPColumn("Service_Start_Date",typeof(DateTime)),
+                new SPColumn("Service_End_Date",typeof(DateTime)),
+                new SPColumn("Funding_Stream",typeof(string)),
+                new SPColumn("Authorized_Units",typeof(string)),
+                new SPColumn("Utilized_Units",typeof(string)),
+                new SPColumn("Remaining_Units",typeof(string)),
+                new SPColumn("Unit_Cost",typeof(string)),
+                new SPColumn("Authorized_Amount",typeof(string)),
+                new SPColumn("Utilized_Amount",typeof(string)),
+                new SPColumn("Last_Paid_Service_Date",typeof(string)),
+                new SPColumn("Last_Authorized_Date",typeof(string)),
+                new SPColumn("ICD_9_Diagnosis_Code",typeof(string)),
+                new SPColumn("ICD_10_Diagnosis_Code",typeof(string)),
+                new SPColumn("TXT_NEEDS_LEVEL",typeof(string)),
+                new SPColumn("TXT_NEEDS_GROUP",typeof(string)),
+                new SPColumn("NL_NG_EFFBEG_DATE",typeof(string)),
+
+            };
+
+            DataTable dataTable = new DataTable(); 
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                dataTable.Columns.Add(spc[4].name, spc[4].type); //Individual_Name
+                dataTable.Columns.Add(spc[5].name, spc[5].type); //Recipient_ID
+                dataTable.Columns.Add(spc[12].name, spc[12].type); //ProcedureCode_Modifier
+                dataTable.Columns.Add(spc[14].name, spc[14].type); //Service_Start_Date
+                dataTable.Columns.Add(spc[15].name, spc[15].type); //Service_End_Date
+                dataTable.Columns.Add(spc[17].name, spc[17].type); //Authorized_Units
+                dataTable.Columns.Add(spc[18].name, spc[18].type); //Utilized_Units
+                dataTable.Columns.Add(spc[19].name, spc[19].type); //Remaining_Units
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[8];
+
+                    values[0] = GetCellData(InputWorksheet, i, 4); //iIndividual_Names_expired
+                    values[1] = GetCellData(InputWorksheet, i, 5); //Recipient_ID
+
+
+                    //string input1 = "test, and test but not testing.  But yes to test";
+                    //string pattern = @"\b:00\b";
+                    //string replace = "";
+                    //string result = Regex.Replace(input1, pattern, replace);
+
+                    string service = GetCellData(InputWorksheet, i, 12); //ProcedureCode_Modifier  W7060:00:00:00:00
+                    string result = Regex.Replace(service, @"\b:00\b", "");
+                    values[2] = result;
+
+                    string startDateString = GetCellData(InputWorksheet, i, 14); //Service_Start_Date
+                    DateTime startDate = Convert.ToDateTime(startDateString);
+                    values[3] = startDate; //Start Date
+
+                    string endDateString = GetCellData(InputWorksheet, i, 15); //Service_End_Date
+                    DateTime endDate = Convert.ToDateTime(endDateString);
+                    values[4] = endDate; //End Date
+
+                    values[5] = GetCellData(InputWorksheet, i, 17); //Authorized_Units
+                    values[6] = GetCellData(InputWorksheet, i, 18); //Utilized_Units
+                    values[7] = GetCellData(InputWorksheet, i, 19); //Remaining_Units
+
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
 
         string ParseClientID(string clientString)
         {
