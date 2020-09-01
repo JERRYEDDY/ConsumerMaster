@@ -92,9 +92,13 @@ namespace ConsumerMaster
 
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
-                DataTable dHBATable = util.GetHCSISDataTable(inputHBA);
 
-                DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
+                DataTable tmpTable = util.GetClientIDsDataTable(inputBA);
+                DataTable dClientIDsTable = util.RemoveDuplicateRows(tmpTable, "id_no");
+                DataTable dHBATable = util.GetHCSISDataTable(inputHBA, dClientIDsTable);
+
+
+                DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable, dHBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
                 int rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName);
@@ -169,7 +173,7 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-        public DataTable FindAllExceptions(DataTable dTDTable, DataTable dBATable)
+        public DataTable FindAllExceptions(DataTable dTDTable, DataTable dBATable, DataTable dHBATable)
         {
             DataTable exceptionsTable = BuildExceptionsDataTable();
 
@@ -208,6 +212,13 @@ namespace ConsumerMaster
                     }
                     if (noBillingAuthorizationCount == 0)
                         exceptionsString.Append("NO BillAuth;");
+
+
+
+                    String BACheck = String.Format("id_no = '" + clientID + "'");
+                    DataRow[] BAResults = dBATable.Select(BACheck);
+                    DataRow[] HBAResults = dHBATable.Select(BACheck);
+
 
                     if (noBillingAuthorizationCount == 0 || servicesMismatched)
                     {
@@ -248,6 +259,19 @@ namespace ConsumerMaster
             return exceptionsTable;
         }
 
+        void MatchBillingAuthorizations(DataTable dBATable, DataTable dHBATable)
+        {
+
+
+
+
+
+
+
+
+
+        }
+
         bool IsServicesMisMatched(int payrollCodeIndex, int billingCodeIndex) 
         {
             bool isMisMatched;
@@ -257,7 +281,7 @@ namespace ConsumerMaster
             else
             {
                 if (billingCodeIndex == 12 && Enumerable.Range(12, 15).Contains(payrollCodeIndex))
-                    isMisMatched = false;
+                    isMisMatched = false;  //SHOULD THIS BE TRUE?
                 else
                     isMisMatched = false;
             }

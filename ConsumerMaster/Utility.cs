@@ -606,92 +606,7 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-        //public DataTable GetAuditLogDataTable(Stream input)
-        //{
-        //    SPColumn[] spc = new SPColumn[10]
-        //    {
-        //        new SPColumn("Activity ID", typeof(string)),
-        //        new SPColumn("ID", typeof(string)),
-        //        new SPColumn("Date", typeof(DateTime)),
-        //        new SPColumn("Who", typeof(string)),
-        //        new SPColumn("Start Time", typeof(DateTime)),
-        //        new SPColumn("Stop Time", typeof(DateTime)),
-        //        new SPColumn("Action", typeof(string)),
-        //        new SPColumn("To", typeof(string)),
-        //        new SPColumn("From", typeof(string)),
-        //        new SPColumn("Comment", typeof(string)),
-        //    };
-
-        //    DataTable dataTable = new DataTable();
-        //    try
-        //    {
-        //        XlsxFormatProvider formatProvider = new XlsxFormatProvider();
-        //        Workbook InputWorkbook = formatProvider.Import(input);
-
-        //        var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
-
-        //        for (int i = 0; i < spc.Count(); i++)
-        //        {
-        //            CellSelection selection = InputWorksheet.Cells[0, i];
-        //            var columnName = "Column" + (i + 1);
-        //            dataTable.Columns.Add(spc[i].name, spc[i].type);
-        //        }
-
-        //        for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
-        //        {
-        //            string action = GetCellData(InputWorksheet, i, 4);
-        //            if (!action.StartsWith("Updated  Billing") && !action.StartsWith("Updated  Payroll")) //Action
-        //                continue;
-
-        //            var values = new object[spc.Count()];
-        //            string subjectString = GetCellData(InputWorksheet, i, 3); //Subject
-        //            string[] subjectSub = subjectString.Split('-');
-
-        //            Regex rg = new Regex(@"\ (.*)\ ");
-        //            string activityID = rg.Match(subjectSub[0]).Groups[1].Value;
-        //            values[0] = activityID;   //Activity ID
-
-        //            Regex rx = new Regex(@"\((.*)\,");
-        //            string clientID = rx.Match(subjectSub[2]).Groups[1].Value;
-        //            values[1] = clientID;    //ID
-
-        //            string dateStr = GetCellData(InputWorksheet, i, 0); 
-        //            DateTime tDate = Convert.ToDateTime(dateStr);
-        //            values[2] = tDate; //Date
-
-        //            values[3] = GetCellData(InputWorksheet, i, 1); //Who
-
-        //            DateTime[] startStopTime = Parse2StartStopTime(subjectSub[3], subjectSub[4]);
-        //            values[4] = startStopTime[0];  //Start Time
-        //            values[5] = startStopTime[1];  //Stop Time
-
-        //            string payrollAction = "Updated  Payroll Code from  H&C 1:1 Degreed Staff (W7061) to  H&C 1:1 W/B (W7060)";
-        //            string billingAction = "Updated  Billing Code from  ODP/ W7061 / H&C 1:1 Degreed Staff to  ODP / W7060 / H&C 1:1 W/B";
-
-
-        //            Regex from = new Regex("from(.*)to");
-        //            var result1 = from.Match(payrollAction);
-        //            var output1 = result1.Groups[1].ToString();
-
-        //            Regex to = new Regex("to(.*)$");
-        //            var result2 = to.Match(payrollAction);
-        //            var output2 = result2.Groups[1].ToString();
-
-
-        //            values[6] = GetCellData(InputWorksheet, i, 4); //Action
-        //            values[7] = GetCellData(InputWorksheet, i, 5); //Comment
-
-        //            dataTable.Rows.Add(values);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex);
-        //    };
-
-        //    return dataTable;
-        //}
-
+ 
         public DataTable GetBillingAuthorizationDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[57]
@@ -763,13 +678,6 @@ namespace ConsumerMaster
 
                 var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
 
-                //for (int i = 0; i < spc.Count(); i++)
-                //{
-                //    CellSelection selection = InputWorksheet.Cells[0, i];
-                //    var columnName = "Column" + (i + 1);
-                //    dataTable.Columns.Add(spc[i].name, spc[i].type);
-                //}
-
                 dataTable.Columns.Add(spc[7].name, spc[7].type); //id_no
                 dataTable.Columns.Add(spc[4].name, spc[4].type); //full_name
                 dataTable.Columns.Add(spc[12].name, spc[12].type); //date_from_details
@@ -778,26 +686,16 @@ namespace ConsumerMaster
                 dataTable.Columns.Add(spc[32].name, spc[32].type); //rate_description
                 dataTable.Columns.Add(spc[23].name, spc[23].type); //detail_balance
                 dataTable.Columns.Add(spc[3].name, spc[3].type); //is_expired
-                dataTable.Columns.Add(spc[9].name, spc[9].type); //medicaid_number
+                dataTable.Columns.Add(spc[8].name, spc[8].type); //medicaid_number
+                dataTable.Columns.Add("procedure_code", typeof(string)); //procedure_code
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
-                    //if (GetCellData(InputWorksheet, i, 4) != "Added a Note to the Activity") //Action
-                    //    continue;
-
-                    var values = new object[9];
-                    //values[0] = GetCellData(InputWorksheet, i, 0); //authorizations_id
-                    //values[1] = GetCellData(InputWorksheet, i, 1); //authorization_details_id
-                    //values[2] = GetCellData(InputWorksheet, i, 2); //authorization_type
+                    var values = new object[10];
                     values[7] = GetCellData(InputWorksheet, i, 3); //is_expired
                     values[1] = GetCellData(InputWorksheet, i, 4); //full_name
-                    //values[5] = GetCellData(InputWorksheet, i, 5); //authorization_number
-                    //values[6] = GetCellData(InputWorksheet, i, 6); //people_id
                     values[0] = GetCellData(InputWorksheet, i, 7); //id_no
                     values[8] = GetCellData(InputWorksheet, i, 8); //medicaid_number
-                    //values[9] = GetCellData(InputWorksheet, i, 9); //policy_num
-                    //values[10] = GetCellData(InputWorksheet, i, 10); //from_date
-                    //values[11] = GetCellData(InputWorksheet, i, 11); //to_date
 
                     string fromDateString = GetCellData(InputWorksheet, i, 12); //date_from_details
                     DateTime fromDate = Convert.ToDateTime(fromDateString);
@@ -807,49 +705,13 @@ namespace ConsumerMaster
                     DateTime toDate = Convert.ToDateTime(toDateString);
                     values[3] = toDate; //To Date
 
-                    //values[14] = GetCellData(InputWorksheet, i, 14); //benefits_assignments_id
-                    //values[15] = GetCellData(InputWorksheet, i, 15); //payor_vendor_id
-                    //values[16] = GetCellData(InputWorksheet, i, 16); //vendor_name
-                    //values[17] = GetCellData(InputWorksheet, i, 17); //units_aut_header
-                    //values[18] = GetCellData(InputWorksheet, i, 18); //units_used_header
-                    //values[19] = GetCellData(InputWorksheet, i, 19); //header_balance
-                    //values[20] = GetCellData(InputWorksheet, i, 20); //total_aut_detail
-                    //values[21] = GetCellData(InputWorksheet, i, 21); //units_aut_detail
-                    //values[22] = GetCellData(InputWorksheet, i, 22); //units_used_detail
                     values[6] = GetCellData(InputWorksheet, i, 23); //detail_balance
-                    //values[24] = GetCellData(InputWorksheet, i, 24); //units_performed_header
-                    //values[25] = GetCellData(InputWorksheet, i, 25); //units_sched_header
-                    //values[26] = GetCellData(InputWorksheet, i, 26); //units_performed_detail
-                    //values[27] = GetCellData(InputWorksheet, i, 27); //units_sched_detail
-                    //values[28] = GetCellData(InputWorksheet, i, 28); //program_name
-                    //values[29] = GetCellData(InputWorksheet, i, 29); //group_profile_type
-                    //values[30] = GetCellData(InputWorksheet, i, 30); //profile_name
                     values[4] = GetCellData(InputWorksheet, i, 31); //service_name
-                    values[5] = GetCellData(InputWorksheet, i, 32); //rate_description
-                    //values[33] = GetCellData(InputWorksheet, i, 33); ////program_modifier_code
-                    //values[34] = GetCellData(InputWorksheet, i, 34); //billing_payment_plan_id
-                    //values[35] = GetCellData(InputWorksheet, i, 35); //over_procedure_code
-                    //values[36] = GetCellData(InputWorksheet, i, 36); //procedure_code_id
-                    //values[37] = GetCellData(InputWorksheet, i, 37); //billing_payment_plan_scheme_link_id
-                    //values[38] = GetCellData(InputWorksheet, i, 38); //billing_service_bundle_id
-                    //values[39] = GetCellData(InputWorksheet, i, 39); //service_bundle_name
-                    //values[40] = GetCellData(InputWorksheet, i, 40); //is_billing
-                    //values[41] = GetCellData(InputWorksheet, i, 41); //type_of_authorizations
-                    //values[42] = GetCellData(InputWorksheet, i, 42); //staff_id
-                    //values[43] = GetCellData(InputWorksheet, i, 43); //staff_name
-                    //values[44] = GetCellData(InputWorksheet, i, 44); //amount_charged
-                    //values[45] = GetCellData(InputWorksheet, i, 45); //over_procedure_code_amt
-                    //values[46] = GetCellData(InputWorksheet, i, 46); //pa_location_code
-                    //values[47] = GetCellData(InputWorksheet, i, 47); //school_district_id
-                    //values[48] = GetCellData(InputWorksheet, i, 48); //school_district
-                    //values[49] = GetCellData(InputWorksheet, i, 49); //school_district_code
-                    //values[50] = GetCellData(InputWorksheet, i, 50); //dtFromDate
-                    //values[51] = GetCellData(InputWorksheet, i, 51); //dtToDate
-                    //values[52] = GetCellData(InputWorksheet, i, 52); //authorization_reason
-                    //values[53] = GetCellData(InputWorksheet, i, 53); //authorization_message
-                    //values[54] = GetCellData(InputWorksheet, i, 54); //client_facility_name
-                    //values[55] = GetCellData(InputWorksheet, i, 55); //client_managing_office_name
-                    //values[56] = GetCellData(InputWorksheet, i, 56); //is_extended
+
+                    string rateDescription = GetCellData(InputWorksheet, i, 32); //rate_description
+                    values[5] = rateDescription;
+                    Match procedureCode = Regex.Match(rateDescription, @"^.*?(?=-)");
+                    values[9] = procedureCode; //procedure_code
 
                     dataTable.Rows.Add(values);
                 }
@@ -862,7 +724,99 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-        public DataTable GetHCSISDataTable(Stream input)
+        public DataTable GetClientIDsDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[57]
+            {
+                new SPColumn("authorizations_id", typeof(string)),
+                new SPColumn("authorization_details_id", typeof(string)),
+                new SPColumn("authorization_type", typeof(string)),
+                new SPColumn("is_expired", typeof(string)),
+                new SPColumn("full_name", typeof(string)),
+                new SPColumn("authorization_number", typeof(string)),
+                new SPColumn("people_id", typeof(string)),
+                new SPColumn("id_no", typeof(string)),
+                new SPColumn("medicaid_number", typeof(string)),
+                new SPColumn("policy_num", typeof(string)),
+                new SPColumn("from_date", typeof(string)),
+                new SPColumn("to_date", typeof(string)),
+                new SPColumn("date_from_details", typeof(DateTime)),
+                new SPColumn("date_to_details", typeof(DateTime)),
+                new SPColumn("benefits_assignments_id", typeof(string)),
+                new SPColumn("payor_vendor_id", typeof(string)),
+                new SPColumn("vendor_name", typeof(string)),
+                new SPColumn("units_aut_header", typeof(string)),
+                new SPColumn("units_used_header", typeof(string)),
+                new SPColumn("header_balance", typeof(string)),
+                new SPColumn("total_aut_detail", typeof(string)),
+                new SPColumn("units_aut_detail", typeof(string)),
+                new SPColumn("units_used_detail", typeof(string)),
+                new SPColumn("detail_balance", typeof(string)),
+                new SPColumn("units_performed_header", typeof(string)),
+                new SPColumn("units_sched_header", typeof(string)),
+                new SPColumn("units_performed_detail", typeof(string)),
+                new SPColumn("units_sched_detail", typeof(string)),
+                new SPColumn("program_name", typeof(string)),
+                new SPColumn("group_profile_type", typeof(string)),
+                new SPColumn("profile_name", typeof(string)),
+                new SPColumn("service_name", typeof(string)),
+                new SPColumn("rate_description", typeof(string)),
+                new SPColumn("program_modifier_code", typeof(string)),
+                new SPColumn("billing_payment_plan_id", typeof(string)),
+                new SPColumn("over_procedure_code", typeof(string)),
+                new SPColumn("procedure_code_id", typeof(string)),
+                new SPColumn("billing_payment_plan_scheme_link_id", typeof(string)),
+                new SPColumn("billing_service_bundle_id", typeof(string)),
+                new SPColumn("service_bundle_name", typeof(string)),
+                new SPColumn("is_billing", typeof(string)),
+                new SPColumn("type_of_authorizations", typeof(string)),
+                new SPColumn("staff_id", typeof(string)),
+                new SPColumn("staff_name", typeof(string)),
+                new SPColumn("amount_charged", typeof(string)),
+                new SPColumn("over_procedure_code_amt", typeof(string)),
+                new SPColumn("pa_location_code", typeof(string)),
+                new SPColumn("school_district_id", typeof(string)),
+                new SPColumn("school_district", typeof(string)),
+                new SPColumn("school_district_code", typeof(string)),
+                new SPColumn("dtFromDate", typeof(string)),
+                new SPColumn("dtToDate", typeof(string)),
+                new SPColumn("authorization_reason", typeof(string)),
+                new SPColumn("authorization_message", typeof(string)),
+                new SPColumn("client_facility_name", typeof(string)),
+                new SPColumn("client_managing_office_name", typeof(string)),
+                new SPColumn("is_extended", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                dataTable.Columns.Add(spc[7].name, spc[7].type); //id_no
+
+                dataTable.Columns.Add(spc[8].name, spc[8].type); //medicaid_number
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[2];
+                    values[0] = GetCellData(InputWorksheet, i, 7); //id_no
+                    values[1] = GetCellData(InputWorksheet, i, 8); //medicaid_number
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
+        public DataTable GetHCSISDataTable(Stream input, DataTable dClientIDsTable)
         {
             SPColumn[] spc = new SPColumn[]
             {
@@ -896,7 +850,6 @@ namespace ConsumerMaster
                 new SPColumn("TXT_NEEDS_LEVEL",typeof(string)),
                 new SPColumn("TXT_NEEDS_GROUP",typeof(string)),
                 new SPColumn("NL_NG_EFFBEG_DATE",typeof(string)),
-
             };
 
             DataTable dataTable = new DataTable(); 
@@ -915,19 +868,18 @@ namespace ConsumerMaster
                 dataTable.Columns.Add(spc[17].name, spc[17].type); //Authorized_Units
                 dataTable.Columns.Add(spc[18].name, spc[18].type); //Utilized_Units
                 dataTable.Columns.Add(spc[19].name, spc[19].type); //Remaining_Units
+                dataTable.Columns.Add("id_no", typeof(string)); //ClientID
+                
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
-                    var values = new object[8];
+
+                    var values = new object[9];
 
                     values[0] = GetCellData(InputWorksheet, i, 4); //iIndividual_Names_expired
-                    values[1] = GetCellData(InputWorksheet, i, 5); //Recipient_ID
 
-
-                    //string input1 = "test, and test but not testing.  But yes to test";
-                    //string pattern = @"\b:00\b";
-                    //string replace = "";
-                    //string result = Regex.Replace(input1, pattern, replace);
+                    string recipientID = GetCellData(InputWorksheet, i, 5); //Recipient_ID
+                    values[1] = recipientID;
 
                     string service = GetCellData(InputWorksheet, i, 12); //ProcedureCode_Modifier  W7060:00:00:00:00
                     string result = Regex.Replace(service, @"\b:00\b", "");
@@ -945,6 +897,12 @@ namespace ConsumerMaster
                     values[6] = GetCellData(InputWorksheet, i, 18); //Utilized_Units
                     values[7] = GetCellData(InputWorksheet, i, 19); //Remaining_Units
 
+                    String condition = String.Format("medicaid_number = '" + recipientID + "'");
+                    DataRow[] results = dClientIDsTable.Select(condition);
+                    if(results.Length == 1) 
+                    {
+                        values[8] = results[0].Field<string>("id_no");
+                    }
 
                     dataTable.Rows.Add(values);
                 }
