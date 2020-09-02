@@ -6,6 +6,7 @@ using System.Linq;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Windows.Media;
 using System.Text;
+using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
@@ -92,11 +93,9 @@ namespace ConsumerMaster
 
                 DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
 
-
                 DataTable tmpTable = util.GetClientIDsDataTable(inputBA);
                 DataTable dClientIDsTable = util.RemoveDuplicateRows(tmpTable, "id_no");
                 DataTable dHBATable = util.GetHCSISDataTable(inputHBA, dClientIDsTable);
-
 
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable, dHBATable);
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
@@ -122,8 +121,13 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Billing Code"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Payroll Code"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
+
+                    ThemableColor textColor = new ThemableColor(Colors.Red);
+                    sheet1Worksheet.Cells[currentRow, column].SetForeColor(textColor);
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Billing Auth"].ToString());
+
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["HCSIS Billing Auth"].ToString());
 
                     currentRow++;
                 }
@@ -142,7 +146,7 @@ namespace ConsumerMaster
 
         public DataTable BuildExceptionsDataTable()
         {
-            SPColumn[] spc = new SPColumn[11]
+            SPColumn[] spc = new SPColumn[12]
             {
                 new SPColumn("ID", typeof(string)),
                 new SPColumn("Name", typeof(string)),
@@ -154,7 +158,8 @@ namespace ConsumerMaster
                 new SPColumn("Payroll Code", typeof(string)), //Payroll Code
                 new SPColumn("Service", typeof(string)), //Service
                 new SPColumn("Exception", typeof(string)),
-                new SPColumn("Billing Auth", typeof(string))
+                new SPColumn("NS Billing Auth", typeof(string)),
+                new SPColumn("HCSIS Billing Auth", typeof(string))
             };
 
             DataTable dataTable = new DataTable();
@@ -193,7 +198,9 @@ namespace ConsumerMaster
                     StringBuilder exceptionsString = new StringBuilder();
                     bool servicesMismatched = IsServicesMisMatched(payrollCodeIndex, billingCodeIndex); //Payroll/Billing Code Mismatched;
                     if (servicesMismatched)
-                        exceptionsString.Append("P/BCode Mismatched; ");
+                    {
+                        exceptionsString.Append("P/B CODE MISMATCHED; ");
+                    }
 
 
                     int noBillingAuthorizationCount = 0;
@@ -214,13 +221,18 @@ namespace ConsumerMaster
                         exceptionsString.Append("NO BillAuth;");
 
 
-
                     String BACheck = String.Format("id_no = '" + clientID + "'");
                     DataRow[] BAResults = dBATable.Select(BACheck);
                     DataRow[] HBAResults = dHBATable.Select(BACheck);
 
+                    bool billingAuthorizationsMismatched = IsBillingAuthorizationsMisMatched(BAResults, HBAResults);
+                    if (billingAuthorizationsMismatched)
+                    {
+                        exceptionsString.Append("HCSIS MISMATCHED");
+                    }
 
-                    if (noBillingAuthorizationCount == 0 || servicesMismatched)
+
+                    if (noBillingAuthorizationCount == 0 || servicesMismatched || billingAuthorizationsMismatched)
                     {
                         int vIndex = 0;
                         var values = new object[exceptionsTable.Columns.Count];
@@ -236,16 +248,24 @@ namespace ConsumerMaster
                         values[vIndex++] = serviceCodeIndex != -1 ? string.Format("[{0}]{1}", serviceCodeIndex.ToString(), tdRow["Service"].ToString()) : "";
                         values[vIndex++] = exceptionsString;  //Exception
 
-                        String selection = String.Format("id_no = '" + clientID + "'");
-                        DataRow[] baResults = dBATable.Select(selection);
-
                         var ba = new StringBuilder();
-                        foreach (DataRow row in baResults)
+                        foreach (DataRow row in BAResults)
                         {
-                            ba.Append(row["service_name"].ToString());
+                            ba.Append(row[9].ToString());
                             ba.Append(";");
                         }
                         values[vIndex++] = ba;
+
+                        if(billingAuthorizationsMismatched)
+                        {
+                            var hba = new StringBuilder();
+                            foreach (DataRow row in HBAResults)
+                            {
+                                hba.Append(row[2].ToString());
+                                hba.Append(";");
+                            }
+                            values[vIndex++] = hba;
+                        }
 
                         exceptionsTable.Rows.Add(values);
                     }
@@ -259,17 +279,36 @@ namespace ConsumerMaster
             return exceptionsTable;
         }
 
-        void MatchBillingAuthorizations(DataTable dBATable, DataTable dHBATable)
+        public List<string> GetBAList(DataRow[] dataRows, int col)
         {
+            List<string> baList = new List<string>();
+            foreach (DataRow row in dataRows)
+            {
+                baList.Add(row[col].ToString());
+            }
+            return baList; 
+        }
 
+        bool IsBillingAuthorizationsMisMatched(DataRow[] BAResults, DataRow[] HBAResults)
+        {
+            bool matched;
 
+            List<string> baList = GetBAList(BAResults, 9);
+            List<string> sortedBAList = baList.OrderBy(q => q).ToList();
 
+            List<string> hbaList = GetBAList(HBAResults, 2);
+            List<string> sortedHBAList = hbaList.OrderBy(q => q).ToList();
 
+            if (sortedBAList.SequenceEqual(sortedHBAList))
+            {
+                matched = false;
+            }
+            else
+            {
+                matched = true;
+            }
 
-
-
-
-
+            return matched;
         }
 
         bool IsServicesMisMatched(int payrollCodeIndex, int billingCodeIndex) 
@@ -281,9 +320,9 @@ namespace ConsumerMaster
             else
             {
                 if (billingCodeIndex == 12 && Enumerable.Range(12, 15).Contains(payrollCodeIndex))
-                    isMisMatched = false;  //SHOULD THIS BE TRUE?
+                    isMisMatched = false; 
                 else
-                    isMisMatched = false;
+                    isMisMatched = true;
             }
             return isMisMatched;
         }
@@ -296,7 +335,7 @@ namespace ConsumerMaster
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
                 worksheet.Cells[rowCount, 0].SetIsBold(true);
-                worksheet.Cells[rowCount++, 0].SetValue("AWC Services Exception Report – Payroll/Billing Code Mismatched and NO Billing Authorization");
+                worksheet.Cells[rowCount++, 0].SetValue("AWC Services Exception Report – Payroll/Billing Code Mismatched, NO Billing Authorization and HCSIS Mismatched");
                 worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
                 worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}; {1}", uploadedTDFileName, uploadedBAFilename));
                 rowCount++;
@@ -324,39 +363,5 @@ namespace ConsumerMaster
 
             return rowCount;
         }
-
-
-        //DataTable tmpALTable = util.GetAuditLogDataTable(inputAL);
-        //var result = tmpALTable.AsEnumerable().GroupBy(x => new { ActivityID = x["Activity ID"], ID = x["ID"] })
-        //    .Select(item => new
-        //    {
-        //        ActivityID = (string)item.Key.ActivityID,
-        //        ID = (string)item.Key.ID,
-        //        Action = string.Join(" ; ", item.Select(c => c["Action"]))
-        //    }).ToList();
-        //DataTable mergedAuditLogDataTable = result.ToDataTable();
-
-        //var JoinResult = (from e in exceptionsTable.AsEnumerable()
-        //                  join m in mergedAuditLogDataTable.AsEnumerable() 
-        //                  on e.Field<string>("Activity ID") equals m.Field<string>("ActivityID") into tempJoin
-        //                  from leftJoin in tempJoin.DefaultIfEmpty()
-        //                  select new
-        //                  {
-        //                      EID = e.Field<string>("ID"),
-        //                      MID = leftJoin == null ? null : leftJoin.Field<string>("ID"),
-        //                      Name = e.Field<string>("Name"),
-        //                      EActivityID = e.Field<string>("Activity ID"),
-        //                      MActivityID = leftJoin == null ? null : leftJoin.Field<string>("ActivityID"),
-        //                      Start = e.Field<DateTime>("Start"),
-        //                      Finish = e.Field<DateTime>("Finish"),
-        //                      Duration = e.Field<Int32>("Duration"),
-        //                      BillingCode = e.Field<string>("Billing Code"),
-        //                      PayrollCode = e.Field<string>("Payroll Code"),
-        //                      Service = e.Field<string>("Service"),
-        //                      Exception = e.Field<string>("Exception"),
-        //                      Action = leftJoin == null ? null : leftJoin.Field<string>("Action")
-        //                  }).ToList();
-
-        //DataTable outputDataTable = JoinResult.ToDataTable();
     }
 }

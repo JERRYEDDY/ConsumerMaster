@@ -104,27 +104,27 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButton5_Click(object sender, EventArgs e)
-        {
-            string outFilename = "AWCServiceNoteAuditReport.xlsx";
-            try
-            {
-                if (RadAsyncUploadClosedActivities.UploadedFiles.Count == 1)
-                {
-                    UploadedFile closedActivitiesFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Closed Activities Report
-                    UploadedFile auditLogFile = RadAsyncUploadAuditLog.UploadedFiles[0]; //Client Authorization List
+        //protected void RadButton5_Click(object sender, EventArgs e)
+        //{
+        //    string outFilename = "AWCServiceNoteAuditReport.xlsx";
+        //    try
+        //    {
+        //        if (RadAsyncUploadClosedActivities.UploadedFiles.Count == 1)
+        //        {
+        //            UploadedFile closedActivitiesFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Closed Activities Report
+        //            UploadedFile auditLogFile = RadAsyncUploadAuditLog.UploadedFiles[0]; //Client Authorization List
  
-                    Utility utility = new Utility();
-                    AWCServiceNoteAuditReportFile report = new AWCServiceNoteAuditReportFile();
-                    MemoryStream output = report.CreateDocument(closedActivitiesFile, auditLogFile);
-                    utility.DownloadTXTFile(output, outFilename);
-                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-            }
-        }
+        //            Utility utility = new Utility();
+        //            AWCServiceNoteAuditReportFile report = new AWCServiceNoteAuditReportFile();
+        //            MemoryStream output = report.CreateDocument(closedActivitiesFile, auditLogFile);
+        //            utility.DownloadTXTFile(output, outFilename);
+        //         }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
 
         protected void RadButtonTravel_Click(object sender, EventArgs e)
         {
