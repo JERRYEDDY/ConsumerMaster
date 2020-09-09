@@ -62,6 +62,19 @@
             </tr>
             <tr>
                 <td>
+                    Travel Time Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
                     NS Billing Authorizations Filename .xlsx:
                 </td>
                 <td>

@@ -104,6 +104,33 @@ namespace ConsumerMaster
             }
         }
 
+
+        protected void RadButtonTravel_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCTravelTimeReport.xlsx";
+            try
+            {
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
+                {
+                    //bool shiftFilter = ShiftCheckBox.Checked;
+                    bool shiftFilter = true;
+
+                    Utility utility = new Utility();
+                    AWCTravelTimeReportExcelFile reportExport = new AWCTravelTimeReportExcelFile();
+                    UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedFile, shiftFilter);
+
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+
+
         //protected void RadButton5_Click(object sender, EventArgs e)
         //{
         //    string outFilename = "AWCServiceNoteAuditReport.xlsx";
@@ -113,7 +140,7 @@ namespace ConsumerMaster
         //        {
         //            UploadedFile closedActivitiesFile = RadAsyncUploadClosedActivities.UploadedFiles[0]; //Closed Activities Report
         //            UploadedFile auditLogFile = RadAsyncUploadAuditLog.UploadedFiles[0]; //Client Authorization List
- 
+
         //            Utility utility = new Utility();
         //            AWCServiceNoteAuditReportFile report = new AWCServiceNoteAuditReportFile();
         //            MemoryStream output = report.CreateDocument(closedActivitiesFile, auditLogFile);
@@ -125,30 +152,6 @@ namespace ConsumerMaster
         //        Logger.Error(ex);
         //    }
         //}
-
-        protected void RadButtonTravel_Click(object sender, EventArgs e)
-        {
-            //string outFilename = "AWCTravelTimeReport.txt";
-            //try
-            //{
-            //    if (RadAsyncUpload1.UploadedFiles.Count == 1)
-            //    {
-
-            //        bool shiftFilter = ShiftCheckBox.Checked;
-
-            //        Utility utility = new Utility();
-            //        AWCTravelTimeReportFile payrollReport = new AWCTravelTimeReportFile();
-
-            //        UploadedFile uploadedFile = RadAsyncUpload1.UploadedFiles[0]; //Payroll Reports
-            //        MemoryStream output = payrollReport.CreateDocument(uploadedFile, shiftFilter);
-            //        utility.DownloadTXTFile(output, outFilename);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.Error(ex);
-            //}
-        }
 
         //protected void RadButtonTravel_Click2(object sender, EventArgs e)
         //{
