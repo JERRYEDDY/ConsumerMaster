@@ -118,8 +118,8 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Billing Code"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Payroll Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["CT Billing Code"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["CT Payroll Code"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
 
                     ThemableColor textColor = new ThemableColor(Colors.Red);
@@ -154,8 +154,8 @@ namespace ConsumerMaster
                 new SPColumn("Start", typeof(DateTime)),
                 new SPColumn("Finish", typeof(DateTime)),
                 new SPColumn("Duration", typeof(Int32)),
-                new SPColumn("Billing Code", typeof(string)), //Billing Code
-                new SPColumn("Payroll Code", typeof(string)), //Payroll Code
+                new SPColumn("CT Billing Code", typeof(string)), //Billing Code
+                new SPColumn("CT Payroll Code", typeof(string)), //Payroll Code
                 new SPColumn("Service", typeof(string)), //Service
                 new SPColumn("Exception", typeof(string)),
                 new SPColumn("NS Billing Auth", typeof(string)),
