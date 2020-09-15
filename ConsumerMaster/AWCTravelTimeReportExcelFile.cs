@@ -123,7 +123,7 @@ namespace ConsumerMaster
                 worksheets.Add();
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
 
-                int rowCnt = Sheet1WorksheetHeader(sheet1Worksheet, columnNames);
+                int rowCnt = Sheet1WorksheetHeader(sheet1Worksheet, columnNames, uploadedFile.FileName);
                 int currentRow = IndexRowItemStart + rowCnt;
 
                 foreach (var bySSP in sspGroup)
@@ -260,18 +260,18 @@ namespace ConsumerMaster
             public DateTime DateTimeInfo { get; set; }
         };
 
-        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames)
+        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames, string uploadedTDFileName)
         {
             int rowCount = 0;
             try
             {
-                //PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
+                PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
 
-                //worksheet.Cells[rowCount, 0].SetIsBold(true);
-                //worksheet.Cells[rowCount++, 0].SetValue("AWC Services Exception Report – Payroll/Billing Code Mismatched and NO Billing Authorization");
-                //worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
-                //worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}; {1}", uploadedTDFileName, uploadedBAFilename));
-                //rowCount++;
+                worksheet.Cells[rowCount, 0].SetIsBold(true);
+                worksheet.Cells[rowCount++, 0].SetValue("AWC Travel Time Report – Time between more than one shift in a day");
+                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
+                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0};", uploadedTDFileName));
+                rowCount++;
 
                 foreach (string column in columnNames)
                 {
