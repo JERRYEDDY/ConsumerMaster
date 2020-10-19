@@ -4,6 +4,7 @@ using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 
 namespace ConsumerMaster
 {
@@ -92,6 +93,30 @@ namespace ConsumerMaster
 
                     UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
                     UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
+                    //UploadedFile uploadedHBAFile = RadAsyncUpload3.UploadedFiles[0]; //HCSIS Billing Authorization File
+
+                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
+        protected void RadButtonServicesExceptionHCSIS_Click(object sender, EventArgs e)
+        {
+            string outFilename = "AWCServicesExceptionReport.xlsx";
+            try
+            {
+                if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1 && RadAsyncUpload3.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+                    AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
+
+                    UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
+                    UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
                     UploadedFile uploadedHBAFile = RadAsyncUpload3.UploadedFiles[0]; //HCSIS Billing Authorization File
 
                     Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile, uploadedHBAFile);
@@ -103,7 +128,6 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             }
         }
-
 
         protected void RadButtonTravel_Click(object sender, EventArgs e)
         {
@@ -129,6 +153,10 @@ namespace ConsumerMaster
             }
         }
 
+        protected void RadUpload1_ValidatingFile(object source, ServerValidateEventArgs args)
+        {
+
+        }
 
 
         //protected void RadButton5_Click(object sender, EventArgs e)

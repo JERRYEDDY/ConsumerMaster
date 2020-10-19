@@ -15,7 +15,7 @@
             </tr>
             <tr>
                 <td>
-                    <h5>Payroll Reports</h5>
+                    <h5>Payroll/Billing Reports</h5>
                 </td>
                 <td>
                     &nbsp
@@ -27,7 +27,7 @@
                     CellTrak Time & Distance Filename .xlsx: 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadUpload1_ValidatingFile" />
 <%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
                </td>
             </tr>
@@ -83,18 +83,32 @@
             </tr>
             <tr>
                 <td>
-                    HCSIS Billing Authorizations Filename .xlsx:
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-               </td>
-            </tr>
-            <tr>
-                <td>
                     Service Exception Report
                 </td>
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonServicesException_Click"/>
+               </td>
+            </tr>
+            <tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    HCSIS Billing Authorizations Filename .xlsx:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" />
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Service Exception (HCSIS) Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAExceptionHCSIS" runat="server" text="Process" OnClick="RadButtonServicesExceptionHCSIS_Click"/>
                </td>
             </tr>
             <tr>
