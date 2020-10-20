@@ -1,6 +1,19 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
 
+
+
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
+    
+<script>
+    function validateUpload(sender, args) {
+        var upload = $find("<%=RadAsyncUpload1.ClientID%>");
+        args.IsValid = upload.getUploadedFiles().length != 0;
+    }
+</script>
+
+
     <div class="demo-container no-bg">
         <p>
             <asp:Label runat="server" ID="Label4" />
@@ -8,8 +21,6 @@
         <table>
             <tr>
                 <td>
-<%--                    <asp:Image ID="AWCLogo" runat="server" ImageUrl="~/Images/AWCLogo.png" Width="231" Height="54" />--%>
-<%--                    <img src="/Images/AWCLogo.png" width="231" height="54" />--%>
                     <img alt="logo" src="<%= Page.ResolveUrl("~/Images/AWCLogo.png")%>" />
                 </td>
             </tr>
@@ -27,8 +38,13 @@
                     CellTrak Time & Distance Filename .xlsx: 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadUpload1_ValidatingFile" />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" ErrorMessage="Select a valid Time and Distance CSV file"></asp:CustomValidator>--%>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile"/>
+                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="CellTrak Time & Distance report file is required" ValidationGroup="OneFileValid" Display="None" />
+                    <asp:CustomValidator runat="server" ID="CustomValidator3" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="CellTrak Time & Distance report file is required" ValidationGroup="TwoFileValid" Display="None" />
+                    <asp:CustomValidator runat="server" ID="CustomValidator4" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="CellTrak Time & Distance report file is required" ValidationGroup="ThreeFileValid" Display="None" />
                </td>
             </tr>
             <tr>
@@ -36,7 +52,7 @@
                     40 Hours Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton1" runat="server" text="Process" OnClick="RadButton1_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton1" runat="server" text="Process" OnClick="RadButton1_Click" ValidationGroup="OneFileValid"/>
                 </td>
             </tr>
             <tr>
@@ -44,7 +60,7 @@
                     29 Hours Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton2" runat="server" text="Process" OnClick="RadButton2_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton2" runat="server" text="Process" OnClick="RadButton2_Click" ValidationGroup="OneFileValid"/>
                 </td>
             </tr>
             <tr>
@@ -52,7 +68,7 @@
                     Overlap Shifts Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton3" runat="server" text="Process" OnClick="RadButton3_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton3" runat="server" text="Process" OnClick="RadButton3_Click" ValidationGroup="OneFileValid"/>
                 </td>
             </tr>
             <tr>
@@ -65,7 +81,7 @@
                     Travel Time Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonTravel" runat="server" text="Process" OnClick="RadButtonTravel_Click" ValidationGroup="OneFileValid"/>
                 </td>
             </tr>
             <tr>
@@ -78,7 +94,11 @@
                     NS Billing Authorizations Filename .xlsx:
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
+                    <asp:CustomValidator runat="server" ID="CustomValidator2" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="NS Billing Authorization report file is required" ValidationGroup="TwoFileValid" Display="None" />
+                    <asp:CustomValidator runat="server" ID="CustomValidator5" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="NS Billing Authorization report file is required" ValidationGroup="ThreeFileValid" Display="None" />
                </td>
             </tr>
             <tr>
@@ -86,7 +106,7 @@
                     Service Exception Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonServicesException_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonServicesException_Click" ValidationGroup="TwoFileValid"/>
                </td>
             </tr>
             <tr>
@@ -100,7 +120,9 @@
                     HCSIS Billing Authorizations Filename .xlsx:
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
+                    <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="HCSIS Billing Authorization report file is required" ValidationGroup="ThreeFileValid" ForeColor="#FF3300" Display="None" />
                </td>
             </tr>
             <tr>
@@ -108,12 +130,19 @@
                     Service Exception (HCSIS) Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAExceptionHCSIS" runat="server" text="Process" OnClick="RadButtonServicesExceptionHCSIS_Click"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAExceptionHCSIS" runat="server" text="Process" OnClick="RadButtonServicesExceptionHCSIS_Click" ValidationGroup="ThreeFileValid"/>
                </td>
             </tr>
             <tr>
                 <td>
                     &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <asp:ValidationSummary id="ValidationSummary1" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="OneFileValid" />
+                    <asp:ValidationSummary id="ValidationSummary2" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="TwoFileValid" />
+                    <asp:ValidationSummary id="ValidationSummary3" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="ThreeFileValid" />
                 </td>
             </tr>
             <tr>
@@ -131,87 +160,6 @@
                     &nbsp;
                 </td>
             </tr>
-<%--            <tr>
-                <td>
-                    <h5>Service Note Audit Reports</h5>
-                </td>
-                <td>
-                    &nbsp
-                </td>
-            </tr>
-            <tr>
-            <tr>
-                <td>
-                    Closed Activities Filename .xlsx: 
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadClosedActivities" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Audit Log Filename .xlsx: 
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadAuditLog" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Service Note Audit Report
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButton5_Click"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp
-                </td>
-                <td>
-                    &nbsp
-                </td>
-            </tr>--%>
-<%--            <tr>
-                <td>
-                    <h5> Unit Utilization Report</h5>
-                </td>
-                <td>
-                    &nbsp
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Client Client Address Filename .xlsx: 
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncClient" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Client Staff Filename .xlsx: 
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadStaff" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Client Authorization Filename .xlsx: 
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadAuthorization" MaxFileInputsCount="1" AllowedFileExtensions="xlsx"  />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Client Staff Authorization Report
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButton4_Click"/>
-                </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;

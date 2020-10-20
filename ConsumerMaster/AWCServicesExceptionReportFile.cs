@@ -110,10 +110,15 @@ namespace ConsumerMaster
 
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
-                int rowCount = 
-                    
-                    Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName);
-
+                int rowCount = 0;
+                if(uploadedHBAFile != null)
+                {
+                    rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName, true);
+                }
+                else
+                {
+                    rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName, false);
+                }
 
 
                 int currentRow = IndexRowItemStart + rowCount;
@@ -225,7 +230,6 @@ namespace ConsumerMaster
             {
                 exceptionsTable = BuildExceptionsDataTable(false);
             }
-
 
             try
             {
@@ -383,10 +387,14 @@ namespace ConsumerMaster
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 0, 0), Colors.Transparent);
                 worksheet.Cells[rowCount, 0].SetIsBold(true);
 
-                string title = "AWC Services Exception Report – Payroll/Billing Code Mismatched, NO Billing Authorization ";
+                string title = "AWC Services Exception Report – Payroll/Billing Code Mismatched";
                 if(includeHCSIS)
                 {
-                    title = title + "and HCSIS Mismatched";
+                    title = title + ", NO Billing Authorization and HCSIS Mismatched";
+                }
+                else
+                {
+                    title = title + " and NO Billing Authorization";
                 }
 
                 worksheet.Cells[rowCount++, 0].SetValue(title);
