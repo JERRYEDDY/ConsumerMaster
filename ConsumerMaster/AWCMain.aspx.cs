@@ -129,6 +129,36 @@ namespace ConsumerMaster
             }
         }
 
+        protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
+        {
+            string outFilename = "EVVVisitsComparisonReport.xlsx";
+            try
+            {
+                if (RadAsyncUpload4.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+
+                    UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
+                    Stream input = uploadedSEVFile.InputStream;
+
+                    DataTable sevDataTable = utility.GetSandataExportVisitsDataTable(input);
+
+                    //AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
+
+                    //UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
+                    //UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
+                    //UploadedFile uploadedHBAFile = RadAsyncUpload3.UploadedFiles[0]; //HCSIS Billing Authorization File
+
+                    //Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile, uploadedHBAFile);
+                    //utility.DownloadExcelFile(workbook, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
+
         protected void RadButtonTravel_Click(object sender, EventArgs e)
         {
             string outFilename = "AWCTravelTimeReport.xlsx";

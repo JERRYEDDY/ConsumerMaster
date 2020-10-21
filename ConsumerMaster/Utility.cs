@@ -18,6 +18,7 @@ using Telerik.Windows.Documents.Fixed.Model;
 using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ConsumerMaster
 {
@@ -176,24 +177,24 @@ namespace ConsumerMaster
 
         public DataTable GetEmployeePersonnelDataTable2(UploadedFile file)
         {
-            String[] columns = new string[19] { "P_ACTIVE", 
-                                                "P_EMPNO ", 
-                                                "P_FNAME ", 
-                                                "P_LNAME ", 
-                                                "P_MI ", 
-                                                "P_BIRTH", 
-                                                "P_SSN", 
-                                                "P_SEX ", 
-                                                "P_EMPEMAIL", 
-                                                "P_JOBCODE ", 
-                                                "P_JOBTITLE ", 
-                                                "P_RACE ", 
-                                                "P_LASTHIRE", 
-                                                "P_HCITY", 
-                                                "P_HSTATE", 
-                                                "P_HZIP", 
-                                                "P_HSTREET1", 
-                                                "P_HSTREET2", 
+            String[] columns = new string[19] { "P_ACTIVE",
+                                                "P_EMPNO ",
+                                                "P_FNAME ",
+                                                "P_LNAME ",
+                                                "P_MI ",
+                                                "P_BIRTH",
+                                                "P_SSN",
+                                                "P_SEX ",
+                                                "P_EMPEMAIL",
+                                                "P_JOBCODE ",
+                                                "P_JOBTITLE ",
+                                                "P_RACE ",
+                                                "P_LASTHIRE",
+                                                "P_HCITY",
+                                                "P_HSTATE",
+                                                "P_HZIP",
+                                                "P_HSTREET1",
+                                                "P_HSTREET2",
                                                 "P_HCOUNTY" };
 
             DataTable dataTable = new DataTable();
@@ -606,7 +607,7 @@ namespace ConsumerMaster
             return dataTable;
         }
 
- 
+
         public DataTable GetBillingAuthorizationDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[57]
@@ -852,7 +853,7 @@ namespace ConsumerMaster
                 new SPColumn("NL_NG_EFFBEG_DATE",typeof(string)),
             };
 
-            DataTable dataTable = new DataTable(); 
+            DataTable dataTable = new DataTable();
             try
             {
                 XlsxFormatProvider formatProvider = new XlsxFormatProvider();
@@ -869,7 +870,7 @@ namespace ConsumerMaster
                 dataTable.Columns.Add(spc[18].name, spc[18].type); //Utilized_Units
                 dataTable.Columns.Add(spc[19].name, spc[19].type); //Remaining_Units
                 dataTable.Columns.Add("id_no", typeof(string)); //ClientID
-                
+
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
@@ -899,7 +900,7 @@ namespace ConsumerMaster
 
                     String condition = String.Format("medicaid_number = '" + recipientID + "'");
                     DataRow[] results = dClientIDsTable.Select(condition);
-                    if(results.Length == 1) 
+                    if (results.Length == 1)
                     {
                         values[8] = results[0].Field<string>("id_no");
                     }
@@ -913,6 +914,124 @@ namespace ConsumerMaster
             };
 
             return dataTable;
+        }
+
+        public DataTable GetSandataExportVisitsDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[]
+            {
+                new SPColumn("Client Name",typeof(string)),
+                new SPColumn("Employee Name",typeof(string)),
+                new SPColumn("Service",typeof(string)),
+                new SPColumn("Visit Date",typeof(DateTime)),
+                //new SPColumn("Scheduled Time In",typeof(string)),
+                //new SPColumn("Scheduled Time Out",typeof(string)),
+                //new SPColumn("Scheduled Hrs",typeof(string)),
+                new SPColumn("Call In",typeof(DateTime)),
+                new SPColumn("Call Out",typeof(DateTime)),
+                new SPColumn("Call Hours",typeof(TimeSpan)),
+                new SPColumn("Adjusted In",typeof(DateTime)),
+                new SPColumn("Adjusted Out",typeof(DateTime)),
+                new SPColumn("Adjusted Hours",typeof(TimeSpan)),
+                new SPColumn("Bill Hours",typeof(string)),
+                new SPColumn("Visit Status",typeof(string)),
+                new SPColumn("Do Not Bill",typeof(string)),
+                new SPColumn("Exceptions",typeof(string)),
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                for (int i = 0; i < spc.Count(); i++)
+                {
+                    CellSelection selection = InputWorksheet.Cells[0, i];
+                    var columnName = "Column" + (i + 1);
+                    dataTable.Columns.Add(spc[i].name, spc[i].type);
+                }
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    var values = new object[spc.Count()];
+
+                    values[0] = GetCellData(InputWorksheet, i, 0); //Client Name
+                    values[1] = GetCellData(InputWorksheet, i, 1); //Employee Name
+                    values[2] = GetCellData(InputWorksheet, i, 2); //Service
+
+                    string dateStr1 = GetCellData(InputWorksheet, i, 3);
+                    DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
+                    values[3] = visitDateOnly; //Visit Date
+
+                    //values[4] = GetCellData(InputWorksheet, i, 4); //Scheduled Time In
+                    //values[5] = GetCellData(InputWorksheet, i, 5); //Scheduled Time Out
+                    //values[6] = GetCellData(InputWorksheet, i, 6); //Scheduled Hrs
+
+                    SandataDateTimeDuration sdtd1 = SetDateTimeDuration
+                        (visitDateOnly,
+                        GetCellData(InputWorksheet, i, 7), 
+                        GetCellData(InputWorksheet, i, 8),
+                        GetCellData(InputWorksheet, i, 9));
+
+                    values[4] = sdtd1.Start; //Call In
+                    values[5] = sdtd1.End; //Call Out
+                    values[6] = sdtd1.Duration; //Call Hours
+
+                    SandataDateTimeDuration sdtd2 = SetDateTimeDuration
+                        (visitDateOnly,
+                        GetCellData(InputWorksheet, i, 10),
+                        GetCellData(InputWorksheet, i, 11),
+                        GetCellData(InputWorksheet, i, 12));
+
+                    values[7] = sdtd2.Start; //Adjusted In
+                    values[8] = sdtd2.End; //Adjusted Out
+                    values[9] = sdtd2.Duration; //Adjusted Hours
+
+                    values[10] = GetCellData(InputWorksheet, i, 13); //Bill Hours
+                    values[11] = GetCellData(InputWorksheet, i, 14); //Visit Status
+                    values[12] = GetCellData(InputWorksheet, i, 15); //Do Not Bill
+                    values[13] = GetCellData(InputWorksheet, i, 16); //Exceptions
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
+        SandataDateTimeDuration SetDateTimeDuration(DateTime visitDateOnly, string startTime, string endTime, string duration)
+        {
+            SandataDateTimeDuration sdtd = new SandataDateTimeDuration();
+
+            DateTime callinTimeOnly;
+            DateTime startDateTime;
+            if (!DateTime.TryParseExact(startTime, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out callinTimeOnly))
+            { 
+            }
+            startDateTime = visitDateOnly.Date.Add(callinTimeOnly.TimeOfDay);
+            sdtd.Start = startDateTime; //Call In
+  
+            TimeSpan coDuration;
+            if (!TimeSpan.TryParse(duration, out coDuration))
+            {
+            }
+            sdtd.Duration = coDuration; //Call Hours
+
+            DateTime endDateTime;
+            if (!DateTime.TryParseExact(endTime, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
+            {
+            }
+            DateTime temp = startDateTime.Add(coDuration);
+            sdtd.End = temp; //Call Out
+
+            return sdtd;
         }
 
 

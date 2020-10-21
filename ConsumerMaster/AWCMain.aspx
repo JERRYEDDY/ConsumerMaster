@@ -1,8 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
 
-
-
-
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     
@@ -138,6 +135,26 @@
                     &nbsp;
                 </td>
             </tr>
+            <tr>
+                <td>
+                    Sandata Export Visits Filename .xlsx:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload4" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" />
+<%--                    <asp:CustomValidator runat="server" ID="CustomValidator6" ClientValidationFunction="validateUpload" 
+                        ErrorMessage="Sandata Export Visits report file is required" ForeColor="#FF3300" Display="None" />--%>
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    EVV Visits Comparison Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButtonEVV_VisitsComparison_Click" />
+               </td>
+            </tr>
+            <tr>
+
             <tr>
                 <td>
                     <asp:ValidationSummary id="ValidationSummary1" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="OneFileValid" />
