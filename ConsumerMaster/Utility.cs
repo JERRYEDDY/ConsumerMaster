@@ -933,9 +933,9 @@ namespace ConsumerMaster
                 new SPColumn("Adjusted In",typeof(DateTime)),
                 new SPColumn("Adjusted Out",typeof(DateTime)),
                 new SPColumn("Adjusted Hours",typeof(TimeSpan)),
-                new SPColumn("Bill Hours",typeof(string)),
+                new SPColumn("Bill Hours",typeof(TimeSpan)),
                 new SPColumn("Visit Status",typeof(string)),
-                new SPColumn("Do Not Bill",typeof(string)),
+                new SPColumn("Do Not Bill",typeof(bool)),
                 new SPColumn("Exceptions",typeof(string)),
             };
 
@@ -990,9 +990,19 @@ namespace ConsumerMaster
                     values[8] = sdtd2.End; //Adjusted Out
                     values[9] = sdtd2.Duration; //Adjusted Hours
 
-                    values[10] = GetCellData(InputWorksheet, i, 13); //Bill Hours
+
+                    TimeSpan billDuration;
+                    if (!TimeSpan.TryParse(GetCellData(InputWorksheet, i, 13), out billDuration))
+                    {
+                    }
+                    values[10] = billDuration; //Bill Hours
+
+
                     values[11] = GetCellData(InputWorksheet, i, 14); //Visit Status
-                    values[12] = GetCellData(InputWorksheet, i, 15); //Do Not Bill
+
+                    bool doNotBill = ("Yes".Equals(GetCellData(InputWorksheet, i, 15)) ? true : false);
+                    values[12] = doNotBill; //Do Not Bill
+
                     values[13] = GetCellData(InputWorksheet, i, 16); //Exceptions
 
                     dataTable.Rows.Add(values);
