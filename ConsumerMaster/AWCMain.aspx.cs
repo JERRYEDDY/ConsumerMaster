@@ -137,15 +137,11 @@ namespace ConsumerMaster
                 if (RadAsyncUpload4.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
-
+                    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile();
                     UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
 
-                    //Stream input = uploadedSEVFile.InputStream;
-                    //DataTable sevDataTable = utility.GetSandataExportVisitsDataTable(input);
-
-                    AWCEVVVisitsComparisonReportFile report = new AWCEVVVisitsComparisonReportFile();
-                    Workbook workbook = report.CreateWorkbook(uploadedSEVFile);
-
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedSEVFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
                 }
             }
             catch (Exception ex)
