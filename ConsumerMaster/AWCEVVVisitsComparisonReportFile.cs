@@ -110,10 +110,6 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Employee Name"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
 
-
-                    //CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
-
-
                     CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy");
                     sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Visit Date"].ToString());
@@ -133,19 +129,20 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeCellValueFormat);
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Adjusted Out"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(string.Format("{0:hh\\:mm}", row["Adjusted Hours"]));
+                    if(row["Adjusted Hours"].ToString() == "00:00:00")
+                    {
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(" ");
+                    }
+                    else
+                    {
+                        sheet1Worksheet.Cells[currentRow, column++].SetValue(string.Format("{0:hh\\:mm}", row["Adjusted Hours"]));
+                    }
 
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(string.Format("{0:hh\\:mm}", row["Bill Hours"]));
 
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Visit Status"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Do Not Bill"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exceptions"].ToString());
-
-                    //ThemableColor textColor = new ThemableColor(Colors.Red);
-                    //sheet1Worksheet.Cells[currentRow, column].SetForeColor(textColor);
-                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
-
-                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
 
                     currentRow++;
                 }

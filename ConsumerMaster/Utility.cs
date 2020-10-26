@@ -1027,7 +1027,7 @@ namespace ConsumerMaster
             }
             startDateTime = visitDateOnly.Date.Add(callinTimeOnly.TimeOfDay);
             sdtd.Start = startDateTime; //Call In
-  
+
             TimeSpan coDuration;
             if (!TimeSpan.TryParse(duration, out coDuration))
             {
@@ -1038,12 +1038,20 @@ namespace ConsumerMaster
             if (!DateTime.TryParseExact(endTime, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
             {
             }
-            DateTime temp = startDateTime.Add(coDuration);
-            sdtd.End = temp; //Call Out
+
+            if(string.IsNullOrEmpty(duration))
+            {
+                DateTime temp = visitDateOnly.Date.Add(endDateTime.TimeOfDay);
+                sdtd.End = temp;
+            }
+            else
+            {
+                DateTime temp = startDateTime.Add(coDuration);
+                sdtd.End = temp; //Call Out
+            }
 
             return sdtd;
         }
-
 
         string ParseClientID(string clientString)
         {
