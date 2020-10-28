@@ -109,6 +109,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Client Name"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Employee Name"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["WCode"].ToString());
 
                     CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy");
                     sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);

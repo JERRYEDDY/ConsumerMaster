@@ -26,6 +26,15 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
+        //class ServiceWCode
+        //{
+        //    public string Service { get; set; }
+        //    public string WCode { get; set; }
+        //}
+
+
+
+
         public DataTable GetDataTable(string queryString)
         {
             DataTable dataTable = new DataTable();
@@ -923,10 +932,8 @@ namespace ConsumerMaster
                 new SPColumn("Client Name",typeof(string)),
                 new SPColumn("Employee Name",typeof(string)),
                 new SPColumn("Service",typeof(string)),
+                new SPColumn("WCode",typeof(string)),
                 new SPColumn("Visit Date",typeof(DateTime)),
-                //new SPColumn("Scheduled Time In",typeof(string)),
-                //new SPColumn("Scheduled Time Out",typeof(string)),
-                //new SPColumn("Scheduled Hrs",typeof(string)),
                 new SPColumn("Call In",typeof(DateTime)),
                 new SPColumn("Call Out",typeof(DateTime)),
                 new SPColumn("Call Hours",typeof(TimeSpan)),
@@ -938,6 +945,19 @@ namespace ConsumerMaster
                 new SPColumn("Do Not Bill",typeof(bool)),
                 new SPColumn("Exceptions",typeof(string)),
             };
+
+            var services = new Dictionary<string, string>()
+            {
+                {"Companion (1:1)" ,"W1726"},
+                {"IHCS Level 2 (1:1)", "W7060"},
+                {"IHCS Level 2 (1:1) Enhanced", "W7061"},
+                {"IHCS Level 3 (2:1)", "W7068"},
+                {"IHCS Level 3 (2:1) Enhanced", "W7069"},
+                {"Respite Level 3 (1:1)-Day", "W9798"},
+                {"Respite Level 3 (1:1)-15 Mins", "W9862"},
+                {"Respite Level 3 (1:1) Enhanced-15 Mins", "W9863"}
+            };
+
 
             DataTable dataTable = new DataTable();
             try
@@ -954,6 +974,7 @@ namespace ConsumerMaster
                     dataTable.Columns.Add(spc[i].name, spc[i].type);
                 }
 
+ 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
                     var values = new object[spc.Count()];
@@ -962,13 +983,18 @@ namespace ConsumerMaster
                     values[1] = GetCellData(InputWorksheet, i, 1); //Employee Name
                     values[2] = GetCellData(InputWorksheet, i, 2); //Service
 
+                    if(services.ContainsKey(values[2].ToString()))
+                    {
+                        values[3] = services[values[2].ToString()];
+                    }
+                    else
+                    {
+                        values[3] = "NOTFOUND";
+                    }
+
                     string dateStr1 = GetCellData(InputWorksheet, i, 3);
                     DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
-                    values[3] = visitDateOnly; //Visit Date
-
-                    //values[4] = GetCellData(InputWorksheet, i, 4); //Scheduled Time In
-                    //values[5] = GetCellData(InputWorksheet, i, 5); //Scheduled Time Out
-                    //values[6] = GetCellData(InputWorksheet, i, 6); //Scheduled Hrs
+                    values[4] = visitDateOnly; //Visit Date
 
                     SandataDateTimeDuration sdtd1 = SetDateTimeDuration
                         (visitDateOnly,
@@ -976,9 +1002,9 @@ namespace ConsumerMaster
                         GetCellData(InputWorksheet, i, 8),
                         GetCellData(InputWorksheet, i, 9));
 
-                    values[4] = sdtd1.Start; //Call In
-                    values[5] = sdtd1.End; //Call Out
-                    values[6] = sdtd1.Duration; //Call Hours
+                    values[5] = sdtd1.Start; //Call In
+                    values[6] = sdtd1.End; //Call Out
+                    values[7] = sdtd1.Duration; //Call Hours
 
                     SandataDateTimeDuration sdtd2 = SetDateTimeDuration
                         (visitDateOnly,
@@ -986,24 +1012,24 @@ namespace ConsumerMaster
                         GetCellData(InputWorksheet, i, 11),
                         GetCellData(InputWorksheet, i, 12));
 
-                    values[7] = sdtd2.Start; //Adjusted In
-                    values[8] = sdtd2.End; //Adjusted Out
-                    values[9] = sdtd2.Duration; //Adjusted Hours
+                    values[8] = sdtd2.Start; //Adjusted In
+                    values[9] = sdtd2.End; //Adjusted Out
+                    values[10] = sdtd2.Duration; //Adjusted Hours
 
 
                     TimeSpan billDuration;
                     if (!TimeSpan.TryParse(GetCellData(InputWorksheet, i, 13), out billDuration))
                     {
                     }
-                    values[10] = billDuration; //Bill Hours
+                    values[11] = billDuration; //Bill Hours
 
 
-                    values[11] = GetCellData(InputWorksheet, i, 14); //Visit Status
+                    values[12] = GetCellData(InputWorksheet, i, 14); //Visit Status
 
                     bool doNotBill = ("Yes".Equals(GetCellData(InputWorksheet, i, 15)) ? true : false);
-                    values[12] = doNotBill; //Do Not Bill
+                    values[13] = doNotBill; //Do Not Bill
 
-                    values[13] = GetCellData(InputWorksheet, i, 16); //Exceptions
+                    values[14] = GetCellData(InputWorksheet, i, 16); //Exceptions
 
                     dataTable.Rows.Add(values);
                 }
