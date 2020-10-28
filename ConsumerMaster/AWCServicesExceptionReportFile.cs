@@ -231,6 +231,9 @@ namespace ConsumerMaster
                 exceptionsTable = BuildExceptionsDataTable(false);
             }
 
+            int tdCount = dTDTable.Rows.Count;
+            int baCount = dBATable.Rows.Count;
+
             try
             {
                 foreach (DataRow tdRow in dTDTable.Rows)

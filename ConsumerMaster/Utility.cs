@@ -631,8 +631,8 @@ namespace ConsumerMaster
                 new SPColumn("id_no", typeof(string)),
                 new SPColumn("medicaid_number", typeof(string)),
                 new SPColumn("policy_num", typeof(string)),
-                new SPColumn("from_date", typeof(string)),
-                new SPColumn("to_date", typeof(string)),
+                new SPColumn("from_date", typeof(DateTime)),
+                new SPColumn("to_date", typeof(DateTime)),
                 new SPColumn("date_from_details", typeof(DateTime)),
                 new SPColumn("date_to_details", typeof(DateTime)),
                 new SPColumn("benefits_assignments_id", typeof(string)),
@@ -690,6 +690,8 @@ namespace ConsumerMaster
 
                 dataTable.Columns.Add(spc[7].name, spc[7].type); //id_no
                 dataTable.Columns.Add(spc[4].name, spc[4].type); //full_name
+                dataTable.Columns.Add(spc[10].name, spc[10].type); //from_date
+                dataTable.Columns.Add(spc[11].name, spc[11].type); //to_date
                 dataTable.Columns.Add(spc[12].name, spc[12].type); //date_from_details
                 dataTable.Columns.Add(spc[13].name, spc[13].type); //date_to_details
                 dataTable.Columns.Add(spc[31].name, spc[31].type); //service_name
@@ -701,27 +703,52 @@ namespace ConsumerMaster
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
-                    var values = new object[10];
-                    values[7] = GetCellData(InputWorksheet, i, 3); //is_expired
-                    values[1] = GetCellData(InputWorksheet, i, 4); //full_name
+                    var values = new object[12];
+
                     values[0] = GetCellData(InputWorksheet, i, 7); //id_no
-                    values[8] = GetCellData(InputWorksheet, i, 8); //medicaid_number
+                    values[1] = GetCellData(InputWorksheet, i, 4); //full_name
 
-                    string fromDateString = GetCellData(InputWorksheet, i, 12); //date_from_details
-                    DateTime fromDate = Convert.ToDateTime(fromDateString);
-                    values[2] = fromDate; //From Date
+                    string fromDateString = GetCellData(InputWorksheet, i, 12); //from_date
+                    if (!string.IsNullOrEmpty(fromDateString))
+                    { 
+                        DateTime fromDate = Convert.ToDateTime(fromDateString);
+                        values[2] = fromDate; //From Date
+                    }
 
-                    string toDateString = GetCellData(InputWorksheet, i, 13); //date_to_details
-                    DateTime toDate = Convert.ToDateTime(toDateString);
-                    values[3] = toDate; //To Date
+                    string toDateString = GetCellData(InputWorksheet, i, 13); //to_date
+                    if (!string.IsNullOrEmpty(toDateString))
+                    {
+                        DateTime toDate = Convert.ToDateTime(toDateString);
+                        values[3] = toDate; //To Date
+                    }
 
-                    values[6] = GetCellData(InputWorksheet, i, 23); //detail_balance
-                    values[4] = GetCellData(InputWorksheet, i, 31); //service_name
+                    string dateFromString = GetCellData(InputWorksheet, i, 12); //date_from_details
+                    if (!string.IsNullOrEmpty(dateFromString))
+                    {
+                        DateTime dateFrom = Convert.ToDateTime(dateFromString);
+                        values[4] = dateFrom; //date_from_details
+                    }
+
+                    string dateToString = GetCellData(InputWorksheet, i, 13); //date_to_details
+                    if (!string.IsNullOrEmpty(dateToString))
+                    {
+                        DateTime dateTo = Convert.ToDateTime(dateToString);
+                        values[5] = dateTo; //To Date
+                    }
+
+                    values[6] = GetCellData(InputWorksheet, i, 31); //service_name
 
                     string rateDescription = GetCellData(InputWorksheet, i, 32); //rate_description
-                    values[5] = rateDescription;
+                    values[7] = rateDescription;
+
+                    values[8] = GetCellData(InputWorksheet, i, 23); //detail_balance
+
+                    values[9] = GetCellData(InputWorksheet, i, 3); //is_expired
+
+                    values[10] = GetCellData(InputWorksheet, i, 8); //medicaid_number
+
                     Match procedureCode = Regex.Match(rateDescription, @"^.*?(?=-)");
-                    values[9] = procedureCode; //procedure_code
+                    values[11] = procedureCode; //procedure_code
 
                     dataTable.Rows.Add(values);
                 }
