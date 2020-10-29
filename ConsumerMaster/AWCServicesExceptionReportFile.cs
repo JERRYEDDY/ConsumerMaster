@@ -187,21 +187,6 @@ namespace ConsumerMaster
             {
                 spc.Add(new SPColumn("HCSIS Billing Auth", typeof(string)));
             }
-            //SPColumn[] spc = new SPColumn[12]
-            //{
-            //    new SPColumn("ID", typeof(string)),
-            //    new SPColumn("Name", typeof(string)),
-            //    new SPColumn("Activity ID", typeof(string)),
-            //    new SPColumn("Start", typeof(DateTime)),
-            //    new SPColumn("Finish", typeof(DateTime)),
-            //    new SPColumn("Duration", typeof(Int32)),
-            //    new SPColumn("CT Billing Code", typeof(string)), //Billing Code
-            //    new SPColumn("CT Payroll Code", typeof(string)), //Payroll Code
-            //    new SPColumn("Service", typeof(string)), //Service
-            //    new SPColumn("Exception", typeof(string)),
-            //    new SPColumn("NS Billing Auth", typeof(string)),
-            //    new SPColumn("HCSIS Billing Auth", typeof(string))
-            //};
 
             DataTable dataTable = new DataTable();
             try
@@ -306,7 +291,7 @@ namespace ConsumerMaster
                         var ba = new StringBuilder();
                         foreach (DataRow row in BAResults)
                         {
-                            ba.Append(row[9].ToString());
+                            ba.Append(row[11].ToString());  //Billing Authorizaton WCodes
                             ba.Append(";");
                         }
                         values[vIndex++] = ba;

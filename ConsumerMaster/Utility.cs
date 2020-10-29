@@ -708,14 +708,14 @@ namespace ConsumerMaster
                     values[0] = GetCellData(InputWorksheet, i, 7); //id_no
                     values[1] = GetCellData(InputWorksheet, i, 4); //full_name
 
-                    string fromDateString = GetCellData(InputWorksheet, i, 12); //from_date
+                    string fromDateString = GetCellData(InputWorksheet, i, 10); //from_date
                     if (!string.IsNullOrEmpty(fromDateString))
                     { 
                         DateTime fromDate = Convert.ToDateTime(fromDateString);
                         values[2] = fromDate; //From Date
                     }
 
-                    string toDateString = GetCellData(InputWorksheet, i, 13); //to_date
+                    string toDateString = GetCellData(InputWorksheet, i, 11); //to_date
                     if (!string.IsNullOrEmpty(toDateString))
                     {
                         DateTime toDate = Convert.ToDateTime(toDateString);
