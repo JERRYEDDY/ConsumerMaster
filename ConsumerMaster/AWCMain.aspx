@@ -1,7 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AWCMain.aspx.cs" Inherits="ConsumerMaster.AWCMain" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
     
 <script>
     function validateUpload(sender, args) {
@@ -86,10 +85,6 @@
                     &nbsp;
                 </td>
             </tr>
-<%--            <tr style="border-bottom:1px solid black">
-                <td colspan="100%">
-                </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -121,10 +116,6 @@
                     &nbsp;
                 </td>
             </tr>
-<%--            <tr style="border-bottom:1px solid black">
-                <td colspan="100%">
-                </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;

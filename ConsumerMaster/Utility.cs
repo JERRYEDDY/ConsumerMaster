@@ -26,15 +26,6 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //class ServiceWCode
-        //{
-        //    public string Service { get; set; }
-        //    public string WCode { get; set; }
-        //}
-
-
-
-
         public DataTable GetDataTable(string queryString)
         {
             DataTable dataTable = new DataTable();
@@ -400,35 +391,6 @@ namespace ConsumerMaster
             };
         }
 
-        //SPColumn[] GetSPColumns20()
-        //{
-        //    SPColumn[] spc = new SPColumn[20]
-        //    {
-        //        new SPColumn("Staff ID", typeof(string)),
-        //        new SPColumn("Secondary Staff ID", typeof(string)),
-        //        new SPColumn("Staff Name", typeof(string) ),
-        //        new SPColumn("Activity ID", typeof(string)),
-        //        new SPColumn("Activity Type", typeof(string)),
-        //        new SPColumn("ID", typeof(string)),
-        //        new SPColumn("Secondary ID", typeof(string)),
-        //        new SPColumn("Name", typeof(string)),
-        //        new SPColumn("Start", typeof(DateTime)),
-        //        new SPColumn("Finish", typeof(DateTime)),
-        //        new SPColumn("Duration", typeof(Int32)),
-        //        new SPColumn("Travel Time", typeof(string)),
-        //        new SPColumn("TSrc", typeof(string)),
-        //        new SPColumn("Distance", typeof(string)),
-        //        new SPColumn("DSrc", typeof(string)),
-        //        new SPColumn("Phone", typeof(string)),
-        //        new SPColumn("Service", typeof(string)),
-        //        new SPColumn("On-call", typeof(string)),
-        //        new SPColumn("Location", typeof(string)),
-        //        new SPColumn("Discipline", typeof(string))
-        //    };
-
-        //    return spc;
-        //}
-
         SPColumn[] GetSPColumns()
         {
             SPColumn[] spc = new SPColumn[22]
@@ -504,7 +466,7 @@ namespace ConsumerMaster
                     values[vIndex++] = finishDate; //Finish
 
                     string durationStr = GetCellData(InputWorksheet, i, 14);
-                    values[vIndex++] = int.Parse(durationStr, System.Globalization.NumberStyles.AllowThousands);  //Duration
+                    values[vIndex++] = int.Parse(durationStr, NumberStyles.AllowThousands);  //Duration
 
                     values[vIndex++] = GetCellData(InputWorksheet, i, 15); //Travel Time
                     values[vIndex++] = GetCellData(InputWorksheet, i, 16); //TSrc
@@ -615,7 +577,6 @@ namespace ConsumerMaster
 
             return dataTable;
         }
-
 
         public DataTable GetBillingAuthorizationDataTable(Stream input)
         {
@@ -985,7 +946,6 @@ namespace ConsumerMaster
                 {"Respite Level 3 (1:1) Enhanced-15 Mins", "W9863"}
             };
 
-
             DataTable dataTable = new DataTable();
             try
             {
@@ -1000,7 +960,6 @@ namespace ConsumerMaster
                     var columnName = "Column" + (i + 1);
                     dataTable.Columns.Add(spc[i].name, spc[i].type);
                 }
-
  
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
@@ -1023,33 +982,21 @@ namespace ConsumerMaster
                     DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
                     values[4] = visitDateOnly; //Visit Date
 
-                    SandataDateTimeDuration sdtd1 = SetDateTimeDuration
-                        (visitDateOnly,
-                        GetCellData(InputWorksheet, i, 7), 
-                        GetCellData(InputWorksheet, i, 8),
-                        GetCellData(InputWorksheet, i, 9));
-
+                    SandataDateTimeDuration sdtd1 = SetDateTimeDuration(visitDateOnly,  GetCellData(InputWorksheet, i, 7), GetCellData(InputWorksheet, i, 8),  GetCellData(InputWorksheet, i, 9));
                     values[5] = sdtd1.Start; //Call In
                     values[6] = sdtd1.End; //Call Out
                     values[7] = sdtd1.Duration; //Call Hours
 
-                    SandataDateTimeDuration sdtd2 = SetDateTimeDuration
-                        (visitDateOnly,
-                        GetCellData(InputWorksheet, i, 10),
-                        GetCellData(InputWorksheet, i, 11),
-                        GetCellData(InputWorksheet, i, 12));
-
+                    SandataDateTimeDuration sdtd2 = SetDateTimeDuration(visitDateOnly, GetCellData(InputWorksheet, i, 10), GetCellData(InputWorksheet, i, 11), GetCellData(InputWorksheet, i, 12));
                     values[8] = sdtd2.Start; //Adjusted In
                     values[9] = sdtd2.End; //Adjusted Out
                     values[10] = sdtd2.Duration; //Adjusted Hours
-
 
                     TimeSpan billDuration;
                     if (!TimeSpan.TryParse(GetCellData(InputWorksheet, i, 13), out billDuration))
                     {
                     }
                     values[11] = billDuration; //Bill Hours
-
 
                     values[12] = GetCellData(InputWorksheet, i, 14); //Visit Status
 
@@ -1593,7 +1540,6 @@ namespace ConsumerMaster
             try
             {
                 PdfFormatProvider formatProvider = new PdfFormatProvider();
-                //formatProvider.ExportSettings.ImageQuality = ImageQuality.High;
 
                 byte[] renderedBytes;
 

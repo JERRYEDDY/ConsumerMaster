@@ -4,7 +4,6 @@ using System.IO;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Data.SqlClient;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI.Upload;
 
 namespace ConsumerMaster
@@ -185,7 +184,6 @@ namespace ConsumerMaster
                 e.IsValid = false;
             }
         }
-
 
         public DataTable GetDataTable(string queryString)
         {
