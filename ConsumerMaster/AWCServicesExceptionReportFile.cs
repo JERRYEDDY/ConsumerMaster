@@ -224,6 +224,7 @@ namespace ConsumerMaster
                 foreach (DataRow tdRow in dTDTable.Rows)
                 {
                     string clientID = tdRow["ID"].ToString();
+                    string clientName = tdRow["Name"].ToString();
                     string payrollCode = tdRow["Payroll Code"].ToString();
                     string billingCode = tdRow["Billing Code"].ToString();
                     string serviceCode = tdRow["Service"].ToString();
@@ -242,23 +243,28 @@ namespace ConsumerMaster
                     int noBillingAuthorizationCount = 0;
                     if(serviceCodeIndex == -1)
                     {
-                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+                        //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+                        String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + payrollCode + "'");
+
                         DataRow[] results = dBATable.Select(condition);
                         noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
                     }
                     else
                     {
                         string pCode = payrollCodeArray[serviceCodeIndex].ToString();
-                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
+                        //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
+                        String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + pCode + "'");
+
                         DataRow[] results = dBATable.Select(condition);
                         noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
                     }
                     if (noBillingAuthorizationCount == 0)
                         exceptionsString.Append("NO BillAuth;");
 
-                    String BACheck = String.Format("id_no = '" + clientID + "'");
-                    DataRow[] BAResults = dBATable.Select(BACheck);
+                    //String BACheck = String.Format("id_no = '" + clientID + "'");
+                    String BACheck = String.Format("full_name = '" + clientName + "'");
 
+                    DataRow[] BAResults = dBATable.Select(BACheck);
 
                     bool billingAuthorizationsMismatched = false;
                     DataRow[] HBAResults = null;

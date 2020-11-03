@@ -492,6 +492,104 @@ namespace ConsumerMaster
             return dataTable;
         }
 
+        public DataTable GetScheduledActualDataTable(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[18]
+            {
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Secondary Staff ID", typeof(string)),
+                new SPColumn("Staff Name", typeof(string) ),
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("Activity Source", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Secondary ID", typeof(string)),
+                new SPColumn("Name", typeof(string)),
+                new SPColumn("Scheduled Start", typeof(DateTime?)),
+                new SPColumn("Scheduled Finish", typeof(DateTime?)),
+                new SPColumn("SDuration", typeof(TimeSpan)),
+                new SPColumn("Actual Start", typeof(DateTime?)),
+                new SPColumn("Actual Finish", typeof(DateTime?)), 
+                new SPColumn("ADuration", typeof(TimeSpan)),
+                new SPColumn("Difference", typeof(string)),
+                new SPColumn("Location", typeof(string)),
+                new SPColumn("Discipline", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            try
+            {
+                XlsxFormatProvider formatProvider = new XlsxFormatProvider();
+                Workbook InputWorkbook = formatProvider.Import(input);
+
+                var InputWorksheet = InputWorkbook.Sheets[0] as Worksheet;
+
+                for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
+                {
+                    int vIndex = 0;
+
+                    var values = new object[spc.Count()];
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 0); //Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 1); //Secondary Staff ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 2); //Staff Name
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 3); //Activity ID
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 4); //Activity Type
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 5); //Activity Source
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 6); //ID"
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 7); //Secondary ID"
+
+                    string name = GetCellData(InputWorksheet, i, 8);
+                    values[vIndex++] = name.Replace("\"", ""); //Name
+
+                    string scheduledStart = GetCellData(InputWorksheet, i, 9) + " " + GetCellData(InputWorksheet, i, 10);
+                    DateTime? scheduledStartDate = string.IsNullOrEmpty(scheduledStart) ? (DateTime?)null : Convert.ToDateTime(scheduledStart);
+                    values[vIndex++] = scheduledStartDate; //Scheduled Start
+
+                    string scheduledEnd = GetCellData(InputWorksheet, i, 11) + " " + GetCellData(InputWorksheet, i, 12);
+                    DateTime? scheduledEndDate = string.IsNullOrEmpty(scheduledEnd) ? (DateTime?)null : Convert.ToDateTime(scheduledEnd);
+                    values[vIndex++] = scheduledEndDate; //Scheduled End
+
+                    string sDuration = GetCellData(InputWorksheet, i, 13);
+                    TimeSpan sDurationTime;
+                    if (TimeSpan.TryParse(sDuration, out sDurationTime))
+                    {
+                        values[vIndex++] = sDurationTime;  //SDuration
+                    }
+
+                    string actualStart = GetCellData(InputWorksheet, i, 14) + " " + GetCellData(InputWorksheet, i, 15);
+                    DateTime? actualStartDate = string.IsNullOrEmpty(actualStart) ? (DateTime?)null : Convert.ToDateTime(actualStart);
+                    values[vIndex++] = actualStartDate; //Actual Start
+
+                    //values[vIndex++] = GetCellData(InputWorksheet, i, 16); //Timezone
+
+                    string actualEnd = GetCellData(InputWorksheet, i, 17) + " " + GetCellData(InputWorksheet, i, 18);
+                    DateTime? actualEndDate = string.IsNullOrEmpty(actualEnd) ? (DateTime?)null : Convert.ToDateTime(actualEnd);
+                    values[vIndex++] = actualEndDate; //Actual End
+
+                    //values[vIndex++] = GetCellData(InputWorksheet, i, 19); //Timezone
+
+                    string aDuration = GetCellData(InputWorksheet, i, 13);
+                    TimeSpan aDurationTime;
+                    if (TimeSpan.TryParse(aDuration, out aDurationTime))
+                    {
+                        values[vIndex++] = aDurationTime;  //ADuration
+                    }
+
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 21); //Difference
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 22); //Location
+                    values[vIndex++] = GetCellData(InputWorksheet, i, 23); //Discipline
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            };
+
+            return dataTable;
+        }
+
         public DataTable GetUPVTDDataTable(Stream input)
         {
             DataTable dataTable = new DataTable();
@@ -667,7 +765,9 @@ namespace ConsumerMaster
                     var values = new object[12];
 
                     values[0] = GetCellData(InputWorksheet, i, 7); //id_no
-                    values[1] = GetCellData(InputWorksheet, i, 4); //full_name
+
+                    string full_name = GetCellData(InputWorksheet, i, 4);
+                    values[1] = full_name.Replace(",", ""); //full_name
 
                     string fromDateString = GetCellData(InputWorksheet, i, 10); //from_date
                     if (!string.IsNullOrEmpty(fromDateString))

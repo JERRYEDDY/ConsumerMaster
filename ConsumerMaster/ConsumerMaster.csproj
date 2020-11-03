@@ -477,6 +477,7 @@
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
     <Compile Include="AWCEVVVisitsComparisonReportFile.cs" />
+    <Compile Include="AWCPayrollFileExcel.cs" />
     <Compile Include="SandataDateTimeHours.cs" />
     <Compile Include="TravelTimeMain.aspx.cs">
       <DependentUpon>TravelTimeMain.aspx</DependentUpon>

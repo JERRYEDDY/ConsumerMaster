@@ -24,6 +24,33 @@ namespace ConsumerMaster
         protected global::System.Web.UI.WebControls.Label Label4;
 
         /// <summary>
+        /// RadAsyncUpload5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload5;
+
+        /// <summary>
+        /// RadAsyncUpload6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload6;
+
+        /// <summary>
+        /// RadButton5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton RadButton5;
+
+        /// <summary>
         /// RadAsyncUpload1 control.
         /// </summary>
         /// <remarks>
@@ -31,33 +58,6 @@ namespace ConsumerMaster
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload1;
-
-        /// <summary>
-        /// CustomValidator control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator;
-
-        /// <summary>
-        /// CustomValidator3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator3;
-
-        /// <summary>
-        /// CustomValidator4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator4;
 
         /// <summary>
         /// RadButton1 control.
@@ -105,24 +105,6 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload2;
 
         /// <summary>
-        /// CustomValidator2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator2;
-
-        /// <summary>
-        /// CustomValidator5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator5;
-
-        /// <summary>
         /// RadButtonBAException control.
         /// </summary>
         /// <remarks>
@@ -139,15 +121,6 @@ namespace ConsumerMaster
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload3;
-
-        /// <summary>
-        /// CustomValidator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator1;
 
         /// <summary>
         /// RadButtonBAExceptionHCSIS control.
@@ -175,33 +148,6 @@ namespace ConsumerMaster
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadButton RadButton4;
-
-        /// <summary>
-        /// ValidationSummary1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
-
-        /// <summary>
-        /// ValidationSummary2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary2;
-
-        /// <summary>
-        /// ValidationSummary3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary3;
 
         /// <summary>
         /// itemsClientSide control.
