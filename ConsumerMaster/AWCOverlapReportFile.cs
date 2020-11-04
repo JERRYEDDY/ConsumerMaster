@@ -26,7 +26,6 @@ namespace ConsumerMaster
                 streamWriter.WriteLine(" ");
                 streamWriter.WriteLine("{0,-22} {1,-22} {2,-22} {3,-22} {4,-10}", "ClientName", "StaffName", "Start", "Finish", "Duration");
 
-                //var groupedByClientName = dTable.AsEnumerable().GroupBy(row => row.Field<string>("Name"));
                 var groupedByClientID = dTable.AsEnumerable().GroupBy(row => row.Field<string>("ID"));
                 foreach (var clientGroup in groupedByClientID)
                 {
