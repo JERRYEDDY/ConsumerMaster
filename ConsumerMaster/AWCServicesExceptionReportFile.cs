@@ -243,8 +243,8 @@ namespace ConsumerMaster
                     int noBillingAuthorizationCount = 0;
                     if(serviceCodeIndex == -1)
                     {
-                        //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
-                        String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + payrollCode + "'");
+                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
+                        //String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + payrollCode + "'");
 
                         DataRow[] results = dBATable.Select(condition);
                         noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
@@ -252,8 +252,8 @@ namespace ConsumerMaster
                     else
                     {
                         string pCode = payrollCodeArray[serviceCodeIndex].ToString();
-                        //String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
-                        String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + pCode + "'");
+                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
+                        //String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + pCode + "'");
 
                         DataRow[] results = dBATable.Select(condition);
                         noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
@@ -261,8 +261,8 @@ namespace ConsumerMaster
                     if (noBillingAuthorizationCount == 0)
                         exceptionsString.Append("NO BillAuth;");
 
-                    //String BACheck = String.Format("id_no = '" + clientID + "'");
-                    String BACheck = String.Format("full_name = '" + clientName + "'");
+                    String BACheck = String.Format("id_no = '" + clientID + "'");
+                    //String BACheck = String.Format("full_name = '" + clientName + "'");
 
                     DataRow[] BAResults = dBATable.Select(BACheck);
 
