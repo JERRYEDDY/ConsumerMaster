@@ -72,7 +72,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedTDFile, UploadedFile uploadedBAFile, UploadedFile uploadedHBAFile=null)
+        public Workbook CreateWorkbook(UploadedFile uploadedTDFile)
         {
             Workbook workbook = new Workbook();
 
@@ -84,41 +84,16 @@ namespace ConsumerMaster
 
                 Utility util = new Utility();
                 Stream inputTD = uploadedTDFile.InputStream;
-                Stream inputBA = uploadedBAFile.InputStream;
 
                 DataTable tempTable = util.GetUPVTDDataTable(inputTD);
                 tempTable.DefaultView.Sort = "Name, Start";
                 DataTable dUPVTDTable = tempTable.DefaultView.ToTable();  //Sort by Client Name and Start DateTime
-
-                DataTable dBATable = util.GetBillingAuthorizationDataTable(inputBA);
-
-                DataTable tmpTable = util.GetClientIDsDataTable(inputBA);
-                DataTable dClientIDsTable = util.RemoveDuplicateRows(tmpTable, "id_no");
-
-                DataTable dHBATable = null;
-                DataTable exceptionsTable = null;
-                if (uploadedHBAFile != null)
-                {
-                    Stream inputHBA = uploadedHBAFile.InputStream;
-                    dHBATable = util.GetHCSISDataTable(inputHBA, dClientIDsTable);
-                    exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable, dHBATable);
-                }
-                else
-                {
-                    exceptionsTable = FindAllExceptions(dUPVTDTable, dBATable);
-                }
+                DataTable exceptionsTable = FindAllExceptions(dUPVTDTable);
 
                 string[] exceptionColumnNames = exceptionsTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
                 int rowCount = 0;
-                if(uploadedHBAFile != null)
-                {
-                    rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName, true);
-                }
-                else
-                {
-                    rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName, uploadedBAFile.FileName, false);
-                }
+                rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName);
 
 
                 int currentRow = IndexRowItemStart + rowCount;
@@ -148,11 +123,6 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
 
-                    if (uploadedHBAFile != null)
-                    {
-                        sheet1Worksheet.Cells[currentRow, column++].SetValue(row["HCSIS Billing Auth"].ToString());
-                    }
-
                     currentRow++;
                 }
 
@@ -168,7 +138,7 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        public DataTable BuildExceptionsDataTable(bool includeHCSIS)
+        public DataTable BuildExceptionsDataTable()
         {
             List<SPColumn> spc = new List<SPColumn>();
             spc.Add(new SPColumn("ID", typeof(string)));
@@ -183,10 +153,6 @@ namespace ConsumerMaster
             spc.Add(new SPColumn("Exception", typeof(string)));
             spc.Add(new SPColumn("NS Billing Auth", typeof(string)));
 
-            if (includeHCSIS)
-            {
-                spc.Add(new SPColumn("HCSIS Billing Auth", typeof(string)));
-            }
 
             DataTable dataTable = new DataTable();
             try
@@ -204,21 +170,11 @@ namespace ConsumerMaster
             return dataTable;
         }
 
-        public DataTable FindAllExceptions(DataTable dTDTable, DataTable dBATable, DataTable dHBATable=null)
+        public DataTable FindAllExceptions(DataTable dTDTable)
         {
-            DataTable exceptionsTable = null;
-            if(dHBATable != null)
-            {
-                exceptionsTable = BuildExceptionsDataTable(true);
-            }
-            else
-            {
-                exceptionsTable = BuildExceptionsDataTable(false);
-            }
+            DataTable exceptionsTable = BuildExceptionsDataTable();
 
             int tdCount = dTDTable.Rows.Count;
-            int baCount = dBATable.Rows.Count;
-
             try
             {
                 foreach (DataRow tdRow in dTDTable.Rows)
@@ -240,45 +196,7 @@ namespace ConsumerMaster
                         exceptionsString.Append("P/B CODE MISMATCHED; ");
                     }
 
-                    int noBillingAuthorizationCount = 0;
-                    if(serviceCodeIndex == -1)
-                    {
-                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + payrollCode + "'");
-                        //String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + payrollCode + "'");
-
-                        DataRow[] results = dBATable.Select(condition);
-                        noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
-                    }
-                    else
-                    {
-                        string pCode = payrollCodeArray[serviceCodeIndex].ToString();
-                        String condition = String.Format("id_no = '" + clientID + "' AND service_name = '" + pCode + "'");
-                        //String condition = String.Format("full_name = '" + clientName + "' AND service_name = '" + pCode + "'");
-
-                        DataRow[] results = dBATable.Select(condition);
-                        noBillingAuthorizationCount = results.Count();  //NO Billing Authorization;
-                    }
-                    if (noBillingAuthorizationCount == 0)
-                        exceptionsString.Append("NO BillAuth;");
-
-                    String BACheck = String.Format("id_no = '" + clientID + "'");
-                    //String BACheck = String.Format("full_name = '" + clientName + "'");
-
-                    DataRow[] BAResults = dBATable.Select(BACheck);
-
-                    bool billingAuthorizationsMismatched = false;
-                    DataRow[] HBAResults = null;
-                    if (dHBATable != null)
-                    {
-                        HBAResults = dHBATable.Select(BACheck);
-                        billingAuthorizationsMismatched = IsBillingAuthorizationsMisMatched(BAResults, HBAResults);
-                        if (billingAuthorizationsMismatched)
-                        {
-                            exceptionsString.Append("HCSIS MISMATCHED");
-                        }
-                    }
-
-                    if (noBillingAuthorizationCount == 0 || servicesMismatched || billingAuthorizationsMismatched)
+                    if (servicesMismatched)
                     {
                         int vIndex = 0;
                         var values = new object[exceptionsTable.Columns.Count];
@@ -294,24 +212,6 @@ namespace ConsumerMaster
                         values[vIndex++] = serviceCodeIndex != -1 ? string.Format("[{0}]{1}", serviceCodeIndex.ToString(), tdRow["Service"].ToString()) : "";
                         values[vIndex++] = exceptionsString;  //Exception
 
-                        var ba = new StringBuilder();
-                        foreach (DataRow row in BAResults)
-                        {
-                            ba.Append(row[11].ToString());  //Billing Authorizaton WCodes
-                            ba.Append(";");
-                        }
-                        values[vIndex++] = ba;
-
-                        if(billingAuthorizationsMismatched)
-                        {
-                            var hba = new StringBuilder();
-                            foreach (DataRow row in HBAResults)
-                            {
-                                hba.Append(row[2].ToString());
-                                hba.Append(";");
-                            }
-                            values[vIndex++] = hba;
-                        }
 
                         exceptionsTable.Rows.Add(values);
                     }
@@ -373,7 +273,7 @@ namespace ConsumerMaster
             return isMisMatched;
         }
 
-        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames, string uploadedTDFileName, string uploadedBAFilename, bool includeHCSIS)
+        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames, string uploadedTDFileName)
         {
             int rowCount = 0;
             try
@@ -382,18 +282,18 @@ namespace ConsumerMaster
                 worksheet.Cells[rowCount, 0].SetIsBold(true);
 
                 string title = "AWC Services Exception Report – Payroll/Billing Code Mismatched";
-                if(includeHCSIS)
-                {
-                    title = title + ", NO Billing Authorization and HCSIS Mismatched";
-                }
-                else
-                {
-                    title = title + " and NO Billing Authorization";
-                }
+                //if(includeHCSIS)
+                //{
+                //    title = title + ", NO Billing Authorization and HCSIS Mismatched";
+                //}
+                //else
+                //{
+                //    title = title + " and NO Billing Authorization";
+                //}
 
                 worksheet.Cells[rowCount++, 0].SetValue(title);
                 worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
-                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}; {1}", uploadedTDFileName, uploadedBAFilename));
+                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0};", uploadedTDFileName));
                 rowCount++;
 
                 foreach (string column in columnNames)

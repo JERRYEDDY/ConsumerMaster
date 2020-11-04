@@ -28,7 +28,7 @@
                     &nbsp
                 </td>
             </tr>
-            <tr>
+<%--            <tr>
                 <td>
                     &nbsp;
                 </td>
@@ -56,7 +56,7 @@
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButtonPayrollFile_Click" ValidationGroup="TwoFileValid"/>
                </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -128,7 +128,7 @@
                     &nbsp;
                 </td>
             </tr>
-            <tr>
+<%--            <tr>
                 <td>
                     &nbsp;
                 </td>
@@ -139,12 +139,8 @@
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator2" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="NS Billing Authorization report file is required" ValidationGroup="TwoFileValid" Display="None" />
-                    <asp:CustomValidator runat="server" ID="CustomValidator5" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="NS Billing Authorization report file is required" ValidationGroup="ThreeFileValid" Display="None" />--%>
                </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td>
                     Service Exception Report
@@ -159,7 +155,7 @@
                     &nbsp;
                 </td>
             </tr>
-            <tr>
+<%--            <tr>
                 <td>
                     &nbsp;
                 </td>
@@ -170,8 +166,6 @@
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator1" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="HCSIS Billing Authorization report file is required" ValidationGroup="ThreeFileValid" ForeColor="#FF3300" Display="None" />--%>
                </td>
             </tr>
             <tr>
@@ -181,7 +175,7 @@
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAExceptionHCSIS" runat="server" text="Process" OnClick="RadButtonServicesExceptionHCSIS_Click" ValidationGroup="ThreeFileValid"/>
                </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -196,15 +190,13 @@
                     &nbsp;
                 </td>
             </tr>
-            <tr>
+<%--            <tr>
                 <td>
                     Sandata Export Visits Filename .xlsx:
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload4" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" />
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator6" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="Sandata Export Visits report file is required" ForeColor="#FF3300" Display="None" />--%>
-               </td>
+              </td>
             </tr>
             <tr>
                 <td>
@@ -215,14 +207,10 @@
                </td>
             </tr>
             <tr>
-
             <tr>
                 <td>
-<%--                    <asp:ValidationSummary id="ValidationSummary1" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="OneFileValid" />
-                    <asp:ValidationSummary id="ValidationSummary2" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="TwoFileValid" />
-                    <asp:ValidationSummary id="ValidationSummary3" DisplayMode="BulletList" runat="server" HeaderText="You must enter a value in the following fields:" Font-Names="verdana" Font-Size="12" ShowMessageBox="True" ShowSummary="False" ValidationGroup="ThreeFileValid" />--%>
-                </td>
-            </tr>
+               </td>
+            </tr>--%>
             <tr>
                 <td>
                     &nbsp;

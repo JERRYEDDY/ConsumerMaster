@@ -86,15 +86,16 @@ namespace ConsumerMaster
             string outFilename = "AWCServicesExceptionReport.xlsx";
             try
             {
-                if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
+                //if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
+                if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
                     AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
 
                     UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
-                    UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
+                    //UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
 
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile);
+                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }
@@ -109,17 +110,17 @@ namespace ConsumerMaster
             string outFilename = "AWCPayrollFile.xlsx";
             try
             {
-                if (RadAsyncUpload5.UploadedFiles.Count == 1)
-                {
-                    Utility utility = new Utility();
-                    AWCPayrollFileExcel ServiceExceptionReport = new AWCPayrollFileExcel();
+                //if (RadAsyncUpload5.UploadedFiles.Count == 1)
+                //{
+                //    Utility utility = new Utility();
+                //    AWCPayrollFileExcel ServiceExceptionReport = new AWCPayrollFileExcel();
 
-                    UploadedFile uploadedSAFile1 = RadAsyncUpload5.UploadedFiles[0]; //Scheduled Actual File
-                    UploadedFile uploadedSAFile2 = RadAsyncUpload6.UploadedFiles[0]; //Scheduled Actual File
+                //    UploadedFile uploadedSAFile1 = RadAsyncUpload5.UploadedFiles[0]; //Scheduled Actual File
+                //    UploadedFile uploadedSAFile2 = RadAsyncUpload6.UploadedFiles[0]; //Scheduled Actual File
 
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedSAFile1, uploadedSAFile2);
-                    utility.DownloadExcelFile(workbook, outFilename);
-                }
+                //    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedSAFile1, uploadedSAFile2);
+                //    utility.DownloadExcelFile(workbook, outFilename);
+                //}
             }
             catch (Exception ex)
             {
@@ -134,18 +135,18 @@ namespace ConsumerMaster
             string outFilename = "AWCServicesExceptionReport.xlsx";
             try
             {
-                if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1 && RadAsyncUpload3.UploadedFiles.Count == 1)
-                {
-                    Utility utility = new Utility();
-                    AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
+                //if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1 && RadAsyncUpload3.UploadedFiles.Count == 1)
+                //{
+                //    Utility utility = new Utility();
+                //    AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
 
-                    UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
-                    UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
-                    UploadedFile uploadedHBAFile = RadAsyncUpload3.UploadedFiles[0]; //HCSIS Billing Authorization File
+                //    UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
+                //    UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
+                //    UploadedFile uploadedHBAFile = RadAsyncUpload3.UploadedFiles[0]; //HCSIS Billing Authorization File
 
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile, uploadedHBAFile);
-                    utility.DownloadExcelFile(workbook, outFilename);
-                }
+                //    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile, uploadedBAFile, uploadedHBAFile);
+                //    utility.DownloadExcelFile(workbook, outFilename);
+                //}
             }
             catch (Exception ex)
             {
@@ -158,15 +159,15 @@ namespace ConsumerMaster
             string outFilename = "EVVVisitsComparisonReport.xlsx";
             try
             {
-                if (RadAsyncUpload4.UploadedFiles.Count == 1)
-                {
-                    Utility utility = new Utility();
-                    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile();
-                    UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
+                //if (RadAsyncUpload4.UploadedFiles.Count == 1)
+                //{
+                //    Utility utility = new Utility();
+                //    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile();
+                //    UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
 
-                    Workbook workbook = reportExport.CreateWorkbook(uploadedSEVFile);
-                    utility.DownloadExcelFile(workbook, outFilename);
-                }
+                //    Workbook workbook = reportExport.CreateWorkbook(uploadedSEVFile);
+                //    utility.DownloadExcelFile(workbook, outFilename);
+                //}
             }
             catch (Exception ex)
             {
