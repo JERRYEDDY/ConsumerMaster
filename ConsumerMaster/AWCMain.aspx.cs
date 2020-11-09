@@ -128,8 +128,6 @@ namespace ConsumerMaster
             }
         }
 
-
-
         protected void RadButtonServicesExceptionHCSIS_Click(object sender, EventArgs e)
         {
             string outFilename = "AWCServicesExceptionReport.xlsx";

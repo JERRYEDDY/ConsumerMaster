@@ -85,7 +85,9 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream inputTD = uploadedTDFile.InputStream;
 
-                DataTable tempTable = util.GetUPVTDDataTable(inputTD);
+                DataTable tempTable = util.GetUPVTDDataTableViaCSV(inputTD);
+                //DataTable tempTable = util.GetUPVTDDataTable(inputTD);
+
                 tempTable.DefaultView.Sort = "Name, Start";
                 DataTable dUPVTDTable = tempTable.DefaultView.ToTable();  //Sort by Client Name and Start DateTime
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable);

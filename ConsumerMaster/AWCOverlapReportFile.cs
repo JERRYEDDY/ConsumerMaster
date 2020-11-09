@@ -15,7 +15,9 @@ namespace ConsumerMaster
         {
             Utility util = new Utility();
             Stream input = uploadedFile.InputStream;
-            DataTable dTable = util.GetTimeAndDistanceDataTable(input);
+            
+            DataTable dTable = util.GetTimeAndDistanceDataTableViaCSV(input);
+            //DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
             using (var ms = new MemoryStream())
             using (var streamWriter = new StreamWriter(ms))

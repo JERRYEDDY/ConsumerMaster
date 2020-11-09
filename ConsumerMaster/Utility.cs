@@ -19,6 +19,8 @@ using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using CsvHelper.TypeConversion;
+using CsvHelper.Configuration;
 
 namespace ConsumerMaster
 {
@@ -173,6 +175,23 @@ namespace ConsumerMaster
                 Logger.Error(ex);
                 return dataTable;
             };
+        }
+
+        public DataTable FromCSVFile(UploadedFile file)
+        {
+            DataTable dt;
+
+            using (var reader = new StreamReader(file.InputStream))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                // Do any configuration to `CsvReader` before creating CsvDataReader.
+                using (var dr = new CsvDataReader(csv))
+                {
+                    dt = new DataTable();
+                    dt.Load(dr);
+                }
+            }
+            return dt;
         }
 
         public DataTable GetEmployeePersonnelDataTable2(UploadedFile file)
@@ -489,6 +508,155 @@ namespace ConsumerMaster
                 Logger.Error(ex);
             };
 
+            return dataTable;
+        }
+
+        public DataTable GetTimeAndDistanceDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = GetSPColumns();
+            DataTable dataTable = new DataTable();
+
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(input))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    int vIndex = 0;
+                    var values = new object[spc.Count()];
+
+                    values[vIndex++] = csv.GetField<string>(0); //Staff ID
+                    values[vIndex++] = csv.GetField<string>(1); //Secondary Staff ID
+                    values[vIndex++] = csv.GetField<string>(2); //Staff Name
+                    values[vIndex++] = csv.GetField<string>(3); //Activity ID
+                    values[vIndex++] = csv.GetField<string>(4); //Activity Type
+                    values[vIndex++] = csv.GetField<string>(5); //ID
+                    values[vIndex++] = csv.GetField<string>(6); //Secondary ID
+
+                    string name = csv.GetField<string>(7); ;
+                    values[vIndex++] = name.Replace("\"", ""); //Name
+
+                    string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
+                    DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
+                    values[vIndex++] = startDate; //Start
+
+                    string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
+                    DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
+                    values[vIndex++] = finishDate; //Finish
+
+                    if (Int32.TryParse(csv.GetField<string>(14), NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out int duration))
+                    {
+                        values[vIndex++] = duration; //Duration
+                    }
+                    else
+                    {
+                        values[vIndex++] = 0;
+                    }
+
+                    values[vIndex++] = csv.GetField<string>(15); //Travel Time
+                    values[vIndex++] = csv.GetField<string>(16); //TSrc
+                    values[vIndex++] = csv.GetField<string>(17); //Distance
+                    values[vIndex++] = csv.GetField<string>(18); //DSrc
+                    values[vIndex++] = csv.GetField<string>(19); //Phone
+                    values[vIndex++] = csv.GetField<string>(20); //Billing Code
+                    values[vIndex++] = csv.GetField<string>(21); //Payroll Code
+                    values[vIndex++] = csv.GetField<string>(22); //Service
+                    values[vIndex++] = csv.GetField<string>(23); //On-call
+                    values[vIndex++] = csv.GetField<string>(24); //Location
+                    values[vIndex++] = csv.GetField<string>(25); //Discipline
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            return dataTable;
+        }
+
+        public DataTable GetUPVTDDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = GetSPColumns();
+            DataTable dataTable = new DataTable();
+
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(input))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    int vIndex = 0;
+
+                    //string activityType = csv.GetField<string>(4);   //Activity Type
+                    //string billingCode = csv.GetField<string>(20);  //Billing Code
+                    //string payrollCode = csv.GetField<string>(21);   //Payroll Code
+                    //string service = csv.GetField<string>(22);  //Service
+
+                    bool isUPV = csv.GetField<string>(4).Contains("UPV");
+                    bool noBillingCode = string.IsNullOrEmpty(csv.GetField<string>(20));  //Billing Code
+                    bool noPayrollCode = string.IsNullOrEmpty(csv.GetField<string>(21));  //Payroll Code
+                    bool noService = string.IsNullOrEmpty(csv.GetField<string>(22));   //Service
+
+                    if (!isUPV)
+                        continue;
+
+                    if (noBillingCode && noPayrollCode && noService)
+                        continue;
+
+                    var values = new object[spc.Count()];
+
+                    values[vIndex++] = csv.GetField<string>(0); //Staff ID
+                    values[vIndex++] = csv.GetField<string>(1); //Secondary Staff ID
+                    values[vIndex++] = csv.GetField<string>(2); //Staff Name
+                    values[vIndex++] = csv.GetField<string>(3); //Activity ID
+                    values[vIndex++] = csv.GetField<string>(4); //Activity Type
+                    values[vIndex++] = csv.GetField<string>(5); //ID
+                    values[vIndex++] = csv.GetField<string>(6); //Secondary ID
+
+                    string name = csv.GetField<string>(7); ;
+                    values[vIndex++] = name.Replace("\"", ""); //Name
+
+                    string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
+                    DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
+                    values[vIndex++] = startDate; //Start
+
+                    string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
+                    DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
+                    values[vIndex++] = finishDate; //Finish
+
+                    if (Int32.TryParse(csv.GetField<string>(14), NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out int duration))
+                    {
+                        values[vIndex++] = duration; //Duration
+                    }
+                    else
+                    {
+                        values[vIndex++] = 0;
+                    }
+
+                    values[vIndex++] = csv.GetField<string>(15); //Travel Time
+                    values[vIndex++] = csv.GetField<string>(16); //TSrc
+                    values[vIndex++] = csv.GetField<string>(17); //Distance
+                    values[vIndex++] = csv.GetField<string>(18); //DSrc
+                    values[vIndex++] = csv.GetField<string>(19); //Phone
+                    values[vIndex++] = csv.GetField<string>(20); //Billing Code
+                    values[vIndex++] = csv.GetField<string>(21); //Payroll Code
+                    values[vIndex++] = csv.GetField<string>(22); //Service
+                    values[vIndex++] = csv.GetField<string>(23); //On-call
+                    values[vIndex++] = csv.GetField<string>(24); //Location
+                    values[vIndex++] = csv.GetField<string>(25); //Discipline
+
+                    dataTable.Rows.Add(values);
+                }
+            }
             return dataTable;
         }
 

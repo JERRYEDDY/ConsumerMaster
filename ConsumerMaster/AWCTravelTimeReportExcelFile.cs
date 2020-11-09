@@ -7,7 +7,6 @@ using Telerik.Web.UI;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Media;
-using System.Text;
 
 namespace ConsumerMaster
 {
@@ -24,7 +23,9 @@ namespace ConsumerMaster
             {
                 Utility util = new Utility();
                 Stream input = uploadedFile.InputStream;
-                DataTable dTable = util.GetTimeAndDistanceDataTable(input);
+
+                DataTable dTable = util.GetTimeAndDistanceDataTableViaCSV(input);
+                //DataTable dTable = util.GetTimeAndDistanceDataTable(input);
 
                 int totalRecords = dTable.Rows.Count;
 

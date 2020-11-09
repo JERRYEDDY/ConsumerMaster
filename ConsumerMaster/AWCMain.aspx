@@ -74,16 +74,10 @@
             </tr>
             <tr>
                 <td>
-                    CellTrak Time & Distance Filename .xlsx: 
+                    CellTrak Time & Distance Filename .csv: 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile"/>
-<%--                    <asp:CustomValidator runat="server" ID="CustomValidator" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="CellTrak Time & Distance report file is required" ValidationGroup="OneFileValid" Display="None" />
-                    <asp:CustomValidator runat="server" ID="CustomValidator3" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="CellTrak Time & Distance report file is required" ValidationGroup="TwoFileValid" Display="None" />
-                    <asp:CustomValidator runat="server" ID="CustomValidator4" ClientValidationFunction="validateUpload" 
-                        ErrorMessage="CellTrak Time & Distance report file is required" ValidationGroup="ThreeFileValid" Display="None" />--%>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload1" MaxFileInputsCount="1" AllowedFileExtensions="csv" OnValidatingFile="RadAsyncUpload_ValidatingFile"/>
                </td>
             </tr>
             <tr>
