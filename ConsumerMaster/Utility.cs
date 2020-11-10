@@ -19,8 +19,7 @@ using Telerik.Windows.Documents.Flow.FormatProviders.Docx;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using CsvHelper.TypeConversion;
-using CsvHelper.Configuration;
+
 
 namespace ConsumerMaster
 {

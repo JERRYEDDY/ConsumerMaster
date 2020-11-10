@@ -11,9 +11,9 @@
 
 
     <div class="demo-container no-bg">
-        <p>
+<%--        <p>
             <asp:Label runat="server" ID="Label4" />
-        </p>
+        </p>--%>
         <table>
             <tr>
                 <td>
@@ -28,35 +28,6 @@
                     &nbsp
                 </td>
             </tr>
-<%--            <tr>
-                <td>
-                    &nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    CellTrak Scheduled Actual Filename Week 1 .xlsx:
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload5" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    CellTrak Scheduled Actual Filename Week 2 .xlsx:
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload6" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
-               </td>
-            </tr>
-            <tr>
-                <td>
-                    Payroll File
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButtonPayrollFile_Click" ValidationGroup="TwoFileValid"/>
-               </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -137,18 +108,18 @@
             </tr>--%>
             <tr>
                 <td>
-                    Service Exception Report
+                    Mismatched Services Report
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAException" runat="server" text="Process" OnClick="RadButtonServicesException_Click" ValidationGroup="TwoFileValid"/>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonMismatchedServices" runat="server" text="Process" OnClick="RadButtonMismatchedServices_Click" ValidationGroup="TwoFileValid"/>
                </td>
             </tr>
             <tr>
-            <tr>
+<%--            <tr>
                 <td>
                     &nbsp;
                 </td>
-            </tr>
+            </tr>--%>
 <%--            <tr>
                 <td>
                     &nbsp;
@@ -170,20 +141,20 @@
                     <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAExceptionHCSIS" runat="server" text="Process" OnClick="RadButtonServicesExceptionHCSIS_Click" ValidationGroup="ThreeFileValid"/>
                </td>
             </tr>--%>
-            <tr>
+<%--            <tr>
                 <td>
                     &nbsp;
                 </td>
-            </tr>
-            <tr style="border-bottom:1px solid black">
+            </tr>--%>
+<%--            <tr style="border-bottom:1px solid black">
                 <td colspan="100%">
                 </td>
-            </tr>
-            <tr>
+            </tr>--%>
+<%--            <tr>
                 <td>
                     &nbsp;
                 </td>
-            </tr>
+            </tr>--%>
 <%--            <tr>
                 <td>
                     Sandata Export Visits Filename .xlsx:

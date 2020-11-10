@@ -81,21 +81,20 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButtonServicesException_Click(object sender, EventArgs e)
+        protected void RadButtonMismatchedServices_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCServicesExceptionReport.xlsx";
+            string outFilename = "AWCMismatchedServicesReport.xlsx";
             try
             {
                 //if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
-                    AWCServicesExceptionReportFile ServiceExceptionReport = new AWCServicesExceptionReportFile();
 
-                    UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
-                    //UploadedFile uploadedBAFile = RadAsyncUpload2.UploadedFiles[0]; //NS Billing Authorization File
+                    AWCMismatchedServicesReportFile MismatchedServicesReport = new AWCMismatchedServicesReportFile();
+                     UploadedFile uploadedTDFile = RadAsyncUpload1.UploadedFiles[0]; //Time & Distance File
 
-                    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedTDFile);
+                    Workbook workbook = MismatchedServicesReport.CreateWorkbook(uploadedTDFile);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }
