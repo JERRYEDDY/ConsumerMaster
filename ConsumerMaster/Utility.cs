@@ -541,12 +541,20 @@ namespace ConsumerMaster
                     string name = csv.GetField<string>(7); ;
                     values[vIndex++] = name.Replace("\"", ""); //Name
 
+                    //string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
+                    //DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
+                    //values[vIndex++] = startDate; //Start
+
                     string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
-                    DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
+                    DateTime? startDate = TryParseDateTime(start);
                     values[vIndex++] = startDate; //Start
 
+                    //string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
+                    //DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
+                    //values[vIndex++] = finishDate; //Finish
+
                     string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
-                    DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
+                    DateTime? finishDate = TryParseDateTime(finish);
                     values[vIndex++] = finishDate; //Finish
 
                     if (Int32.TryParse(csv.GetField<string>(14), NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out int duration))
@@ -595,11 +603,6 @@ namespace ConsumerMaster
                 {
                     int vIndex = 0;
 
-                    //string activityType = csv.GetField<string>(4);   //Activity Type
-                    //string billingCode = csv.GetField<string>(20);  //Billing Code
-                    //string payrollCode = csv.GetField<string>(21);   //Payroll Code
-                    //string service = csv.GetField<string>(22);  //Service
-
                     bool isUPV = csv.GetField<string>(4).Contains("UPV");
                     bool noBillingCode = string.IsNullOrEmpty(csv.GetField<string>(20));  //Billing Code
                     bool noPayrollCode = string.IsNullOrEmpty(csv.GetField<string>(21));  //Payroll Code
@@ -624,13 +627,22 @@ namespace ConsumerMaster
                     string name = csv.GetField<string>(7); ;
                     values[vIndex++] = name.Replace("\"", ""); //Name
 
+                    //string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
+                    //DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
+                    //values[vIndex++] = startDate; //Start
+
                     string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
-                    DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
+                    DateTime? startDate = TryParseDateTime(start);
                     values[vIndex++] = startDate; //Start
 
+                    //string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
+                    //DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
+                    //values[vIndex++] = finishDate; //Finish
+
                     string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
-                    DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
+                    DateTime? finishDate = TryParseDateTime(finish);
                     values[vIndex++] = finishDate; //Finish
+
 
                     if (Int32.TryParse(csv.GetField<string>(14), NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out int duration))
                     {
@@ -658,6 +670,97 @@ namespace ConsumerMaster
             }
             return dataTable;
         }
+
+        public DataTable GetScheduledActualDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[18]
+            {
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Secondary Staff ID", typeof(string)),
+                new SPColumn("Staff Name", typeof(string) ),
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("Activity Source", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Secondary ID", typeof(string)),
+                new SPColumn("Name", typeof(string)),
+                new SPColumn("Scheduled Start", typeof(DateTime)), //Scheduled Start + Time
+                new SPColumn("Scheduled Finish", typeof(DateTime)), //Scheduled Finish + Time
+                new SPColumn("SDuration", typeof(TimeSpan)),
+                new SPColumn("Actual Start", typeof(DateTime)), //Actual Start + Time + Timezone
+                new SPColumn("Actual Finish", typeof(DateTime)), //Actual Finish + Time + Timezone
+                new SPColumn("ADuration", typeof(TimeSpan)),
+                new SPColumn("Difference", typeof(string)),
+                new SPColumn("Location", typeof(string)),
+                new SPColumn("Discipline", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(input))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    int vIndex = 0;
+                    var values = new object[spc.Count()];
+
+                    values[vIndex++] = csv.GetField<string>(0); //Staff ID
+                    values[vIndex++] = csv.GetField<string>(1); //Secondary Staff ID
+                    values[vIndex++] = csv.GetField<string>(2); //Staff Name
+                    values[vIndex++] = csv.GetField<string>(3); //Activity ID
+                    values[vIndex++] = csv.GetField<string>(4); //Activity Type
+                    values[vIndex++] = csv.GetField<string>(5); //Activity Source
+                    values[vIndex++] = csv.GetField<string>(6); //ID
+                    values[vIndex++] = csv.GetField<string>(7); //Secondary ID
+
+                    string name = csv.GetField<string>(8); ;
+                    values[vIndex++] = name.Replace("\"", ""); //Name
+
+                    string scheduledStart = csv.GetField<string>(9) + " " + csv.GetField<string>(10);
+                    DateTime? scheduledStartDate = TryParseDateTime(scheduledStart);
+                    values[vIndex++] = scheduledStartDate; //Scheduled Start + Time
+
+                    string scheduledFinish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
+                    DateTime? scheduledFinishDate = TryParseDateTime(scheduledFinish);
+                    values[vIndex++] = scheduledFinishDate; //Scheduled Finish + Time
+
+                    TimeSpan? sDurationTime = TryParseTimeSpan(csv.GetField<string>(13));
+                    values[vIndex++] = sDurationTime;  //SDuration
+
+                    string actualStart = csv.GetField<string>(14) + " " + csv.GetField<string>(15);
+                    DateTime? actualStartDate = TryParseDateTime(actualStart);
+                    values[vIndex++] = actualStartDate; //Actual Start + Time
+
+                    string actualFinish = csv.GetField<string>(17) + " " + csv.GetField<string>(18);
+                    DateTime? actualFinishDate = TryParseDateTime(actualFinish);
+                    values[vIndex++] = actualFinishDate; //ActualFinish + Time
+
+                    TimeSpan ? aDurationTime = TryParseTimeSpan(csv.GetField<string>(20));
+                    values[vIndex++] = aDurationTime;  //ADuration
+
+                    values[vIndex++] = csv.GetField<string>(21); //Difference
+                    values[vIndex++] = csv.GetField<string>(22); //Location
+                    values[vIndex++] = csv.GetField<string>(23); //Discipline
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+
+            return dataTable;
+        }
+
+
+        public static DateTime? TryParseDateTime(string text) =>  DateTime.TryParse(text, out var date) ? date : (DateTime?)null;
+
+        public static TimeSpan? TryParseTimeSpan(string text) => TimeSpan.TryParse(text, out var timespan) ? timespan : (TimeSpan?)null;
 
         public DataTable GetScheduledActualDataTable(Stream input)
         {

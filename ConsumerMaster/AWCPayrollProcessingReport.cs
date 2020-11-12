@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
-    public class AWCPayrollFileExcel
+    public class AWCPayrollProcessingReport
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
@@ -72,7 +72,7 @@ namespace ConsumerMaster
         //    "(H2023):SE Job Find W/B"
         //};
 
-        public Workbook CreateWorkbook(UploadedFile uploadedSAFile1, UploadedFile uploadedSAFile2)
+        public Workbook CreateWorkbook(UploadedFile uploadedFile)
         {
             Workbook workbook = new Workbook();
 
@@ -83,11 +83,10 @@ namespace ConsumerMaster
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
 
                 Utility util = new Utility();
-                Stream inputSA1 = uploadedSAFile1.InputStream;
-                Stream inputSA2 = uploadedSAFile2.InputStream;
+                Stream input = uploadedFile.InputStream;
 
-                DataTable SA1Table = util.GetScheduledActualDataTable(inputSA1);
-                DataTable SA2Table = util.GetScheduledActualDataTable(inputSA2);
+                DataTable dTable = util.GetScheduledActualDataTableViaCSV(input);
+
 
                 //DataTable tempTable = util.GetUPVTDDataTable(inputTD);
                 //tempTable.DefaultView.Sort = "Name, Start";

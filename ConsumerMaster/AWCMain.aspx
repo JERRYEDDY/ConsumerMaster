@@ -108,6 +108,11 @@
             </tr>--%>
             <tr>
                 <td>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td>
                     Mismatched Services Report
                 </td>
                 <td>
@@ -115,37 +120,41 @@
                </td>
             </tr>
             <tr>
-<%--            <tr>
+            <tr>
                 <td>
                     &nbsp;
                 </td>
-            </tr>--%>
-<%--            <tr>
+            </tr>
+            <tr style="border-bottom:1px solid black">
+                <td colspan="100%">
+                </td>
+            </tr>
+            <tr>
                 <td>
                     &nbsp;
                 </td>
             </tr>
             <tr>
                 <td>
-                    HCSIS Billing Authorizations Filename .xlsx:
+                    CellTrak Scheduled & Actual Filename .csv: 
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="csv" OnValidatingFile="RadAsyncUpload_ValidatingFile"/>
+               </td>
+            </tr>
+             <tr>
+                <td>
+                    Payroll Processing Report
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonPayrollProcessingReport" runat="server" text="Process" OnClick="RadButtonPayrollProcessingReport_Click" ValidationGroup="ThreeFileValid"/>
                </td>
             </tr>
             <tr>
                 <td>
-                    Service Exception (HCSIS) Report
-                </td>
-                <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButtonBAExceptionHCSIS" runat="server" text="Process" OnClick="RadButtonServicesExceptionHCSIS_Click" ValidationGroup="ThreeFileValid"/>
-               </td>
-            </tr>--%>
-<%--            <tr>
-                <td>
                     &nbsp;
                 </td>
-            </tr>--%>
+            </tr>
 <%--            <tr style="border-bottom:1px solid black">
                 <td colspan="100%">
                 </td>

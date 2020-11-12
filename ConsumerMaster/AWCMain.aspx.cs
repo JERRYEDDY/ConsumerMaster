@@ -104,22 +104,21 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButtonPayrollFile_Click(object sender, EventArgs e)
+        protected void RadButtonPayrollProcessingReport_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCPayrollFile.xlsx";
+            string outFilename = "AWCPayrollProcessing.xlsx";
             try
             {
-                //if (RadAsyncUpload5.UploadedFiles.Count == 1)
-                //{
-                //    Utility utility = new Utility();
-                //    AWCPayrollFileExcel ServiceExceptionReport = new AWCPayrollFileExcel();
+                if (RadAsyncUpload2.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+                    AWCPayrollProcessingReport payrollProcessingReport = new AWCPayrollProcessingReport();
 
-                //    UploadedFile uploadedSAFile1 = RadAsyncUpload5.UploadedFiles[0]; //Scheduled Actual File
-                //    UploadedFile uploadedSAFile2 = RadAsyncUpload6.UploadedFiles[0]; //Scheduled Actual File
+                    UploadedFile uploadedFile = RadAsyncUpload2.UploadedFiles[0]; //Scheduled Actual File
 
-                //    Workbook workbook = ServiceExceptionReport.CreateWorkbook(uploadedSAFile1, uploadedSAFile2);
-                //    utility.DownloadExcelFile(workbook, outFilename);
-                //}
+                    Workbook workbook = payrollProcessingReport.CreateWorkbook(uploadedFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
             }
             catch (Exception ex)
             {

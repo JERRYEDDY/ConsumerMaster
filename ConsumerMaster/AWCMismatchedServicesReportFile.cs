@@ -123,7 +123,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column].SetForeColor(textColor);
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
+                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
 
                     currentRow++;
                 }
@@ -153,7 +153,7 @@ namespace ConsumerMaster
             spc.Add(new SPColumn("CT Payroll Code", typeof(string))); //Payroll Code
             spc.Add(new SPColumn("Service", typeof(string))); //Service
             spc.Add(new SPColumn("Exception", typeof(string)));
-            spc.Add(new SPColumn("NS Billing Auth", typeof(string)));
+            //spc.Add(new SPColumn("NS Billing Auth", typeof(string)));
 
 
             DataTable dataTable = new DataTable();
@@ -284,14 +284,6 @@ namespace ConsumerMaster
                 worksheet.Cells[rowCount, 0].SetIsBold(true);
 
                 string title = "AWC Services Exception Report – Payroll/Billing Code Mismatched";
-                //if(includeHCSIS)
-                //{
-                //    title = title + ", NO Billing Authorization and HCSIS Mismatched";
-                //}
-                //else
-                //{
-                //    title = title + " and NO Billing Authorization";
-                //}
 
                 worksheet.Cells[rowCount++, 0].SetValue(title);
                 worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
