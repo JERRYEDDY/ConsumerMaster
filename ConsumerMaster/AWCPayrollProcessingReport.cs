@@ -60,19 +60,23 @@ namespace ConsumerMaster
                      new { ID = i.Field<string>("ID"), Name = i.Field<string>("Name"), StaffName = i.Field<string>("StaffName") } into ivrData
                      join m in mobileGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals
                      new { ID = m.Field<string>("ID"), Name = m.Field<string>("Name"), StaffName = m.Field<string>("StaffName") } into mobileData
+                     join p in portalGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals
+                     new { ID = p.Field<string>("ID"), Name = p.Field<string>("Name"), StaffName = p.Field<string>("StaffName") } into portalData
                      from ivrRecord in ivrData.DefaultIfEmpty()
                      from mobileRecord in mobileData.DefaultIfEmpty()
+                     from portalRecord in portalData.DefaultIfEmpty()
                      select new PayrollProcessClient
                      {
                          ID = c.Field<string>("ID"),
                          Name = c.Field<string>("Name"),
                          StaffName = c.Field<string>("StaffName"),
-                         ICount = ivrRecord.Field<int>("Count"),
-                         MCount = mobileRecord.Field<int>("Count")
+                         ICount = ivrRecord == null ? 0 : ivrRecord.Field<int>("Count"),
+                         MCount = mobileRecord == null ? 0 : mobileRecord.Field<int>("Count"),
+                         PCount = portalRecord == null ? 0 : portalRecord.Field<int>("Count")
                      }).ToList();
 
 
-
+                DataTable join = ConvertToDataTable(collection);
 
 
 
