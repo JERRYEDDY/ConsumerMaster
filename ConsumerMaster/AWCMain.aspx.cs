@@ -128,7 +128,7 @@ namespace ConsumerMaster
 
         protected void RadButtonServicesExceptionHCSIS_Click(object sender, EventArgs e)
         {
-            string outFilename = "AWCServicesExceptionReport.xlsx";
+            //string outFilename = "AWCServicesExceptionReport.xlsx";
             try
             {
                 //if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1 && RadAsyncUpload3.UploadedFiles.Count == 1)
@@ -152,7 +152,7 @@ namespace ConsumerMaster
 
         protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
         {
-            string outFilename = "EVVVisitsComparisonReport.xlsx";
+            //string outFilename = "EVVVisitsComparisonReport.xlsx";
             try
             {
                 //if (RadAsyncUpload4.UploadedFiles.Count == 1)

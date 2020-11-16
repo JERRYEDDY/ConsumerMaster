@@ -5,9 +5,9 @@ using Telerik.Web.UI;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Windows.Media;
 using System.Linq;
-using System.Reflection;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
 {
@@ -15,6 +15,28 @@ namespace ConsumerMaster
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static readonly int IndexRowItemStart = 0;
+
+        private readonly SortedList<string, bool> headerColumns = new SortedList<string, bool>()
+        {
+            {"Client_ID", false },
+            {"Client_Name", false },
+            {"Staff Name", false },
+            {"Num_of_IVR_Tranactions", false },
+            {"Num_of Mobile_Tranactions", false },
+            {"Num_of Portal_Tranactions", false },
+            {"Progress Notes Week 1?", true },
+            {"Progress Notes Week 2?", true },
+            {"Notes_PN", false },
+            {"Progress Notes Initials", true },
+            {"Notes_Evolv Submission and Payroll", false },
+            {"Submit initials", true },
+            {"Evolv Submit", true },
+            {"Evolv Approval", true },
+            {"Sent for Payroll", true },
+            {"Evolv Submit (original)", true },
+            {"Evolv Approval (orginal)", true },
+            {"Sent for Payroll (original)", true },
+        };
 
         public Workbook CreateWorkbook(UploadedFile uploadedFile)
         {
@@ -32,30 +54,33 @@ namespace ConsumerMaster
                 Utility util = new Utility();
                 Stream input = uploadedFile.InputStream;
 
-                DataTable dTable = util.GetScheduledActualDataTableViaCSV(input);
+                DataTable dataTable = util.GetScheduledActualDataTableViaCSV(input);
+                DataTable clients = dataTable.DefaultView.ToTable(true, "ID","Name", "StaffName");
 
-                DataTable clientsGroup = dTable.DefaultView.ToTable(true, "ID","Name", "StaffName");
+                var groupByList = dataTable.AsEnumerable()
+                .GroupBy(row => new
+                {
+                    ID = row["ID"],
+                    Name = row["Name"],
+                    StaffName = row["StaffName"],
+                    ActivitySource = row["ActivitySource"]
+                })
+                .Select(grp => new
+                {
+                    ID = grp.Key.ID,
+                    Name = grp.Key.Name,
+                    StaffName = grp.Key.StaffName,
+                    ActivitySource = grp.Key.ActivitySource,
+                    Count = grp.Count()
+                }).ToList();
 
-                DataTable ivrResults = dTable.Select("[ActivitySource] = 'IVR'").CopyToDataTable();
-                var ivrList = ivrResults.AsEnumerable()
-                    .GroupBy(row => new { ID = row["ID"], Name = row["Name"], StaffName = row["StaffName"] })
-                    .Select(grp => new { ID = grp.Key.ID, Name = grp.Key.Name, StaffName = grp.Key.StaffName, Count = grp.Count() }).ToList();
-                DataTable ivrGroup = ConvertToDataTable(ivrList);
-
-                DataTable mobileResults = dTable.Select("[ActivitySource] = 'Mobile'").CopyToDataTable();
-                var mobileList = mobileResults.AsEnumerable()
-                    .GroupBy(row => new { ID = row["ID"], Name = row["Name"], StaffName = row["StaffName"] })
-                    .Select(grp => new { ID = grp.Key.ID, Name = grp.Key.Name, StaffName = grp.Key.StaffName, Count = grp.Count() }).ToList();
-                DataTable mobileGroup = ConvertToDataTable(mobileList);
-
-                DataTable portalResults = dTable.Select("[ActivitySource] = 'Portal'").CopyToDataTable();
-                var portalList = portalResults.AsEnumerable()
-                    .GroupBy(row => new { ID = row["ID"], Name = row["Name"], StaffName = row["StaffName"] })
-                    .Select(grp => new { ID = grp.Key.ID, Name = grp.Key.Name, StaffName = grp.Key.StaffName, Count = grp.Count() }).ToList();
-                DataTable portalGroup = ConvertToDataTable(portalList);
+                DataTable groupBy = ConvertToDataTable(groupByList);
+                DataTable ivrGroup = groupBy.Select("[ActivitySource] = 'IVR'").CopyToDataTable();
+                DataTable mobileGroup = groupBy.Select("[ActivitySource] = 'Mobile'").CopyToDataTable();
+                DataTable portalGroup = groupBy.Select("[ActivitySource] = 'Portal'").CopyToDataTable();
 
                 List<PayrollProcessClient> collection =
-                    (from c in clientsGroup.AsEnumerable()
+                    (from c in clients.AsEnumerable()
                      join i in ivrGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals 
                      new { ID = i.Field<string>("ID"), Name = i.Field<string>("Name"), StaffName = i.Field<string>("StaffName") } into ivrData
                      join m in mobileGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals
@@ -77,37 +102,9 @@ namespace ConsumerMaster
 
 
                 DataTable join = ConvertToDataTable(collection);
-
-
-
-                //var query =
-                //    from clients in clientsGroup.AsEnumerable()
-                //    join ivr in ivrGroup.AsEnumerable() on new {ID = clients.Field<string>("ID"), Name = clients.Field<string>("Name"), StaffName = clients.Field<string>("StaffName")} equals
-                //    new { ID = ivr.Field<string>("ID"), Name = ivr.Field<string>("Name"), StaffName = ivr.Field<string>("StaffName") } into ivrData
-                //    join mobile in mobileGroup.AsEnumerable() on new { ID = clients.Field<string>("ID"), Name = clients.Field<string>("Name"), StaffName = clients.Field<string>("StaffName") } equals
-                //    new { ID = mobile.Field<string>("ID"), Name = mobile.Field<string>("Name"), StaffName = mobile.Field<string>("StaffName") } into mobileData
-                //    from ivrRecord in ivrData.DefaultIfEmpty()
-                //    from mobileRecord in mobileData.DefaultIfEmpty()
-                //    select new
-                //    {
-                //        ID = clients.Field<string>("ID"),
-                //        Name = ivrRecord.Field<string>("Name"),
-                //        StaffName = ivrRecord.Field<string>("StaffName"),
-                //        ICount = ivrRecord == null ? 0 : ivrRecord.Field<int>("Count"),
-                //        MCount = mobileRecord == null ? 0 : mobileRecord.Field<int>("Count")
-                //    };
-
-
-                //var joins = query.ToList();
-
-
-
-                //var query = (from x in clientResults.AsEnumerable()
-                //             join y in ivrGroup.AsEnumerable() on x.Field<string>("ID") equals y.Field<string>("ID") into tempJoin
-                //             from leftJoin in tempJoin.DefaultIfEmpty()
-                //             select new { col1 = x.Field<string>("ID"), col2 = y.Field<string>("Name"), col3 = y.Field<string>("StaffName"), col4 = y.Field<int>("Count") }).ToList();
-
-
+                DataView dv = join.DefaultView;
+                dv.Sort = "Name, StaffName";
+                DataTable dTable= dv.ToTable();
 
                 PrepareSheet1Worksheet(sheet1Worksheet);
 
@@ -118,31 +115,45 @@ namespace ConsumerMaster
 
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ID"].ToString());
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Activity ID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
 
-                    CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
+                    //CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                    //sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
+                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
+                    //sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
+                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["CT Billing Code"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["CT Payroll Code"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ICount"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["MCount"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["PCount"].ToString());
 
-                    ThemableColor textColor = new ThemableColor(Colors.Red);
-                    sheet1Worksheet.Cells[currentRow, column].SetForeColor(textColor);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
+                    CellIndex week1RuleCellIndex = new CellIndex(currentRow, column);
+                    ListDataValidationRuleContext week1Context = new ListDataValidationRuleContext(sheet1Worksheet, week1RuleCellIndex);
+                    week1Context.InCellDropdown = true;
+                    week1Context.Argument1 = "Yes";
+                    ListDataValidationRule week1Rule = new ListDataValidationRule(week1Context);
+                    sheet1Worksheet.Cells[week1RuleCellIndex].SetDataValidationRule(week1Rule);
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
+                    int currentColumn = headerColumns.IndexOfKey("Progress Notes Week 1?");
+                    
 
+
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(""); //Progress Notes Week1
+
+
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(""); //Progress Notes Week2
+
+                    //ThemableColor textColor = new ThemableColor(Colors.Red);
+                    //sheet1Worksheet.Cells[currentRow, column].SetForeColor(textColor);
+                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
+
+                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
 
                     currentRow++;
                 }
 
-                for (int i = 1; i < dTable.Columns.Count; i++)  //Start at 1 instead of 0
+                for (int i = 1; i < 18; i++)  //Start at 1 instead of 0
                 {
                     sheet1Worksheet.Columns[i].AutoFitWidth();
                 }
@@ -157,40 +168,24 @@ namespace ConsumerMaster
 
         private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
-            string[] columnsList = new string[]
-            {
-                    "Client_ID",
-                    "Client_Name",
-                    "Staff Name",
-                    "IVR_Count",
-                    "Mobile_Count",
-                    "Portal_Count",
-                    "Progress Notes Week 1?",
-                    "Progress Notes WeeK 2?",
-                    "Notes - PN",
-                    "Progress Notes Initials",
-                    "Notes - Evolv Submission and Payroll",
-                    "Submit initials",
-                    "Evolv Submit",
-                    "Evolv Approval",
-                    "Sent for Payroll",
-                    "Evolv Submit (original)",
-                    "Evolv Approval (orginal)",
-                    "Sent for Payroll (original)",
-            };
-
             try
             {
-                PatternFill redPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(120, 255, 0, 0), Colors.Transparent);
-                PatternFill goldPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 255, 215, 0), Colors.Transparent);
+                PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 192, 192, 192), Colors.Transparent);
 
-                foreach (string column in columnsList)
+                worksheet.ViewState.FreezePanes(0, 3);
+
+                int columnKey = 0;
+                foreach (KeyValuePair<string, bool> header in headerColumns)
                 {
-                    int columnKey = Array.IndexOf(columnsList, column);
-                    string columnName = column;
-
+                    string columnName = header.Key;
+                    bool colValue = header.Value;
+                    worksheet.Cells[IndexRowItemStart, columnKey].SetIsWrapped(colValue);
                     worksheet.Cells[IndexRowItemStart, columnKey].SetValue(columnName);
-                    worksheet.Cells[IndexRowItemStart, columnKey].SetHorizontalAlignment(RadHorizontalAlignment.Left);
+
+                    if (columnKey < 6)
+                        worksheet.Cells[IndexRowItemStart, columnKey].SetFill(solidPatternFill);
+
+                    worksheet.Cells[IndexRowItemStart, columnKey++].SetHorizontalAlignment(RadHorizontalAlignment.Left);
                 }
             }
             catch (Exception ex)
@@ -214,7 +209,6 @@ namespace ConsumerMaster
             }
             return table;
         }
-
 
         public class PayrollProcessClient
         {

@@ -703,8 +703,8 @@ namespace ConsumerMaster
                     values[vIndex++] = csv.GetField<string>(2); //Staff Name
                     values[vIndex++] = csv.GetField<string>(5); //Activity Source
 
-                    //if (String.IsNullOrEmpty(csv.GetField<string>(5)))
-                    //    continue;
+                    if (String.IsNullOrEmpty(csv.GetField<string>(5)))
+                        continue;
 
                     dataTable.Rows.Add(values);
                 }
