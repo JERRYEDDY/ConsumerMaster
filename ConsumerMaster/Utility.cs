@@ -541,17 +541,9 @@ namespace ConsumerMaster
                     string name = csv.GetField<string>(7); ;
                     values[vIndex++] = name.Replace("\"", ""); //Name
 
-                    //string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
-                    //DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
-                    //values[vIndex++] = startDate; //Start
-
                     string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
                     DateTime? startDate = TryParseDateTime(start);
                     values[vIndex++] = startDate; //Start
-
-                    //string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
-                    //DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
-                    //values[vIndex++] = finishDate; //Finish
 
                     string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
                     DateTime? finishDate = TryParseDateTime(finish);
@@ -627,22 +619,13 @@ namespace ConsumerMaster
                     string name = csv.GetField<string>(7); ;
                     values[vIndex++] = name.Replace("\"", ""); //Name
 
-                    //string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
-                    //DateTime? startDate = string.IsNullOrEmpty(start) ? (DateTime?)null : Convert.ToDateTime(start);
-                    //values[vIndex++] = startDate; //Start
-
                     string start = csv.GetField<string>(8) + " " + csv.GetField<string>(9);
                     DateTime? startDate = TryParseDateTime(start);
                     values[vIndex++] = startDate; //Start
 
-                    //string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
-                    //DateTime? finishDate = string.IsNullOrEmpty(finish) ? (DateTime?)null : Convert.ToDateTime(finish);
-                    //values[vIndex++] = finishDate; //Finish
-
                     string finish = csv.GetField<string>(11) + " " + csv.GetField<string>(12);
                     DateTime? finishDate = TryParseDateTime(finish);
                     values[vIndex++] = finishDate; //Finish
-
 
                     if (Int32.TryParse(csv.GetField<string>(14), NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out int duration))
                     {
@@ -682,7 +665,6 @@ namespace ConsumerMaster
             };
 
             DataTable dataTable = new DataTable();
-
             for (int i = 0; i < spc.Count(); i++)
             {
                 dataTable.Columns.Add(spc[i].name, spc[i].type);
@@ -703,7 +685,7 @@ namespace ConsumerMaster
                     values[vIndex++] = csv.GetField<string>(2); //Staff Name
                     values[vIndex++] = csv.GetField<string>(5); //Activity Source
 
-                    if (String.IsNullOrEmpty(csv.GetField<string>(5)))
+                    if (String.IsNullOrEmpty(csv.GetField<string>(5))) //Ignore blank in ActivitySource column
                         continue;
 
                     dataTable.Rows.Add(values);
@@ -785,13 +767,9 @@ namespace ConsumerMaster
                     DateTime? actualStartDate = string.IsNullOrEmpty(actualStart) ? (DateTime?)null : Convert.ToDateTime(actualStart);
                     values[vIndex++] = actualStartDate; //Actual Start
 
-                    //values[vIndex++] = GetCellData(InputWorksheet, i, 16); //Timezone
-
                     string actualEnd = GetCellData(InputWorksheet, i, 17) + " " + GetCellData(InputWorksheet, i, 18);
                     DateTime? actualEndDate = string.IsNullOrEmpty(actualEnd) ? (DateTime?)null : Convert.ToDateTime(actualEnd);
                     values[vIndex++] = actualEndDate; //Actual End
-
-                    //values[vIndex++] = GetCellData(InputWorksheet, i, 19); //Timezone
 
                     string aDuration = GetCellData(InputWorksheet, i, 13);
                     TimeSpan aDurationTime;

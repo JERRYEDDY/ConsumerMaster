@@ -18,24 +18,24 @@ namespace ConsumerMaster
 
         private readonly HeaderColumns[] hdrColumns = new HeaderColumns[]
         {
-            new HeaderColumns(0, "Client_ID", false),
-            new HeaderColumns(1, "Client_Name", false),
-            new HeaderColumns(2, "Staff Name", false),
-            new HeaderColumns(3, "Num_of_IVR_Tranactions", false),
-            new HeaderColumns(4, "Num_of Mobile_Tranactions", false),
-            new HeaderColumns(5, "Num_of Portal_Tranactions", false),
-            new HeaderColumns(6, "Progress Notes Week 1?", true),
-            new HeaderColumns(7, "Progress Notes Week 2?", true),
-            new HeaderColumns(8, "Notes_PN             ", false),
-            new HeaderColumns(9, "Progress Notes Initials", true),
-            new HeaderColumns(10, "Notes_Evolv Submission and Payroll", false),
-            new HeaderColumns(11, "Submit initials", true),
-            new HeaderColumns(12, "Evolv Submit", true),
-            new HeaderColumns(13, "Evolv Approval", true),
-            new HeaderColumns(14, "Sent for Payroll", true),
-            new HeaderColumns(15, "Evolv Submit (original)", true),
-            new HeaderColumns(16, "Evolv Approval (orginal)", true),
-            new HeaderColumns(17, "Sent for Payroll (original)", true)
+            new HeaderColumns("Client_ID", false),
+            new HeaderColumns("Client_Name", false),
+            new HeaderColumns("Staff Name", false),
+            new HeaderColumns("Num_of_IVR_Tranactions", false),
+            new HeaderColumns("Num_of Mobile_Tranactions", false),
+            new HeaderColumns("Num_of Portal_Tranactions", false),
+            new HeaderColumns("Progress Notes Week 1?", true),
+            new HeaderColumns("Progress Notes Week 2?", true),
+            new HeaderColumns("Notes_PN             ", false),
+            new HeaderColumns("Progress Notes Initials", true),
+            new HeaderColumns("Notes_Evolv Submission and Payroll", false),
+            new HeaderColumns("Submit initials", true),
+            new HeaderColumns("Evolv Submit", true),
+            new HeaderColumns("Evolv Approval", true),
+            new HeaderColumns("Sent for Payroll", true),
+            new HeaderColumns("Evolv Submit (original)", true),
+            new HeaderColumns("Evolv Approval (orginal)", true),
+            new HeaderColumns("Sent for Payroll (original)", true)
         };
 
 
@@ -131,32 +131,9 @@ namespace ConsumerMaster
 
                 PrepareSheet1Worksheet(sheet1Worksheet);
 
-
-        //    public const int Client_ID = 0;
-        //public const int Client_Name = 1;
-        //public const int Staff_Name = 2;
-        //public const int Num_of_IVR_Tranactions = 3;
-        //public const int Num_of_Mobile_Tranactions = 4;
-        //public const int Num_of_Portal_Tranactions = 5;
-        //public const int Progress_Notes_Week_1 = 6;
-        //public const int Progress_Notes_WeeK_2 = 7;
-        //public const int Notes_PN = 8;
-        //public const int Progress_Notes_Initials = 9;
-        //public const int Notes_Evolv_Submission_and_Payroll = 10;
-        //public const int Submit_initials = 11;
-        //public const int Evolv_Submit = 12;
-        //public const int Evolv_Approval = 13;
-        //public const int Sent_for_Payroll = 14;
-        //public const int Evolv_Submit_original = 15;
-        //public const int Evolv_Approval_orginal = 16;
-        //public const int Sent_for_Payroll_original = 17;
-
-
                 int currentRow = IndexRowItemStart + 1;
                 foreach (DataRow row in dTable.Rows)
                 {
-                    int column = 0;
-
                     sheet1Worksheet.Cells[currentRow, Header.Client_ID].SetValue(row["ID"].ToString());
                     sheet1Worksheet.Cells[currentRow, Header.Client_Name].SetValue(row["Name"].ToString());
                     sheet1Worksheet.Cells[currentRow, Header.Staff_Name].SetValue(row["StaffName"].ToString());
@@ -180,15 +157,6 @@ namespace ConsumerMaster
                     ListDataValidationRule c2Rule = new ListDataValidationRule(c2Context);
                     sheet1Worksheet.Cells[c2RuleCellIndex].SetDataValidationRule(c2Rule);
                     sheet1Worksheet.Cells[currentRow, Header.Progress_Notes_Week_2].SetValue(""); //Progress Notes Week2
-
-        //    public const int Evolv_Submit = 12;
-        //public const int Evolv_Approval = 13;
-        //public const int Sent_for_Payroll = 14;
-        //public const int Evolv_Submit_original = 15;
-        //public const int Evolv_Approval_orginal = 16;
-        //public const int Sent_for_Payroll_original = 17;
-
-
 
                     CellIndex c3RuleCellIndex = new CellIndex(currentRow, Header.Evolv_Submit);
                     ListDataValidationRuleContext c3Context = new ListDataValidationRuleContext(sheet1Worksheet, c3RuleCellIndex);
@@ -256,26 +224,6 @@ namespace ConsumerMaster
 
         private void PrepareSheet1Worksheet(Worksheet worksheet)
         {
-            //HeaderColumns[] hdrColumns = new HeaderColumns[18];
-            //hdrColumns[0] = new HeaderColumns("Client_ID", false);
-            //hdrColumns[1] = new HeaderColumns("Client_Name", false);
-            //hdrColumns[2] = new HeaderColumns("Staff Name", false);
-            //hdrColumns[3] = new HeaderColumns("Num_of_IVR_Tranactions", false);
-            //hdrColumns[4] = new HeaderColumns("Num_of Mobile_Tranactions", false);
-            //hdrColumns[5] = new HeaderColumns("Num_of Portal_Tranactions", false);
-            //hdrColumns[6] = new HeaderColumns("Progress Notes Week 1?", true);
-            //hdrColumns[7] = new HeaderColumns("Progress Notes Week 2?", true);
-            //hdrColumns[8] = new HeaderColumns("Notes_PN             ", false);
-            //hdrColumns[9] = new HeaderColumns("Progress Notes Initials", true);
-            //hdrColumns[10] = new HeaderColumns("Notes_Evolv Submission and Payroll", false);
-            //hdrColumns[11] = new HeaderColumns("Submit initials", true);
-            //hdrColumns[12] = new HeaderColumns("Evolv Submit", true);
-            //hdrColumns[13] = new HeaderColumns("Evolv Approval", true);
-            //hdrColumns[14] = new HeaderColumns("Sent for Payroll", true);
-            //hdrColumns[15] = new HeaderColumns("Evolv Submit (original)", true);
-            //hdrColumns[16] = new HeaderColumns("Evolv Approval (orginal)", true);
-            //hdrColumns[17] = new HeaderColumns("Sent for Payroll (original)", true);
-
             try
             {
                 PatternFill solidPatternFill = new PatternFill(PatternType.Solid, Color.FromArgb(255, 192, 192, 192), Colors.Transparent);
@@ -318,22 +266,18 @@ namespace ConsumerMaster
             return table;
         }
 
-
         public class HeaderColumns 
         {
-            public int Col { get; set; }
             public string Name { get; set; }
             public bool IsWrap { get; set; }
 
-            public HeaderColumns(int col, string name, bool iswrap )
+            public HeaderColumns(string name, bool iswrap )
             {
-                Col = col;
                 Name = name;
                 IsWrap = iswrap;
             }
 
         }
-
 
         public class PayrollProcessClient
         {
