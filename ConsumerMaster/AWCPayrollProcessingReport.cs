@@ -38,7 +38,6 @@ namespace ConsumerMaster
             new HeaderColumns("Sent for Payroll (original)", true)
         };
 
-
         public static class Header
         {
             public const int Client_ID = 0;

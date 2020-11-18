@@ -133,7 +133,6 @@ namespace ConsumerMaster
             {
                 using (TextReader reader = new StreamReader(file.InputStream))
                 {
-                    //var dataTable = new DataTable();
                     bool createColumns = true;
 
                     using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
@@ -337,12 +336,9 @@ namespace ConsumerMaster
                     if (!string.IsNullOrEmpty(GetCellData(InputWorksheet, i, 0))) //Client ID
                     {
                         values[0] = GetCellData(InputWorksheet, i, 0);  //ClientID
-                                                                        //ClientName     
                         values[1] = GetCellData(InputWorksheet, i, 2);  //MemberID
                         values[2] = GetCellData(InputWorksheet, i, 3);  //MemberName
                         values[3] = GetCellData(InputWorksheet, i, 4);  //MemberRole
-                                                                        //IsSupervisor
-                                                                        //MemberStart
 
                         dataTable.Rows.Add(values);
                     }
@@ -696,7 +692,6 @@ namespace ConsumerMaster
         }
 
         public static DateTime? TryParseDateTime(string text) =>  DateTime.TryParse(text, out var date) ? date : (DateTime?)null;
-
         public static TimeSpan? TryParseTimeSpan(string text) => TimeSpan.TryParse(text, out var timespan) ? timespan : (TimeSpan?)null;
 
         public DataTable GetScheduledActualDataTable(Stream input)
@@ -1174,7 +1169,6 @@ namespace ConsumerMaster
 
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
-
                     var values = new object[9];
 
                     values[0] = GetCellData(InputWorksheet, i, 4); //iIndividual_Names_expired

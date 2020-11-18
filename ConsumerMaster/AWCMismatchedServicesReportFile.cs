@@ -86,8 +86,6 @@ namespace ConsumerMaster
                 Stream inputTD = uploadedTDFile.InputStream;
 
                 DataTable tempTable = util.GetUPVTDDataTableViaCSV(inputTD);
-                //DataTable tempTable = util.GetUPVTDDataTable(inputTD);
-
                 tempTable.DefaultView.Sort = "Name, Start";
                 DataTable dUPVTDTable = tempTable.DefaultView.ToTable();  //Sort by Client Name and Start DateTime
                 DataTable exceptionsTable = FindAllExceptions(dUPVTDTable);
@@ -123,8 +121,6 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, column].SetForeColor(textColor);
                     sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exception"].ToString());
 
-                    //sheet1Worksheet.Cells[currentRow, column++].SetValue(row["NS Billing Auth"].ToString());
-
                     currentRow++;
                 }
 
@@ -153,8 +149,6 @@ namespace ConsumerMaster
             spc.Add(new SPColumn("CT Payroll Code", typeof(string))); //Payroll Code
             spc.Add(new SPColumn("Service", typeof(string))); //Service
             spc.Add(new SPColumn("Exception", typeof(string)));
-            //spc.Add(new SPColumn("NS Billing Auth", typeof(string)));
-
 
             DataTable dataTable = new DataTable();
             try
@@ -213,7 +207,6 @@ namespace ConsumerMaster
                         values[vIndex++] = payrollCodeIndex != -1 ? string.Format("[{0}]{1}", payrollCodeIndex.ToString(), tdRow["Payroll Code"].ToString()) : "";
                         values[vIndex++] = serviceCodeIndex != -1 ? string.Format("[{0}]{1}", serviceCodeIndex.ToString(), tdRow["Service"].ToString()) : "";
                         values[vIndex++] = exceptionsString;  //Exception
-
 
                         exceptionsTable.Rows.Add(values);
                     }
