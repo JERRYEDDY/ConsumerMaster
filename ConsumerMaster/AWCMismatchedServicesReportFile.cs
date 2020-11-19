@@ -95,7 +95,6 @@ namespace ConsumerMaster
                 int rowCount = 0;
                 rowCount = Sheet1WorksheetHeader(sheet1Worksheet, exceptionColumnNames, uploadedTDFile.FileName);
 
-
                 int currentRow = IndexRowItemStart + rowCount;
                 foreach (DataRow row in exceptionsTable.Rows)
                 {

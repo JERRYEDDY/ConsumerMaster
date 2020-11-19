@@ -1166,7 +1166,6 @@ namespace ConsumerMaster
                 dataTable.Columns.Add(spc[19].name, spc[19].type); //Remaining_Units
                 dataTable.Columns.Add("id_no", typeof(string)); //ClientID
 
-
                 for (int i = 1; i < InputWorksheet.UsedCellRange.RowCount; i++)
                 {
                     var values = new object[9];
@@ -1309,6 +1308,103 @@ namespace ConsumerMaster
             {
                 Logger.Error(ex);
             };
+
+            return dataTable;
+        }
+
+        public DataTable GetSandataExportVisitsDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[]
+            {
+                new SPColumn("Client Name",typeof(string)),
+                new SPColumn("Employee Name",typeof(string)),
+                new SPColumn("Service",typeof(string)),
+                new SPColumn("WCode",typeof(string)),
+                new SPColumn("Visit Date",typeof(DateTime)),
+                new SPColumn("Call In",typeof(DateTime)),
+                new SPColumn("Call Out",typeof(DateTime)),
+                new SPColumn("Call Hours",typeof(TimeSpan)),
+                new SPColumn("Adjusted In",typeof(DateTime)),
+                new SPColumn("Adjusted Out",typeof(DateTime)),
+                new SPColumn("Adjusted Hours",typeof(TimeSpan)),
+                new SPColumn("Bill Hours",typeof(TimeSpan)),
+                new SPColumn("Visit Status",typeof(string)),
+                new SPColumn("Do Not Bill",typeof(bool)),
+                new SPColumn("Exceptions",typeof(string)),
+            };
+
+            var services = new Dictionary<string, string>()
+            {
+                {"Companion (1:1)" ,"W1726"},
+                {"IHCS Level 2 (1:1)", "W7060"},
+                {"IHCS Level 2 (1:1) Enhanced", "W7061"},
+                {"IHCS Level 3 (2:1)", "W7068"},
+                {"IHCS Level 3 (2:1) Enhanced", "W7069"},
+                {"Respite Level 3 (1:1)-Day", "W9798"},
+                {"Respite Level 3 (1:1)-15 Mins", "W9862"},
+                {"Respite Level 3 (1:1) Enhanced-15 Mins", "W9863"}
+            };
+
+            DataTable dataTable = new DataTable();
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(input))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var values = new object[spc.Count()];
+
+                    values[0] = csv.GetField<string>(0); //Client Name
+                    values[1] = csv.GetField<string>(1); //Employee Name
+                    values[2] = csv.GetField<string>(2); //Service
+
+                    if (services.ContainsKey(values[2].ToString()))
+                    {
+                        values[3] = services[values[2].ToString()];
+                    }
+                    else
+                    {
+                        values[3] = "NOTFOUND";
+                    }
+
+                    string dateStr1 = csv.GetField<string>(3);
+                    DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
+                    values[4] = visitDateOnly; //Visit Date
+
+
+                    SandataDateTimeDuration sdtd1 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(7), csv.GetField<string>(8), csv.GetField<string>(9));
+                    values[5] = sdtd1.Start; //Call In
+                    values[6] = sdtd1.End; //Call Out
+                    values[7] = sdtd1.Duration; //Call Hours
+
+                    SandataDateTimeDuration sdtd2 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(10), csv.GetField<string>(11), csv.GetField<string>(12));
+                    values[8] = sdtd2.Start; //Adjusted In
+                    values[9] = sdtd2.End; //Adjusted Out
+                    values[10] = sdtd2.Duration; //Adjusted Hours
+
+                    TimeSpan billDuration;
+                    if (!TimeSpan.TryParse(csv.GetField<string>(13), out billDuration))
+                    {
+                    }
+                    values[11] = billDuration; //Bill Hours
+
+                    values[12] = csv.GetField<string>(14); //Visit Status
+
+                    bool doNotBill = ("Yes".Equals(csv.GetField<string>(15)) ? true : false);
+                    values[13] = doNotBill; //Do Not Bill
+
+                    values[14] = csv.GetField<string>(16); //Exceptions
+
+                    dataTable.Rows.Add(values);
+
+                }
+            }
 
             return dataTable;
         }
@@ -1476,6 +1572,85 @@ namespace ConsumerMaster
             return dataTable;
         }
 
+        public DataTable GetClosedActivitiesDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[19]
+            {
+                new SPColumn("Activity ID", typeof(string)),
+                new SPColumn("Activity Type", typeof(string)),
+                new SPColumn("Activity Source", typeof(string)),
+                new SPColumn("Activity Name", typeof(string)),
+                new SPColumn("ID", typeof(string)),
+                new SPColumn("Executed By", typeof(string)),
+                new SPColumn("Staff ID", typeof(string)),
+                new SPColumn("Executed By Type", typeof(string)),
+                new SPColumn("Start Time", typeof(DateTime)),
+                new SPColumn("Stop Time", typeof(DateTime)),
+                new SPColumn("Duration", typeof(string)),
+                new SPColumn("Status", typeof(string)),
+                new SPColumn("Travel To Activity Exported Time", typeof(string)),
+                new SPColumn("Travel To Activity Exported Distance", typeof(string)),
+                new SPColumn("Travel During Activity Exported Time", typeof(string)),
+                new SPColumn("Travel During Activity Exported Distance", typeof(string)),
+                new SPColumn("Travel Info", typeof(string)),
+                new SPColumn("Alerts", typeof(string)),
+                new SPColumn("Location", typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(input))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    int vIndex = 0;
+                    var values = new object[spc.Count()];
+
+                    values[vIndex++] = csv.GetField<string>(0); //Activity ID
+                    values[vIndex++] = csv.GetField<string>(1); //Activity Type
+                    values[vIndex++] = csv.GetField<string>(2); //Activity Source
+                    values[vIndex++] = csv.GetField<string>(3); //Activity Name
+                    values[vIndex++] = csv.GetField<string>(4); //ID
+                    values[vIndex++] = csv.GetField<string>(5); //Executed By
+                    values[vIndex++] = csv.GetField<string>(6); //Staff ID
+                    values[vIndex++] = csv.GetField<string>(7); //Executed By Type
+                    
+                    
+                    string iString = "8/15/2020 7:13 PM";
+                    DateTime startDatTime = DateTime.ParseExact(iString, "M/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);
+
+                    string start = csv.GetField<string>(8);
+                    DateTime startDate = DateTime.ParseExact(start, "M/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);
+                    values[vIndex++] = startDate; //Start Date Time
+
+                    string stop = csv.GetField<string>(9);
+                    DateTime stopDate = DateTime.ParseExact(stop, "M/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);
+                    values[vIndex++] = stopDate; //Stop Date Time
+
+                    values[vIndex++] = csv.GetField<string>(10); //Duration
+
+                    values[vIndex++] = csv.GetField<string>(11); //Status
+                    values[vIndex++] = csv.GetField<string>(12); //Travel To Activity Exported Time
+                    values[vIndex++] = csv.GetField<string>(13); //Travel To Activity Exported Distance
+                    values[vIndex++] = csv.GetField<string>(14); //Travel During Activity Exported Time
+                    values[vIndex++] = csv.GetField<string>(15); //Travel During Activity Exported Distance
+                    values[vIndex++] = csv.GetField<string>(16); //Travel Info
+                    values[vIndex++] = csv.GetField<string>(17); //Alerts
+                    values[vIndex++] = csv.GetField<string>(18); //Location
+
+                    dataTable.Rows.Add(values);
+                }
+            }
+            return dataTable;
+        }
         public DataTable GetClientRosterDataTable(Stream input)
         {
             SPColumn[] spc = new SPColumn[17]

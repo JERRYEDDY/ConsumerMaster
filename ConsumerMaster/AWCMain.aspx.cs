@@ -5,6 +5,7 @@ using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Data;
 using System.Data.SqlClient;
 using Telerik.Web.UI.Upload;
+using System.Globalization;
 
 namespace ConsumerMaster
 {
@@ -14,6 +15,24 @@ namespace ConsumerMaster
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            //try
+            //{ 
+            //    string a = "8/15/2020 11:03 PM";
+            //    string b = "8/15/2020 8:17 PM";
+            //    string c = "8/07/2020 9:00 AM";
+
+            //    DateTime aDatTime = DateTime.ParseExact(a, "M/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);
+            //    DateTime bDatTime = DateTime.ParseExact(b, "M/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);
+            //    DateTime cDatTime = DateTime.ParseExact(c, "M/dd/yyyy h:mm tt", CultureInfo.InvariantCulture);
+
+
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error(ex);
+
+            //};
 
         }
 
@@ -86,7 +105,6 @@ namespace ConsumerMaster
             string outFilename = "AWCMismatchedServicesReport.xlsx";
             try
             {
-                //if (RadAsyncUpload1.UploadedFiles.Count == 1 && RadAsyncUpload2.UploadedFiles.Count == 1)
                 if (RadAsyncUpload1.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
@@ -152,18 +170,19 @@ namespace ConsumerMaster
 
         protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
         {
-            //string outFilename = "EVVVisitsComparisonReport.xlsx";
+            string outFilename = "EVVVisitsComparisonReport.xlsx";
             try
             {
-                //if (RadAsyncUpload4.UploadedFiles.Count == 1)
-                //{
-                //    Utility utility = new Utility();
-                //    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile();
-                //    UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
+                if (RadAsyncUpload3.UploadedFiles.Count == 1 && RadAsyncUpload4.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+                    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile(); 
+                    UploadedFile uploadedCCAFile = RadAsyncUpload3.UploadedFiles[0]; //CellTrak Closed Activities File
+                    UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
 
-                //    Workbook workbook = reportExport.CreateWorkbook(uploadedSEVFile);
-                //    utility.DownloadExcelFile(workbook, outFilename);
-                //}
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedCCAFile, uploadedSEVFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
             }
             catch (Exception ex)
             {

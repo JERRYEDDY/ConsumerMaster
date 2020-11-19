@@ -155,21 +155,29 @@
                     &nbsp;
                 </td>
             </tr>
-<%--            <tr style="border-bottom:1px solid black">
+            <tr style="border-bottom:1px solid black">
                 <td colspan="100%">
                 </td>
-            </tr>--%>
-<%--            <tr>
+            </tr>
+            <tr>
                 <td>
                     &nbsp;
                 </td>
-            </tr>--%>
-<%--            <tr>
+            </tr>
+            <tr>
                 <td>
-                    Sandata Export Visits Filename .xlsx:
+                    CellTrak Closed Activities Filename .csv:
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload4" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
+              </td>
+            </tr>
+            <tr>
+                <td>
+                    Sandata Export Visits Filename .csv:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload4" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
               </td>
             </tr>
             <tr>
@@ -184,7 +192,7 @@
             <tr>
                 <td>
                </td>
-            </tr>--%>
+            </tr>
             <tr>
                 <td>
                     &nbsp;

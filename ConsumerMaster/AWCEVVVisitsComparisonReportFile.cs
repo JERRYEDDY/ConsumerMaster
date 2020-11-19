@@ -82,7 +82,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedSEVFile)
+        public Workbook CreateWorkbook(UploadedFile uploadedCCAFile, UploadedFile uploadedSEVFile)
         {
             Workbook workbook = new Workbook();
 
@@ -93,8 +93,11 @@ namespace ConsumerMaster
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
 
                 Utility util = new Utility();
-                Stream input = uploadedSEVFile.InputStream;
-                DataTable sevDataTable = util.GetSandataExportVisitsDataTable(input);
+                Stream inputCCA = uploadedCCAFile.InputStream;
+                Stream inputSEV = uploadedSEVFile.InputStream;
+
+                DataTable ccaDataTable = util.GetClosedActivitiesDataTableViaCSV(inputCCA);
+                DataTable sevDataTable = util.GetSandataExportVisitsDataTableViaCSV(inputSEV);
 
                 string[] sevColumnNames = sevDataTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
