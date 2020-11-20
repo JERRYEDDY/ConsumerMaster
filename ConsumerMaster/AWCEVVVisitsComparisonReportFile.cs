@@ -5,6 +5,7 @@ using Telerik.Web.UI;
 using System.Linq;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace ConsumerMaster
 {
@@ -82,7 +83,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedCCAFile, UploadedFile uploadedSEVFile)
+        public Workbook CreateWorkbook(UploadedFile uploadedCCAFile, UploadedFile uploadedTADFile, UploadedFile uploadedSEVFile)
         {
             Workbook workbook = new Workbook();
 
@@ -94,10 +95,57 @@ namespace ConsumerMaster
 
                 Utility util = new Utility();
                 Stream inputCCA = uploadedCCAFile.InputStream;
+                Stream inputTAD = uploadedTADFile.InputStream;
                 Stream inputSEV = uploadedSEVFile.InputStream;
 
                 DataTable ccaDataTable = util.GetClosedActivitiesDataTableViaCSV(inputCCA);
+                DataTable tadDataTable = util.GetTimeAndDistanceDataTableViaCSV(inputTAD);
                 DataTable sevDataTable = util.GetSandataExportVisitsDataTableViaCSV(inputSEV);
+
+
+                int blank = 0, no_blank = 0;
+
+                foreach (DataRow row in tadDataTable.Rows)
+                {
+                    string bCode = row["Billing Code"].ToString();
+                    string pCode = row["Payroll Code"].ToString();
+
+                    bool b = string.IsNullOrEmpty(bCode);
+                    bool p = string.IsNullOrEmpty(pCode);
+
+                    if(b & p) 
+                    {
+                        blank++;
+                    }
+                    else
+                    {
+                        no_blank++;
+                    }
+                }
+
+
+                List<EVVClient> collection =
+                (from tad in tadDataTable.AsEnumerable()
+                 join cca in ccaDataTable.AsEnumerable() on new { ID = tad.Field<string>("Activity ID") } equals
+                 new { ID = cca.Field<string>("Activity ID") } into evvData
+                 from evvRecord in evvData.DefaultIfEmpty()
+                 select new EVVClient
+                 {
+                     TActivityID = tad.Field<string>("Activity ID"),
+                     CActivityID = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity ID")
+                     ,
+                     TName = tad.Field<string>("Name"),
+                     CName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity Name"),
+                     TStaffName = tad.Field<string>("Staff Name"),
+                     CStaffName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Executed By")
+                 }).ToList();
+
+
+
+                //int count = collection.Count;
+
+
+
 
                 string[] sevColumnNames = sevDataTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
@@ -214,6 +262,19 @@ namespace ConsumerMaster
             }
 
             return rowCount;
+        }
+
+        public class EVVClient
+        {
+            public string TActivityID { get; set; }
+            public string TName { get; set; }
+            public string TStaffName { get; set; }
+            public string CActivityID { get; set; }
+            public string CName { get; set; }
+            public string CStaffName { get; set; }
+            //    public int ICount { get; set; }
+            //    public int MCount { get; set; }
+            //    public int PCount { get; set; }
         }
     }
 }

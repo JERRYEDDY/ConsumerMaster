@@ -174,6 +174,14 @@
             </tr>
             <tr>
                 <td>
+                    CellTrak Time and Distance Filename .csv:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload5" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
+              </td>
+            </tr>
+            <tr>
+                <td>
                     Sandata Export Visits Filename .csv:
                 </td>
                 <td>
