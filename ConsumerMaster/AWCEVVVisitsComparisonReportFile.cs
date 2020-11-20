@@ -123,29 +123,38 @@ namespace ConsumerMaster
                     }
                 }
 
-
                 List<EVVClient> collection =
-                (from tad in tadDataTable.AsEnumerable()
-                 join cca in ccaDataTable.AsEnumerable() on new { ID = tad.Field<string>("Activity ID") } equals
-                 new { ID = cca.Field<string>("Activity ID") } into evvData
-                 from evvRecord in evvData.DefaultIfEmpty()
+                (from cca in ccaDataTable.AsEnumerable()
+                 join tad in tadDataTable.AsEnumerable() on cca["Activity ID"] equals tad["Activity ID"]
                  select new EVVClient
                  {
+                     CActivityID = cca.Field<string>("Activity ID"),
                      TActivityID = tad.Field<string>("Activity ID"),
-                     CActivityID = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity ID")
-                     ,
+                     CName = cca.Field<string>("Activity Name"),
                      TName = tad.Field<string>("Name"),
-                     CName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity Name"),
+                     CStaffName = cca.Field<string>("Executed By"),
                      TStaffName = tad.Field<string>("Staff Name"),
-                     CStaffName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Executed By")
+                     ActivityType = cca.Field<string>("Activity Type"),
+                     ActivitySource = cca.Field<string>("Activity Source"),
+                     ActivityName = cca.Field<string>("Activity Name")
                  }).ToList();
 
-
+                //List<EVVClient> collection =
+                //(from tad in tadDataTable.AsEnumerable()
+                // join cca in ccaDataTable.AsEnumerable() on new { ID = tad.Field<string>("Activity ID") } equals
+                // new { ID = cca.Field<string>("Activity ID") } into evvData
+                // from evvRecord in evvData.DefaultIfEmpty()
+                // select new EVVClient
+                // {
+                //     TActivityID = tad.Field<string>("Activity ID"),
+                //     CActivityID = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity ID"),
+                //     TName = tad.Field<string>("Name"),
+                //     CName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity Name"),
+                //     TStaffName = tad.Field<string>("Staff Name"),
+                //     CStaffName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Executed By")
+                // }).ToList();
 
                 //int count = collection.Count;
-
-
-
 
                 string[] sevColumnNames = sevDataTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
@@ -266,12 +275,16 @@ namespace ConsumerMaster
 
         public class EVVClient
         {
-            public string TActivityID { get; set; }
-            public string TName { get; set; }
-            public string TStaffName { get; set; }
             public string CActivityID { get; set; }
+            public string TActivityID { get; set; }
             public string CName { get; set; }
+            public string TName { get; set; }
             public string CStaffName { get; set; }
+            public string TStaffName { get; set; }
+            public string ActivityType { get; set; }
+            public string ActivitySource { get; set; }
+            public string ActivityName { get; set; }
+
             //    public int ICount { get; set; }
             //    public int MCount { get; set; }
             //    public int PCount { get; set; }
