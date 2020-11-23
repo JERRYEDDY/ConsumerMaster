@@ -123,87 +123,61 @@ namespace ConsumerMaster
                     }
                 }
 
-                List<EVVClient> collection =
+                List<EVVTransaction> evvTransactionList =
                 (from cca in ccaDataTable.AsEnumerable()
                  join tad in tadDataTable.AsEnumerable() on cca["Activity ID"] equals tad["Activity ID"]
-                 select new EVVClient
+                 select new EVVTransaction
                  {
-                     CActivityID = cca.Field<string>("Activity ID"),
-                     TActivityID = tad.Field<string>("Activity ID"),
-                     CName = cca.Field<string>("Activity Name"),
-                     TName = tad.Field<string>("Name"),
-                     CStaffName = cca.Field<string>("Executed By"),
-                     TStaffName = tad.Field<string>("Staff Name"),
-                     ActivityType = cca.Field<string>("Activity Type"),
+                     ActivityID = cca.Field<string>("Activity ID"),
+                     ClientID = cca.Field<string>("ID"),
+                     ClientName = cca.Field<string>("Activity Name"),
+                     StaffID = cca.Field<string>("Staff ID"),
+                     StaffName = cca.Field<string>("Executed By"),
+                     ActivityType = tad.Field<string>("Activity Type"),
                      ActivitySource = cca.Field<string>("Activity Source"),
-                     ActivityName = cca.Field<string>("Activity Name")
+                     BillingCode = tad.Field<string>("Billing Code"),
+                     PayrollCode = tad.Field<string>("Payroll Code"),
+                     Start = tad.Field<DateTime>("Start"),
+                     Finish = tad.Field<DateTime>("Finish"),
+                     Duration = tad.Field<Int32>("Duration"),
+                     Alerts = cca.Field<string>("Alerts"),
+                     Status = cca.Field<string>("Status")
                  }).ToList();
 
-                //List<EVVClient> collection =
-                //(from tad in tadDataTable.AsEnumerable()
-                // join cca in ccaDataTable.AsEnumerable() on new { ID = tad.Field<string>("Activity ID") } equals
-                // new { ID = cca.Field<string>("Activity ID") } into evvData
-                // from evvRecord in evvData.DefaultIfEmpty()
-                // select new EVVClient
-                // {
-                //     TActivityID = tad.Field<string>("Activity ID"),
-                //     CActivityID = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity ID"),
-                //     TName = tad.Field<string>("Name"),
-                //     CName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Activity Name"),
-                //     TStaffName = tad.Field<string>("Staff Name"),
-                //     CStaffName = evvRecord == null ? "NULL" : evvRecord.Field<string>("Executed By")
-                // }).ToList();
+                DataTable evvTransactions = util.ConvertToDataTable(evvTransactionList);
 
-                //int count = collection.Count;
-
-                string[] sevColumnNames = sevDataTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
-
-                int rowCount = rowCount = Sheet1WorksheetHeader(sheet1Worksheet, sevColumnNames, uploadedSEVFile.FileName);
+                int rowCount = rowCount = Sheet1WorksheetHeader(sheet1Worksheet, evvTransactions);
 
                 int currentRow = IndexRowItemStart + rowCount;
-                foreach (DataRow row in sevDataTable.Rows)
+                foreach (DataRow row in evvTransactions.Rows)
                 {
                     int column = 0;
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Client Name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Employee Name"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Service"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["WCode"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivityID"].ToString());
 
-                    CellValueFormat dateCellValueFormat = new CellValueFormat("MM/dd/yyyy");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Visit Date"].ToString());
+                    CellValueFormat textFormat = new CellValueFormat("@");
+                    sheet1Worksheet.Cells[currentRow, column].SetFormat(textFormat);
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientID"].ToString());
 
-                    CellValueFormat dateTimeCellValueFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Call In"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientName"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Call Out"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivityType"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivitySource"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["BillingCode"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["PayrollCode"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(string.Format("{0:hh\\:mm}", row["Call Hours"]));
+                    CellValueFormat dateTimeFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeFormat);
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Adjusted In"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeFormat);
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeCellValueFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Adjusted Out"].ToString());
-
-                    if(row["Adjusted Hours"].ToString() == "00:00:00")
-                    {
-                        sheet1Worksheet.Cells[currentRow, column++].SetValue(" ");
-                    }
-                    else
-                    {
-                        sheet1Worksheet.Cells[currentRow, column++].SetValue(string.Format("{0:hh\\:mm}", row["Adjusted Hours"]));
-                    }
-
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(string.Format("{0:hh\\:mm}", row["Bill Hours"]));
-
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Visit Status"].ToString());
-
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Do Not Bill"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Exceptions"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Alerts"].ToString());
+                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Status"].ToString());
 
                     currentRow++;
                 }
@@ -220,7 +194,7 @@ namespace ConsumerMaster
             return workbook;
         }
 
-        private int Sheet1WorksheetHeader(Worksheet worksheet, string[] columnNames, string uploadedSEVFile)
+        private int Sheet1WorksheetHeader(Worksheet worksheet, DataTable dataTable)
         {
             int rowCount = 0;
             try
@@ -229,26 +203,26 @@ namespace ConsumerMaster
                 worksheet.Cells[rowCount, 0].SetIsBold(true);
                 worksheet.Cells[rowCount++, 0].SetValue("AWC EVV Visits Comparison Report");
                 worksheet.Cells[rowCount++, 0].SetValue(String.Format("Date/time:{0}", DateTime.Now.ToString("MM/dd/yyyy hh:mm tt")));
-                worksheet.Cells[rowCount++, 0].SetValue(String.Format("Filename:{0}", uploadedSEVFile));
                 rowCount++;
 
-                worksheet.Cells[rowCount, 0].SetIsBold(true);
-                worksheet.Cells[rowCount, 0].SetValue("Visit Status");
-                worksheet.Cells[rowCount, 1].SetIsBold(true);
-                worksheet.Cells[rowCount++, 1].SetValue("Visit Description");
+                //worksheet.Cells[rowCount, 0].SetIsBold(true);
+                //worksheet.Cells[rowCount, 0].SetValue("Visit Status");
+                //worksheet.Cells[rowCount, 1].SetIsBold(true);
+                //worksheet.Cells[rowCount++, 1].SetValue("Visit Description");
 
-                worksheet.Cells[rowCount, 0].SetValue("In Process");
-                worksheet.Cells[rowCount++, 1].SetValue("A visit has started and not yet completed");
-                worksheet.Cells[rowCount, 0].SetValue("Incomplete");
-                worksheet.Cells[rowCount++, 1].SetValue("A visit has exceeded a 24-hr. period and is still missing a call-in/call-out");
-                worksheet.Cells[rowCount, 0].SetValue("Verified");
-                worksheet.Cells[rowCount++, 1].SetValue("A visit that does not contain any exceptions");
-                worksheet.Cells[rowCount, 0].SetValue("Processed");
-                worksheet.Cells[rowCount++, 1].SetValue("A visit that does not contain any exceptions and has been returned to the claims validation engine at least once");
-                worksheet.Cells[rowCount, 0].SetValue("Omit");
-                worksheet.Cells[rowCount++, 1].SetValue("A visit that is marked \"Do Not Bill\"");
+                //worksheet.Cells[rowCount, 0].SetValue("In Process");
+                //worksheet.Cells[rowCount++, 1].SetValue("A visit has started and not yet completed");
+                //worksheet.Cells[rowCount, 0].SetValue("Incomplete");
+                //worksheet.Cells[rowCount++, 1].SetValue("A visit has exceeded a 24-hr. period and is still missing a call-in/call-out");
+                //worksheet.Cells[rowCount, 0].SetValue("Verified");
+                //worksheet.Cells[rowCount++, 1].SetValue("A visit that does not contain any exceptions");
+                //worksheet.Cells[rowCount, 0].SetValue("Processed");
+                //worksheet.Cells[rowCount++, 1].SetValue("A visit that does not contain any exceptions and has been returned to the claims validation engine at least once");
+                //worksheet.Cells[rowCount, 0].SetValue("Omit");
+                //worksheet.Cells[rowCount++, 1].SetValue("A visit that is marked \"Do Not Bill\"");
                 rowCount++;
 
+                string[] columnNames = dataTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
                 foreach (string column in columnNames)
                 {
                     int columnKey = Array.IndexOf(columnNames, column);
@@ -273,21 +247,22 @@ namespace ConsumerMaster
             return rowCount;
         }
 
-        public class EVVClient
+        public class EVVTransaction
         {
-            public string CActivityID { get; set; }
-            public string TActivityID { get; set; }
-            public string CName { get; set; }
-            public string TName { get; set; }
-            public string CStaffName { get; set; }
-            public string TStaffName { get; set; }
+            public string ActivityID { get; set; } //Closed Activities Activity ID
+            public string ClientID { get; set; } //Closed Activities ID
+            public string ClientName { get; set; } //Closed Activities Activity Name
+            public string StaffID { get; set; } // Closed Activities Staff ID
+            public string StaffName { get; set; } // Closed Activities Executed By
             public string ActivityType { get; set; }
             public string ActivitySource { get; set; }
-            public string ActivityName { get; set; }
-
-            //    public int ICount { get; set; }
-            //    public int MCount { get; set; }
-            //    public int PCount { get; set; }
+            public string BillingCode { get; set; }
+            public string PayrollCode { get; set; }
+            public DateTime Start { get; set; }
+            public DateTime Finish { get; set; }
+            public int Duration { get; set; }
+            public string Alerts { get; set; }
+            public string Status { get; set; }
         }
     }
 }

@@ -96,7 +96,7 @@ namespace ConsumerMaster
                     Count = grp.Count()
                 }).ToList();
 
-                DataTable groupBy = ConvertToDataTable(groupByList);
+                DataTable groupBy = util.ConvertToDataTable(groupByList);
                 DataTable ivrGroup = groupBy.Select("[ActivitySource] = 'IVR'").CopyToDataTable();
                 DataTable mobileGroup = groupBy.Select("[ActivitySource] = 'Mobile'").CopyToDataTable();
                 DataTable portalGroup = groupBy.Select("[ActivitySource] = 'Portal'").CopyToDataTable();
@@ -123,7 +123,7 @@ namespace ConsumerMaster
                      }).ToList();
 
 
-                DataTable join = ConvertToDataTable(collection);
+                DataTable join = util.ConvertToDataTable(collection);
                 DataView dv = join.DefaultView;
                 dv.Sort = "Name, StaffName";
                 DataTable dTable= dv.ToTable();
@@ -247,22 +247,6 @@ namespace ConsumerMaster
             {
                 Logger.Error(ex);
             }
-        }
-
-        public DataTable ConvertToDataTable<T>(IList<T> data)
-        {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
-            DataTable table = new DataTable();
-            foreach (PropertyDescriptor prop in properties)
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-            foreach (T item in data)
-            {
-                DataRow row = table.NewRow();
-                foreach (PropertyDescriptor prop in properties)
-                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-                table.Rows.Add(row);
-            }
-            return table;
         }
 
         public class HeaderColumns 
