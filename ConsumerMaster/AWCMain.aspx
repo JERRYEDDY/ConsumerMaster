@@ -9,11 +9,7 @@
     }
 </script>
 
-
     <div class="demo-container no-bg">
-<%--        <p>
-            <asp:Label runat="server" ID="Label4" />
-        </p>--%>
         <table>
             <tr>
                 <td>
@@ -93,19 +89,6 @@
                     &nbsp;
                 </td>
             </tr>
-<%--            <tr>
-                <td>
-                    &nbsp;
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    NS Billing Authorizations Filename .xlsx:
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload2" MaxFileInputsCount="1" AllowedFileExtensions="xlsx" OnValidatingFile="RadAsyncUpload_ValidatingFile" />
-               </td>
-            </tr>--%>
             <tr>
                 <td>
                     &nbsp;
@@ -166,20 +149,20 @@
             </tr>
             <tr>
                 <td>
-                    CellTrak Closed Activities Filename .csv:
+                    Netsmart Client Services Filename .csv:
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
               </td>
             </tr>
-            <tr>
+<%--            <tr>
                 <td>
                     CellTrak Time and Distance Filename .csv:
                 </td>
                 <td>
                     <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload5" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
               </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td>
                     Sandata Export Visits Filename .csv:

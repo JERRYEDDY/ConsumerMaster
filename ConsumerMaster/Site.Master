@@ -69,7 +69,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="ReferringProviders">Referring Providers</a>
                         </li>
-                        <li class="nav-item dropdown">
+<%--                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Reports
                             </a>
@@ -79,7 +79,7 @@
                                 <a class="dropdown-item" href="NSStaffImportMain">Staff Import</a>
                                 <a class="dropdown-item" href="TravelTimeMain">Travel Time Import</a>
                             </div>
-                        </li>
+                        </li>--%>
                     </ul>
                 </div>
             </div>

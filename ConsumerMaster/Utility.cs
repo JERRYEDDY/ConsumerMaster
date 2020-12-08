@@ -20,6 +20,9 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.ComponentModel;
+using System.Text;
+using System.CodeDom.Compiler;
+using Newtonsoft.Json;
 
 namespace ConsumerMaster
 {
@@ -1446,6 +1449,239 @@ namespace ConsumerMaster
             return sdtd;
         }
 
+        public DataTable GetNetsmartClientServicesDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[]
+            {
+                new SPColumn("people_id",typeof(string)),
+                new SPColumn("full_name",typeof(string)),
+                new SPColumn("id_no",typeof(string)),
+                new SPColumn("other_id_number",typeof(string)),
+                new SPColumn("dob",typeof(string)),
+                new SPColumn("gender",typeof(string)),
+                new SPColumn("gender_code",typeof(string)),
+                new SPColumn("ssn_number",typeof(string)),
+                new SPColumn("is_staff",typeof(string)),
+                new SPColumn("intake_dt",typeof(string)),
+                new SPColumn("discharge_dt",typeof(string)),
+                new SPColumn("medicaid_number",typeof(string)),
+                new SPColumn("ipd",typeof(string)),
+                new SPColumn("current_location",typeof(string)),
+                new SPColumn("program_info_id",typeof(string)),
+                new SPColumn("program_name",typeof(string)),
+                new SPColumn("program_type",typeof(string)),
+                new SPColumn("site_providing_service",typeof(string)),
+                new SPColumn("facility",typeof(string)),
+                new SPColumn("license_number",typeof(string)),
+                new SPColumn("staff_id",typeof(string)),
+                new SPColumn("job_title",typeof(string)),
+                new SPColumn("staff_name",typeof(string)),
+                new SPColumn("actual_date",typeof(string)),
+                new SPColumn("end_date",typeof(string)),
+                new SPColumn("duration",typeof(string)),
+                new SPColumn("event_log_id",typeof(string)),
+                new SPColumn("event_definition_id",typeof(string)),
+                new SPColumn("event_name",typeof(string)),
+                new SPColumn("parent_event",typeof(string)),
+                new SPColumn("service",typeof(string)),
+                new SPColumn("activity_type",typeof(string)),
+                new SPColumn("encounter_with",typeof(string)),
+                new SPColumn("is_client_involved",typeof(string)),
+                new SPColumn("is_noshow",typeof(string)),
+                new SPColumn("is_locked",typeof(string)),
+                new SPColumn("progress_note",typeof(string)),
+                new SPColumn("event_category_id",typeof(string)),
+                new SPColumn("form_header_id",typeof(string)),
+                new SPColumn("is_billed",typeof(string)),
+                new SPColumn("is_paid",typeof(string)),
+                new SPColumn("invoice_number",typeof(string)),
+                new SPColumn("date_entered",typeof(string)),
+                new SPColumn("user_entered",typeof(string)),
+                new SPColumn("user_entered_name",typeof(string)),
+                new SPColumn("approved_date",typeof(string)),
+                new SPColumn("approved_by_id",typeof(string)),
+                new SPColumn("approved_staff_name",typeof(string)),
+                new SPColumn("submitted",typeof(string)),
+                new SPColumn("is_approved",typeof(string)),
+                new SPColumn("is_notapproved",typeof(string)),
+                new SPColumn("is_notapproved_subm",typeof(string)),
+                new SPColumn("depended_activity",typeof(string)),
+                new SPColumn("program_unit_description",typeof(string)),
+                new SPColumn("sc_code",typeof(string)),
+                new SPColumn("duration_num",typeof(string)),
+                new SPColumn("do_not_bill",typeof(string)),
+                new SPColumn("do_not_pay",typeof(string)),
+                new SPColumn("general_location_id",typeof(string)),
+                new SPColumn("general_location",typeof(string)),
+                new SPColumn("program_modifier_id",typeof(string)),
+                new SPColumn("program_modifier",typeof(string)),
+                new SPColumn("program_modifier_code",typeof(string)),
+                new SPColumn("NormalWorkHours",typeof(string)),
+                new SPColumn("duration_other_num",typeof(string)),
+                new SPColumn("duration_other",typeof(string)),
+                new SPColumn("travel_time_num",typeof(string)),
+                new SPColumn("travel_time",typeof(string)),
+                new SPColumn("planning_time_num",typeof(string)),
+                new SPColumn("planning_time",typeof(string)),
+                new SPColumn("total_duration_num",typeof(string)),
+                new SPColumn("total_duration",typeof(string)),
+                new SPColumn("total_duration_num_cc",typeof(string)),
+                new SPColumn("total_duration_cc",typeof(string)),
+                new SPColumn("actual_location_facility_id",typeof(string)),
+                new SPColumn("actual_location_facility",typeof(string)),
+                new SPColumn("reason_for_no_show_id",typeof(string)),
+                new SPColumn("reason_for_no_show",typeof(string)),
+                new SPColumn("form_program",typeof(string)),
+                new SPColumn("cue_number",typeof(string)),
+                new SPColumn("cue_type",typeof(string)),
+                new SPColumn("client_participation_response",typeof(string)),
+                new SPColumn("client_part_resp_description",typeof(string)),
+                new SPColumn("outcome_id",typeof(string)),
+                new SPColumn("outcome_description",typeof(string)),
+                new SPColumn("gaf_score_current",typeof(string)),
+                new SPColumn("date_order",typeof(string)),
+                new SPColumn("is_billable",typeof(string)),
+                new SPColumn("snb_reasons",typeof(string)),
+                new SPColumn("is_billing",typeof(string)),
+                new SPColumn("sr_incident_to",typeof(string)),
+                new SPColumn("is_incident_to",typeof(string)),
+                new SPColumn("medicare_incident_to_supervisor",typeof(string)),
+                new SPColumn("it_supervisor_name",typeof(string)),
+                new SPColumn("whole_date_order",typeof(string)),
+                new SPColumn("serv_entry_actual_date",typeof(string)),
+                new SPColumn("sort_order",typeof(string)),
+                new SPColumn("conversion_id",typeof(string))
+            };
+
+            var services = new Dictionary<string, string>()
+            {
+                {"Companion (1:1)" ,"W1726"},
+                {"IHCS Level 2 (1:1)", "W7060"},
+                {"IHCS Level 2 (1:1) Enhanced", "W7061"},
+                {"IHCS Level 3 (2:1)", "W7068"},
+                {"IHCS Level 3 (2:1) Enhanced", "W7069"},
+                {"Respite Level 3 (1:1)-Day", "W9798"},
+                {"Respite Level 3 (1:1)-15 Mins", "W9862"},
+                {"Respite Level 3 (1:1) Enhanced-15 Mins", "W9863"}
+            };
+
+            DataTable dataTable = new DataTable();
+
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(input))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+
+                csv.Configuration.HasHeaderRecord = true;
+
+                csv.Read();
+                csv.ReadHeader();
+
+                var good = new List<NSClientServices>();
+                var bad = new List<string>();
+                var isRecordBad = false;
+
+                csv.Configuration.BadDataFound = context =>
+                {
+                    isRecordBad = true;
+                    bad.Add(context.RawRecord);
+                };
+
+                //dataTable.Columns.Add("people_id", typeof(string));
+                //dataTable.Columns.Add("full_name", typeof(string));
+                //dataTable.Columns.Add("id_no", typeof(string));
+
+                while (csv.Read())
+                {
+                    //int vIndex = 0;
+                    var values = new object[98];
+
+                    //var record = csv.GetRecord<NSClientServices>();
+
+                    //if (!isRecordBad)
+                    //{
+                    //good.Add((NSClientServices)record);
+
+                    //values[0] = record.people_id;
+                    //values[1] = record.full_name;
+                    //values[2] = record.id_no;
+
+                    for (int vIndex = 0; vIndex < 98; vIndex++)
+                    {
+                        values[vIndex] = csv.GetField<string>(vIndex);
+                    }
+
+                    dataTable.Rows.Add(values);
+
+                    //    isRecordBad = false;
+                    //}
+
+
+
+                    //string people_id = good[0].people_id;
+                    //string full_name = good[0].full_name;
+                    //string id_no = good[0].id_no;
+
+                    //List<NSClientServices> cServices = records.ToList<NSClientServices>();
+
+
+                    //for (int i=0; i<spc.Count(); i++)
+                    //{
+                    //    values[i] = csv.GetField<string>(i).Trim('"');
+
+                    //}
+                    //values[0] = csv.GetField<string>(0); //Client Name
+                    //values[1] = csv.GetField<string>(1); //Employee Name
+                    //values[2] = csv.GetField<string>(2); //Service
+
+                    //if (services.ContainsKey(values[2].ToString()))
+                    //{
+                    //    values[3] = services[values[2].ToString()];
+                    //}
+                    //else
+                    //{
+                    //    values[3] = "NOTFOUND";
+                    //}
+
+                    //string dateStr1 = csv.GetField<string>(3);
+                    //DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
+                    //values[4] = visitDateOnly; //Visit Date
+
+
+                    //SandataDateTimeDuration sdtd1 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(7), csv.GetField<string>(8), csv.GetField<string>(9));
+                    //values[5] = sdtd1.Start; //Call In
+                    //values[6] = sdtd1.End; //Call Out
+                    //values[7] = sdtd1.Duration; //Call Hours
+
+                    //SandataDateTimeDuration sdtd2 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(10), csv.GetField<string>(11), csv.GetField<string>(12));
+                    //values[8] = sdtd2.Start; //Adjusted In
+                    //values[9] = sdtd2.End; //Adjusted Out
+                    //values[10] = sdtd2.Duration; //Adjusted Hours
+
+                    //TimeSpan billDuration;
+                    //if (!TimeSpan.TryParse(csv.GetField<string>(13), out billDuration))
+                    //{
+                    //}
+                    //values[11] = billDuration; //Bill Hours
+
+                    //values[12] = csv.GetField<string>(14); //Visit Status
+
+                    //bool doNotBill = ("Yes".Equals(csv.GetField<string>(15)) ? true : false);
+                    //values[13] = doNotBill; //Do Not Bill
+
+                    //values[14] = csv.GetField<string>(16); //Exceptions
+
+                }
+            }
+
+            return dataTable;
+        }
+
+
         string ParseClientID(string clientString)
         {
             string idString = clientString.Split('(', ')')[1];
@@ -1486,6 +1722,13 @@ namespace ConsumerMaster
 
             return startStopTime;
         }
+
+        public class Temp
+        {
+            public int Key { get; set; }
+            public string Value { get; set; }
+        };
+
 
         public DataTable GetClosedActivitiesDataTable(Stream input)
         {

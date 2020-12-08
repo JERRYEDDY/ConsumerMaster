@@ -173,15 +173,14 @@ namespace ConsumerMaster
             string outFilename = "EVVVisitsComparisonReport.xlsx";
             try
             {
-                if (RadAsyncUpload3.UploadedFiles.Count == 1 && RadAsyncUpload5.UploadedFiles.Count == 1 && RadAsyncUpload4.UploadedFiles.Count == 1)
+                if (RadAsyncUpload3.UploadedFiles.Count == 1 && RadAsyncUpload4.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
                     AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile(); 
-                    UploadedFile uploadedCCAFile = RadAsyncUpload3.UploadedFiles[0]; //CellTrak Closed Activities File
-                    UploadedFile uploadedTADFile = RadAsyncUpload5.UploadedFiles[0]; //CellTrak Time and Distance File
+                    UploadedFile uploadedNCSFile = RadAsyncUpload3.UploadedFiles[0]; //Netsmart Client Services File
                     UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
 
-                    Workbook workbook = reportExport.CreateWorkbook(uploadedCCAFile, uploadedTADFile, uploadedSEVFile);
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedNCSFile, uploadedSEVFile);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }

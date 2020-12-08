@@ -83,7 +83,7 @@ namespace ConsumerMaster
             "(H2023):SE Job Find W/B"
         };
 
-        public Workbook CreateWorkbook(UploadedFile uploadedCCAFile, UploadedFile uploadedTADFile, UploadedFile uploadedSEVFile)
+        public Workbook CreateWorkbook(UploadedFile uploadedNCSFile, UploadedFile uploadedSEVFile)
         {
             Workbook workbook = new Workbook();
 
@@ -94,98 +94,96 @@ namespace ConsumerMaster
                 Worksheet sheet1Worksheet = worksheets["Sheet1"];
 
                 Utility util = new Utility();
-                Stream inputCCA = uploadedCCAFile.InputStream;
-                Stream inputTAD = uploadedTADFile.InputStream;
+                Stream inputNCS = uploadedNCSFile.InputStream;
                 Stream inputSEV = uploadedSEVFile.InputStream;
 
-                DataTable ccaDataTable = util.GetClosedActivitiesDataTableViaCSV(inputCCA);
-                DataTable tadDataTable = util.GetTimeAndDistanceDataTableViaCSV(inputTAD);
+                DataTable ncsDataTable = util.GetNetsmartClientServicesDataTableViaCSV(inputNCS);
                 DataTable sevDataTable = util.GetSandataExportVisitsDataTableViaCSV(inputSEV);
 
 
-                int blank = 0, no_blank = 0;
+                //int blank = 0, no_blank = 0;
 
-                foreach (DataRow row in tadDataTable.Rows)
-                {
-                    string bCode = row["Billing Code"].ToString();
-                    string pCode = row["Payroll Code"].ToString();
+                //foreach (DataRow row in tadDataTable.Rows)
+                //{
+                //    string bCode = row["Billing Code"].ToString();
+                //    string pCode = row["Payroll Code"].ToString();
 
-                    bool b = string.IsNullOrEmpty(bCode);
-                    bool p = string.IsNullOrEmpty(pCode);
+                //    bool b = string.IsNullOrEmpty(bCode);
+                //    bool p = string.IsNullOrEmpty(pCode);
 
-                    if(b & p) 
-                    {
-                        blank++;
-                    }
-                    else
-                    {
-                        no_blank++;
-                    }
-                }
+                //    if(b & p) 
+                //    {
+                //        blank++;
+                //    }
+                //    else
+                //    {
+                //        no_blank++;
+                //    }
+                //}
 
-                List<EVVTransaction> evvTransactionList =
-                (from cca in ccaDataTable.AsEnumerable()
-                 join tad in tadDataTable.AsEnumerable() on cca["Activity ID"] equals tad["Activity ID"]
-                 select new EVVTransaction
-                 {
-                     ActivityID = cca.Field<string>("Activity ID"),
-                     ClientID = cca.Field<string>("ID"),
-                     ClientName = cca.Field<string>("Activity Name"),
-                     StaffID = cca.Field<string>("Staff ID"),
-                     StaffName = cca.Field<string>("Executed By"),
-                     ActivityType = tad.Field<string>("Activity Type"),
-                     ActivitySource = cca.Field<string>("Activity Source"),
-                     BillingCode = tad.Field<string>("Billing Code"),
-                     PayrollCode = tad.Field<string>("Payroll Code"),
-                     Start = tad.Field<DateTime>("Start"),
-                     Finish = tad.Field<DateTime>("Finish"),
-                     Duration = tad.Field<Int32>("Duration"),
-                     Alerts = cca.Field<string>("Alerts"),
-                     Status = cca.Field<string>("Status")
-                 }).ToList();
+                //List<EVVTransaction> evvTransactionList =
+                //(from cca in ccaDataTable.AsEnumerable()
+                // join tad in tadDataTable.AsEnumerable() on cca["Activity ID"] equals tad["Activity ID"]
+                // select new EVVTransaction
+                // {
+                //     ActivityID = cca.Field<string>("Activity ID"),
+                //     ClientID = cca.Field<string>("ID"),
+                //     ClientName = cca.Field<string>("Activity Name"),
+                //     StaffID = cca.Field<string>("Staff ID"),
+                //     StaffName = cca.Field<string>("Executed By"),
+                //     ActivityType = tad.Field<string>("Activity Type"),
+                //     ActivitySource = cca.Field<string>("Activity Source"),
+                //     BillingCode = tad.Field<string>("Billing Code"),
+                //     PayrollCode = tad.Field<string>("Payroll Code"),
+                //     Start = tad.Field<DateTime>("Start"),
+                //     Finish = tad.Field<DateTime>("Finish"),
+                //     Duration = tad.Field<Int32>("Duration"),
+                //     Alerts = cca.Field<string>("Alerts"),
+                //     Status = cca.Field<string>("Status")
+                // }).ToList();
 
-                DataTable evvTransactions = util.ConvertToDataTable(evvTransactionList);
+                //DataTable evvTransactions = util.ConvertToDataTable(evvTransactionList);
 
-                int rowCount = rowCount = Sheet1WorksheetHeader(sheet1Worksheet, evvTransactions);
+                //int rowCount = rowCount = Sheet1WorksheetHeader(sheet1Worksheet, evvTransactions);
 
-                int currentRow = IndexRowItemStart + rowCount;
-                foreach (DataRow row in evvTransactions.Rows)
-                {
-                    int column = 0;
+                //int currentRow = IndexRowItemStart + rowCount;
+                //foreach (DataRow row in evvTransactions.Rows)
+                //{
+                //    int column = 0;
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivityID"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivityID"].ToString());
 
-                    CellValueFormat textFormat = new CellValueFormat("@");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(textFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientID"].ToString());
+                //    CellValueFormat textFormat = new CellValueFormat("@");
+                //    sheet1Worksheet.Cells[currentRow, column].SetFormat(textFormat);
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientID"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientName"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ClientName"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffID"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["StaffName"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivityType"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivitySource"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["BillingCode"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["PayrollCode"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivityType"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["ActivitySource"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["BillingCode"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["PayrollCode"].ToString());
 
-                    CellValueFormat dateTimeFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
+                //    CellValueFormat dateTimeFormat = new CellValueFormat("MM/dd/yyyy hh:mm AM/PM");
+                //    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeFormat);
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Start"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeFormat);
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column].SetFormat(dateTimeFormat);
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Finish"].ToString());
 
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Alerts"].ToString());
-                    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Status"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Duration"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Alerts"].ToString());
+                //    sheet1Worksheet.Cells[currentRow, column++].SetValue(row["Status"].ToString());
 
-                    currentRow++;
-                }
+                //    currentRow++;
+                //}
 
-                for (int i = 1; i < sevDataTable.Columns.Count; i++)  //Start at 1 instead of 0
-                {
-                    sheet1Worksheet.Columns[i].AutoFitWidth();
-                }
+                //for (int i = 1; i < sevDataTable.Columns.Count; i++)  //Start at 1 instead of 0
+                //{
+                //    sheet1Worksheet.Columns[i].AutoFitWidth();
+                //}
             }
             catch (Exception ex)
             {
