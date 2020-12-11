@@ -16,7 +16,7 @@ namespace ConsumerMaster
         public string gender_code { get; set; }
         public string ssn_number { get; set; }
         public string is_staff { get; set; }
-        public string intake_dt { get; set; }
+        public DateTime? intake_dt { get; set; }
         public string discharge_dt { get; set; }
         public string medicaid_number { get; set; }
         public string ipd { get; set; }
@@ -30,8 +30,8 @@ namespace ConsumerMaster
         public string staff_id { get; set; }
         public string job_title { get; set; }
         public string staff_name { get; set; }
-        public string actual_date { get; set; }
-        public string end_date { get; set; }
+        public DateTime? actual_date { get; set; }
+        public DateTime? end_date { get; set; }
         public string duration { get; set; }
         public string event_log_id { get; set; }
         public string event_definition_id { get; set; }
@@ -49,7 +49,7 @@ namespace ConsumerMaster
         public string is_billed { get; set; }
         public string is_paid { get; set; }
         public string invoice_number { get; set; }
-        public string date_entered { get; set; }
+        public DateTime? date_entered { get; set; }
         public string user_entered { get; set; }
         public string user_entered_name { get; set; }
         public string approved_date { get; set; }
@@ -93,7 +93,7 @@ namespace ConsumerMaster
         public string outcome_id { get; set; }
         public string outcome_description { get; set; }
         public string gaf_score_current { get; set; }
-        public string date_order { get; set; }
+        public DateTime? date_order { get; set; }
         public string is_billable { get; set; }
         public string snb_reasons { get; set; }
         public string is_billing { get; set; }
@@ -101,8 +101,8 @@ namespace ConsumerMaster
         public string is_incident_to { get; set; }
         public string medicare_incident_to_supervisor { get; set; }
         public string it_supervisor_name { get; set; }
-        public string whole_date_order { get; set; }
-        public string serv_entry_actual_date { get; set; }
+        public DateTime? whole_date_order { get; set; }
+        public DateTime? serv_entry_actual_date { get; set; }
         public string sort_order { get; set; }
         public string conversion_id { get; set; }
     }

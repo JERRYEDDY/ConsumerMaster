@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Text;
 using System.CodeDom.Compiler;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace ConsumerMaster
 {
@@ -1457,12 +1458,12 @@ namespace ConsumerMaster
                 new SPColumn("full_name",typeof(string)),
                 new SPColumn("id_no",typeof(string)),
                 new SPColumn("other_id_number",typeof(string)),
-                new SPColumn("dob",typeof(string)),
+                new SPColumn("dob",typeof(DateTime)),
                 new SPColumn("gender",typeof(string)),
                 new SPColumn("gender_code",typeof(string)),
                 new SPColumn("ssn_number",typeof(string)),
                 new SPColumn("is_staff",typeof(string)),
-                new SPColumn("intake_dt",typeof(string)),
+                new SPColumn("intake_dt",typeof(DateTime)),
                 new SPColumn("discharge_dt",typeof(string)),
                 new SPColumn("medicaid_number",typeof(string)),
                 new SPColumn("ipd",typeof(string)),
@@ -1476,8 +1477,8 @@ namespace ConsumerMaster
                 new SPColumn("staff_id",typeof(string)),
                 new SPColumn("job_title",typeof(string)),
                 new SPColumn("staff_name",typeof(string)),
-                new SPColumn("actual_date",typeof(string)),
-                new SPColumn("end_date",typeof(string)),
+                new SPColumn("actual_date",typeof(DateTime)),
+                new SPColumn("end_date",typeof(DateTime)),
                 new SPColumn("duration",typeof(string)),
                 new SPColumn("event_log_id",typeof(string)),
                 new SPColumn("event_definition_id",typeof(string)),
@@ -1566,121 +1567,43 @@ namespace ConsumerMaster
             };
 
             DataTable dataTable = new DataTable();
-
-            for (int i = 0; i < spc.Count(); i++)
+            foreach (PropertyInfo p in typeof(NSClientServices).GetProperties())
             {
-                dataTable.Columns.Add(spc[i].name, spc[i].type);
+                dataTable.Columns.Add(p.Name, Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType);
             }
 
+            List<String> lines = new List<String>();
             using (var reader = new StreamReader(input))
+            {
+                String line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    String replaced = line.Replace("\"images/CHECK.gif\"", "images/CHECK.gif");
+                    lines.Add(replaced);
+                }
+            }
+
+            var memStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memStream);
+            foreach (String line in lines)
+            {
+                streamWriter.WriteLine(line);
+            }
+            streamWriter.Flush();                                   
+            memStream.Seek(0, SeekOrigin.Begin);
+
+            using (var reader = new StreamReader(memStream))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-
-                csv.Configuration.HasHeaderRecord = true;
-
-                csv.Read();
-                csv.ReadHeader();
-
-                var good = new List<NSClientServices>();
-                var bad = new List<string>();
-                var isRecordBad = false;
-
-                csv.Configuration.BadDataFound = context =>
+                using (var dr = new CsvDataReader(csv))
                 {
-                    isRecordBad = true;
-                    bad.Add(context.RawRecord);
-                };
-
-                //dataTable.Columns.Add("people_id", typeof(string));
-                //dataTable.Columns.Add("full_name", typeof(string));
-                //dataTable.Columns.Add("id_no", typeof(string));
-
-                while (csv.Read())
-                {
-                    //int vIndex = 0;
-                    var values = new object[98];
-
-                    //var record = csv.GetRecord<NSClientServices>();
-
-                    //if (!isRecordBad)
-                    //{
-                    //good.Add((NSClientServices)record);
-
-                    //values[0] = record.people_id;
-                    //values[1] = record.full_name;
-                    //values[2] = record.id_no;
-
-                    for (int vIndex = 0; vIndex < 98; vIndex++)
-                    {
-                        values[vIndex] = csv.GetField<string>(vIndex);
-                    }
-
-                    dataTable.Rows.Add(values);
-
-                    //    isRecordBad = false;
-                    //}
-
-
-
-                    //string people_id = good[0].people_id;
-                    //string full_name = good[0].full_name;
-                    //string id_no = good[0].id_no;
-
-                    //List<NSClientServices> cServices = records.ToList<NSClientServices>();
-
-
-                    //for (int i=0; i<spc.Count(); i++)
-                    //{
-                    //    values[i] = csv.GetField<string>(i).Trim('"');
-
-                    //}
-                    //values[0] = csv.GetField<string>(0); //Client Name
-                    //values[1] = csv.GetField<string>(1); //Employee Name
-                    //values[2] = csv.GetField<string>(2); //Service
-
-                    //if (services.ContainsKey(values[2].ToString()))
-                    //{
-                    //    values[3] = services[values[2].ToString()];
-                    //}
-                    //else
-                    //{
-                    //    values[3] = "NOTFOUND";
-                    //}
-
-                    //string dateStr1 = csv.GetField<string>(3);
-                    //DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
-                    //values[4] = visitDateOnly; //Visit Date
-
-
-                    //SandataDateTimeDuration sdtd1 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(7), csv.GetField<string>(8), csv.GetField<string>(9));
-                    //values[5] = sdtd1.Start; //Call In
-                    //values[6] = sdtd1.End; //Call Out
-                    //values[7] = sdtd1.Duration; //Call Hours
-
-                    //SandataDateTimeDuration sdtd2 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(10), csv.GetField<string>(11), csv.GetField<string>(12));
-                    //values[8] = sdtd2.Start; //Adjusted In
-                    //values[9] = sdtd2.End; //Adjusted Out
-                    //values[10] = sdtd2.Duration; //Adjusted Hours
-
-                    //TimeSpan billDuration;
-                    //if (!TimeSpan.TryParse(csv.GetField<string>(13), out billDuration))
-                    //{
-                    //}
-                    //values[11] = billDuration; //Bill Hours
-
-                    //values[12] = csv.GetField<string>(14); //Visit Status
-
-                    //bool doNotBill = ("Yes".Equals(csv.GetField<string>(15)) ? true : false);
-                    //values[13] = doNotBill; //Do Not Bill
-
-                    //values[14] = csv.GetField<string>(16); //Exceptions
-
+                    dataTable.Load(dr);
                 }
             }
 
             return dataTable;
-        }
 
+        }
 
         string ParseClientID(string clientString)
         {
