@@ -168,19 +168,42 @@ namespace ConsumerMaster
             }
         }
 
-        protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
+        //protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
+        //{
+        //    string outFilename = "EVVVisitsComparisonReport.xlsx";
+        //    try
+        //    {
+        //        if (RadAsyncUpload3.UploadedFiles.Count == 1 && RadAsyncUpload4.UploadedFiles.Count == 1)
+        //        {
+        //            Utility utility = new Utility();
+        //            AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile(); 
+        //            UploadedFile uploadedNCSFile = RadAsyncUpload3.UploadedFiles[0]; //Netsmart Client Services File
+        //            UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
+
+        //            Workbook workbook = reportExport.CreateWorkbook(uploadedNCSFile, uploadedSEVFile);
+        //            utility.DownloadExcelFile(workbook, outFilename);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error(ex);
+        //    }
+        //}
+
+
+        protected void RadButtonPayrollFile_Click(object sender, EventArgs e)
         {
-            string outFilename = "EVVVisitsComparisonReport.xlsx";
+            string outFilename = "AWCPayrollFile.xlsx";
             try
             {
-                if (RadAsyncUpload3.UploadedFiles.Count == 1 && RadAsyncUpload4.UploadedFiles.Count == 1)
+                if (RadAsyncWeek1.UploadedFiles.Count == 1 && RadAsyncWeek2.UploadedFiles.Count == 1)
                 {
                     Utility utility = new Utility();
-                    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile(); 
-                    UploadedFile uploadedNCSFile = RadAsyncUpload3.UploadedFiles[0]; //Netsmart Client Services File
-                    UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
+                    AWCPayrollFile reportExport = new AWCPayrollFile();
+                    UploadedFile uploadedWeek1File = RadAsyncWeek1.UploadedFiles[0]; //Week 1 Netsmart Client Services File
+                    UploadedFile uploadedWeek2File = RadAsyncWeek2.UploadedFiles[0]; //Week 2 Netsmart Client Services File
 
-                    Workbook workbook = reportExport.CreateWorkbook(uploadedNCSFile, uploadedSEVFile);
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedWeek1File, uploadedWeek2File);
                     utility.DownloadExcelFile(workbook, outFilename);
                 }
             }

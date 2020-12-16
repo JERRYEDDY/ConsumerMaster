@@ -87,22 +87,22 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadButton RadButtonPayrollProcessingReport;
 
         /// <summary>
-        /// RadAsyncUpload3 control.
+        /// RadAsyncWeek1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload3;
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncWeek1;
 
         /// <summary>
-        /// RadAsyncUpload4 control.
+        /// RadAsyncWeek2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUpload4;
+        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncWeek2;
 
         /// <summary>
         /// RadButton4 control.

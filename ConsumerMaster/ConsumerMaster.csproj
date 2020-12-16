@@ -476,6 +476,7 @@
     <Compile Include="ATFMain.aspx.designer.cs">
       <DependentUpon>ATFMain.aspx</DependentUpon>
     </Compile>
+    <Compile Include="AWCPayrollFile.cs" />
     <Compile Include="AWCEVVVisitsComparisonReportFile.cs" />
     <Compile Include="AWCPayrollProcessingReport.cs" />
     <Compile Include="AWCMismatchedServicesReportFile.cs" />

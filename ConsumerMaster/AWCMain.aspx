@@ -149,34 +149,26 @@
             </tr>
             <tr>
                 <td>
-                    Netsmart Client Services Filename .csv:
+                    Netsmart Client Services Filename Week 1 .csv:
                 </td>
                 <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload3" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
-              </td>
-            </tr>
-<%--            <tr>
-                <td>
-                    CellTrak Time and Distance Filename .csv:
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload5" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
-              </td>
-            </tr>--%>
-            <tr>
-                <td>
-                    Sandata Export Visits Filename .csv:
-                </td>
-                <td>
-                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUpload4" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncWeek1" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
               </td>
             </tr>
             <tr>
                 <td>
-                    EVV Visits Comparison Report
+                    Netsmart Client Services Filename Week 2 .csv:
                 </td>
                 <td>
-                    <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButtonEVV_VisitsComparison_Click" />
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncWeek2" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
+              </td>
+            </tr>
+            <tr>
+                <td>
+                    AWC Payroll File
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton4" runat="server" text="Process" OnClick="RadButtonPayrollFile_Click" />
                </td>
             </tr>
             <tr>

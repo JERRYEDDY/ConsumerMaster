@@ -130,7 +130,27 @@ namespace ConsumerMaster
 
         public DataTable GetEmployeePersonnelDataTable(UploadedFile file)
         {
-            String[] columns = new string[19] { "P_ACTIVE", "P_EMPNO ", "P_FNAME ", "P_LNAME ", "P_MI ", "P_BIRTH", "P_SSN", "P_SEX ", "P_EMPEMAIL", "P_JOBCODE ", "P_JOBTITLE ", "P_RACE ", "P_LASTHIRE", "P_HCITY", "P_HSTATE", "P_HZIP", "P_HSTREET1", "P_HSTREET2", "P_HCOUNTY" };
+            String[] columns = new string[19] { 
+                "P_ACTIVE", 
+                "P_EMPNO ", 
+                "P_FNAME ", 
+                "P_LNAME ", 
+                "P_MI ", 
+                "P_BIRTH", 
+                "P_SSN", 
+                "P_SEX ", 
+                "P_EMPEMAIL", 
+                "P_JOBCODE ", 
+                "P_JOBTITLE ", 
+                "P_RACE ", 
+                "P_LASTHIRE", 
+                "P_HCITY", 
+                "P_HSTATE", 
+                "P_HZIP", 
+                "P_HSTREET1", 
+                "P_HSTREET2", 
+                "P_HCOUNTY" };
+
             DataTable dataTable = new DataTable();
 
             try
@@ -198,25 +218,26 @@ namespace ConsumerMaster
 
         public DataTable GetEmployeePersonnelDataTable2(UploadedFile file)
         {
-            String[] columns = new string[19] { "P_ACTIVE",
-                                                "P_EMPNO ",
-                                                "P_FNAME ",
-                                                "P_LNAME ",
-                                                "P_MI ",
-                                                "P_BIRTH",
-                                                "P_SSN",
-                                                "P_SEX ",
-                                                "P_EMPEMAIL",
-                                                "P_JOBCODE ",
-                                                "P_JOBTITLE ",
-                                                "P_RACE ",
-                                                "P_LASTHIRE",
-                                                "P_HCITY",
-                                                "P_HSTATE",
-                                                "P_HZIP",
-                                                "P_HSTREET1",
-                                                "P_HSTREET2",
-                                                "P_HCOUNTY" };
+            String[] columns = new string[19] { 
+                "P_ACTIVE",
+                "P_EMPNO ",
+                "P_FNAME ",
+                "P_LNAME ",
+                "P_MI ",
+                "P_BIRTH",
+                "P_SSN",
+                "P_SEX ",
+                "P_EMPEMAIL",
+                "P_JOBCODE ",
+                "P_JOBTITLE ",
+                "P_RACE ",
+                "P_LASTHIRE",
+                "P_HCITY",
+                "P_HSTATE",
+                "P_HZIP",
+                "P_HSTREET1",
+                "P_HSTREET2",
+                "P_HCOUNTY" };
 
             DataTable dataTable = new DataTable();
 
@@ -1554,22 +1575,15 @@ namespace ConsumerMaster
                 new SPColumn("conversion_id",typeof(string))
             };
 
-            var services = new Dictionary<string, string>()
-            {
-                {"Companion (1:1)" ,"W1726"},
-                {"IHCS Level 2 (1:1)", "W7060"},
-                {"IHCS Level 2 (1:1) Enhanced", "W7061"},
-                {"IHCS Level 3 (2:1)", "W7068"},
-                {"IHCS Level 3 (2:1) Enhanced", "W7069"},
-                {"Respite Level 3 (1:1)-Day", "W9798"},
-                {"Respite Level 3 (1:1)-15 Mins", "W9862"},
-                {"Respite Level 3 (1:1) Enhanced-15 Mins", "W9863"}
-            };
-
             DataTable dataTable = new DataTable();
             foreach (PropertyInfo p in typeof(NSClientServices).GetProperties())
             {
                 dataTable.Columns.Add(p.Name, Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType);
+            }
+
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
             }
 
             List<String> lines = new List<String>();
@@ -1598,6 +1612,86 @@ namespace ConsumerMaster
                 using (var dr = new CsvDataReader(csv))
                 {
                     dataTable.Load(dr);
+                }
+            }
+
+            return dataTable;
+        }
+
+        public DataTable GetNetsmartClientServicesDataTablePayrollViaCSV(Stream input, string weekName)
+        {
+            SPColumn[] spc = new SPColumn[]
+            {
+                new SPColumn("staff_name",typeof(string)),
+                new SPColumn("event_name",typeof(string)),
+                new SPColumn("full_name",typeof(string)),
+                new SPColumn("duration",typeof(string)),
+                new SPColumn("total_duration",typeof(string)),
+                new SPColumn("duration_num",typeof(int)),
+                new SPColumn("total_duration_num",typeof(int)),
+                new SPColumn("is_approved",typeof(string)),
+                new SPColumn("week",typeof(string)),
+            };
+
+            //var services = new Dictionary<string, string>()
+            //{
+            //    {"Companion (1:1)" ,"W1726"},
+            //    {"IHCS Level 2 (1:1)", "W7060"},
+            //    {"IHCS Level 2 (1:1) Enhanced", "W7061"},
+            //    {"IHCS Level 3 (2:1)", "W7068"},
+            //    {"IHCS Level 3 (2:1) Enhanced", "W7069"},
+            //    {"Respite Level 3 (1:1)-Day", "W9798"},
+            //    {"Respite Level 3 (1:1)-15 Mins", "W9862"},
+            //    {"Respite Level 3 (1:1) Enhanced-15 Mins", "W9863"}
+            //};
+
+            List<String> lines = new List<String>();
+            using (var reader = new StreamReader(input))
+            {
+                String line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    String replaced = line.Replace("\"images/CHECK.gif\"", "images/CHECK.gif");
+                    lines.Add(replaced);
+                }
+            }
+
+            var memStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memStream);
+            foreach (String line in lines)
+            {
+                streamWriter.WriteLine(line);
+            }
+            streamWriter.Flush();
+            memStream.Seek(0, SeekOrigin.Begin);
+
+
+            DataTable dataTable = new DataTable();
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                dataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            using (var reader = new StreamReader(memStream))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var values = new object[spc.Count()];
+
+                    values[0] = csv.GetField<string>(22); //staff_name
+                    values[1] = csv.GetField<string>(28); //event_name
+                    values[2] = csv.GetField<string>(1); //full_name
+                    values[3] = csv.GetField<string>(25); //duration
+                    values[4] = csv.GetField<string>(71); //total_duration
+                    values[5] = Int32.Parse(csv.GetField<string>(55)); //duration_num
+                    values[6] = Int32.Parse(csv.GetField<string>(70)); //total_duration_num
+                    values[7] = csv.GetField<string>(49); //is_approved
+                    values[8] = weekName; //week
+
+                    dataTable.Rows.Add(values);
                 }
             }
 
