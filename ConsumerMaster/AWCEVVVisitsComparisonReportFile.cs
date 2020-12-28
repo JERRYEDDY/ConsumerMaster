@@ -102,7 +102,7 @@ namespace ConsumerMaster
                 DataTable sevDataTable = util.GetSandataExportVisitsDataTableViaCSV(inputSEV);
 
 
-                //int blank = 0, no_blank = 0;
+                int blank = 0, no_blank = 0;
 
                 //foreach (DataRow row in tadDataTable.Rows)
                 //{

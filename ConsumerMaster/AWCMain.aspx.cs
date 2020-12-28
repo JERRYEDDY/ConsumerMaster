@@ -168,27 +168,27 @@ namespace ConsumerMaster
             }
         }
 
-        //protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
-        //{
-        //    string outFilename = "EVVVisitsComparisonReport.xlsx";
-        //    try
-        //    {
-        //        if (RadAsyncUpload3.UploadedFiles.Count == 1 && RadAsyncUpload4.UploadedFiles.Count == 1)
-        //        {
-        //            Utility utility = new Utility();
-        //            AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile(); 
-        //            UploadedFile uploadedNCSFile = RadAsyncUpload3.UploadedFiles[0]; //Netsmart Client Services File
-        //            UploadedFile uploadedSEVFile = RadAsyncUpload4.UploadedFiles[0]; //Sandata Export Visits File
+        protected void RadButtonEVV_VisitsComparison_Click(object sender, EventArgs e)
+        {
+            string outFilename = "EVVVisitsComparisonReport.xlsx";
+            try
+            {
+                if (RadAsyncUploadNCS.UploadedFiles.Count == 1 && RadAsyncUploadSEV.UploadedFiles.Count == 1)
+                {
+                    Utility utility = new Utility();
+                    AWCEVVVisitsComparisonReportFile reportExport = new AWCEVVVisitsComparisonReportFile();
+                    UploadedFile uploadedNCSFile = RadAsyncUploadNCS.UploadedFiles[0]; //Netsmart Client Services File
+                    UploadedFile uploadedSEVFile = RadAsyncUploadSEV.UploadedFiles[0]; //Sandata Export Visits File
 
-        //            Workbook workbook = reportExport.CreateWorkbook(uploadedNCSFile, uploadedSEVFile);
-        //            utility.DownloadExcelFile(workbook, outFilename);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Error(ex);
-        //    }
-        //}
+                    Workbook workbook = reportExport.CreateWorkbook(uploadedNCSFile, uploadedSEVFile);
+                    utility.DownloadExcelFile(workbook, outFilename);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+            }
+        }
 
 
         protected void RadButtonPayrollFile_Click(object sender, EventArgs e)

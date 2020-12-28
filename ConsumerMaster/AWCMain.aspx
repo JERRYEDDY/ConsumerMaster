@@ -174,6 +174,40 @@
             <tr>
             <tr>
                 <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr style="border-bottom:1px solid black">
+                <td colspan="100%">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+               </td>
+            </tr>
+            <tr>
+                <td>
+                    Netsmart Client Services for Billing Filename .csv:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadNCS" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
+              </td>
+            </tr>
+            <tr>
+                <td>
+                    Sandata Export Visits Filename .csv:
+                </td>
+                <td>
+                    <telerik:RadAsyncUpload runat="server" ID="RadAsyncUploadSEV" MaxFileInputsCount="1" AllowedFileExtensions="csv" />
+              </td>
+            </tr>
+            <tr>
+                <td>
+                    EVV Visits Comparison
+                </td>
+                <td>
+                    <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButtonEVV_VisitsComparison_Click" />
                </td>
             </tr>
             <tr>
