@@ -69,6 +69,11 @@ namespace ConsumerMaster
                 DataTable clientStaffListDataTable = util.GetClientStaffListDataTable(clientStaffListFileInput);
                 DataTable clientStaffDataTable = util.ClientStaffGroupBy("SClientID", "MemberRole", clientStaffListDataTable);
 
+
+
+
+
+
                 var JoinResult = (from c in clientRosterDataTable.AsEnumerable()
                                   join a in clientAuthorizationDataTable.AsEnumerable() on c.Field<string>("id_no") equals a.Field<string>("AClientID")
                                   join s in clientStaffDataTable.AsEnumerable() on c.Field<string>("id_no") equals s.Field<string>("SClientID") into tempJoin
