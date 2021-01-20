@@ -1337,6 +1337,100 @@ namespace ConsumerMaster
             return dataTable;
         }
 
+        public DataTable GetNetsmartClientServicesDataTableViaCSV(Stream input)
+        {
+            SPColumn[] spc = new SPColumn[]
+            {
+                new SPColumn("client_name",typeof(string)),         //Client Name
+                new SPColumn("staff_name",typeof(string)),          //Employee Name
+                new SPColumn("service",typeof(string)),             //Service
+                new SPColumn("wcode",typeof(string)),               //Parsed Service
+                new SPColumn("base_wcode", typeof(string)),         //Base WCode
+                new SPColumn("start_date",typeof(DateTime)),        //Call In 
+                new SPColumn("end_date",typeof(DateTime)),          //Call Out
+                new SPColumn("duration",typeof(TimeSpan)),          //Call Hours
+                new SPColumn("duration_num",typeof(int)),
+                new SPColumn("is_approved",typeof(string))
+            };
+
+            DataTable dataTable = new DataTable();
+            foreach (PropertyInfo info in typeof(NSClientServices).GetProperties())
+            {
+                dataTable.Columns.Add(new DataColumn(info.Name, Nullable.GetUnderlyingType(info.PropertyType) ?? info.PropertyType));
+            }
+
+            List<String> lines = new List<String>();
+            using (var reader = new StreamReader(input))
+            {
+                String line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    String replaced = line.Replace("\"images/CHECK.gif\"", "images/CHECK.gif");
+                    lines.Add(replaced);
+                }
+            }
+
+            var memStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memStream);
+            foreach (String line in lines)
+            {
+                streamWriter.WriteLine(line);
+            }
+            streamWriter.Flush();
+            memStream.Seek(0, SeekOrigin.Begin);
+
+            using (var reader = new StreamReader(memStream))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                using (var dr = new CsvDataReader(csv))
+                {
+                    dataTable.Load(dr);
+                }
+            }
+
+            DataTable ncsDataTable = new DataTable();
+            for (int i = 0; i < spc.Count(); i++)
+            {
+                ncsDataTable.Columns.Add(spc[i].name, spc[i].type);
+            }
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                var values = new object[spc.Count()];
+
+                values[0] = row["full_name"];   //client_name
+                values[1] = row["staff_name"];  //staff_name
+                values[2] = row["service"];     //service
+                values[3] = row["service"].ToString().Split('(', ')')[1]; //wcode
+
+                if (values[3].ToString().IndexOf(':', 0) == -1)
+                {
+                    values[4] = values[3].ToString(); //base_wcode
+                }
+                else
+                {
+                    values[4] = values[3].ToString().Split(':')[0]; //base_wcode
+                }
+
+                values[5] = row["actual_date"];
+                values[6] = row["end_date"];
+
+                if (!TimeSpan.TryParse(row["duration"].ToString(), out TimeSpan billDuration))
+                {
+                }
+                values[7] = billDuration;
+
+                int durationNum = Int32.Parse(row["duration_num"].ToString());
+                values[8] = durationNum;
+
+                values[9] = row["is_approved"];
+
+                ncsDataTable.Rows.Add(values);
+            }
+
+            return ncsDataTable;
+        }
+
         public DataTable GetSandataExportVisitsDataTableViaCSV(Stream input)
         {
             SPColumn[] spc = new SPColumn[]
@@ -1348,9 +1442,12 @@ namespace ConsumerMaster
                 new SPColumn("start_date",typeof(DateTime)),
                 new SPColumn("end_date",typeof(DateTime)),
                 new SPColumn("duration",typeof(TimeSpan)),
-                new SPColumn("adj_start_date",typeof(DateTime)),
-                new SPColumn("adj_end__date",typeof(DateTime)),
-                new SPColumn("adj_duration",typeof(TimeSpan)),
+                new SPColumn("is_adjusted", typeof(bool)),
+                new SPColumn("adj_hours", typeof(string))
+                //new SPColumn("adj_start_date",typeof(DateTime)),
+                //new SPColumn("adj_end__date",typeof(DateTime)),
+                //new SPColumn("adj_duration",typeof(TimeSpan)),
+                //new SPColumn("adj_hours",typeof(string)),
             };
 
             var services = new Dictionary<string, string>()
@@ -1396,28 +1493,27 @@ namespace ConsumerMaster
                     string dateStr1 = csv.GetField<string>(3);
                     DateTime visitDateOnly = Convert.ToDateTime(dateStr1);
 
-                    SandataDateTimeDuration sdtd1 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(7), csv.GetField<string>(8), csv.GetField<string>(9));
-                    values[4] = sdtd1.Start; //start_date
-                    values[5] = sdtd1.End; //end_date
-                    values[6] = sdtd1.Duration; //duration
+                    SandataDateTimeDuration shift = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(7), csv.GetField<string>(8), csv.GetField<string>(9));
+                    SandataDateTimeDuration adj_shift = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(10), csv.GetField<string>(11), csv.GetField<string>(12));
 
-                    SandataDateTimeDuration sdtd2 = SetDateTimeDuration(visitDateOnly, csv.GetField<string>(10), csv.GetField<string>(11), csv.GetField<string>(12));
-                    values[7] = sdtd2.Start; //adj_start_date
-                    values[8] = sdtd2.End; //adj_end_date
-                    values[9] = sdtd2.Duration; //adj_duration
+                    string adj_hours = csv.GetField<string>(12).Replace(" ", "");
+                    bool is_adjusted = !string.IsNullOrEmpty(adj_hours);
 
-                    //TimeSpan billDuration;
-                    //if (!TimeSpan.TryParse(csv.GetField<string>(13), out billDuration))
-                    //{
-                    //}
-                    //values[11] = billDuration; //Bill Hours
+                    if (is_adjusted)
+                    {
+                        values[4] = adj_shift.Start; //adjusted start_date
+                        values[5] = adj_shift.End; //adjusted end_date
+                        values[6] = adj_shift.Duration; //adjusted duration
+                    }
+                    else
+                    {
+                        values[4] = shift.Start; //start_date
+                        values[5] = shift.End; //end_date
+                        values[6] = shift.Duration; //duration                       
+                    }
 
-                    //values[12] = csv.GetField<string>(14); //Visit Status
-
-                    //bool doNotBill = ("Yes".Equals(csv.GetField<string>(15)) ? true : false);
-                    //values[13] = doNotBill; //Do Not Bill
-
-                    //values[14] = csv.GetField<string>(16); //Exceptions
+                    values[7] = is_adjusted;
+                    values[8] = adj_hours;
 
                     dataTable.Rows.Add(values);
                 }
@@ -1463,88 +1559,6 @@ namespace ConsumerMaster
             return sdtd;
         }
 
-        public DataTable GetNetsmartClientServicesDataTableViaCSV(Stream input)
-        {
-            SPColumn[] spc = new SPColumn[]
-            {
-                new SPColumn("client_name",typeof(string)),           //Client Name
-                new SPColumn("staff_name",typeof(string)),          //Employee Name
-                new SPColumn("service",typeof(string)),             //Service
-                new SPColumn("wcode",typeof(string)),               //Parsed Service
-                new SPColumn("start_date",typeof(DateTime)),       //Call In 
-                new SPColumn("end_date",typeof(DateTime)),          //Call Out
-                new SPColumn("duration",typeof(TimeSpan)),            //Call Hours
-                new SPColumn("duration_num",typeof(int)),
-                new SPColumn("is_approved",typeof(string))
-            };
-
-            DataTable dataTable = new DataTable();
-            foreach (PropertyInfo info in typeof(NSClientServices).GetProperties())
-            {
-                dataTable.Columns.Add(new DataColumn(info.Name, Nullable.GetUnderlyingType(info.PropertyType) ?? info.PropertyType));
-            }
-
-            List<String> lines = new List<String>();
-            using (var reader = new StreamReader(input))
-            {
-                String line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    String replaced = line.Replace("\"images/CHECK.gif\"", "images/CHECK.gif");
-                    lines.Add(replaced);
-                }
-            }
-
-            var memStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memStream);
-            foreach (String line in lines)
-            {
-                streamWriter.WriteLine(line);
-            }
-            streamWriter.Flush();                                   
-            memStream.Seek(0, SeekOrigin.Begin);
-
-            using (var reader = new StreamReader(memStream))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                using (var dr = new CsvDataReader(csv))
-                {
-                    dataTable.Load(dr);
-                }
-            }
-
-            DataTable ncsDataTable = new DataTable();
-            for (int i = 0; i < spc.Count(); i++)
-            {
-                ncsDataTable.Columns.Add(spc[i].name, spc[i].type);
-            }
-
-            foreach(DataRow row in dataTable.Rows)
-            {
-                var values = new object[spc.Count()];
-
-                values[0] = row["full_name"];
-                values[1] = row["staff_name"];
-                values[2] = row["service"];
-                values[3] = row["service"].ToString().Split('(', ')')[1];
-                values[4] = row["actual_date"];
-                values[5] = row["end_date"];
-
-                if (!TimeSpan.TryParse(row["duration"].ToString(), out TimeSpan billDuration))
-                {
-                }
-                values[6] = billDuration;
-
-                int durationNum = Int32.Parse(row["duration_num"].ToString());
-                values[7] = durationNum;
-
-                values[8] = row["is_approved"];
-
-                ncsDataTable.Rows.Add(values);
-            }
-
-            return ncsDataTable;
-        }
 
         public DataTable GetNetsmartClientServicesDataTablePayrollViaCSV(Stream input, string weekName)
         {
@@ -2048,7 +2062,7 @@ namespace ConsumerMaster
 
                 dr["me_count"] = dSourceTable.Compute(expression, meFilter);
                 dr["ssp_count"] = dSourceTable.Compute(expression, sspFilter);
-             }
+            }
 
             //returning grouped/counted result
             return dtGroup;

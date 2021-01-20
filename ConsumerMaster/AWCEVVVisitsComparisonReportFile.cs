@@ -97,33 +97,11 @@ namespace ConsumerMaster
                 Stream inputNCS = uploadedNCSFile.InputStream;
                 Stream inputSEV = uploadedSEVFile.InputStream;
 
-
                 DataTable ncsDataTable = util.GetNetsmartClientServicesDataTableViaCSV(inputNCS);
                 DataTable sevDataTable = util.GetSandataExportVisitsDataTableViaCSV(inputSEV);
 
-
-                int blank = 0, no_blank = 0;
-
-                //foreach (DataRow row in tadDataTable.Rows)
-                //{
-                //    string bCode = row["Billing Code"].ToString();
-                //    string pCode = row["Payroll Code"].ToString();
-
-                //    bool b = string.IsNullOrEmpty(bCode);
-                //    bool p = string.IsNullOrEmpty(pCode);
-
-                //    if(b & p) 
-                //    {
-                //        blank++;
-                //    }
-                //    else
-                //    {
-                //        no_blank++;
-                //    }
-                //}
-
-
-                var JResult = (from ncs in ncsDataTable.AsEnumerable()
+                List<BillingCompareTransaction> billingTransactionList =
+                (from ncs in ncsDataTable.AsEnumerable()
                 join sev in sevDataTable.AsEnumerable()
                 on new
                 {
@@ -146,89 +124,26 @@ namespace ConsumerMaster
                 {
                     NCSClientName = ncs.Field<string>("client_name"),
                     NCSStaffName = ncs.Field<string>("staff_name"),
-                    NCSStartDate = ncs.Field<DateTime>("start_date"),
-                    NCSEndDate = ncs.Field<DateTime>("end_date"),
+                    NCSStartDate = ncs?.Field<DateTime>("start_date"),
+                    NCSEndDate = ncs?.Field<DateTime>("end_date"),
+                    NCSService = ncs.Field<string>("service"),
+                    NCSWCode = ncs.Field<string>("wcode"),
+                    NCSBaseWCode = ncs.Field<string>("base_wcode"),
                     SEVClientName = leftJoin?.Field<string>("client_name"),
                     SEVStaffName = leftJoin?.Field<string>("staff_name"),
-                    SEVStartDate = leftJoin == null ? (DateTime?)null : leftJoin.Field<DateTime>("start_date"),
-                    SEVEndDate = leftJoin.Field<DateTime>("end_date")
-                    //ActivityID = ca.Field<string>("Activity ID"),
-                    //ActivityType = ca.Field<string>("Activity Type"),
-                    //ActivitySource = ca.Field<string>("Activity Source"),
-                    //ClientName = ca.Field<string>("Activity Name"),
-                    //StartTime = ca.Field<DateTime>("Start Time"),
-                    //StopTime = ca.Field<DateTime>("Stop Time"),
-                    ////AL_ActivityID = leftJoin == null ? null : leftJoin.Field<string>("Activity ID"),
-                    ////AL_Subject = leftJoin == null ? null : leftJoin.Field<string>("Subject"),
-                    ////AL_StartTime = leftJoin == null ? (DateTime?)null : leftJoin.Field<DateTime>("Start Time"),
-                    ////AL_StopTime = leftJoin == null ? (DateTime?)null : leftJoin.Field<DateTime>("Stop Time"),
-                    //Action = leftJoin == null ? null : leftJoin.Field<string>("Action"),
-                    //Comment = leftJoin == null ? null : leftJoin.Field<string>("Comment")
+                    SEVStartDate = leftJoin?.Field<DateTime>("start_date"),
+                    SEVEndDate = leftJoin?.Field<DateTime>("end_date"),
+                    SEVService = leftJoin?.Field<string>("service"),
+                    SEVWCode = leftJoin?.Field<string>("wcode")
                 }).ToList();
 
+                DataTable billingTransactions = util.ConvertToDataTable(billingTransactionList);
 
-                foreach (BillingCompareTransaction bct in JResult)
+                foreach (DataRow row in billingTransactions.Rows)
                 {
-                    string str = bct.NCSClientName;
+                    string str = row["NCSClientName"].ToString();
 
                 }
-
-                //List<BillingCompareTransaction> results = from ncsTable in ncsDataTable.AsEnumerable()
-                //    join sevTable in sevDataTable.AsEnumerable()
-                //        on new
-                //        {
-                //            clientName = ncsTable.Field<string>("client_name"),
-                //            staffName = ncsTable.Field<string>("staff_name"),
-                //            startDate = ncsTable.Field<DateTime>("start_date"),
-                //            endDate = ncsTable.Field<DateTime>("end_date")
-                //        }
-                //        equals new
-                //        {
-                //            clientName = sevTable.Field<string>("client_name"),
-                //            staffName = sevTable.Field<string>("staff_name"),
-                //            startDate = sevTable.Field<DateTime>("start_date"),
-                //            endDate = sevTable.Field<DateTime>("end_date")
-                //        }
-                //        into temp
-                //    from row in temp.DefaultIfEmpty()
-                //    select new BillingCompareTransaction
-                //    {
-                //        NCSClientName = (string)ncsTable["client_name"],
-                //        NCSStaffName = (string)ncsTable["staff_name"],
-                //        NCSStartDate = (DateTime)ncsTable["start_date"],
-                //        NCSEndDate = (DateTime)ncsTable["end_date"],
-                //        SEVClientName = row.Field<string>("client_name"),
-                //        SEVStaffName = (string)row["staff_name"],
-                //        SEVStartDate = (DateTime)row["start_date"],
-                //        SEVEndDate = (DateTime)row["end_date"]
-                //    };
-
-
-
-
-                List<EVVTransaction> evvTransactionList =
-                (from cca in sevDataTable.AsEnumerable()
-                 join tad in ncsDataTable.AsEnumerable() on 
-                 new { } equals new { }
-                 select new EVVTransaction
-                 {
-                     ActivityID = cca.Field<string>("Activity ID"),
-                     ClientID = cca.Field<string>("ID"),
-                     ClientName = cca.Field<string>("Activity Name"),
-                     StaffID = cca.Field<string>("Staff ID"),
-                     StaffName = cca.Field<string>("Executed By"),
-                     ActivityType = tad.Field<string>("Activity Type"),
-                     ActivitySource = cca.Field<string>("Activity Source"),
-                     BillingCode = tad.Field<string>("Billing Code"),
-                     PayrollCode = tad.Field<string>("Payroll Code"),
-                     Start = tad.Field<DateTime>("Start"),
-                     Finish = tad.Field<DateTime>("Finish"),
-                     Duration = tad.Field<Int32>("Duration"),
-                     Alerts = cca.Field<string>("Alerts"),
-                     Status = cca.Field<string>("Status")
-                 }).ToList();
-
-                //DataTable evvTransactions = util.ConvertToDataTable(evvTransactionList);
 
                 //int rowCount = rowCount = Sheet1WorksheetHeader(sheet1Worksheet, evvTransactions);
 
@@ -340,13 +255,18 @@ namespace ConsumerMaster
         public class BillingCompareTransaction
         {
             public string NCSClientName { get; set; } 
-            public string SEVClientName { get; set; } 
             public string NCSStaffName { get; set; }
-            public string SEVStaffName { get; set; } 
-            public DateTime NCSStartDate { get; set; } 
-            public DateTime SEVStartDate { get; set; }
-            public DateTime NCSEndDate { get; set; }
-            public DateTime SEVEndDate { get; set; }
+            public DateTime? NCSStartDate { get; set; }
+            public DateTime? NCSEndDate { get; set; }
+            public string NCSService { get; set; }
+            public string NCSWCode { get; set; }
+            public string NCSBaseWCode { get; set; }
+            public string SEVClientName { get; set; }
+            public string SEVStaffName { get; set; }
+            public DateTime? SEVStartDate { get; set; }
+            public DateTime? SEVEndDate { get; set; }
+            public string SEVService { get; set; }
+            public string SEVWCode { get; set; }
         }
 
         public class EVVTransaction
