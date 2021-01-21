@@ -114,8 +114,8 @@ namespace ConsumerMaster
                 {
                     clientName = sev.Field<string>("client_name"),
                     staffName = sev.Field<string>("staff_name"),
-                    startDate = sev.Field<DateTime>("start_date"),
-                    endDate = sev.Field<DateTime>("end_date")
+                    startDate = sev.Field<DateTime>("join_start_date"),
+                    endDate = sev.Field<DateTime>("join_end_date")
                 } 
                 into tempJoin
                 from leftJoin in tempJoin.DefaultIfEmpty()
@@ -131,8 +131,8 @@ namespace ConsumerMaster
                     NCSBaseWCode = ncs.Field<string>("base_wcode"),
                     SEVClientName = leftJoin?.Field<string>("client_name"),
                     SEVStaffName = leftJoin?.Field<string>("staff_name"),
-                    SEVStartDate = leftJoin?.Field<DateTime>("start_date"),
-                    SEVEndDate = leftJoin?.Field<DateTime>("end_date"),
+                    SEVStartDate = leftJoin?.Field<DateTime>("join_start_date"),
+                    SEVEndDate = leftJoin?.Field<DateTime>("join_end_date"),
                     SEVService = leftJoin?.Field<string>("service"),
                     SEVWCode = leftJoin?.Field<string>("wcode")
                 }).ToList();

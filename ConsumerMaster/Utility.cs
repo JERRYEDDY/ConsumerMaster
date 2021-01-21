@@ -1439,14 +1439,17 @@ namespace ConsumerMaster
                 new SPColumn("staff_name",typeof(string)),
                 new SPColumn("service",typeof(string)),
                 new SPColumn("wcode",typeof(string)),
-                new SPColumn("start_date",typeof(DateTime)),
-                new SPColumn("end_date",typeof(DateTime)),
-                new SPColumn("duration",typeof(TimeSpan)),
-                new SPColumn("is_adjusted", typeof(bool)),
-                new SPColumn("adj_hours", typeof(string))
+                //new SPColumn("start_date",typeof(DateTime)),
+                //new SPColumn("end_date",typeof(DateTime)),
+                //new SPColumn("duration",typeof(TimeSpan)),
                 //new SPColumn("adj_start_date",typeof(DateTime)),
                 //new SPColumn("adj_end__date",typeof(DateTime)),
                 //new SPColumn("adj_duration",typeof(TimeSpan)),
+                new SPColumn("join_start_date",typeof(DateTime)),
+                new SPColumn("join_end_date",typeof(DateTime)),
+                new SPColumn("join_duration",typeof(TimeSpan)),
+                new SPColumn("is_adjusted", typeof(bool)),
+                new SPColumn("adj_hours", typeof(string))
                 //new SPColumn("adj_hours",typeof(string)),
             };
 
@@ -1475,19 +1478,20 @@ namespace ConsumerMaster
                 csv.ReadHeader();
                 while (csv.Read())
                 {
+                    int vIndex = 0;
                     var values = new object[spc.Count()];
 
-                    values[0] = csv.GetField<string>(0); //client_name
-                    values[1] = csv.GetField<string>(1); //staff_name
-                    values[2] = csv.GetField<string>(2); //service
+                    values[vIndex++] = csv.GetField<string>(0); //client_name
+                    values[vIndex++] = csv.GetField<string>(1); //staff_name
+                    values[vIndex++] = csv.GetField<string>(2); //service
 
                     if (services.ContainsKey(values[2].ToString()))
                     {
-                        values[3] = services[values[2].ToString()];  //wcode
+                        values[vIndex++] = services[values[2].ToString()];  //wcode
                     }
                     else
                     {
-                        values[3] = "NOTFOUND";
+                        values[vIndex++] = "NOTFOUND";
                     }
 
                     string dateStr1 = csv.GetField<string>(3);
@@ -1499,21 +1503,29 @@ namespace ConsumerMaster
                     string adj_hours = csv.GetField<string>(12).Replace(" ", "");
                     bool is_adjusted = !string.IsNullOrEmpty(adj_hours);
 
+                    //values[4] = shift.Start; //start_date
+                    //values[5] = shift.End; //end_date
+                    //values[6] = shift.Duration; //duration  
+
+                    //values[7] = adj_shift.Start; //adjusted start_date
+                    //values[8] = adj_shift.End; //adjusted end_date
+                    //values[9] = adj_shift.Duration; //adjusted duration
+
                     if (is_adjusted)
                     {
-                        values[4] = adj_shift.Start; //adjusted start_date
-                        values[5] = adj_shift.End; //adjusted end_date
-                        values[6] = adj_shift.Duration; //adjusted duration
+                        values[vIndex++] = adj_shift.Start; //join_start_date
+                        values[vIndex++] = adj_shift.End; //join_end_date
+                        values[vIndex++] = adj_shift.Duration; //join_duration
                     }
                     else
                     {
-                        values[4] = shift.Start; //start_date
-                        values[5] = shift.End; //end_date
-                        values[6] = shift.Duration; //duration                       
+                        values[vIndex++] = shift.Start; //join_start_date
+                        values[vIndex++] = shift.End; //join_end_date
+                        values[vIndex++] = shift.Duration; //join_duration                       
                     }
 
-                    values[7] = is_adjusted;
-                    values[8] = adj_hours;
+                    values[vIndex++] = is_adjusted;
+                    values[vIndex++] = adj_hours;
 
                     dataTable.Rows.Add(values);
                 }
