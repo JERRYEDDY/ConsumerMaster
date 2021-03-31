@@ -138,7 +138,7 @@
                     &nbsp;
                 </td>
             </tr>
-            <tr style="border-bottom:1px solid black">
+<%--            <tr style="border-bottom:1px solid black">
                 <td colspan="100%">
                 </td>
             </tr>
@@ -176,8 +176,8 @@
                 <td>
                     &nbsp;
                </td>
-            </tr>
-            <tr style="border-bottom:1px solid black">
+            </tr>--%>
+<%--            <tr style="border-bottom:1px solid black">
                 <td colspan="100%">
                 </td>
             </tr>
@@ -209,7 +209,7 @@
                 <td>
                     <telerik:RadButton RenderMode="Lightweight" id="RadButton5" runat="server" text="Process" OnClick="RadButtonEVV_VisitsComparison_Click" />
                </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <td>
                     &nbsp;

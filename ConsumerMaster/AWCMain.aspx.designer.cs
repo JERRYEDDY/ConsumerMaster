@@ -87,60 +87,6 @@ namespace ConsumerMaster
         protected global::Telerik.Web.UI.RadButton RadButtonPayrollProcessingReport;
 
         /// <summary>
-        /// RadAsyncWeek1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncWeek1;
-
-        /// <summary>
-        /// RadAsyncWeek2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncWeek2;
-
-        /// <summary>
-        /// RadButton4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButton4;
-
-        /// <summary>
-        /// RadAsyncUploadNCS control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadNCS;
-
-        /// <summary>
-        /// RadAsyncUploadSEV control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadAsyncUpload RadAsyncUploadSEV;
-
-        /// <summary>
-        /// RadButton5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadButton RadButton5;
-
-        /// <summary>
         /// itemsClientSide control.
         /// </summary>
         /// <remarks>

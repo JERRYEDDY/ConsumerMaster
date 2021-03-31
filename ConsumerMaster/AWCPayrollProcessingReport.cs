@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Web.UI;
 using Telerik.Windows.Documents.Spreadsheet.Model.DataValidation;
 
 namespace ConsumerMaster
@@ -22,7 +23,7 @@ namespace ConsumerMaster
             new HeaderColumns("Client_Name", false),
             new HeaderColumns("Staff Name", false),
             new HeaderColumns("Num_of_IVR_Tranactions", false),
-            new HeaderColumns("Num_of Mobile_Tranactions", false),
+            //new HeaderColumns("Num_of Mobile_Tranactions", false),
             new HeaderColumns("Num_of Portal_Tranactions", false),
             new HeaderColumns("Progress Notes Week 1?", true),
             new HeaderColumns("Progress Notes Week 2?", true),
@@ -44,20 +45,20 @@ namespace ConsumerMaster
             public const int Client_Name = 1;
             public const int Staff_Name = 2;
             public const int Num_of_IVR_Tranactions = 3;
-            public const int Num_of_Mobile_Tranactions = 4;
-            public const int Num_of_Portal_Tranactions = 5;
-            public const int Progress_Notes_Week_1 = 6;
-            public const int Progress_Notes_Week_2 = 7;
-            public const int Notes_PN = 8;
-            public const int Progress_Notes_Initials = 9;
-            public const int Notes_Evolv_Submission_and_Payroll = 10;
-            public const int Submit_initials = 11;
-            public const int Evolv_Submit = 12;
-            public const int Evolv_Approval = 13;
-            public const int Sent_for_Payroll = 14;
-            public const int Evolv_Submit_original = 15;
-            public const int Evolv_Approval_orginal = 16;
-            public const int Sent_for_Payroll_original = 17;
+            //public const int Num_of_Mobile_Tranactions = 4;
+            public const int Num_of_Portal_Tranactions = 4;
+            public const int Progress_Notes_Week_1 = 5;
+            public const int Progress_Notes_Week_2 = 6;
+            public const int Notes_PN = 7;
+            public const int Progress_Notes_Initials = 8;
+            public const int Notes_Evolv_Submission_and_Payroll = 9;
+            public const int Submit_initials = 10;
+            public const int Evolv_Submit = 11;
+            public const int Evolv_Approval = 12;
+            public const int Sent_for_Payroll = 13;
+            public const int Evolv_Submit_original = 14;
+            public const int Evolv_Approval_orginal = 15;
+            public const int Sent_for_Payroll_original = 16;
         }
 
         public Workbook CreateWorkbook(UploadedFile uploadedFile)
@@ -98,19 +99,19 @@ namespace ConsumerMaster
 
                 DataTable groupBy = util.ConvertToDataTable(groupByList);
                 DataTable ivrGroup = groupBy.Select("[ActivitySource] = 'IVR'").CopyToDataTable();
-                DataTable mobileGroup = groupBy.Select("[ActivitySource] = 'Mobile'").CopyToDataTable();
+                //DataTable mobileGroup = groupBy.Select("[ActivitySource] = 'Mobile'").CopyToDataTable();
                 DataTable portalGroup = groupBy.Select("[ActivitySource] = 'Portal'").CopyToDataTable();
 
-                List<PayrollProcessClient> collection =
+                List<PayrollProcessClient> source =
                     (from c in clients.AsEnumerable()
                      join i in ivrGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals 
                      new { ID = i.Field<string>("ID"), Name = i.Field<string>("Name"), StaffName = i.Field<string>("StaffName") } into ivrData
-                     join m in mobileGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals
-                     new { ID = m.Field<string>("ID"), Name = m.Field<string>("Name"), StaffName = m.Field<string>("StaffName") } into mobileData
+                     //join m in mobileGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals
+                     //new { ID = m.Field<string>("ID"), Name = m.Field<string>("Name"), StaffName = m.Field<string>("StaffName") } into mobileData
                      join p in portalGroup.AsEnumerable() on new { ID = c.Field<string>("ID"), Name = c.Field<string>("Name"), StaffName = c.Field<string>("StaffName") } equals
                      new { ID = p.Field<string>("ID"), Name = p.Field<string>("Name"), StaffName = p.Field<string>("StaffName") } into portalData
                      from ivrRecord in ivrData.DefaultIfEmpty()
-                     from mobileRecord in mobileData.DefaultIfEmpty()
+                     //from mobileRecord in mobileData.DefaultIfEmpty()
                      from portalRecord in portalData.DefaultIfEmpty()
                      select new PayrollProcessClient
                      {
@@ -118,12 +119,27 @@ namespace ConsumerMaster
                          Name = c.Field<string>("Name"),
                          StaffName = c.Field<string>("StaffName"),
                          ICount = ivrRecord == null ? 0 : ivrRecord.Field<int>("Count"),
-                         MCount = mobileRecord == null ? 0 : mobileRecord.Field<int>("Count"),
+                         //MCount = mobileRecord == null ? 0 : mobileRecord.Field<int>("Count"),
                          PCount = portalRecord == null ? 0 : portalRecord.Field<int>("Count")
                      }).ToList();
 
 
-                DataTable join = util.ConvertToDataTable(collection);
+                List<PayrollProcessClient> target = new List<PayrollProcessClient>();
+                foreach (PayrollProcessClient client in source)
+                {
+                    int total = client.ICount + client.PCount;
+                    if(total > 0)
+                        target.Add(client);
+                }
+
+                //foreach (PayrollProcessClient client in target)
+                //{
+                //    int total = client.ICount + client.PCount;
+                //}
+
+
+
+                DataTable join = util.ConvertToDataTable(target);
                 DataView dv = join.DefaultView;
                 dv.Sort = "Name, StaffName";
                 DataTable dTable= dv.ToTable();
@@ -138,7 +154,7 @@ namespace ConsumerMaster
                     sheet1Worksheet.Cells[currentRow, Header.Staff_Name].SetValue(row["StaffName"].ToString());
 
                     sheet1Worksheet.Cells[currentRow, Header.Num_of_IVR_Tranactions].SetValue(row["ICount"].ToString()); //Num_of_IVR_Tranactions
-                    sheet1Worksheet.Cells[currentRow, Header.Num_of_Mobile_Tranactions].SetValue(row["MCount"].ToString());
+                    //sheet1Worksheet.Cells[currentRow, Header.Num_of_Mobile_Tranactions].SetValue(row["MCount"].ToString());
                     sheet1Worksheet.Cells[currentRow, Header.Num_of_Portal_Tranactions].SetValue(row["PCount"].ToString());
 
                     CellIndex c1RuleCellIndex = new CellIndex(currentRow, Header.Progress_Notes_Week_1);
@@ -268,7 +284,7 @@ namespace ConsumerMaster
             public string Name { get; set; }
             public string StaffName { get; set; }
             public int ICount { get; set; }
-            public int MCount { get; set; }
+            //public int MCount { get; set; }
             public int PCount { get; set; }
         }
     }
